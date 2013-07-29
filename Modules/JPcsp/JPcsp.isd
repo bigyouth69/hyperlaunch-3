@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="emuBit" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Which version of java do you want to run?</DESCRIPTION>
+							<VALUES>
+								<VALUE>32</VALUE>
+								<VALUE>64</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="useRAM" required="false" nullable="true" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>How much ram do you want to give the PSP to use? If you have 4GB, give it 1024</DESCRIPTION>
+						</KEY>
+						<KEY name="bezelTopOffset" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the top of your playing screen increase this value. If your playing screen is hidden at the top decrease it.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

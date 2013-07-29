@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="SystemConfigs" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, RetroArch will use per-system cfg files named to match your System Name. If false, it looks for a retroarch.cfg.</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_2600" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Atari 2600. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is stella_libretro_x86_64_20130629</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_FBA" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Final Burn Alpha. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is fb_alpha_libretro_x86_64_20130629</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_GB" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Nintendo Game Boy. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is bsnes_libretro_balanced_x86_64_20130629</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_GBC" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Nintendo Game Boy Color. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is gambatte_libretro_x86_64_20130629</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_GBA" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Nintendo Game Boy Advance. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is vba_next_libretro_x86_64_20130629</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_GEN" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Sega Genesis. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator.  Default is genesis_plus_gx_libretro_x86_64_20130629</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_GG" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Sega GameGear. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is genesis_plus_gx_libretro_x86_64_20130629</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_NES" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Nintendo Entertaiment System. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is genesis_plus_gx_libretro_x86_64_20130629</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_NFAM" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Nintendo Famicom. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is genesis_plus_gx_libretro_x86_64_20130629</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_NFDS" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Nintendo Famicom Disk System. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is genesis_plus_gx_libretro_x86_64_20130629</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_NGP" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for SNK Neo Geo Pocket. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is mednafen_vb_libretro_x86_64_20130629</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_NGPC" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for SNK Neo Geo Pocket Color. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is mednafen_vb_libretro_x86_64_20130629</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_NSF" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Nintendo Super Famicom. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is bsnes_libretro_balanced_x86_64_20130629</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_NVB" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Nintendo Virtual Boy. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is mednafen_vb_libretro_x86_64_20130629</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_PCE" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for NEC PC Engine. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is mednafen_vb_libretro_x86_64_20130629</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_PCECD" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for NEC PC Engine-CD. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is mednafen_vb_libretro_x86_64_20130629</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_PSX" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Sony Playstation. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is mednafen_psx_libretro_x86_64_20130629</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_SCD" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Sega CD. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator.  Default is genesis_plus_gx_libretro_x86_64_20130629</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_SG1K" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Sega SG-1000. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator.  Default is genesis_plus_gx_libretro_x86_64_20130629</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_SMS" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Sega Master System. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is genesis_plus_gx_libretro_x86_64_20130629</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_SNES" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Super Nintendo Entertainment System. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is bsnes_libretro_balanced_x86_64_20130629</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_SGFX" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for NEC SuperGrafx. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is mednafen_vb_libretro_x86_64_20130629</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_TG16" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for NEC TuboGrafx-16. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is mednafen_vb_libretro_x86_64_20130629</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_TGCD" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for NEC TuboGrafx-CD. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is mednafen_vb_libretro_x86_64_20130629</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_WSAN" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Bandai WonderSwan. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is mednafen_wswan_libretro_x86_64_20130629</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_WSANC" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Bandai WonderSwan Color. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is mednafen_wswan_libretro_x86_64_20130629</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

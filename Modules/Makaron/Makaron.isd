@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="true">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="MakaronWidth" required="false" nullable="true" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The resolution width you want to run standard orientation games</DESCRIPTION>
+						</KEY>
+						<KEY name="MakaronHeight" required="false" nullable="true" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The resolution height you want to run standard orientation games</DESCRIPTION>
+						</KEY>
+						<KEY name="VerticalMakaronWidth" required="false" nullable="true" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The vertical resolution width you want to run standard orientation games</DESCRIPTION>
+						</KEY>
+						<KEY name="VerticalMakaronHeight" required="false" nullable="true" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The vertical resolution height you want to run standard orientation games</DESCRIPTION>
+						</KEY>
+						<KEY name="VerticalMethod" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>The tool you want to use to rotate your desktop. Choiced are display or irotate. The exe of the one you choose should be placed in your Module Extensions folder</DESCRIPTION>
+							<VALUES>
+								<VALUE>display</VALUE>
+								<VALUE>irotate</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Vertical" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Naomi - If true, will rotate your desktop to 90° so you can pay vertical games on a standard monitor.
+</DESCRIPTION>
+						</KEY>
+						<KEY name="MakaronBios" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Set the number to the bios you want to use. Blank is automatic. Get this from setting the bios in the emu, then opening the demul ini and seeing what number it was set to.</DESCRIPTION>
+						</KEY>
+						<KEY name="Controls" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Naomi - The prefix of the controls file you want this game to use found in the "Controls" folder with your emulator. Default is Standard if not set. For example to use driving controls, set this key to driving, and it will load the driving_JVS.ini profile.</DESCRIPTION>
+						</KEY>
+						<KEY name="WinCE" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Can be true or false. Only set to true if the game is a WinCE game. These games only work in Makaron.</DESCRIPTION>
+						</KEY>
+						<KEY name="Cable" required="false" nullable="false" minLength="0" maxLength="2">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Can be 0 (VGA), 1 (RGB EURO/SCART), or 2 (Composite). Some games will only work with certain cable types</DESCRIPTION>
+							<VALUES>
+								<VALUE>0</VALUE>
+								<VALUE>1</VALUE>
+								<VALUE>2</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Keyboard" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Can be true or false. It tells the emu to attach the keyboard or not, some games will not run with it connected</DESCRIPTION>
+						</KEY>
+						<KEY name="DisablePlayerTwo" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Can be true or false. It tells the emu to attach a controller on port 2 or not, some games will not run with it connected</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true emulator will run fullscreen.</DESCRIPTION>
+						</KEY>
+						<KEY name="daphneWidth" required="false" nullable="true" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Set fullscreen width.</DESCRIPTION>
+						</KEY>
+						<KEY name="daphneHeight" required="false" nullable="true" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Set fullscreen height.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

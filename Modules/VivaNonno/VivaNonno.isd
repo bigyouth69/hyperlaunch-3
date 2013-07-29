@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="WinX" required="false" nullable="true" minLength="0">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Only works with fullscreen disabled. X position of your screen (in pixels) you want the top left corner of the emulator's window. (0 is top left corner of your screen)</DESCRIPTION>
+						</KEY>
+						<KEY name="WinY" required="false" nullable="true" minLength="0">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Only works with fullscreen disabled. Y position of your screen (in pixels) you want the top left corner of the emulator's window to be at. (0 is top left corner of your screen)</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

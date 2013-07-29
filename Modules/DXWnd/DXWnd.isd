@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="true">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="verticalMethod" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>choices are display or irotate, use whatever works best for you</DESCRIPTION>
+							<VALUES>
+								<VALUE>Display</VALUE>
+								<VALUE>iRotate</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="system" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>System specifies whether the game is standard or vertical rotation, default being standard</DESCRIPTION>
+							<VALUES>
+								<VALUE>Standard</VALUE>
+								<VALUE>Vertical</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="titleClass" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>This is the Window Title and Class of your application. To find the Title/Class you can use the AutoIt3 Window Spy utility installed with AutoHotKey or my utility @ http://www.hyperspin-fe.com/forum/showthread.php?15014-Window-Logger</DESCRIPTION>
+						</KEY>
+						<KEY name="launchExe" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>The filename and extension of the game. This is used because sometimes an exe cannot be renamed to match the romName. This is the application that is ran.</DESCRIPTION>
+						</KEY>
+						<KEY name="AppExe" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>This is the process name for your game. Use this if the game running has a different process name than what was launched. This is useful if use an ahk or bat script to launch a game. This is the name of the process that hyperlaunch will wait for while you play. If it isn't correct HyperLaunch will not perform correctly.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

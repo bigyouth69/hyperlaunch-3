@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="Freeplay" required="false" nullable="false">
+							<KEYTYPE>Binary</KEYTYPE>
+							<DESCRIPTION>0=off, 1=on</DESCRIPTION>
+						</KEY>
+						<KEY name="Country" required="false" nullable="false" minLength="0" maxLength="3">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>0 = Japan,  1 = USA,  2 = Europe</DESCRIPTION>
+							<VALUES>
+								<VALUE>0</VALUE>
+								<VALUE>1</VALUE>
+								<VALUE>2</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Hardware" required="false" nullable="false">
+							<KEYTYPE>Binary</KEYTYPE>
+							<DESCRIPTION>0 = Console, 1 = Arcade</DESCRIPTION>
+						</KEY>
+						<KEY name="Hotkeys" required="false" nullable="false">
+							<KEYTYPE>Binary</KEYTYPE>
+							<DESCRIPTION>Set to 0 to disable menu shortcuts (handy for Hotrod players)</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

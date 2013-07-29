@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="WideScreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Widescreen mode</DESCRIPTION>
+						</KEY>
+						<KEY name="ConfigInputs" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true will launch SuperModel into the config inputs menu, Leave false to play games.</DESCRIPTION>
+						</KEY>
+						<KEY name="Resolution" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Width,Height  -- Put in the resolution you want to play at. WIdth,Height. Don't forget the comma separating the two values.Leave blank to use default monitor's resolution.</DESCRIPTION>
+						</KEY>
+						<KEY name="vertShader" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>This is the filename + extension of your 3D vertex shader. Leave blank to not use one.</DESCRIPTION>
+						</KEY>
+						<KEY name="fragShader" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>This is the filename + extension of your 3D fragment shader. Leave blank to not use one.</DESCRIPTION>
+						</KEY>
+						<KEY name="inputSystem" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Choices are dinput (default), xinput, &amp; rawinput. Use dinput for most setups. Use xinput if you use XBox 360 controllers. Use rawinput for multiple mice or keyboard support.</DESCRIPTION>
+							<VALUES>
+								<VALUE>dinput</VALUE>
+								<VALUE>xinput</VALUE>
+								<VALUE>rawinput</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="forceFeedback" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Turns on force feedback if you have a controller that supports it. Scud Race' (including 'Scud Race Plus'), 'Daytona USA 2' (both editions), and 'Sega Rally 2' are the only games that support it.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="frequency" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>To improve performance, Supermodel underclocks the PowerPC down to 25 MHz by default.  This may be the cause of some games running too slowly even when the frame rate is at 60 FPS (which is the native rate).  You may want to experiment with increasing the clock frequency, although this comes with a performance penalty.</DESCRIPTION>
+						</KEY>
+						<KEY name="throttle" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>By default, Supermodel limits the frame rate to 60 Hz.  This has no impact on
+performance except when the frame rate exceeds 60 FPS on fast systems.  This
+can be disabled with the '-no-throttle' option. (true) otherwise leave blank.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

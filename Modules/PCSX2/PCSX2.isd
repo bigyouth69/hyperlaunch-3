@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="PerGameMemoryCards" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Support for Per-Game Memory Card support. Make sure you first create a "default.ps2" memory card in the folder you store your memory cards in.</DESCRIPTION>
+						</KEY>
+						<KEY name="noGUI" required="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, the GUI window will not show, DO NOT SET THIS AS TRUE, currently pcsx2 doesn't close properly when you exit in this mode. Make sure this option is set to default or false for normal usage, it is only for testing purposes.</DESCRIPTION>
+						</KEY>
+						<KEY name="fullboot" required="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Disables fast booting and shows the bios screen.</DESCRIPTION>
+						</KEY>
+						<KEY name="HideConsole" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables hiding of console window that can appear while in windowed mode or using bezels.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="nohacks" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>disables all speedhacks</DESCRIPTION>
+						</KEY>
+						<KEY name="gamefixes" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>use the specified comma or pipe-delimited list of gamefixes.</DESCRIPTION>
+						</KEY>
+						<KEY name="cfg" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>specifies the PCSX2 configuration file to use</DESCRIPTION>
+						</KEY>
+						<KEY name="cfgpath" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>changes the configuration file path</DESCRIPTION>
+						</KEY>
+						<KEY name="gs" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>specify the file to use as the GS plugin</DESCRIPTION>
+						</KEY>
+						<KEY name="pad" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>specify the file to use as the PAD plugin</DESCRIPTION>
+						</KEY>
+						<KEY name="spu2" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>specify the file to use as the SPU2 plugin</DESCRIPTION>
+						</KEY>
+						<KEY name="cdvd" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>specify the file to use as the CDVD plugin</DESCRIPTION>
+						</KEY>
+						<KEY name="usb" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>specify the file to use as the USB plugin</DESCRIPTION>
+						</KEY>
+						<KEY name="fw" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>specify the file to use as the FW plugin</DESCRIPTION>
+						</KEY>
+						<KEY name="dev9" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>specify the file to use as the DEV9 plugin</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

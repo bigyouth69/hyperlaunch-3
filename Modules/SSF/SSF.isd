@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="ShowBIOS" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true SSF shows the BIOS Screen. If false it doesn't show.</DESCRIPTION>
+						</KEY>
+						<KEY name="BilinearFiltering" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Bilinear Filtering. This makes the game textures appear smoother.</DESCRIPTION>
+						</KEY>
+						<KEY name="vSync" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If you are getting clipping, set the vSync variable to true</DESCRIPTION>
+						</KEY>
+						<KEY name="WideScreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables WideScreen Support</DESCRIPTION>
+						</KEY>
+						<KEY name="Stretch" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true Stretches game to fill screen losing aspect ratio.</DESCRIPTION>
+						</KEY>
+						<KEY name="CDDrive" required="false" nullable="true" minLength="0">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Make sure you have your CDDrive set to whatever number you use for your games. 0 may be your hardware drive, while 1 may be your virtual drive (depending on how many you have). If you get a black screen, try different numbers starting from 0. If you keep getting the CD Player BIOS screen, you have the CDDrive variable set wrong.</DESCRIPTION>
+						</KEY>
+						<KEY name="defaultRegion" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>If any of your roms do not have a region tag, the module will use this region as it's default. If you still get a black screen for this rom, add a correct region tag to the rom's file name.</DESCRIPTION>
+							<VALUES>
+								<VALUE>America, Canada, Brazil</VALUE>
+								<VALUE>Japan, Taiwan, Korea, Philippines</VALUE>
+								<VALUE>Europe, Australia, South Africa</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="USBios" required="true" nullable="true">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Path to your USA Bios file.</DESCRIPTION>
+						</KEY>
+						<KEY name="EUBios" required="true" nullable="true">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Path to your European Bios file.</DESCRIPTION>
+						</KEY>
+						<KEY name="JPBios" required="true" nullable="true">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Path to your Japanese Bios file.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

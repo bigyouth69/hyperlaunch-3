@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="remapWinKeys" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>This remaps windows Start keys to do nothing to prevent accidental leaving of game</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="gamePath" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>If you don't want to use the default romname\exe as described in the module notes, set the gamePath value to be the location of your game's Mugen.exe which should be in your rompath. This is just giving you the ability to rename the folder structure if you don't want to use the romName for your folder's name containing the Mugen.exe. gamePath should and will be treated as starting  from your romPath and ending with the exe to the game. (Examples: Street Fighter Legends\mugen.exe  OR  Bastion\WinBa.exe)</DESCRIPTION>
+						</KEY>
+						<KEY name="exitHack" required="false" nullable="false">
+							<KEYTYPE>Binary</KEYTYPE>
+							<DESCRIPTION> Sometimes mugen crashes during exit and doesn't close, so we need to do a workaround to detect it, this doesn't seem to happen on MUGEN 1.0. 1 = workaround enabled (this is the default).</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

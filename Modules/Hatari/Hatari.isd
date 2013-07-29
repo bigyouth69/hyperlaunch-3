@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="Monitor" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>choices are mono, rgb, vga and tv</DESCRIPTION>
+							<VALUES>
+								<VALUE>rgb</VALUE>
+								<VALUE>vga</VALUE>
+								<VALUE>tv</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="StatusBar" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>show floppy status bar at bottom of emu window</DESCRIPTION>
+						</KEY>
+						<KEY name="Borders" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>ST/STE only - show screen borders (for low/med resolution overscan demos), false will help stretch the game to fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="Zoom" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>zoom low resolution</DESCRIPTION>
+						</KEY>
+						<KEY name="DesktopST" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Whether fullscreen mode uses desktop resolution to avoid: messing multi-screen setups, several seconds delay needed by LCD monitors resolution switching and the resulting sound break. As Hatari ST/E display code doesn't support zooming (except low-rez doubling), it doesn't get scaled (by Hatari or monitor) when this is enabled. Therefore this is mainly useful only if you suffer from the described effects, but still want to grab mouse and remove other distractions from the screen just by toggling fullscreen mode.
+</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

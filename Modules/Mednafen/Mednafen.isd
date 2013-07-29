@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="Stretch" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Defines how your game will be displayed. 0 = use medanfen's default, aspect = increase size to fill screen while maintaining aspect ratio (HL default), full = fill entire screen while losing aspect ratio and the black bars.</DESCRIPTION>
+							<VALUES>
+								<VALUE>0</VALUE>
+								<VALUE>aspect</VALUE>
+								<VALUE>full</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="vDriver" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>The video driver you want to use. Choices are opengl or sdl. Some people experience screen flickering and mednafen will not stay in fullscreen, you can changed vDriver to sdl and it will possibly fix the issue.</DESCRIPTION>
+							<VALUES>
+								<VALUE>opengl</VALUE>
+								<VALUE>sdl</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="xRes" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Resolution Width of your screen when using mednafen.</DESCRIPTION>
+						</KEY>
+						<KEY name="yRes" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Resolution Height of your screen when using mednafen.</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_X_Res" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Controls width of the emu's window, relative to the bezel's window</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Y_Res" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Controls height of the emu's window, relative to the bezel's window</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="%SystemName%" required="false">
+			<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="Stretch" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Defines how your game will be displayed. 0 = use medanfen's default, aspect = increase size to fill screen while maintaining aspect ratio (HL default), full = fill entire screen while losing aspect ratio and the black bars.</DESCRIPTION>
+							<VALUES>
+								<VALUE>0</VALUE>
+								<VALUE>aspect</VALUE>
+								<VALUE>full</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="vDriver" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>The video driver you want to use. Choices are opengl or sdl. Some people experience screen flickering and mednafen will not stay in fullscreen, you can changed vDriver to sdl and it will possibly fix the issue.</DESCRIPTION>
+							<VALUES>
+								<VALUE>opengl</VALUE>
+								<VALUE>sdl</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="xRes" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Resolution Width of your screen when using mednafen.</DESCRIPTION>
+						</KEY>
+						<KEY name="yRes" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Resolution Height of your screen when using mednafen.</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_X_Res" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Controls width of the emu's window, relative to the bezel's window</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Y_Res" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Controls height of the emu's window, relative to the bezel's window</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="Atari Lynx" required="false">
+			<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="Stretch" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Defines how your game will be displayed. 0 = use medanfen's default, aspect = increase size to fill screen while maintaining aspect ratio (HL default), full = fill entire screen while losing aspect ratio and the black bars.</DESCRIPTION>
+							<VALUES>
+								<VALUE>0</VALUE>
+								<VALUE>aspect</VALUE>
+								<VALUE>full</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="vDriver" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>The video driver you want to use. Choices are opengl or sdl. Some people experience screen flickering and mednafen will not stay in fullscreen, you can changed vDriver to sdl and it will possibly fix the issue.</DESCRIPTION>
+							<VALUES>
+								<VALUE>opengl</VALUE>
+								<VALUE>sdl</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="xRes" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Resolution Width of your screen when using mednafen.</DESCRIPTION>
+						</KEY>
+						<KEY name="yRes" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Resolution Height of your screen when using mednafen.</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_X_Res" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Controls width of the emu's window, relative to the bezel's window</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Y_Res" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Controls height of the emu's window, relative to the bezel's window</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_X_Vertical_Res" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Only for Atari Lynx vertical games - Controls height of the emu's window, relative to the bezel's vertical window</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Y_Vertical_Res" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Only for Atari Lynx vertical games - Controls width of the emu's window, relative to the bezel's vertical window</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="RotateScreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>For Atari Lynx only. If true, it will rotate the emulator window to simulate the effect of rotating the Atari Lynx. This does not rotate your desktop.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="NEC PC-FX" required="false">
+			<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="Stretch" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Defines how your game will be displayed. 0 = use medanfen's default, aspect = increase size to fill screen while maintaining aspect ratio (HL default), full = fill entire screen while losing aspect ratio and the black bars.</DESCRIPTION>
+							<VALUES>
+								<VALUE>0</VALUE>
+								<VALUE>aspect</VALUE>
+								<VALUE>full</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="vDriver" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>The video driver you want to use. Choices are opengl or sdl. Some people experience screen flickering and mednafen will not stay in fullscreen, you can changed vDriver to sdl and it will possibly fix the issue.</DESCRIPTION>
+							<VALUES>
+								<VALUE>opengl</VALUE>
+								<VALUE>sdl</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="xRes" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Resolution Width of your screen when using mednafen.</DESCRIPTION>
+						</KEY>
+						<KEY name="yRes" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Resolution Height of your screen when using mednafen.</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_X_Res" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Controls width of the emu's window, relative to the bezel's window</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Y_Res" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Controls height of the emu's window, relative to the bezel's window</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="Bios" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="PCFX_Bios" required="false" nullable="true">
+							<KEYTYPE>FileName</KEYTYPE>
+							<DESCRIPTION>Bios, placed in the bios subfolder of the emu, required for NEC PC-FX. (filename.extension)</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="NEC PC Engine-CD" required="false">
+			<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="Stretch" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Defines how your game will be displayed. 0 = use medanfen's default, aspect = increase size to fill screen while maintaining aspect ratio (HL default), full = fill entire screen while losing aspect ratio and the black bars.</DESCRIPTION>
+							<VALUES>
+								<VALUE>0</VALUE>
+								<VALUE>aspect</VALUE>
+								<VALUE>full</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="vDriver" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>The video driver you want to use. Choices are opengl or sdl. Some people experience screen flickering and mednafen will not stay in fullscreen, you can changed vDriver to sdl and it will possibly fix the issue.</DESCRIPTION>
+							<VALUES>
+								<VALUE>opengl</VALUE>
+								<VALUE>sdl</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="xRes" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Resolution Width of your screen when using mednafen.</DESCRIPTION>
+						</KEY>
+						<KEY name="yRes" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Resolution Height of your screen when using mednafen.</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_X_Res" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Controls width of the emu's window, relative to the bezel's window</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Y_Res" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Controls height of the emu's window, relative to the bezel's window</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="Bios" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="PCE_CD_Bios" required="false" nullable="true">
+							<KEYTYPE>FileName</KEYTYPE>
+							<DESCRIPTION>Bios, placed in the bios subfolder of the emu, required for these systems: NEC PC Engine-CD and NEC TurboGrafx-CD. (filename.extension)</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="NEC TurboGrafx-CD" required="false">
+			<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="Stretch" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Defines how your game will be displayed. 0 = use medanfen's default, aspect = increase size to fill screen while maintaining aspect ratio (HL default), full = fill entire screen while losing aspect ratio and the black bars.</DESCRIPTION>
+							<VALUES>
+								<VALUE>0</VALUE>
+								<VALUE>aspect</VALUE>
+								<VALUE>full</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="vDriver" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>The video driver you want to use. Choices are opengl or sdl. Some people experience screen flickering and mednafen will not stay in fullscreen, you can changed vDriver to sdl and it will possibly fix the issue.</DESCRIPTION>
+							<VALUES>
+								<VALUE>opengl</VALUE>
+								<VALUE>sdl</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="xRes" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Resolution Width of your screen when using mednafen.</DESCRIPTION>
+						</KEY>
+						<KEY name="yRes" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Resolution Height of your screen when using mednafen.</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_X_Res" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Controls width of the emu's window, relative to the bezel's window</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Y_Res" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Controls height of the emu's window, relative to the bezel's window</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="Bios" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="PCE_CD_Bios" required="false" nullable="true">
+							<KEYTYPE>FileName</KEYTYPE>
+							<DESCRIPTION>Bios, placed in the bios subfolder of the emu, required for these systems: NEC PC Engine-CD and NEC TurboGrafx-CD. (filename.extension)</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="Sony PlayStation" required="false">
+			<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="Stretch" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Defines how your game will be displayed. 0 = use medanfen's default, aspect = increase size to fill screen while maintaining aspect ratio (HL default), full = fill entire screen while losing aspect ratio and the black bars.</DESCRIPTION>
+							<VALUES>
+								<VALUE>0</VALUE>
+								<VALUE>aspect</VALUE>
+								<VALUE>full</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="vDriver" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>The video driver you want to use. Choices are opengl or sdl. Some people experience screen flickering and mednafen will not stay in fullscreen, you can changed vDriver to sdl and it will possibly fix the issue.</DESCRIPTION>
+							<VALUES>
+								<VALUE>opengl</VALUE>
+								<VALUE>sdl</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="xRes" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Resolution Width of your screen when using mednafen.</DESCRIPTION>
+						</KEY>
+						<KEY name="yRes" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Resolution Height of your screen when using mednafen.</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_X_Res" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Controls width of the emu's window, relative to the bezel's window</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Y_Res" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Controls height of the emu's window, relative to the bezel's window</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="Bios" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="NA_Bios" required="false" nullable="true">
+							<KEYTYPE>FileName</KEYTYPE>
+							<DESCRIPTION>Sony PlayStation only - this is the bios you want to use for North American games - place this in a "bios" subfolder where Mednafen is. (filename.extension)</DESCRIPTION>
+						</KEY>
+						<KEY name="EU_Bios" required="false" nullable="true">
+							<KEYTYPE>FileName</KEYTYPE>
+							<DESCRIPTION>Sony PlayStation only - this is the bios you want to use for European games - place this in a "bios" subfolder where Mednafen is. (filename.extension)</DESCRIPTION>
+						</KEY>
+						<KEY name="JP_Bios" required="false" nullable="true">
+							<KEYTYPE>FileName</KEYTYPE>
+							<DESCRIPTION>Sony PlayStation only - this is the bios you want to use for Japanese games - place this in a "bios" subfolder where Mednafen is. (filename.extension)</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

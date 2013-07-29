@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="file:///C:/Users/Greg/Desktop/Modules/_Module%20Ini%20Schemas/IniSchema.xsd">
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="NullDC" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="DualMonitors" required="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables DualMonitors</DESCRIPTION>
+						</KEY>
+						<KEY name="autoStart" required="false">
+							<KEYTYPE>Binary</KEYTYPE>
+							<DESCRIPTION>Enables/Disables autoStart</DESCRIPTION>
+						</KEY>
+						<KEY name="noConsole" required="false">
+							<KEYTYPE>Binary</KEYTYPE>
+							<DESCRIPTION>Enables/Disables noConsole</DESCRIPTION>
+						</KEY>
+						<KEY name="autoHideMenu" required="false">
+							<KEYTYPE>Binary</KEYTYPE>
+							<DESCRIPTION>Enables/Disables autoHideMenu</DESCRIPTION>
+						</KEY>
+						<KEY name="alwaysOnTop" required="false">
+							<KEYTYPE>Binary</KEYTYPE>
+							<DESCRIPTION>Enables/Disables alwaysOnTop</DESCRIPTION>
+						</KEY>
+						<KEY name="showVMU" required="false">
+							<KEYTYPE>Binary</KEYTYPE>
+							<DESCRIPTION>Enables/Disables showVMU</DESCRIPTION>
+						</KEY>
+						<KEY name="loadDefaultImage" required="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>loadDefaultImage</DESCRIPTION>
+						</KEY>
+						<KEY name="patchRegion" required="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>patchRegion</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Cable" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Games can have a custom Cable Type (per game). Not all games work on VGA, so use this option to choose the correct cable for your game. Cable can be 0 (VGA(0)(RGB)), 1 (VGA(1)(RGB)), 2 (TV(RGB)) or 3 (TV(VBS/Y+S/C)), default is 0.</DESCRIPTION>
+							<VALUES>
+								<VALUE>0</VALUE>
+								<VALUE>1</VALUE>
+								<VALUE>2</VALUE>
+								<VALUE>3</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

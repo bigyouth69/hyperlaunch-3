@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="CustomConfig" required="false" nullable="false">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<DESCRIPTION>Set the path to a custom config file and the module will use this instead of the ScummVM's default one.</DESCRIPTION>
+						</KEY>
+						<KEY name="SaveKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>hotkey to save state</DESCRIPTION>
+						</KEY>
+						<KEY name="LoadKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>hotkey to load state</DESCRIPTION>
+						</KEY>
+						<KEY name="MenuKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>hotkey to access the ScummVM menu</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

@@ -1,0 +1,2128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="true">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true emulator will run fullscreen.</DESCRIPTION>
+						</KEY>
+						<KEY name="ControllerCode" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The Controller code unique to your hardware. Found in the Demul.ini.</DESCRIPTION>
+						</KEY>
+						<KEY name="MouseCode" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The Mouse code unique to your hardware. Found in the Demul.ini.</DESCRIPTION>
+						</KEY>
+						<KEY name="KeyboardCode" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The Keyboard code unique to your hardware. Found in the Demul.ini.</DESCRIPTION>
+						</KEY>
+						<KEY name="LightgunCode" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The Lightgun code unique to your hardware. Found in the Demul.ini.</DESCRIPTION>
+						</KEY>
+						<KEY name="GlobalShaderEffects" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, turns on shader support for demul for all games. (shaders are only supported using gpuOglv3 video plugin)</DESCRIPTION>
+						</KEY>
+						<KEY name="GlobalShaderName" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>The shader to use for all games that do not have a custom shader defined in their section</DESCRIPTION>
+						</KEY>
+						<KEY name="GlobalShaderMode" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>0 (minimum), 1 (more), 2 (medium), 3 (maximum)</DESCRIPTION>
+							<VALUES>
+								<VALUE>1</VALUE>
+								<VALUE>2</VALUE>
+								<VALUE>3</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Controls" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>the controls prefix you want this game to use. Default is Standard if not set. For example to use driving controls, set this key to driving, and it will load the driving_JAMMA0_0 and driving_JAMMA0_1 profiles.</DESCRIPTION>
+						</KEY>
+						<KEY name="LoadDecrypted" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Currently not supported</DESCRIPTION>
+						</KEY>
+						<KEY name="Bios" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Set the number to the bios you want to use. Blank is automatic. Get this from setting the bios in the emu, then opening the demul ini and seeing what number it was set to.</DESCRIPTION>
+							<VALUES>
+								<VALUE>0 - Naomi epr-21576e (Japan)</VALUE>
+								<VALUE>1 - Naomi epr-21576g (Japan)</VALUE>
+								<VALUE>2 - Naomi epr-21576h (Japan)</VALUE>
+								<VALUE>3 - Naomi epr-21576d (Japan)</VALUE>
+								<VALUE>4 - Naomi epr-21576b (Japan)</VALUE>
+								<VALUE>5 - Naomi epr-21576 (Japan)</VALUE>
+								<VALUE>6 - Naomi epr-21578g (Export)</VALUE>
+								<VALUE>7 - Naomi epr-21578e (Export)</VALUE>
+								<VALUE>8 - Naomi epr-21578d (Export)</VALUE>
+								<VALUE>9 - Naomi epr-21578b (Export)</VALUE>
+								<VALUE>10 - Naomi epr-21577g (USA)</VALUE>
+								<VALUE>11 - Naomi epr-21577e (USA)</VALUE>
+								<VALUE>12 - Naomi epr-21577d (USA)</VALUE>
+								<VALUE>13 - Naomi House of the Dead 2 (Export)</VALUE>
+								<VALUE>14 - Naomi House of the Dead 2 (USA)</VALUE>
+								<VALUE>15 - Naomi Ferrari F355 (Export)</VALUE>
+								<VALUE>16 - Naomi Ferrari F355 (USA)</VALUE>
+								<VALUE>17 - Naomi Airline Pilots Deluxe (Export)</VALUE>
+								<VALUE>18 - Naomi Airline Pilots Deluxe (USA)</VALUE>
+								<VALUE>19 - Naomi Dev BIOS</VALUE>
+								<VALUE>20 - Naomi 2 epr-23605c (Japan)</VALUE>
+								<VALUE>21 - Naomi 2 epr-23605b (Japan)</VALUE>
+								<VALUE>22 - Naomi 2 epr-23605a (Japan)</VALUE>
+								<VALUE>23 - Naomi 2 epr-23605 (Japan)</VALUE>
+								<VALUE>24 - Naomi 2 epr-23608b (Export)</VALUE>
+								<VALUE>25 - Naomi 2 epr-23608 (Export)</VALUE>
+								<VALUE>26 - Naomi 2 epr-23607b (USA)</VALUE>
+								<VALUE>27 - Naomi 2 epr-23607 (USA)</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="ShaderEffects" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, turns on shader support for just this game. (shaders are only supported using gpuOglv3 video plugin)</DESCRIPTION>
+						</KEY>
+						<KEY name="ShaderName" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>The name of your shader file (w/o extension) for just this game. Shaders must be placed in a "shaders" folder in your Emu_Path.</DESCRIPTION>
+						</KEY>
+						<KEY name="ShaderMode" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>0 (minimum), 1 (more), 2 (medium), 3 (maximum)</DESCRIPTION>
+							<VALUES>
+								<VALUE>1</VALUE>
+								<VALUE>2</VALUE>
+								<VALUE>3</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="standard_JAMMA0_0" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="PUSH1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH6" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH7" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH8" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SERVICE" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="standard_JAMMA0_1" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="PUSH1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH6" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH7" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH8" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SERVICE" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="sfstyle_JAMMA0_0" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="PUSH1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH6" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH7" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH8" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SERVICE" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="sfstyle_JAMMA0_1" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="PUSH1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH6" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH7" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH8" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SERVICE" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="ggxstyle_JAMMA0_0" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="PUSH1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH6" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH7" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH8" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SERVICE" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="ggxstyle_JAMMA0_1" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="PUSH1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH6" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH7" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH8" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SERVICE" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="reverse_JAMMA0_0" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="PUSH1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH6" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH7" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH8" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SERVICE" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="reverse_JAMMA0_1" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="PUSH1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH6" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH7" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH8" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SERVICE" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="driving_JAMMA0_0" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="PUSH1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH6" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH7" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH8" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SERVICE" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="driving_JAMMA0_1" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="PUSH1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH6" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH7" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH8" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SERVICE" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="18wheel_JAMMA0_0" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="PUSH1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH6" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH7" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH8" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SERVICE" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="18wheel_JAMMA0_1" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="PUSH1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH6" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH7" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH8" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SERVICE" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="jambodriving_JAMMA0_0" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="PUSH1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH6" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH7" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH8" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SERVICE" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="jambodriving_JAMMA0_1" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="PUSH1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH6" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH7" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH8" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SERVICE" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="wldrider_JAMMA0_0" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="PUSH1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH6" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH7" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH8" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SERVICE" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="wldrider_JAMMA0_1" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="PUSH1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH6" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH7" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH8" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SERVICE" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="fps_JAMMA0_0" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="PUSH1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH6" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH7" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH8" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SERVICE" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="fps_JAMMA0_1" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="PUSH1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH6" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH7" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH8" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SERVICE" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="samba_JAMMA0_0" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="PUSH1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH6" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH7" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH8" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SERVICE" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="samba_JAMMA0_1" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="PUSH1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH6" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH7" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="PUSH8" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SERVICE" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DIGITALRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGUP2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGDOWN2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGLEFT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="ANALOGRIGHT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="standard_ATOMISWAVE0_0" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="UP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="LEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="RIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="standard_ATOMISWAVE0_1" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="UP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="LEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="RIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="sfstyle_ATOMISWAVE0_0" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="UP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="LEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="RIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="sfstyle_ATOMISWAVE0_1" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="UP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="LEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="RIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="ggxstyle_ATOMISWAVE0_0" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="UP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="LEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="RIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="ggxstyle_ATOMISWAVE0_1" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="UP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="LEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="RIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="reverse_ATOMISWAVE0_0" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="UP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="LEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="RIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="reverse_ATOMISWAVE0_1" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="UP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="LEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="RIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="driving_ATOMISWAVE0_0" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="UP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="LEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="RIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="driving_ATOMISWAVE0_1" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="UP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="LEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="RIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="fps_ATOMISWAVE0_0" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="UP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="LEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="RIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="fps_ATOMISWAVE0_1" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="UP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="LEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="RIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="samba_ATOMISWAVE0_0" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="UP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="LEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="RIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="samba_ATOMISWAVE0_1" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="UP" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="DOWN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="LEFT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="RIGHT" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT1" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT2" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT3" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT4" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="SHOT5" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="START" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="COIN" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="Resolution" required="false" nullable="false" minLength="0" maxLength="5">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Fullscreen Resolution: 0=320x240, 1=640x480, 2=800x600, 3=1024x768, 4=1280x1024, 5=1600x1200</DESCRIPTION>
+							<VALUES>
+								<VALUE>0</VALUE>
+								<VALUE>1</VALUE>
+								<VALUE>2</VALUE>
+								<VALUE>3</VALUE>
+								<VALUE>4</VALUE>
+								<VALUE>5</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="WinX" required="false" nullable="true" minLength="0">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>for Windowed Mode Only, X coordinate of Window</DESCRIPTION>
+						</KEY>
+						<KEY name="WinY" required="false" nullable="true" minLength="0">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>for Windowed Mode Only,  Y coordinate of Window</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

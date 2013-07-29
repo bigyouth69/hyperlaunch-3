@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Windowed" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>y=Simulated Fullscreen mode, n=Normal Fullscreen mode - Simulated Fullscreen mode is preferred, it still looks fullscreen</DESCRIPTION>
+							<VALUES>
+								<VALUE>y</VALUE>
+								<VALUE>n</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="WideScreenMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>y=enable, n=disable</DESCRIPTION>
+							<VALUES>
+								<VALUE>y</VALUE>
+								<VALUE>n</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="DesktopMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>y=enable, n=disable - This is basically what sets fullscreen mode. Set to n to show emu in a small window</DESCRIPTION>
+							<VALUES>
+								<VALUE>y</VALUE>
+								<VALUE>n</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="FullscreenStretch" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>y=enable, n=disable - This stretches the game screen while keeping the aspect ratio</DESCRIPTION>
+							<VALUES>
+								<VALUE>y</VALUE>
+								<VALUE>n</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="HighResMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>y=enable, n=disable</DESCRIPTION>
+							<VALUES>
+								<VALUE>y</VALUE>
+								<VALUE>n</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Filter" required="false" nullable="false">
+							<KEYTYPE>Binary</KEYTYPE>
+							<DESCRIPTION>1=bilinear filtering , 0=disable</DESCRIPTION>
+						</KEY>
+						<KEY name="TripleBuffer" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>y=enable, n=disable (DirectX only)</DESCRIPTION>
+							<VALUES>
+								<VALUE>y</VALUE>
+								<VALUE>n</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Zoom" required="false" nullable="false" minLength="0" maxLength="4">
+							<KEYTYPE>Decimal</KEYTYPE>
+							<DESCRIPTION>4=zoom max , 0=no zoom, use any value between 0 and 4</DESCRIPTION>
+						</KEY>
+						<KEY name="scanlines" required="false" nullable="false" minLength="0" maxLength="40">
+							<KEYTYPE>Decimal</KEYTYPE>
+							<DESCRIPTION>0=none, 40=black, use any value in between 0 and 40</DESCRIPTION>
+						</KEY>
+						<KEY name="vSync" required="false" nullable="false" minLength="0" maxLength="2">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>0=disable, 1=enable, 2=vsync + timer (special vsync for windowed mode)</DESCRIPTION>
+							<VALUES>
+								<VALUE>0</VALUE>
+								<VALUE>1</VALUE>
+								<VALUE>2</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="vDriver" required="false" nullable="false">
+							<KEYTYPE>Binary</KEYTYPE>
+							<DESCRIPTION>0=DirectX, 1=OpenGL</DESCRIPTION>
+						</KEY>
+						<KEY name="xRes" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Width of the desired resolution </DESCRIPTION>
+						</KEY>
+						<KEY name="yRes" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Height of the desired resolution </DESCRIPTION>
+						</KEY>
+						<KEY name="bitDepth" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Color Depth or Bit depth. If in doubt choose 32.</DESCRIPTION>
+						</KEY>
+						<KEY name="DisplayRes" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Display screen resolution for troubleshooting</DESCRIPTION>
+							<VALUES>
+								<VALUE>y</VALUE>
+								<VALUE>n</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="UseNoMousy" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Use NoMousy tool to hide the mouse. If false, will move mouse off the screen instead</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

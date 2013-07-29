@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="videoMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Window 1x is a small window. Window 2x is twice as big as Window 1x, Window 3x is 3 times as big as Window 1x. THese are values for a windowed emulator. The rest are the fullscreen modes. Be sure to pick one that is compatible with your screen and video card. WidthxHeightxColorDepth. Default value is 1024x768x32.</DESCRIPTION>
+							<VALUES>
+								<VALUE>Window 1x</VALUE>
+								<VALUE>Window 2x</VALUE>
+								<VALUE>Window 3x</VALUE>
+								<VALUE>640x480x32</VALUE>
+								<VALUE>720x480x32</VALUE>
+								<VALUE>720x576x32</VALUE>
+								<VALUE>800x600x32</VALUE>
+								<VALUE>1024x768x32</VALUE>
+								<VALUE>1152x864x32</VALUE>
+								<VALUE>1280x720x32</VALUE>
+								<VALUE>1280x768x32</VALUE>
+								<VALUE>1280x800x32</VALUE>
+								<VALUE>1280x960x32</VALUE>
+								<VALUE>1280x1024x32</VALUE>
+								<VALUE>1360x768x32</VALUE>
+								<VALUE>1366x768x32</VALUE>
+								<VALUE>1600x900x32</VALUE>
+								<VALUE>1600x1024x32</VALUE>
+								<VALUE>1600x1200x32</VALUE>
+								<VALUE>1680x1050x32</VALUE>
+								<VALUE>1920x1080x32</VALUE>
+								<VALUE>1920x1200x32</VALUE>
+								<VALUE>640x480x16</VALUE>
+								<VALUE>720x480x16</VALUE>
+								<VALUE>720x576x16</VALUE>
+								<VALUE>800x600x16</VALUE>
+								<VALUE>1024x768x16</VALUE>
+								<VALUE>1152x864x16</VALUE>
+								<VALUE>1280x720x16</VALUE>
+								<VALUE>1280x768x16</VALUE>
+								<VALUE>1280x800x16</VALUE>
+								<VALUE>1280x960x16</VALUE>
+								<VALUE>1280x1024x16</VALUE>
+								<VALUE>1360x768x16</VALUE>
+								<VALUE>1366x768x16</VALUE>
+								<VALUE>1600x900x16</VALUE>
+								<VALUE>1600x1024x16</VALUE>
+								<VALUE>1600x1200x16</VALUE>
+								<VALUE>1680x1050x16</VALUE>
+								<VALUE>1920x1080x16</VALUE>
+								<VALUE>1920x1200x16</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

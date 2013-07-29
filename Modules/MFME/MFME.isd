@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2010 rel. 3 (http://www.altova.com) by MESMERiZE (MSM) -->
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="MinimizeWindows" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Minimizes all windows that are detected by HyperLaunch.</DESCRIPTION>
+						</KEY>
+						<KEY name="ResizeDesktop" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you want to use a different screen resolution when playing a game. This is useful if you use layouts.</DESCRIPTION>
+						</KEY>
+						<KEY name="ResizeW" required="false" nullable="true" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Do not change this, layouts are made to fit this size desktop. Default Value is 1280.</DESCRIPTION>
+						</KEY>
+						<KEY name="ResizeH" required="false" nullable="true" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Do not change this, layouts are made to fit this size desktop. Default Value is 1024.</DESCRIPTION>
+						</KEY>
+						<KEY name="BackgroundPic" required="false" nullable="false" FULLROW="true">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<DESCRIPTION>a background picture that persists during gameplay. Your emulator will display on top of this image and this image will hide your desktop</DESCRIPTION>
+							<PATHTYPE>Absolute</PATHTYPE>
+						</KEY>
+						<KEY name="Magnify" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Create a windows magnifier window in the bottom right corner to see things closer over your cursor. If using Windows Vista or newer this feature works better with UAC off, If UAC is on you will receive a prompt. Also If you are using Windows Vista or newer be sure to set MagnifyWrapper.exe to run as administrator in its properties.</DESCRIPTION>
+						</KEY>
+						<KEY name="MagnifyPercentage" required="false" nullable="true" minLength="100">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Magnification Zoom Percentage</DESCRIPTION>
+						</KEY>
+						<KEY name="MagnifyWinSizeW" required="false" nullable="true" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Magnification Window Width</DESCRIPTION>
+						</KEY>
+						<KEY name="MagnifyWinSizeH" required="false" nullable="true" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Magnification Window Height</DESCRIPTION>
+						</KEY>
+						<KEY name="MagnifyWinPosX" required="false" nullable="true" minLength="0">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Magnification Window Pos x (default is bottom right hand corner)</DESCRIPTION>
+						</KEY>
+						<KEY name="MagnifyWinPosY" required="false" nullable="true" minLength="0">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Magnification Window Pos y (default is bottom right hand corner)</DESCRIPTION>
+						</KEY>
+						<KEY name="ambientSound" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Ambient Sound Feature</DESCRIPTION>
+						</KEY>
+						<KEY name="ambientSoundFile" required="false" nullable="false" FULLROW="true">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<DESCRIPTION>The name of the sound file + extension in your module extensions folder</DESCRIPTION>
+							<PATHTYPE>Absolute</PATHTYPE>
+						</KEY>
+						<KEY name="ambientSoundPlayer" required="false" nullable="false" FULLROW="true">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<DESCRIPTION>This module was made to use the djAmbiencePlayer.exe. This key allows you to have a different name for your sound player. If you choose a different sound player  things will break.</DESCRIPTION>
+							<PATHTYPE>Absolute</PATHTYPE>
+						</KEY>
+						<KEY name="ambientStopKey" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>This is for djAmbientPlayer, this is the name of the key used to stop the playing of the ambient music. Please use AutoIt key naming conventions. djAmbientPlayer adds the brackets {} as seen as used by Autoit's HotKeySet command.</DESCRIPTION>
+						</KEY>
+						<KEY name="ResetKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>Key to reset the game while playing</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

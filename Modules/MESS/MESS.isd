@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="Videomode" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Choices are gdi,ddraw,d3d. If left blank, MESS uses d3d by default.</DESCRIPTION>
+							<VALUES>
+								<VALUE>d3d</VALUE>
+								<VALUE>ddraw</VALUE>
+								<VALUE>gdi</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="BezelMode" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Choices are layout or normal. If left blank, layout will be used by default. "Layout" allows MESS to use it's built-in layout support, where-as "normal" only uses HyperLaunch bezels.</DESCRIPTION>
+							<VALUES>
+								<VALUE>layout</VALUE>
+								<VALUE>normal</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%SystemName%" required="false">
+					<SECTIONTYPE>System</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Parameters" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Add any extra command line parameters for that system.</DESCRIPTION>
+						</KEY>
+						<KEY name="UseSoftwareList" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you want to launch the game using MESS Software list, if you set this to true MAKE SURE you have a proper rom mapping file that maps your rom names to MESS names. Either that or manually edit the respective software list under MESS\hash to your rom names.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="Texas Instruments TI 99-4A" required="false">
+			<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Main_Cart" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Main_Cart should be used on expansion modules like Adventureland and should contain the name of the main cart required to load the expansion module</DESCRIPTION>
+						</KEY>
+						<KEY name="Basic_Cart" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Basic_Cart if you need a different extended basic cart for a specific game use add this entry</DESCRIPTION>
+						</KEY>
+						<KEY name="Expansion_Location" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Expansion_Location this is the device where you want to load your expansion module from, typically on disks it's DSK1.* and on tapes CS1.*</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="Apple IIGS" required="false">
+			<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="External_OS" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true for games without OS included, this game will then always use %romPath%\System6.2mg as its OS</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="Magnavox Odyssey 2" required="false">
+			<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Bios" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>for all games, we use the default bios (odyssey2). Some games might require different bios like Odyssey2's Jopac games use the videopac bios instead.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

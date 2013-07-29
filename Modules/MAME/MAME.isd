@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="HideConsole" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables hiding of console window that can appear while in windowed mode or using bezels. Usually this window informs you of missing roms and/or samples but can be annoying if the game still works as it shows up behind the bezel.</DESCRIPTION>
+						</KEY>
+						<KEY name="Videomode" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Choices are gdi,ddraw,d3d. If left blank, MAME uses d3d by default.</DESCRIPTION>
+							<VALUES>
+								<VALUE>d3d</VALUE>
+								<VALUE>ddraw</VALUE>
+								<VALUE>gdi</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="BezelMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Choices are layout or normal. If left blank, layout will be used by default. "Layout" allows MAME to use it's built-in layout support, where-as "normal" only uses HyperLaunch bezels.</DESCRIPTION>
+							<VALUES>
+								<VALUE>layout</VALUE>
+								<VALUE>normal</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="CheatMode" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables cheats in Mame provided you placed the cheat.7z in the same folder as the mame executable. When in mame you can check if cheat mode was successfully loaded by going into the TAB menu and seeing that there is a new menu entry named "Cheat". High Scores DO NOT SAVE when cheats are enabled!</DESCRIPTION>
+						</KEY>
+						<KEY name="CheatModeKey" required="false" nullable="true">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>If you set a CheatModeKey, it will only enable Mame cheats if you hold this key down before Mame is launched. High Scores DO NOT SAVE when cheats are enabled!</DESCRIPTION>
+						</KEY>
+						<KEY name="pauseMethod" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>set the pause method that works better on your machine (preferred methods 1 and 2) 1 = Win7 and Win8 OK - Problems with Win XP, 2 = preferred method for WinXP - Problems in Win7, 3 and 4 = same as 1 and 2, 5 = only use If you have a direct input version of mame, 6 = suspend mame process method, it could crash mame in some. computers</DESCRIPTION>
+							<VALUES>
+								<VALUE>1</VALUE>
+								<VALUE>2</VALUE>
+								<VALUE>3</VALUE>
+								<VALUE>4</VALUE>
+								<VALUE>5</VALUE>
+								<VALUE>6</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%SystemName%" required="false">
+					<SECTIONTYPE>System</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Params" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>System specific option that adds a CLI command to all games of this system at boot</DESCRIPTION>
+						</KEY>
+						<KEY name="Use_Bezels" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Bezel Image for the entire system. Can be overwritten by the per-rom setting of the same name.</DESCRIPTION>
+						</KEY>
+						<KEY name="Use_Overlays" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Overlay for the entire system. Can be overwritten by the per-rom setting of the same name.</DESCRIPTION>
+						</KEY>
+						<KEY name="Use_Backdrops" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Backdrops for the entire system. Can be overwritten by the per-rom setting of the same name.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Params" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>ROM specific option that adds a CLI command to that game at boot</DESCRIPTION>
+						</KEY>
+						<KEY name="MameRomName" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>For games that require they be named the original rom's name, set this key to the original rom name. Likewise you also set a "-rompath PATH" in the Params key to the path the rom can be found so mame will look there for the alternate rom.</DESCRIPTION>
+						</KEY>
+						<KEY name="Use_Bezels" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Bezel Image for just this game. Overwrites the system setting.</DESCRIPTION>
+						</KEY>
+						<KEY name="Use_Overlays" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Overlay for just this game. Overwrites the system setting.</DESCRIPTION>
+						</KEY>
+						<KEY name="Use_Backdrops" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Backdrops for just this game. Overwrites the system setting.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

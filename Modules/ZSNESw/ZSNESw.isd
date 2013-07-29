@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="FullScreen" required="false" nullable="false">
+							<KEYTYPE>Binary</KEYTYPE>
+							<DESCRIPTION>If true ZSNES will run fullscreen.</DESCRIPTION>
+						</KEY>
+						<KEY name="Stretch" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true ZSNES will stretch to fill the screen, losing aspect ratio.</DESCRIPTION>
+						</KEY>
+						<KEY name="resX" required="false" nullable="true" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Full screen resolution width</DESCRIPTION>
+						</KEY>
+						<KEY name="resY" required="false" nullable="true" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Full screen resolution height</DESCRIPTION>
+						</KEY>
+						<KEY name="DisplayRomInfo" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true ZSNES will display rom info on load along bottom of screen.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

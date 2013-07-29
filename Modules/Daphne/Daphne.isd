@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="true">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="settings" required="true">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="globalParams" required="true" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION># -noissues is for Esh's Aurunmilla. It stops daphne's warning about issues at launch.
+# -fastboot is for Dragon's Lair and Space Ace, It skips the self test in the beginning.</DESCRIPTION>
+						</KEY>
+						<KEY name="pauseOnExit" required="true" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, will pause Daphne before exiting by sending "P". If your monitor is not the same resolution as daphne, Fade_Out will not display correctly. Pausing Daphne tries to prevent this.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="min_seek_delay" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="seek_frames_per_ms" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="homedir" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+						</KEY>
+						<KEY name="bank0" required="false" minLength="8" maxLength="8">
+							<KEYTYPE>Binary</KEYTYPE>
+						</KEY>
+						<KEY name="bank1" required="false" minLength="8" maxLength="8">
+							<KEYTYPE>Binary</KEYTYPE>
+						</KEY>
+						<KEY name="bank2" required="false" minLength="8" maxLength="8">
+							<KEYTYPE>Binary</KEYTYPE>
+						</KEY>
+						<KEY name="bank3" required="false" minLength="8" maxLength="8">
+							<KEYTYPE>Binary</KEYTYPE>
+						</KEY>
+						<KEY name="sound_buffer" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+						</KEY>
+						<KEY name="params" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+						</KEY>
+						<KEY name="version" required="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Use this if you want to use a different rom for this version of the game. Useful if you want to have several entries for the same game with different settings in your database.</DESCRIPTION>
+							<VALUES>
+								<VALUE>ace</VALUE>
+								<VALUE>ace_a</VALUE>
+								<VALUE>ace_a2</VALUE>
+								<VALUE>ace91</VALUE>
+								<VALUE>aceeuro</VALUE>
+								<VALUE>astron</VALUE>
+								<VALUE>astronp</VALUE>
+								<VALUE>badlandp</VALUE>
+								<VALUE>badlands</VALUE>
+								<VALUE>bega</VALUE>
+								<VALUE>begar1</VALUE>
+								<VALUE>blazer</VALUE>
+								<VALUE>cliff</VALUE>
+								<VALUE>cliffalt</VALUE>
+								<VALUE>cobra</VALUE>
+								<VALUE>cobraab</VALUE>
+								<VALUE>cobraconv</VALUE>
+								<VALUE>cobram3</VALUE>
+								<VALUE>dle11</VALUE>
+								<VALUE>dle21</VALUE>
+								<VALUE>dle21</VALUE>
+								<VALUE>esh</VALUE>
+								<VALUE>eshalt</VALUE>
+								<VALUE>eshalt2</VALUE>
+								<VALUE>galaxy</VALUE>
+								<VALUE>galaxyp</VALUE>
+								<VALUE>gpworld</VALUE>
+								<VALUE>interstellar</VALUE>
+								<VALUE>lair</VALUE>
+								<VALUE>lair_a</VALUE>
+								<VALUE>lair_b</VALUE>
+								<VALUE>lair_c</VALUE>
+								<VALUE>lair_d</VALUE>
+								<VALUE>lair_e</VALUE>
+								<VALUE>lair_f</VALUE>
+								<VALUE>lair_ita</VALUE>
+								<VALUE>lair_n1</VALUE>
+								<VALUE>lair_x</VALUE>
+								<VALUE>lair2</VALUE>
+								<VALUE>lair2_211</VALUE>
+								<VALUE>lair2_300</VALUE>
+								<VALUE>lair2_314</VALUE>
+								<VALUE>lair2_315</VALUE>
+								<VALUE>lair2_316_euro</VALUE>
+								<VALUE>lair2_318</VALUE>
+								<VALUE>lair2_318</VALUE>
+								<VALUE>lair2_319_euro</VALUE>
+								<VALUE>lair2_319_span</VALUE>
+								<VALUE>laireuro</VALUE>
+								<VALUE>mach3</VALUE>
+								<VALUE>roadblaster</VALUE>
+								<VALUE>sae</VALUE>
+								<VALUE>sdq</VALUE>
+								<VALUE>sdqshort</VALUE>
+								<VALUE>sdqshortalt</VALUE>
+								<VALUE>tq</VALUE>
+								<VALUE>tq_alt</VALUE>
+								<VALUE>tq_swear</VALUE>
+								<VALUE>uvt</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

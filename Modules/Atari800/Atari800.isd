@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true emulator will run fullscreen.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="%SystemName%" required="true">
+			<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Mouse" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>turns mouse on and off</DESCRIPTION>
+							<VALUES>
+								<VALUE>on</VALUE>
+								<VALUE>off</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="CartType" required="false" nullable="true" minLength="0" maxLength="59">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>choices are 0-59 Info on what number is what type can be found in %emupath%\DOC\cart.txt</DESCRIPTION>
+						</KEY>
+						<KEY name="Basic" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Only used for Atari 8-Bit. Set to true if the rom is a BASIC rom. default is false.</DESCRIPTION>
+						</KEY>
+						<KEY name="OSType" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Only used for Atari 8-Bit. More information can be found in found in %emupath%\DOC\USAGE</DESCRIPTION>
+						</KEY>
+						<KEY name="VideoMode" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Only used for Atari 8-Bit. Choices are pal and ntsc. default is pal.</DESCRIPTION>
+							<VALUES>
+								<VALUE>pal</VALUE>
+								<VALUE>ntsc</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="MachineType" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Only used for Atari 8-Bit. Define what machine you are using. default is xl. Descriptions can be found in module notes.</DESCRIPTION>
+							<VALUES>
+								<VALUE>atari</VALUE>
+								<VALUE>1200</VALUE>
+								<VALUE>xl</VALUE>
+								<VALUE>xe</VALUE>
+								<VALUE>320xe</VALUE>
+								<VALUE>rambo</VALUE>
+								<VALUE>xegs</VALUE>
+								<VALUE>5200</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

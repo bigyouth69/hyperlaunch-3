@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, launches Yabause in full screen mode</DESCRIPTION>
+						</KEY>
+						<KEY name="IniFolderSearchType" required="false" nullable="false">
+							<KEYTYPE>Binary</KEYTYPE>
+							<DESCRIPTION>If set to 1 hyperlaunch looks for the yabause.ini in stored at %LOCALAPPDATA%\yabause (on Win7/8 and XP) . If set to 0 hyperlaunch will look for the yabause.ini in %USERPROFILE%\Local Settings\Application Data\yabause (on WinXP only)</DESCRIPTION>
+						</KEY>
+						<KEY name="HideBars" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="GameINIPath" required="false" nullable="true" FULLROW="true">
+							<KEYTYPE>FolderPath</KEYTYPE>
+							<DESCRIPTION>Path to your per-game XEBRA.INI(s). (default is %emuPath%\GameINIs)</DESCRIPTION>
+							<PATHTYPE>Absolute</PATHTYPE>
+						</KEY>
+						<KEY name="defXebraIni" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Your filename + extension of the default XEBRA.INI you want to use. The default value is XEBRA.default.INI</DESCRIPTION>
+						</KEY>
+						<KEY name="AutoGameINIs" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, will auto-backup your XEBRA.INI to the GameINIPath and rename it to match your game. This aids in creating per-game modules quickly. WARNING, this WILL overwrite existing backed-up game INIs.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="run" required="false" nullable="false" minLength="1" maxLength="3">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>run - This is what Xebra will use to run this game. The 3 options are 1,2, and 3 as can be seen when you run the emu manually and select Run. 1 is default and will be used when the game is not listed here</DESCRIPTION>
+							<VALUES>
+								<VALUE>1</VALUE>
+								<VALUE>2</VALUE>
+								<VALUE>3</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

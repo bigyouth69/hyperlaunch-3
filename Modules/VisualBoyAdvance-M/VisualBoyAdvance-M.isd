@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="VideoMode" required="false" nullable="false" minLength = "0" maxLength = "5">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Changes Video Mode, only used when fullscreen is disabled. 0 = 1xWindowSize, 1 = 2xWindowSize, 2 = 3xWindowSize, 3 = 4xWindowSize, 4 = 5xWindowSize, 5 = 6xWindowSize.</DESCRIPTION>
+							<VALUES>
+								<VALUE>0</VALUE>
+								<VALUE>1</VALUE>
+								<VALUE>2</VALUE>
+								<VALUE>3</VALUE>
+								<VALUE>4</VALUE>
+								<VALUE>5</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="fsWidth" required="false" nullable="false" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Value for the width of fullscreen, default is your main monitor width. Make sure the value you set is compatible with your video card and screen.</DESCRIPTION>
+						</KEY>
+						<KEY name="fsHeight" required="false" nullable="true" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Value for the height of fullscreen, default is your main monitor height. Make sure the value you set is compatible with your video card and screen.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

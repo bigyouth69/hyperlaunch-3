@@ -1,0 +1,452 @@
+<?xml version="1.0"?>
+<mamelayout version="2">
+	<element name="mine">
+		<image file="Mine Storm (World).png" />
+	</element>
+
+	<view name="Mine Storm (World) overlay">
+		<bezel element="mine">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</bezel>
+
+		<overlay element="mine">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</overlay>
+
+		<screen index="0">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</screen>
+	</view>
+
+	<element name="mine">
+		<image file="Mine Storm II (USA) (Rev 2).png" />
+	</element>
+
+	<view name="Mine Storm II (USA) (Rev 2) overlay">
+		<bezel element="mine">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</bezel>
+
+		<overlay element="mine">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</overlay>
+
+		<screen index="0">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</screen>
+	</view>
+
+	<element name="armor">
+		<image file="Armor..Attack (World).png" />
+	</element>
+
+	<view name="Armor..Attack (World) overlay">
+		<bezel element="armor">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</bezel>
+
+		<overlay element="armor">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</overlay>
+
+		<screen index="0">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</screen>
+	</view>
+
+	<element name="bedlam">
+		<image file="Bedlam (USA, Europe).png" />
+	</element>
+
+	<view name="Bedlam (USA, Europe) overlay">
+		<bezel element="bedlam">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</bezel>
+
+		<overlay element="bedlam">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</overlay>
+
+		<screen index="0">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</screen>
+	</view>
+
+	<element name="berzerk">
+		<image file="Berzerk (World).png" />
+	</element>
+
+	<view name="Berzerk (World) overlay">
+		<bezel element="berzerk">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</bezel>
+
+		<overlay element="berzerk">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</overlay>
+
+		<screen index="0">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</screen>
+	</view>
+
+	<element name="blitz">
+		<image file="Blitz! - Action Football (USA, Europe).png" />
+	</element>
+
+	<view name="Blitz! - Action Football (USA, Europe) overlay">
+		<bezel element="blitz">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</bezel>
+
+		<overlay element="blitz">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</overlay>
+
+		<screen index="0">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</screen>
+	</view>
+
+	<element name="chasm">
+		<image file="Cosmic Chasm (World).png" />
+	</element>
+
+	<view name="Cosmic Chasm (World) overlay">
+		<bezel element="chasm">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</bezel>
+
+		<overlay element="chasm">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</overlay>
+
+		<screen index="0">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</screen>
+	</view>
+
+	<element name="sweep">
+		<image file="Clean Sweep (World).png" />
+	</element>
+
+	<view name="Clean Sweep (World) overlay">
+		<bezel element="sweep">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</bezel>
+
+		<overlay element="sweep">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</overlay>
+
+		<screen index="0">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</screen>
+	</view>
+
+	<element name="mrboston">
+		<image file="mrboston.png" />
+	</element>
+
+	<view name="Mr. Boston Clean Sweep overlay">
+		<bezel element="mrboston">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</bezel>
+
+		<overlay element="mrboston">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</overlay>
+
+		<screen index="0">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</screen>
+	</view>
+
+	<element name="dktower">
+		<image file="Dktower2.png" />
+	</element>
+
+	<view name="Dark Tower overlay">
+		<bezel element="dktower">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</bezel>
+
+		<overlay element="dktower">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</overlay>
+
+		<screen index="0">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</screen>
+	</view>
+
+	<element name="narzod">
+		<image file="Fortress of Narzod (USA, Europe).png" />
+	</element>
+
+	<view name="Fortress of Narzod (USA, Europe) overlay">
+		<bezel element="narzod">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</bezel>
+
+		<overlay element="narzod">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</overlay>
+
+		<screen index="0">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</screen>
+	</view>
+
+	<element name="headsup">
+		<image file="Heads-Up - Action Soccer (USA).png" />
+	</element>
+
+	<view name="Heads-Up - Action Soccer (USA) overlay">
+		<bezel element="headsup">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</bezel>
+
+		<overlay element="headsup">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</overlay>
+
+		<screen index="0">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</screen>
+	</view>
+
+	<element name="hyper">
+		<image file="HyperChase - Auto Race (World).png" />
+	</element>
+
+	<view name="HyperChase - Auto Race (World) overlay">
+		<bezel element="hyper">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</bezel>
+
+		<overlay element="hyper">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</overlay>
+
+		<screen index="0">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</screen>
+	</view>
+
+	<element name="polar">
+		<image file="Polar Rescue (USA).png" />
+	</element>
+
+	<view name="Polar Rescue (USA) overlay">
+		<bezel element="polar">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</bezel>
+
+		<overlay element="polar">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</overlay>
+
+		<screen index="0">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</screen>
+	</view>
+
+	<element name="pole">
+		<image file="Pole Position (USA).png" />
+	</element>
+
+	<view name="Pole Position (USA) overlay">
+		<bezel element="pole">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</bezel>
+
+		<overlay element="pole">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</overlay>
+
+		<screen index="0">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</screen>
+	</view>
+
+	<element name="ripoff">
+		<image file="Rip Off (World).png" />
+	</element>
+
+	<view name="Rip Off (World) overlay">
+		<bezel element="ripoff">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</bezel>
+
+		<overlay element="ripoff">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</overlay>
+
+		<screen index="0">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</screen>
+	</view>
+
+	<element name="scramble">
+		<image file="Scramble (USA, Europe).png" />
+	</element>
+
+	<view name="Scramble (USA, Europe) overlay">
+		<bezel element="scramble">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</bezel>
+
+		<overlay element="scramble">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</overlay>
+
+		<screen index="0">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</screen>
+	</view>
+
+	<element name="solar">
+		<image file="Solar Quest (World).png" />
+	</element>
+
+	<view name="Solar Quest (World) overlay">
+		<bezel element="solar">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</bezel>
+
+		<overlay element="solar">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</overlay>
+
+		<screen index="0">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</screen>
+	</view>
+
+	<element name="space">
+		<image file="Space Wars (World).png" />
+	</element>
+
+	<view name="Space Wars (World) overlay">
+		<bezel element="space">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</bezel>
+
+		<overlay element="space">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</overlay>
+
+		<screen index="0">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</screen>
+	</view>
+
+	<element name="spike">
+		<image file="Spike (USA, Europe).png" />
+	</element>
+
+	<view name="Spike (USA, Europe) overlay">
+		<bezel element="spike">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</bezel>
+
+		<overlay element="spike">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</overlay>
+
+		<screen index="0">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</screen>
+	</view>
+
+	<element name="spinball">
+		<image file="Spin Ball (USA).png" />
+	</element>
+
+	<view name="Spin Ball (USA) overlay">
+		<bezel element="spinball">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</bezel>
+
+		<overlay element="spinball">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</overlay>
+
+		<screen index="0">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</screen>
+	</view>
+
+	<element name="castle">
+		<image file="Star Castle (USA).png" />
+	</element>
+
+	<view name="Star Castle (USA) overlay">
+		<bezel element="castle">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</bezel>
+
+		<overlay element="castle">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</overlay>
+
+		<screen index="0">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</screen>
+	</view>
+
+	<element name="starhawk">
+		<image file="StarHawk (World).png" />
+	</element>
+
+	<view name="StarHawk (World) overlay">
+		<bezel element="starhawk">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</bezel>
+
+		<overlay element="starhawk">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</overlay>
+
+		<screen index="0">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</screen>
+	</view>
+
+	<element name="startrek">
+		<image file="Star Trek - The Motion Picture (USA).png" />
+	</element>
+
+	<view name="Star Trek - The Motion Picture (USA) overlay">
+		<bezel element="startrek">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</bezel>
+
+		<overlay element="startrek">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</overlay>
+
+		<screen index="0">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</screen>
+	</view>
+
+	<element name="webwars">
+		<image file="WebWars (USA).png" />
+	</element>
+
+	<view name="WebWars (USA) overlay">
+		<bezel element="webwars">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</bezel>
+
+		<overlay element="webwars">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</overlay>
+
+		<screen index="0">
+			<bounds left="0" top="0" right="3" bottom="4" />
+		</screen>
+	</view>
+</mamelayout>

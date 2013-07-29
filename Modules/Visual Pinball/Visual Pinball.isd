@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="EscClose" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>This fixes VP from crashing (in WinXP) on exit when using Esc as your exit key.</DESCRIPTION>
+						</KEY>
+						<KEY name="showDMD" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables the DMD (Dot Matrix Display).</DESCRIPTION>
+						</KEY>
+						<KEY name="updateDefaultDMD" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set this to true if you want the script to set the default position of the DMD on next run.</DESCRIPTION>
+						</KEY>
+						<KEY name="dmdX" required="false" nullable="true" minLength="0">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Your default X position of the DMD</DESCRIPTION>
+						</KEY>
+						<KEY name="dmdY" required="false" nullable="true" minLength="0">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Your default Y position of the DMD</DESCRIPTION>
+						</KEY>
+						<KEY name="dmdWidth" required="false" nullable="true" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Your default DMD Width</DESCRIPTION>
+						</KEY>
+						<KEY name="dmdHeight" required="false" nullable="true" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Your default DMD HeightHeight</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

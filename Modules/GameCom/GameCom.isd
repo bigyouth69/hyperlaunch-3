@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="ShowIntro" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Show the Tiger Logo before the main menu, cannot autostart games if true</DESCRIPTION>
+						</KEY>
+						<KEY name="AutoStartGame" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Will only work if ShowIntro is false</DESCRIPTION>
+						</KEY>
+						<KEY name="BlockInput" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if the module works for you and you don't want foreign key presses disturbing the launch process</DESCRIPTION>
+						</KEY>
+						<KEY name="errorFix" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you get a windows no disk error after the emu starts. It has been reported to happen on 32-bit OSes. This adds 2 seconds to launch if you don't get the error, so set to false for a quicker launch if you never see the error.</DESCRIPTION>
+						</KEY>
+						<KEY name="MLanguage" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>If English, dialog boxes look for the word "Open" and if Spanish/Portuguese, looks for "Abrir"</DESCRIPTION>
+							<VALUES>
+								<VALUE>English</VALUE>
+								<VALUE>Spanish/Portuguese</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

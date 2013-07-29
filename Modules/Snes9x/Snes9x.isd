@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="EmulateFullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>This helps fading look better and work better on exit. You cannot use this with a normal fullscreen so one has to be false.</DESCRIPTION>
+						</KEY>
+						<KEY name="WindowMaximized" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Maximizes window to fill screen when in windowed mode.</DESCRIPTION>
+						</KEY>
+						<KEY name="Stretch" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Stretches Video to fill to edges of screen, this might cause your video to lose aspect ratio.</DESCRIPTION>
+						</KEY>
+						<KEY name="MaintainAspectRatio" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Locks aspect ratio and prevents stretching, this will leave black bars on the sides of the screen when in fullscreen.</DESCRIPTION>
+						</KEY>
+						<KEY name="HideMenu" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If True hides the emulator menu, if false the menu is visible.</DESCRIPTION>
+						</KEY>
+						<KEY name="FullScreenWidth" required="false" nullable="true" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The width of the  fullscreen resolution. Make sure it is compatible with your video card and screen.</DESCRIPTION>
+						</KEY>
+						<KEY name="FullScreenHeight" required="false" nullable="true" minLength="1">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The height of the of the fullscreen resolution. Make sure it is compatible with your video card and screen.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>
