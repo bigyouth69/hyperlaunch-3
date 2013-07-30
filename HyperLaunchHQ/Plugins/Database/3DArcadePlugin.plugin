@@ -1,0 +1,154 @@
+﻿using HyperEmu.Entity;
+using HyperEmu.Ini;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+
+namespace HyperEmu.Database
+{
+    [DisplayName("3D Arcade")]
+    [FrontendExecutable("fe3darcade.exe")]
+    [PluginDescription("Loads from 3D Arcade atf databases")]
+    public class _3DArcadePlugin : DefaultDatabasePlugin
+    {
+        Dictionary<String, String> new_to_old_system_names = new Dictionary<String, String>();
+
+        public _3DArcadePlugin(String HLpath)
+            : base(HLpath)
+        {}
+
+        protected override String getMainDBsubPath()
+        {
+            return @"\cfg\feemulators.cfg";
+        }
+
+        protected override String getSystemDBsubPath(String system)
+        {
+            return @"\cfg\lists\" + system + ".atf";
+        }
+
+        public override void createSystem(String system_name, String system_description)
+        {
+            //Creating systems isn't supported yet
+            return;
+        }
+
+        public override void renameFrontendSystem(String old_system_name, String new_system_name, String new_system_description)
+        {
+            //Renaming systems isn't supported yet
+            return;
+        }
+
+        public override List<String> loadSystems()
+        {
+            List<String> systemsList = new List<String>();
+
+            String file = getMainDBFullPath();
+            String system_map_ini = getPluginFolder() + @"\3DArcade_SystemMapping.ini";
+            IniLoader ini = new IniLoader(system_map_ini);
+
+            if (File.Exists(file))
+            {
+                //Format is |Description|SystemName|||||||||||||||||||||||||||||||||||
+                StreamReader reader = new StreamReader(file);
+                String line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    if (line.Trim().Length > 0)
+                    {
+                        String[] fields = line.Split('|');
+                        if (fields.Length > 2)
+                        {
+                            String system = fields[2];
+                            String mapsystem = ini.GetIniValue("Remapping", system, "");
+                            system = mapsystem.Trim().Length == 0 ? system : mapsystem;
+                            systemsList.Add(system);
+
+                            new_to_old_system_names.Add(system, fields[2]);
+                        }
+                    }
+                }
+                reader.Close();
+            }
+            return systemsList;
+        }
+
+        public override ObservableCollection<GameXml> loadGames(String system, out bool loaded)
+        {
+            ObservableCollection<GameXml> gamesList = new ObservableCollection<GameXml>();
+            String arcade_systemName = new_to_old_system_names[system];
+
+            loaded = true;
+
+            if (!isGlobalSystem(system))
+            {
+                String lists_map_ini = getPluginFolder() + @"\3DArcade_SystemLists.ini";
+                IniLoader ini = new IniLoader(lists_map_ini);
+
+                if (arcade_systemName != null)
+                {
+                    //Read the atf files to search in
+                    String lists = ini.GetIniValue("Remapping", arcade_systemName);
+                    lists = lists.Trim().Length == 0 ? arcade_systemName : lists;
+                    String[] fields = lists.Split('|');
+
+                    foreach (String field in fields)
+                    {
+                        //Cycle through each atf file
+                        String fieldVal = field.Trim(); //this represents each atf file to read
+
+                        if (fieldVal.Length > 0)
+                        {
+                            //Get field positions for each atf
+                            int descPos = 1;
+                            Int32.TryParse(ini.GetIniValue(fieldVal, "DescriptionField", "1"), out descPos);
+                            int yearPos = 3;
+                            Int32.TryParse(ini.GetIniValue(fieldVal, "YearField", "3"), out yearPos);
+                            int genrePos = 7;
+                            Int32.TryParse(ini.GetIniValue(fieldVal, "GenreField", "7"), out genrePos);
+                            int clonePos = 5;
+                            Int32.TryParse(ini.GetIniValue(fieldVal, "CloneField", "5"), out genrePos);
+
+                            //Read from atf file
+                            String file = getSystemDBFullPath(fieldVal);
+                            if (File.Exists(file))
+                            {
+                                StreamReader reader = new StreamReader(file);
+                                String line;
+                                while ((line = reader.ReadLine()) != null)
+                                {
+                                    if (line.Trim().Length > 0)
+                                    {
+                                        String[] atf_fields = line.Split('|');
+                                        if (atf_fields.Length > 10)
+                                        {
+                                            String sys = atf_fields[10];
+                                            String name = atf_fields[2];
+                                            String desc = atf_fields[descPos];
+                                            String year = atf_fields[yearPos];
+                                            String genre = atf_fields[genrePos];
+                                            String clone = atf_fields[clonePos];
+
+                                            if (sys.Trim().Equals(arcade_systemName, StringComparison.InvariantCultureIgnoreCase))
+                                            {
+                                                if (name.LastIndexOf('.') > 0)
+                                                    name = name.Substring(0, name.LastIndexOf('.')); //3DArcade rom names usually contain the file extension as well
+
+                                                GameXml gamexml = new GameXml(name, desc, genre, clone, system);
+                                                if (!gamesList.Contains(gamexml))
+                                                    gamesList.Add(gamexml);
+                                            }
+                                        }
+                                    }
+                                }
+                                reader.Close();
+                            }
+                        }
+                    }
+                }
+            }
+            return gamesList;
+        }
+    }
+}

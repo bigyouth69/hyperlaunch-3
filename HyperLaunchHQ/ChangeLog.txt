@@ -1,0 +1,91 @@
+=============================================================================================
+                                      __                             _                ____ 
+    /\  /\ _   _  _ __    ___  _ __  / /   __ _  _   _  _ __    ___ | |__     /\  /\ /___ \  
+   / /_/ /| | | || '_ \  / _ \| '__|/ /   / _` || | | || '_ \  / __|| '_ \   / /_/ ///  / /
+  / __  / | |_| || |_) ||  __/| |  / /___| (_| || |_| || | | || (__ | | | | / __  // \_/ / 
+  \/ /_/   \__, || .__/  \___||_|  \____/ \__,_| \__,_||_| |_| \___||_| |_| \/ /_/ \___,_\ 
+           |___/ |_|                                                                       
+
+=============================================================================================
+                                       Release History                                       
+=============================================================================================
+
+v1.0.8 (July 30th, 2013):
+  * Added ability to export have/missing lists from both audit panel. Supports both Text and 
+    HTML output formats
+  * Added support for HyperLaunch's new Player 2 navigation keys
+  * Added support to change system names directly from within HLHQ. This will also rename all 
+    the necessary files and folders. It won't rename any emulator or roms paths though you'll 
+    have to do that manually if you also want to change them. I ended up adding this because 
+    the plugin system now allows me this flexibility while keeping HLHQ frontend independent
+  * When browsing File and Folder settings in the module settings form the browse starting path 
+    will now default to the current value if there's one
+  * Easier filling of the FadeTitle for PCLauncher, now it's as easy as launching the game and 
+    pressing Ctrl+q to get that info filled in. Uses code from djvj's ActiveWindowsLogger to 
+    grab the window information
+  * Moved the checkbox "Only show modules/emulators that are appropriate for the current system" 
+    from the Emulators tab into the HyperLaunchHQ tab. This means this setting is now also saved 
+    into HyperLaunchHQ.ini
+  * Added support for 2 new HyperPause ini keys : Bar_Vertical_Offset and Enable_Full_Screen_Help_Text
+  * Split General Settings\HyperLaunch tab into 2 moving all controls keys in it's own tab
+
+v1.0.7 (July 23rd, 2013):
+  * Fixed 3DArcade plugin to properly handle rom names with dots in their filenames
+  * Added code to handle errors while accessing the clipboard in some machines, only a warning 
+    will be written to the log file now
+  * Excluded system and hidden folders from the audit caching system, audit could potentially 
+    fail if the system trying to look into a protected folder
+  * Replaced FolderBrowserDialog by a customized version of it to allow manual path entering
+
+v1.0.6 (July 17th, 2013):
+  * Copy log contents to clipboard directly from HLHQ
+  * Changed again the layout in the module settings editor, added a GridSplitter this time 
+    hopefully it will solve all situations
+  * Corrected bug in audit where rom extensions were case sensitive
+  * Added support to copy the selected log line in the log viewer screen using Ctrl+C
+  * Fixed bug in the audit system where the game list would become empty under certain conditions
+  * Added support for 2 new ini keys : Logging_Show_Command_Window and Logging_Log_Command_Window
+  * Added the port number each controller is connected to under the xpadder tab in the keymapper
+    screen
+
+v1.0.5 (July 12th, 2013):
+  * Added Full System Audit feature. It's now possible to audit the roms several or all of your 
+    systems at once
+  * Corrected bug with GridSplitter in the keymappers panel where it wasn't resizing properly
+  * Corrected bug and added some extra validations to the plugin loading mechanism
+  * Added option to enable/disable loading plugins
+  * Added ScrollViewer on module settings editor form in order to support lower resolution 
+    monitors
+
+v1.0.4 (July 6th, 2013):
+
+  * Added the ability to launch your frontend from HLHQ (From General Settings tab)
+  * System Notes feature - You can now add your own personal text notes for any system you 
+    want (Settings tab)
+  * Added new option Rom Extension to Skip Checks setting
+  * Database Plugin System added. You can create your own plugins to make HLHQ read your 
+    databases from any format, making it possible to use HLHQ with any frontend
+
+v1.0.3 (July 3rd, 2013):
+
+  * Added support for the 7z_Sounds ini key
+  * Changed module parser to support the new MSystem tag declaration
+  * Corrected log parser to support log entries using the pipe character
+  * Other minor bug fixes
+
+v1.0.2 (June 28th, 2013):
+
+  * Fixed crash when reseting General Settings to the default values
+  * Added a feature to check if HyperLaunch is running and the ability to stop it from the 
+    HyperLaunchHQ panel
+  * Corrected bug with absolute/relative paths in the module settings editor
+  * ISD : Added support for new key type (FileNameNoExt)
+  * Several other minor bug fixes and corrections
+
+v1.0.1 (June 23rd, 2013):
+
+  * Removed an empty space from the Fade_Stats_Info_Order default value
+
+v1.0.0 (June 22nd, 2013):
+
+  * First public release
