@@ -1,0 +1,172 @@
+v3.0.0.8
+
+	Fixed - VJoy profiles, was using a variable that was removed awhile back and no vjoy profiles could be found.
+	Fixed - 7z bug introduced from 3.0.0.8 that would try to extract a rom already found in the 7z temp folder.
+	Fixed - IniFileEdit was not replacing some values that got confused for regex.
+	Fixed - Left in some MultiGame settings I had hardcoded in to test, this prevented you from being able to customize a lot of MG's font parameters.
+	Fixed - MultiGame did not support multiple rom paths, it does now!
+	Fixed - Bug in Fade Animations.ahk that caused an ahk error in a specific scenario with MG and HP enabled and after selecting a game in MG.
+	Fixed - Bug in FadeInStart that would not pre-load locations of multiple discs into the table (at launch) if HP or Fade was disabled.
+	Fixed - Double creation of romTable when MG was enabled.
+	Added - Logs to show each VJoy profile HL is looking for.
+	Added - Logs to show your screen's current resolution and emu size before MultiGame draws it's screen.
+	Added - Logs added in MultiGame to show where it's scanning for background images.
+	Added - More MultiGame logs to give more info on what it is doing.
+	Added - More Rom Mapping Launch Menu logs to give more info on what it is doing.
+	Added - Daemon Tools now logs the file it received.
+	Added - Logs to show what GetFadePicFile is looking for for your Fade Layer images.
+	Added - Check if HyperLaunch was used correctly and sent a systemName and romName.
+	Added - When RestoreFE is used, will now send a mouse click to your front end on exit. Should fix issues when a simple left click was needed to put focus back to Hyperspin.
+	Added - Player 2 navigation keys.
+	Added - Support for Player 2 navigation keys in MultiGame, Rom Map Launch Menu, and HyperPause.
+	Added - Rom Mapping and Launch menu support for Having a list of mame clones where only your parents are show in your wheel. You would define all the clones on the rom map ini. See Example 6 here: 
+
+	https://sites.google.com/site/hyperlaunch2/alter
+	Changed - Log now shows the actual OS language rather than a language code. I had to remove 2 language code translations as it made the expression too long for ahk: (0443 = Uzbek_Latin and 0843 = Uzbek_Cyrillic), I 
+
+	don't think this will be a problem lol...
+	Changed - Always logs errors
+
+	Bleasby's changes:
+	Shared.ahk:
+	Added one line change (line 528), to reset the description value when the game is not found on the database.
+
+	Rom Mapping Launch Menu.ahk:
+	Added code to avoid running filters and additional info functions if there is no naming scheme defined on the rom map ini file.
+
+	Fade.ahk:
+	Changed GetFadePicFile function to support random choice of all Fade Layer images (images should be named layer 1*.png, e.g. layer 1 - balblabla.png, layer 1 second options.png,...).
+
+	HyperPause.ahk:
+	Added support for save and load state screenshot show (brownvim request - http://www.hyperspin-fe.com/forum/showthread.php?26074-HyperPause-Feature-Requests&p=250127&viewfull=1#post250127).
+	Added support for highscores with more then 3 columns (HillJackBob request - http://www.hyperspin-fe.com/forum/showthread.php?26862-Small-High-Score-Issue-Found-in-HyperPause).
+	Added support for main menu bar verticall offset (Angelus_EV request - http://www.hyperspin-fe.com/forum/showthread.php?26173-640x480&p=250243&viewfull=1#post250243) (controlled by Bar_Vertical_Offset ini option).
+	Fullscreen images now uses the most of the screen available size at 100% level of zoom (requested by DrMoney - http://www.hyperspin-fe.com/forum/showthread.php?26074-HyperPause-Feature-
+
+	Requests&p=255828&viewfull=1#post255828).
+	Added option to hide the full screen help text after some time, or disable it completly (requested by Gikachon - http://www.hyperspin-fe.com/forum/showthread.php?26892-Question-about-controls-
+
+	info&p=256065&viewfull=1#post256065) (controlled by Full_Screen_Help_Text_Timer ini option)
+	Small fixes to menu drawing bugs.
+	Corrected folder path on the error message when the default HyperPause font is not used.
+
+	New HyperPause keys added:
+	Bar_Vertical_Offset
+	Full_Screen_Help_Text_Timer
+
+	Additional Updated Files:
+	Lib\Shared.ahk updated to 1.0.9
+	Lib\MultiGame.ahk updated to 1.0.1
+	Lib\Fade Animations.ahk updated to 1.0.3
+	Lib\Fade.ahk updated to 1.0.3
+	Lib\Rom Mapping Launch Menu.ahk updated to 1.0.2
+	Lib\HyperPause.ahk updated to 1.0.2
+
+v3.0.0.8
+
+	Added - Log which shows the run (CLI) command sent to BetaBrite and another when exiting HL
+	Added - Log which shows the run (CLI) command sent to CPWizard and another when exiting HL
+	Added - Log which shows the run (CLI) command sent to VJoy and another when exiting HL
+	Added - Logs to identify what method of the Main thread HyperLaunch used where it branches off depending on what SkipChecks is used.
+	Fixed - CLI for BetaBrite support on launch, removed an extra path being sent to betabrite.
+	Fixed - SkipChecks method was looking for "Rom" not "Rom Only"
+
+v3.0.0.7
+
+	Fixed - StopGlobalUserFeatures moved to FadeOutExit instead of FadeInExit. It would not trigger if emu closed w/o pressing the exit emu key. Also if fadeOut was disabled, would not trigger.
+	Fixed - IniFileEdit bug that would not correctly locate the end of line characters on all ini-type files.
+	
+	Related Updated Files:
+	Lib\Shared.ahk updated to 1.0.6
+
+v3.0.0.6
+
+	Added - A new method to troubleshoot launching emus. For the most part, this eliminates the need to create batch files when you need to test running an emu directly to read the output in a command window.
+	Added - New setting to control showing the command window, Logging_Show_Command_Window. See the HL site for more info: https://sites.google.com/site/hyperlaunch2/home/first-steps/keys?pli=1#TOC-Logging-
+	Once HLHQ is updated with the new setting, you can set this in the Logging section. For now, you can only turn it on/off manually in the Settings\HyperLaunch.ini.
+	Changed - WinClose function now also does a winwaitclose with a quick timeout so it can properly return errorlevel if required in the module.
+	Added - A library I had to create to read from INI-type config files w/o any [sections] defined. I made this so I can read/write to the RetroArch cfg as it uses an assinine method to store settings. New function calls available for use include ReadProperty, WriteProperty, and SaveProperty. See how to use them in the new RetroArch module or by reading them in shared.ahk.
+
+	Related Updated Files:
+	Lib\Shared.ahk updated to 1.0.5
+
+v3.0.0.5
+
+	7z has been completely rewritten and optimized because of a couple bugs found. This gave me the opportunity to remove a lot of duplicate code (shrunk by 50%) that I just didn't want to bother doing before, but now I had to in order to fix said bugs.
+	7z should no longer create 3 romName folders deep if your rom is inside a folder in the archive. Yuck, I know...
+	7z now does a size compare of the contents of an archive and what's already extracted in your temp folder. If they differ, it will extract the game again, otherwise it loads the already extracted rom.
+	7z has had many more logs added/changed to track what's going on.
+	Keymapper will no longer error if an AHK profile is not found. It will instead give a warning in the log. This will make it so you don't have to create profiles for every game once enabled or a blank default one.
+	"Rom Extensions" is now a working choice for Skip Checks. It is used for systems like scummvm when your games are zipped and the file matches the database but roms inside do not.
+	romExtensions variable is now send on every launch even when Skip Checks is used. On some scenarios it was still needed by the module or some features.
+	Rom Mapping now logs the rom it found rather than only the files it looks for. It also logs if and how many roms it found for the map table.
+	Fade Animation's default animation logs when a sound is played.
+	Fixed bug in Rom Map Launch Menu that it would not destroy the gui when FadeIn was disabled
+	Fixed bug in Rom Map Launch Menu that it would not restore your exit emu key to control CloseProcess on its exit and would trigger ExitModule() prematurely when key was pressed.
+	MultiGame's table creation call moved so it doesn't only trigger when FadeIn is enabled
+
+	Related Updated Files:
+	Lib\Shared.ahk updated to 1.0.2
+	Lib\Rom Mapping Launch Menu.ahk updated to 1.0.1
+	Lib\Fade.ahk updated to 1.0.2
+	Lib\Fade Animations.ahk updated to 1.0.2
+
+v3.0.0.4
+
+	HyperLaunch
+	Module Extensions\HyperLaunch.dll updated to add some new functions used in the near future.
+	If Skipchecks is enabled in any way, will convert romPaths to absolute if relative
+	Added a new Setting in HL to turn on or off the 7z extracting and complete sounds on a global or per-system basis
+	Fade option "Detect Error" has had some additional functionality added. If true (default), will error if there is a problem with the module and waiting for a window to appear. If you disable this, it will not error, but the module may get stuck if something is wrong like an incompatbile error.
+	All WinWait and WinWaitActive calls in the modules will log detailed information about the currently active window before and after the command is run. This is only done when debug or higher logging level is set.
+	The log will now warn you if you have a different system name than what is supported by the module.
+
+
+	HyperPause
+	Esrb has been changed to Rating in your HyperPause Game Info Item List options (If you were using this choice, please fix this otherwise you will not see Ratings)
+	All Data\Game Info\*.ini files have been changed to reflect the above change
+	Added Earth Bound (USA) (Proto) rom info in the Data\Game Info\Nintendo Entertainment System.ini (Thanks Cruel Moose)
+
+
+	Libs
+	Lib\xhotkey.ahk - had a wrong crc number
+	Fixed errorlevel being set and causing problems in the ePSXe module and triggering a scripterror because HL thought errorlevel was set when it shouldn't be.
+	Lib\Shared.ahk - added some screen manipulation functions and an updated togglemenu function
+	Lib\HyperPause.ahk - contains a fix for the xp bug that brolly and others were having. Also fixed some bugs reported by windowlicker11.
+	Lib\Bezel.ahk - contains functions to deal with three window emus (Sega Pico).
+	Lib\Fade Animations.ahk - updated to now search for wheel images in in Media\Wheels folder as a primary source and HyperSpin Media folders as a secondary source. Further detaching HL from HS.
+	Media\Fade\_Default\System folder can be deleted if you were using it. Use the above folder instead now.
+	Lib\Keymapper.ahk - Fixed incorrect path for AHK and JoyToKey system profiles
+	Lib\User Functions.ahk - Added StartGlobalUserFeatures() and StopGlobalUserFeatures().
+	These Functions now allow you to define code that will run globally in every module. You would use the Stop function if there is something you need to do on exit.
+
+
+	Media
+	Media\Bezels\Sega Pico - contains bezel images for the Sega Pico system
+
+
+	Keymapper
+	System JoyIDsPreferredControllers key changed to a default value of "use_global"
+
+
+	HyperLaunchHQ
+	Updated to v1.0.3.0 to support the change in MSystem
+	You need to update all the modules otherwise they will show up as red under the Modules tab
+	Also added ability to toggle 7z Play Sounds under Global/System -> Settings -> 7z
+
+
+	Modules
+	All modules have been updated, changing 'MSystem :=' to 'MSystem ='
+	Run 'Rename Modules for HLv3.0.0.4.exe' to approve one-by-one a rename of all your modules to the new standard. It will automatically create a backup of your Modules folder. Be careful with Demul, Project64, & Virtual APF as they have multiple modules in the folders. I kept either the author name or the version of the emu in the filename to distinguish the differences.
+	Run 'Rename Global Emu ini for HLv3.0.0.4.exe' to approve one-by-one a rename of all your Global Emulator Module values to the new standard. It will automatically create a backup of your Global Emulators.ini before it writes to the file.
+	Modules\PicoDrive - contains the PicoDrive module and isd files for Sega Pico
+	Modules\NullDC - updated removing toggleMenu function sincie it is now in shared.ahk
+
+v3.0.0.3
+	Bug Fix - If CPWizard and BetaBrite were enabled but had empty paths, checkfiles would return blank.
+v3.0.0.2
+	Bug Fix - now erroring after finding correct rom because loop was not ending and continued searching for a rom.
+v3.0.0.1
+	Quick hotfix to address an issue where no error thrown when Match Extension = true and rom was not found, it would still load emu with no rom.
+v3.0.0.0
+	Initial Release
