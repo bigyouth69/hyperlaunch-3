@@ -2,9 +2,9 @@ MEmu = PCLauncher
 MEmuV =  N/A
 MURL = https://sites.google.com/site/hyperlaunch2/additional-features/pclauncher
 MAuthor = djvj
-MVersion = 2.0.5
+MVersion = 2.0.6
 MCRC = 6B6F5A7B
-iCRC = C95FDE49
+iCRC = 75BD398A
 MID = 635038268912701232
 MSystem = "Games for Windows","Microsoft Windows","PCLauncher","PC Games","Taito Type X","Touhou"
 ;----------------------------------------------------------------------------

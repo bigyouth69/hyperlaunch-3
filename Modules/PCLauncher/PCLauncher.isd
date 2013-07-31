@@ -108,7 +108,7 @@
 							</VALUES>
 						</KEY>
 						<KEY name="FadeTitle" required="false" nullable="true">
-							<KEYTYPE>String</KEYTYPE>
+							<KEYTYPE>WinTitle</KEYTYPE>
 							<DESCRIPTION>This is the Window Title &amp; Class of your application. To find the Title/Class you can use the AutoIt3 Window Spy utility installed with AutoHotKey or my utility @ http://www.hyperspin-fe.com/forum/showthread.php?15014-Window-Logger</DESCRIPTION>
 						</KEY>
 						<KEY name="FadeInExitSleep" required="false" nullable="true">
@@ -234,7 +234,7 @@
 						</KEY>
 						<KEY name="FadeTitle" required="false" nullable="true">
 							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>This is the Window Title &amp; Class of your application. To find the Title/Class you can use the AutoIt3 Window Spy utility installed with AutoHotKey or my utility @ http://www.hyperspin-fe.com/forum/showthread.php?15014-Window-Logger</DESCRIPTION>
+							<DESCRIPTION>This is the Window Title &amp; Class of your application. To find the Title/Class, click the button to the right of this field to launch a script that copies the active window's title and class to your clipboard. You can also use the AutoIt3 Window Spy utility installed with AutoHotKey or my utility @ http://www.hyperspin-fe.com/forum/showthread.php?15014-Window-Logger</DESCRIPTION>
 						</KEY>
 						<KEY name="FadeInExitSleep" required="false" nullable="true">
 							<KEYTYPE>Integer</KEYTYPE>
