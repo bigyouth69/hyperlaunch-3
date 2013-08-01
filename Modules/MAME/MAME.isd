@@ -73,6 +73,10 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables Backdrops for the entire system. Can be overwritten by the per-rom setting of the same name.</DESCRIPTION>
 						</KEY>
+						<KEY name="Autosave" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Auto-Saving and Auto-Loading of game sessions. When enabled, upon exiting mame, your state will be saved and automatically resumed next time you run any game on this system. Overwrites the system setting.</DESCRIPTION>
+						</KEY>
 					</KEYS>
 				</SECTION>
 				<SECTION name="%RomName%" required="false">
@@ -97,6 +101,10 @@
 						<KEY name="Use_Backdrops" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables Backdrops for just this game. Overwrites the system setting.</DESCRIPTION>
+						</KEY>
+						<KEY name="Autosave" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Auto-Saving and Auto-Loading of game sessions. When enabled, upon exiting mame, your state will be saved and automatically resumed next time you run this game. Overwrites the system setting.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>

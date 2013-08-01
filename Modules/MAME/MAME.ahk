@@ -2,9 +2,9 @@ MEmu = MAME
 MEmuV =  v0.148
 MURL = http://www.mame.net/
 MAuthor = djvj
-MVersion = 2.0.6
-MCRC = D558F163
-iCRC = CD775A90
+MVersion = 2.0.7
+MCRC = 18333640
+iCRC = 83E89D15
 MID = 635038268903403479
 MSystem = "AAE","Cave","LaserDisc","MAME","Nintendo Arcade Systems","Sega Model 1","Sega ST-V","SNK Neo Geo","SNK Neo Geo AES"
 ;----------------------------------------------------------------------------
@@ -13,7 +13,7 @@ MSystem = "AAE","Cave","LaserDisc","MAME","Nintendo Arcade Systems","Sega Model 
 ; Command Line Options - http://easyemu.mameworld.info/mameguide/mameguide-options.html
 ; High Scores DO NOT SAVE when cheats are enabled!
 ; HLSL Documentation: http://mamedev.org/source/docs/hlsl.txt.html
-; MAME 149 is currently bugged and HyperPause support is broken. Emu does not let you alt-tab out. This is a mamedev issue, not an HL one.
+; MAME 149 is currently bugged and HyperPause support is broken. Emu does not let you alt-tab out. This is a mamedev issue, not an HL one. See here for bug report: http://mametesters.org/view.php?id=5235
 ; If you use MAME for AAE, create a vector.ini in mame's ini subfolder and paste these HLSL settings in there: http://www.mameworld.info/ubbthreads/showflat.php?Cat=&Number=309968&page=&view=&sb=5&o=&vc=1
 ;----------------------------------------------------------------------------
 StartModule()
@@ -37,6 +37,8 @@ Use_Overlays := IniReadCheck(settingsFile, "Settings", "Use_Overlays", "true",,1
 Use_Overlays := IniReadCheck(settingsFile, romName, "Use_Overlays", Use_Overlays,,1)	; default is the system's current setting
 Use_Backdrops := IniReadCheck(settingsFile, "Settings", "Use_Backdrops", "true",,1)
 Use_Backdrops := IniReadCheck(settingsFile, romName, "Use_Backdrops", Use_Backdrops,,1)	; default is the system's current setting
+autosave := IniReadCheck(settingsFile, "Settings", "Autosave", "false",,1)
+autosave := IniReadCheck(settingsFile, romName, "Autosave", autosave,,1)	; default is the system's current setting
 
 If bezelEnabled = true
 {	ListXMLtable := []
@@ -62,6 +64,7 @@ fullscreen := If (Fullscreen = "true") ? "-nowindow" : "-window"
 videomode := If (Videomode != "" ) ? "-video " . videomode : ""
 sysParams := If sysParams != ""  ? sysParams : ""
 romParams := If romParams != ""  ? romParams : ""
+autosave := If autosave = "true"  ? "-autosave" : ""
 
 StringReplace,mameRomPaths,romPathFromIni,|,`"`;`",1	; replace all instances of | to ; in the Rom_Path from Emulators.ini so mame knows where to find your roms
 mameRomPaths := "-rompath """ .  (If mameRomName ? romPath : mameRomPaths) . """"	; if using an alt rom, only supply mame with the path to that rom so it doesn't try to use the original rom
@@ -91,7 +94,7 @@ If cheatMode = true
 If hideConsole = true
 	SetTimer, HideConsole, 10
 
-Run(executable . A_Space . romName . A_Space . fullscreen . A_Space . cheatEnabled . A_Space . videomode . A_Space . useBezels . A_Space . useOverlays . A_Space . useBackdrops . A_Space . mameRomPaths . A_Space . sysParams . A_Space . romParams, emuPath, winstate)
+Run(executable . A_Space . romName . A_Space . fullscreen . A_Space . cheatEnabled . A_Space . videomode . A_Space . useBezels . A_Space . useOverlays . A_Space . useBackdrops . A_Space . mameRomPaths . A_Space . sysParams . A_Space . romParams . A_Space . autosave, emuPath, winstate)
 
 If(ErrorLevel != 0){
 	If (ErrorLevel = 1)
