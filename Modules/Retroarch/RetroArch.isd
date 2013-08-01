@@ -91,6 +91,10 @@
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Sega SG-1000. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator.  Default is genesis_plus_gx_libretro_x86_64_20130629</DESCRIPTION>
 						</KEY>
+						<KEY name="LibRetro_SGB" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Nintendo Super Game Boy. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator.  Default is bsnes_libretro_balanced_x86_64_20130629</DESCRIPTION>
+						</KEY>
 						<KEY name="LibRetro_SMS" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Sega Master System. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is genesis_plus_gx_libretro_x86_64_20130629</DESCRIPTION>
@@ -118,6 +122,24 @@
 						<KEY name="LibRetro_WSANC" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Bandai WonderSwan Color. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is mednafen_wswan_libretro_x86_64_20130629</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%SystemName%" required="false">
+					<SECTIONTYPE>System</SECTIONTYPE>
+					<KEYS>
+						<KEY name="SuperGameBoy" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set this to true if this entire system should enable Super Game Boy mode in RetroArch. Make sure the rom "Super Game Boy (World).sfc" is located in the bios folder in your emuPath.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="SuperGameBoy" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set this to true if this game should enable Super Game Boy mode in RetroArch. Make sure the rom "Super Game Boy (World).sfc" is located in the bios folder in your emuPath.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>

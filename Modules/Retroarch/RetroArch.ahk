@@ -2,11 +2,11 @@ MEmu = RetroArch
 MEmuV =  v0.9.9
 MURL = http://themaister.net/retroarch.html
 MAuthor = djvj
-MVersion = 2.0.5
-MCRC = 6AAD16D
-iCRC = 5C431F2F
+MVersion = 2.0.6
+MCRC = 6D0537E6
+iCRC = 3F6AD41F
 MID = 635038268922229162
-MSystem = "Atari 2600","Bandai Wonderswan","Bandai Wonderswan Color","Final Burn Alpha","NEC PC Engine","NEC PC Engine-CD","NEC TurboGrafx-16","NEC SuperGrafx","NEC TurboGrafx-CD","Nintendo Entertainment System","Nintendo Famicom","Nintendo Famicom Disk System","Nintendo Game Boy","Nintendo Game Boy Color","Nintendo Game Boy Advance","Nintendo Virtual Boy","Nintendo Super Famicom","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","Sony PlayStation","Sega SG-1000","SNK Neo Geo Pocket","SNK Neo Geo Pocket Color","Super Nintendo Entertainment System"
+MSystem = "Atari 2600","Bandai Wonderswan","Bandai Wonderswan Color","Final Burn Alpha","NEC PC Engine","NEC PC Engine-CD","NEC TurboGrafx-16","NEC SuperGrafx","NEC TurboGrafx-CD","Nintendo Entertainment System","Nintendo Famicom","Nintendo Famicom Disk System","Nintendo Game Boy","Nintendo Game Boy Color","Nintendo Game Boy Advance","Nintendo Super Game Boy","Nintendo Virtual Boy","Nintendo Super Famicom","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","Sony PlayStation","Sega SG-1000","SNK Neo Geo Pocket","SNK Neo Geo Pocket Color","Super Nintendo Entertainment System"
 ;----------------------------------------------------------------------------
 ; Notes:
 ; If the emu doesn't load and you get no error, usually this means the LibRetro DLL is not working!
@@ -27,14 +27,14 @@ MSystem = "Atari 2600","Bandai Wonderswan","Bandai Wonderswan Color","Final Burn
 ; Nintendo Famicom Disk System - Requires disksys.rom be placed in the folder you define as system_directory in the RetroArch's cfg.
 ; Sega CD - Requires "bios_CD_E.bin", "bios_CD_J.bin", "bios_CD_U.bin" all be placed in the folder you define as system_directory in the RetroArch's cfg.
 ; Super Nintendo Entertainment System - requires split all 10 dsp# & st### roms all be placed in the folder you define as system_directory in the RetroArch's cfg. Many games, like Super Mario Kart require these.
-; Nintendo Game Boy - Requires "sgb.boot.rom" and "Super Game Boy (World).sfc"to be placed in the folder you define as system_directory in the RetroArch's cfg. This is needed if you want to use Super game boy mode and color palettes. Also requires using the latest bsnes core. Not all games support SGB mode.
 ; NEC TurboGrafx-CD - Requires "syscard3.pce" be placed in the folder you define as system_directory in the RetroArch's cfg.
+; Nintendo Super Game Boy - Set the Module setting in HLHQ SuperGameBoy to true to enable a system or only a rom to use SGB mode. This is not needed if your systemName is set to the official name of "Nintendo Super Game Boy". Requires "sgb.boot.rom" and "Super Game Boy (World).sfc" to be placed in the folder you define as system_directory in the RetroArch's cfg. This is needed if you want to use Super game boy mode and color palettes. Also requires using the latest bsnes core. Not all games support SGB mode.
 ;----------------------------------------------------------------------------
 StartModule()
 FadeInStart()
 
 ; This object controls how the module reacts to different systems. RetroArch can play a lot of systems, but needs to know what system you want to run, so this module has to adapt.
-mType := Object("Atari 2600","LibRetro_2600","Bandai Wonderswan","LibRetro_WSAN","Bandai Wonderswan Color","LibRetro_WSANC","Final Burn Alpha","LibRetro_FBA","NEC PC Engine","LibRetro_PCE","NEC PC Engine-CD","LibRetro_PCECD","NEC SuperGrafx","LibRetro_SGFX","NEC TurboGrafx-16","LibRetro_TG16","NEC TurboGrafx-CD","LibRetro_TGCD","Nintendo Entertainment System","LibRetro_NES","Nintendo Famicom","LibRetro_NFAM","Nintendo Famicom Disk System","LibRetro_NFDS","Nintendo Game Boy","LibRetro_GB","Nintendo Game Boy Color","LibRetro_GBC","Nintendo Game Boy Advance","LibRetro_GBA","Nintendo Super Famicom","LibRetro_NSF","Nintendo Virtual Boy","LibRetro_NVB","Sega Game Gear","LibRetro_GG","Sega CD","LibRetro_SCD","Sega Genesis","LibRetro_GEN","Sega Mega Drive","LibRetro_GEN","Sega Master System","LibRetro_SMS","Sony PlayStation","LibRetro_PSX","Sega SG-1000","LibRetro_SG1K","SNK Neo Geo Pocket","LibRetro_NGP","SNK Neo Geo Pocket Color","LibRetro_NGPC","Super Nintendo Entertainment System","LibRetro_SNES")
+mType := Object("Atari 2600","LibRetro_2600","Bandai Wonderswan","LibRetro_WSAN","Bandai Wonderswan Color","LibRetro_WSANC","Final Burn Alpha","LibRetro_FBA","NEC PC Engine","LibRetro_PCE","NEC PC Engine-CD","LibRetro_PCECD","NEC SuperGrafx","LibRetro_SGFX","NEC TurboGrafx-16","LibRetro_TG16","NEC TurboGrafx-CD","LibRetro_TGCD","Nintendo Entertainment System","LibRetro_NES","Nintendo Famicom","LibRetro_NFAM","Nintendo Famicom Disk System","LibRetro_NFDS","Nintendo Game Boy","LibRetro_GB","Nintendo Game Boy Color","LibRetro_GBC","Nintendo Game Boy Advance","LibRetro_GBA","Nintendo Super Famicom","LibRetro_NSF","Nintendo Super Game Boy","LibRetro_SGB","Nintendo Virtual Boy","LibRetro_NVB","Sega Game Gear","LibRetro_GG","Sega CD","LibRetro_SCD","Sega Genesis","LibRetro_GEN","Sega Mega Drive","LibRetro_GEN","Sega Master System","LibRetro_SMS","Sony PlayStation","LibRetro_PSX","Sega SG-1000","LibRetro_SG1K","SNK Neo Geo Pocket","LibRetro_NGP","SNK Neo Geo Pocket Color","LibRetro_NGPC","Super Nintendo Entertainment System","LibRetro_SNES")
 ident := mType[systemName]	; search object for the systemName identifier Retroarch uses for its cores
 If !ident
 	ScriptError("Your systemName is: " . systemName . "`nIt is not one of the known supported systems for this " . MEmu . " module: " . moduleName)
@@ -61,6 +61,7 @@ LibRetro_PCECD := IniReadCheck(settingsFile, "Settings", "LibRetro_PCECD","medna
 LibRetro_PSX := IniReadCheck(settingsFile, "Settings", "LibRetro_PSX","mednafen_psx_libretro_x86_64_20130629",,1)
 LibRetro_SCD := IniReadCheck(settingsFile, "Settings", "LibRetro_SCD","genesis_plus_gx_libretro_x86_64_20130629",,1)
 LibRetro_SG1K := IniReadCheck(settingsFile, "Settings", "LibRetro_SG1K","genesis_plus_gx_libretro_x86_64_20130629",,1)
+LibRetro_SGB := IniReadCheck(settingsFile, "Settings", "LibRetro_SGB","bsnes_libretro_balanced_x86_64_20130629",,1)
 LibRetro_SMS := IniReadCheck(settingsFile, "Settings", "LibRetro_SMS","genesis_plus_gx_libretro_x86_64_20130629",,1)
 LibRetro_SNES := IniReadCheck(settingsFile, "Settings", "LibRetro_SNES","bsnes_libretro_balanced_x86_64_20130629",,1)
 LibRetro_SGFX := IniReadCheck(settingsFile, "Settings", "LibRetro_SGFX","mednafen_pce_fast_libretro_x86_64_20130629",,1)
@@ -68,6 +69,8 @@ LibRetro_TG16 := IniReadCheck(settingsFile, "Settings", "LibRetro_TG16","mednafe
 LibRetro_TGCD := IniReadCheck(settingsFile, "Settings", "LibRetro_TGCD","mednafen_pce_fast_libretro_x86_64_20130629",,1)
 LibRetro_WSAN := IniReadCheck(settingsFile, "Settings", "LibRetro_WSAN","mednafen_wswan_libretro_x86_64_20130629",,1)
 LibRetro_WSANC := IniReadCheck(settingsFile, "Settings", "LibRetro_WSANC","mednafen_wswan_libretro_x86_64_20130629",,1)
+superGB := IniReadCheck(settingsFile, systemName, "SuperGameBoy", "false",,1)
+superGB := IniReadCheck(settingsFile, romName, "SuperGameBoy", superGB,,1)	; default is the system's current setting
 
 If (FileExist(emuPath . "\" . systemName . ".cfg") && SystemConfigs = "true" )
 	retroCFGFile := emuPath . "\" . systemName . ".cfg"
@@ -93,7 +96,11 @@ If ident In LibRetro_NFDS,LibRetro_SCD,LibRetro_TGCD,LibRetro_PCECD
 
 7z(romPath, romName, romExtension, 7zExtractPath)
 
-If ident = LibRetro_NFDS	; Nintendo Famicom Disk System
+If (ident = "LibRetro_SGB" || If superGB = "true")	; if system or rom is set to use Super Game Boy
+{	superGB = true	; setting this just in case it's false and the system is Nintendo Super Game Boy
+	sgbRomPath := CheckFile(emuPath . "\bios\Super Game Boy (World).sfc","Could not find the rom required for Super Game Boy support. Make sure the rom ""Super Game Boy (World).sfc"" is located in: " . emupath . "\bios")
+	CheckFile(emuPath . "\bios\sgb.boot.rom","Could not find the bios required for Super Game Boy support. Make sure the bios ""sgb.boot.rom"" is located in: " . emupath . "\bios")
+} Else If ident = LibRetro_NFDS	; Nintendo Famicom Disk System
 {	IfNotExist, %retroSysDir%disksys.rom
 		ScriptError("RetroArch requires ""disksys.rom"" for " . systemName . " but could not find it in your system_directory: """ . retroSysDir . """")
 } Else If ident = LibRetro_SCD	; Sega CD
@@ -112,6 +119,7 @@ If ident = LibRetro_NFDS	; Nintendo Famicom Disk System
 		ScriptError("RetroArch requires ""syscard3.pce"" for " . systemName . " but could not find it in your system_directory: """ . retroSysDir . """")
 }
 
+
 ; WriteProperty(retroCFGFile,"system_directory","""D:\test""")	; write a new value to the RetroArch cfg file
 ; SaveProperty()	; save RetroArch cfg file to disk
 
@@ -124,7 +132,7 @@ IfNotExist, %emuPath%\srm
 IfNotExist, %emuPath%\save
 	FileCreateDir, %emuPath%\save ; creating save dir if it doesn't exist
 
-Run(executable . " """ . romPath . "\" . romName . romExtension . """ " . fullscreen . " -c """ . retroCFGFile . """ -L """ . libDll . """ -s srm -S save", emuPath, "Hide")
+Run(executable . " """ . (If superGB = "true" ? sgbRomPath . """ -g """ : "") . romPath . "\" . romName . romExtension . """ " . fullscreen . " -c """ . retroCFGFile . """ -L """ . libDll . """ -s srm -S save", emuPath, "Hide")
 
 WinWait("RetroArch ahk_class RetroArch")
 WinWaitActive("RetroArch ahk_class RetroArch")
