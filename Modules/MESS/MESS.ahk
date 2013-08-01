@@ -2,8 +2,8 @@ MEmu = MESS
 MEmuV =  v0.148
 MURL = http://www.mess.org/
 MAuthor = djvj
-MVersion = 2.0.5
-MCRC = 48DEBB39
+MVersion = 2.0.6
+MCRC = CEC00D18
 iCRC = D61C6C86
 MID = 635038268905515239
 MSystem = "Amstrad GX4000","APF Imagination Machine","Apple IIGS","Atari 2600","Atari 5200","Atari 7800","Bally Astrocade","Casio PV-1000","Casio PV-2000","ColecoVision","Creatronic Mega Duck","Emerson Arcadia 2001","Entex AdventureVision","Epoch Game Pocket Computer","Epoch Super Cassette Vision","Fairchild Channel F","Funtech Super Acan","GCE Vectrex","Interton VC4000","Magnavox Odyssey 2","Mattel Aquarius","Mattel Intellivision","NEC PC Engine","NEC PC Engine-CD","NEC SuperGrafx","NEC TurboGrafx-16","NEC TurboGrafx-CD","Nintendo Entertainment System","Nintendo Game Boy","Nintendo Game Boy Advance","Nintendo Game Boy Color","Nintendo Virtual Boy","Philips CD-i","RCA Studio II","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","SNK Neo Geo AES","SNK Neo Geo CD","SNK Neo Geo Pocket","SNK Neo Geo Pocket Color","Super Nintendo Entertainment System","Texas Instruments TI 99-4A","Tiger Game.com","VTech CreatiVision","Watara Supervision"
@@ -179,12 +179,12 @@ If UseSoftwareList != true
 
 	; These systems don't use an ini, but do require parameters to be changed from the default method of launching Mess
 	If ident = aes	; SNK Neo Geo AES
-	{	param1:="-bios asia-aes" ;can also be jap-aes (default), but the asian one has english menus for most games
-		param2:="-rompath " . """" . "roms;" . romPath . """"
-		param3:="-cart " . romName
-	}Else If ident = neocdz	; SNK Neo Geo CD
-	{	If romExtension != .cue
-			ScriptError("MESS only supports SNK Neo Geo CD games in cue format. It does not support:`n" . romExtension)
+	{	param1 := "-bios asia-aes" ;can also be jap-aes (default), but the asian one has english menus for most games
+		param2 := "-rompath " . """" . "roms;" . romPath . """"
+		param3 := "-cart " . romName
+	}Else If (ident = "neocdz" || ident = "cdimono1" || (ident = "pce" && (systemName = "NEC TurboGrafx-CD" || systemName = "NEC PC Engine-CD")))	; SNK Neo Geo CD, Philips CD-i, NEC PC Engine-CD or NEC TurboGrafx-CD
+	{	If romExtension not in .chd,.cue
+			ScriptError("MESS only supports " . systemName . " games in chd and cue format. It does not support:`n" . romExtension)
 		param1 := "-cdrm " . """" . romPath . "\" . romName . romExtension . """"
 	}Else If ident = gamecom	; Tiger Game.com
 	{	If romExtension != .txt
@@ -192,14 +192,6 @@ If UseSoftwareList != true
 	}Else If ident = vectrex	; GCE Vectrex
 	{	If romName = Mine Storm (World)	; Mess dumps an error if you try to launch Mine Storm using a rom instead of just booting vectrex w/o a game in it (Mine Storm is built into vectrex)
 			param1:=
-	}Else If ident = cdimono1	; Philips CD-i
-	{	If romExtension != .chd
-			ScriptError("MESS only supports Philips CD-i games in chd format. It does not support:`n" . romExtension)
-		param1 := "-cdrm " . """" . romPath . "\" . romName . romExtension . """"
-	}Else If (ident = "pce" && (systemName = "NEC TurboGrafx-CD" || systemName = "NEC PC Engine-CD"))	; NEC PC Engine-CD or NEC TurboGrafx-CD
-	{	If romExtension != .chd
-			ScriptError("MESS only supports NEC PC Engine-CD and NEC TurboGrafx-CD games in chd format. It does not support:`n" . romExtension)
-		param1 := "-cdrm " . """" . romPath . "\" . romName . romExtension . """"
 	}
 }Else{	; Use Software List
 	hashname := ident
@@ -207,13 +199,13 @@ If UseSoftwareList != true
 
 	If ident = aes	; SNK Neo Geo AES
 	{	hashname := "neogeo"
-		param2:="-bios asia-aes" ;can also be jap-aes (default), but the asian one has english menus for most games
+		param2 := "-bios asia-aes" ;can also be jap-aes (default), but the asian one has english menus for most games
 	}
 	CheckFile(emuPath . "\hash\" . hashname . ".xml","Could not find a software list for the system " . ident) ;Check if software list for selected system exists
 }
 
 If ident = vectrex	; GCE Vectrex
-	param2:="-view "  . (If (FileExist(emuPath . "\artwork\Vectrex\" . romName . ".png"))?("""" . romName . """"):"standard")	; need overlays extracted in the artwork\vectres folder. PNGs must match romName
+	param2 := "-view "  . (If (FileExist(emuPath . "\artwork\Vectrex\" . romName . ".png"))?("""" . romName . """"):"standard")	; need overlays extracted in the artwork\vectres folder. PNGs must match romName
 
 ; use a custom cfg file if it exists and append it to param1
 IfExist, % emuPath . "\cfg\" . ident . "\" . dbName
