@@ -2,8 +2,8 @@ MEmu = PCSXR
 MEmuV =  r80440
 MURL = http://pcsxr.codeplex.com/
 MAuthor = djvj
-MVersion = 2.0.1
-MCRC = A4977F35
+MVersion = 2.0.2
+MCRC = C4827D3A
 iCRC = 60E37EB3
 MID = 635038268913822158
 MSystem = "Sony PlayStation"
@@ -13,7 +13,7 @@ MSystem = "Sony PlayStation"
 ; In the emu, set your Cdrom plugin to SaPu's CD-ROM Plugin.
 ;
 ; If you have no video with OpenGL plugin, use Pete's OpenGL2 plugin
-; Fullscreen is controled by the variable below to give quick access to testing
+; Fullscreen is controlled by the setting in HLHQ to give quick access to testing
 ; Resolution can changed in the emu's GPU Plugin config.
 ;
 ; Emu settings are stored in the registry @ HKEY_CURRENT_USER\Software\Pcsxr
@@ -35,16 +35,16 @@ If ( Fullscreen != "true" And currentFullScreen = 0 )
 Else If ( Fullscreen = "true" And currentFullScreen = 1 )
 	WriteReg("WindowMode", 0)
 
+7z(romPath, romName, romExtension, 7zExtractPath)
+
 noEmuGUI := (If NoEmuGUI = "true" ? ("-nogui") : (""))
 cdType := (If romExtension = ".cue" ? ("-runcd") : ("-cdfile"))
 cdPath := (If romExtension = ".cue" ? ("") : ("""" . romPath . "\" . romName . romExtension . """"))
 sysParams := If sysParams != ""  ? sysParams : ""
 romParams := If romParams != ""  ? romParams : ""
 
-7z(romPath, romName, romExtension, 7zExtractPath)
-
 ; Mount the CD using DaemonTools
-If romExtension = .cue
+If ( romExtension = ".cue" && dtEnabled = "true" )
 	DaemonTools("mount",romPath . "\" . romName . romExtension)
 
 Run(executable . A_Space .  noEmuGUI . A_Space . sysParams . A_Space . romParams . A_Space . cdType . A_Space .  cdPath, emuPath)
@@ -55,7 +55,7 @@ WinWaitActive("AHK_class PCSXR Main")
 FadeInExit()
 Process("WaitClose", executable)
 
-If romExtension = .cue
+If ( romExtension = ".cue" && dtEnabled = "true" )
 	DaemonTools("unmount")
 
 7zCleanUp()
