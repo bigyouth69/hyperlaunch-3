@@ -11,7 +11,8 @@ MSystem = "NEC PC Engine","NEC PC Engine-CD","NEC SuperGrafx","NEC TurboGrafx-16
 ; Notes:
 ; Place your SYSCARD.PCE file in the same folder as the emu. If your bios is called SYSCARD3.PCE, rename it to SYSCARD.PCE
 ; If you want to use built-in zip support, you need to d/l UNZIP32.DLL and put it in the emu folder. Otherwise, use 7z support to unzip your rom
-;
+; To go fullscreen, set in the emulator's options to "Start Window Mode". HyperLaunch sends fullscreen on launch so it can be controlled via HLHQ and the module
+;.
 ; CD systems:
 ; Make sure your DAEMON_Tools_Path in Settings\Global HyperLaunch.ini is correct
 ; Run the emu and goto CD-ROM on the menubar and set the Drive Letter you use for Daemon Tools

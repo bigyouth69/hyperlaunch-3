@@ -54,8 +54,8 @@ MSystem = "Atari Lynx","Bandai Wonderswan","Bandai Wonderswan Color","NEC PC Eng
 ; vb.input.builtin.gamepad.up-r keyboard 105
 
 ; Sony PlayStation Info:
-; Create a folder called "bios" in your mednafen folder and place all your bios files (ex. scph5501.bin) in there. Set the options below so mednafen can find them
-; This module only supports the built-in bin/cue support, no Daemon Tools support has been added.
+; Create a folder called "firmware" in your mednafen folder and place all your bios files (ex. scph5501.bin) in there. Set the options below so mednafen can find them
+; This module only supports Daemon Tools when mounting with a cue extension for psx.
 ; Set your rom extension to cue
 ; Getting Multi-Disc games requires a DT drive in Daemon Tools, SCSI does not seem to be supported as mednafen didn't read the TOC from it.
 ; Multi-Disc games REQUIRES Daemon Tools, do not attempt to swap discs any other way as it is not supported by this module.
