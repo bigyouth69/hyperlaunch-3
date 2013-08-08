@@ -3,9 +3,9 @@ MEmuV =  v4.6
 MURL = http://freezesms.emuunlim.com/
 MAuthor = djvj
 MVersion = 2.0
-MCRC = 8ED53B83
+MCRC = 64CFCCE5
 iCRC = 1E716C97
-MID = 635038268893895568
+mId = 635115863426031003
 MSystem = "ColecoVision","Nintendo Entertainment System","Sega Game Gear","Sega Game Gear","Sega Master System","Sega SG-1000"
 ;----------------------------------------------------------------------------
 ; Notes:
