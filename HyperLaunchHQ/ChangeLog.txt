@@ -10,6 +10,13 @@
                                        Release History                                       
 =============================================================================================
 
+v1.0.9 (August 5th, 2013):
+  * Fixed serious bug in the save/load state form. Setting weren't being loaded properly and 
+    by consequence they were being saved with the wrong values
+  * Added the ability to launch a game through HyperLaunch from within the module settings form
+  * Added support for the new admissible values for the ini key Restore_Front_End_On_Exit, it's 
+    not a boolean any longer
+
 v1.0.8 (July 30th, 2013):
   * Added ability to export have/missing lists from both audit panel. Supports both Text and 
     HTML output formats
@@ -26,7 +33,7 @@ v1.0.8 (July 30th, 2013):
   * Moved the checkbox "Only show modules/emulators that are appropriate for the current system" 
     from the Emulators tab into the HyperLaunchHQ tab. This means this setting is now also saved 
     into HyperLaunchHQ.ini
-  * Added support for 2 new HyperPause ini keys : Bar_Vertical_Offset and Enable_Full_Screen_Help_Text
+  * Added support for 2 new HyperPause ini keys : Bar_Vertical_Offset and Full_Screen_Help_Text_Timer
   * Split General Settings\HyperLaunch tab into 2 moving all controls keys in it's own tab
 
 v1.0.7 (July 23rd, 2013):
