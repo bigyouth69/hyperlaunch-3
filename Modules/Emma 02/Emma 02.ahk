@@ -2,20 +2,19 @@ MEmu = Emma 02
 MEmuV =  v1.18
 MURL = http://www.emma02.hobby-site.com/
 MAuthor = brolly
-MVersion = 2.0
-MCRC = 78E83969
+MVersion = 2.0.1
+MCRC = 868D853D
 iCRC = 1E716C97
 MID = 635038268887179980
 MSystem = "RCA Studio II"
 ;----------------------------------------------------------------------------
 ; Notes:
-; Best way to configure controls is to run Emma 02.exe directly do all the changes you want and then go to 
-; %APPDATA%\Emma 02 and copy the file emma_02.ini to the emulators data folder
-; otherwise to edit controls you need to edit this file manually since when running in portable mode you don't have access 
-; to the GUI.
+; Best way to configure controls is to run Emma 02.exe directly do all the changes you want and then go to %APPDATA%\Emma 02 and copy the file emma_02.ini
+; to the emulators data folder otherwise to edit controls you need to edit this file manually since when running in portable mode you don't have access to the GUI.
+;
 ; To run the built-in games create txt files with the correct names and put them on your roms folder
-; Built-in games require pressing a specific button on the controller in order to start, so make sure you edit the keys on the module 
-; below to match your own configuration
+; Built-in games require pressing a specific button on the controller in order to start, so make sure you edit the keys on the module below to match your own configuration
+; Most of the games require you to press a button to start the game, like 1 or 2. So the game screen will be black until you do.
 ;----------------------------------------------------------------------------
 StartModule()
 FadeInStart()
@@ -24,6 +23,9 @@ settingsFile := modulePath . "\" . moduleName . ".ini"
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 
 7z(romPath, romName, romExtension, 7zExtractPath)
+
+If romExtension in %7zFormats%
+	ScriptError(MEmu . " only supports extracted roms. Please extract your roms or turn on 7z for this system as the emu is being sent this extension: """ . romExtension . """")
 
 options := "-p" . (If Fullscreen = "true" ? " -f" : "") . " -u -c=studio"
 
