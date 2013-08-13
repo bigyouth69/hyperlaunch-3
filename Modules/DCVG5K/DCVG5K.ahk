@@ -6,7 +6,7 @@ MVersion = 2.0
 MCRC = FFA88C52
 iCRC = 96341D95
 MID = 635038268880784660
-MSystem = "Philips VG5000"
+MSystem = "Philips VG 5000"
 ;------------------------------------------------------------------------
 ; Notes:
 ; Roms must be unzipped
