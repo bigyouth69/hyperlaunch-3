@@ -10,6 +10,19 @@
                                        Release History                                       
 =============================================================================================
 
+v1.0.10 (August 13th, 2013):
+  * Added support for file/folder paths relative to the emulator folder in the module settings 
+    form
+  * HLHQ will now remember the last selected main tab and will start on that tab next time you 
+    run it
+  * Added support to drag&drop .exe and .bat files in the PCLauncher module settings form. Just 
+    drag them into the target same way you do for shortcuts, you MUST insert the game entry first 
+    in this case though
+  * Added support to launch a game with HyperLaunch while using the window title grabber. Used by 
+    PCLauncher
+  * Fixed bug in Module validator that made HLHQ crash when certain special characters were used
+  * Added warning when you try to audit a system that doesn't have a default emulator set
+
 v1.0.9 (August 5th, 2013):
   * Fixed serious bug in the save/load state form. Setting weren't being loaded properly and 
     by consequence they were being saved with the wrong values
