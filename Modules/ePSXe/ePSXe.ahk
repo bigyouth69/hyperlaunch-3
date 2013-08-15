@@ -2,8 +2,8 @@ MEmu = ePSXe
 MEmuV =  v1.8.0
 MURL = http://www.epsxe.com/
 MAuthor = djvj & Shateredsoul & brolly
-MVersion = 2.0.3
-MCRC = 8E174373
+MVersion = 2.0.4
+MCRC = AF206F70
 iCRC = D6E3720
 MID = 635038268888210842
 MSystem = "Sony PlayStation"
@@ -30,6 +30,7 @@ MSystem = "Sony PlayStation"
 ;----------------------------------------------------------------------------
 StartModule()
 FadeInStart()
+; BezelStart()	; if a fullscreen setting is ever added to the module, bezel support can be added
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
 turboButton := IniReadCheck(settingsFile, "Settings", "turboButton","F12",,1)		; Key mapping for turbo button assignment
@@ -63,6 +64,7 @@ If errorLvl != 0
 WinWait("ePSXe ahk_class EPSX")
 WinWaitActive("ePSXe ahk_class EPSX")
 
+; BezelDraw()
 FadeInExit()
 
 If enableAnalog = true
@@ -76,6 +78,7 @@ If (epsxeExtension && dtEnabled = "true" )
 	DaemonTools("unmount")
 
 7zCleanUp()
+; BezelExit()
 FadeOutExit()
 ExitModule()
 
@@ -113,6 +116,5 @@ CloseProcess:
 	FadeOutStart()
 	SetWinDelay, 50
 	Log("Module - Sending Escape to close emulator")
-	; WinClose("ePSXe ahk_class EPSX")	; epsxe remains running as a process when this is used
-	Send, {Esc down}{Esc up} ; DO NOT CHANGE
+	ControlSend,, {Esc down}{Esc up}, ePSXe ahk_class EPSX ; DO NOT CHANGE
 Return
