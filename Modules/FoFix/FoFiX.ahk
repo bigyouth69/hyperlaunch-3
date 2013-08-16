@@ -13,7 +13,7 @@ MSystem = "Frets on Fire X"
 ; Set your rom path to the folder you store your themes in. The default is EMU\data\themes\ folder.
 ; in your rom folder, place a blank txt file named to each game name you have in your xml
 ; The folder names in the above theme folder must match the game name from your xml. You can consider these your "roms"
-; Songs must reside in the "data\songs" folder 
+; Songs must reside in the "data\songs" folder
 ; If fullscreen mode is used, FoFiX destroys the fade gui and Hyperspin may pop back into view for a moment.
 ; If fullscreen is false, the module will remove the titlebar and border of the window to give a look of fullscreen and fade support will still work. Make sure you set the resolution to match your desktop though.
 ;----------------------------------------------------------------------------

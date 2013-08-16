@@ -11,7 +11,7 @@ MSystem = "DOS","Microsoft MS-DOS"
 ; Notes:
 ; Requires DoSBox @ http://www.dosbox.com/ or you can get newer SVN versions on EmuCR
 ; You can find an Enhanced DosBox with many unofficial features on ykhwong's page @ http://ykhwong.x-y.net/
-; Blank txt files need to be created for every game for HS1. In HS2, set skipchecks to true if you are not using 7z_enable. Otherwise you have to create blank txt files/
+; Blank txt files need to be created for every game for HS1. In HS2, set skipchecks to true if you are not using 7z_enable. Otherwise you have to create blank txt files.
 ; path needs to be the folder with the DFend.exe and exe needs to be DFend.exe
 ; romPath needs to point to the dir with all the blank txt files for HS1. In HS2 it is not needed if skipchecks is true. If using 7z_enable, set romPath to your compressed games.
 ; If 7z_Enable is true, this module will set your Default Game Location in DFend to match the 7z_extract_dir in your system.ini.
