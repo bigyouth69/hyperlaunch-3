@@ -19,6 +19,10 @@
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Atari 2600. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is stella_libretro_x86_64_20130629</DESCRIPTION>
 						</KEY>
+						<KEY name="LibRetro_32X" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Sega 32X. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is picodrive_libretro_x86_64_20130813</DESCRIPTION>
+						</KEY>
 						<KEY name="LibRetro_FBA" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Final Burn Alpha. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is fb_alpha_libretro_x86_64_20130629</DESCRIPTION>
@@ -78,6 +82,10 @@
 						<KEY name="LibRetro_PCECD" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for NEC PC Engine-CD. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is mednafen_vb_libretro_x86_64_20130629</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_PICO" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Sega Pico. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is picodrive_libretro_x86_64_20130813</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_PSX" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
