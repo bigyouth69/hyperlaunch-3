@@ -2,8 +2,8 @@ MEmu = Sega Model 2 Emulator
 MEmuV = v1.0
 MURL = http://nebula.emulatronia.com/
 MAuthor = djvj
-MVersion = 2.0
-MCRC = B79E5E3A
+MVersion = 2.0.1
+MCRC = 155BC798
 iCRC = 
 MID = 635038268923290039
 MSystem = "Sega Model 2"
@@ -12,9 +12,12 @@ MSystem = "Sega Model 2"
 ; Oustide of Hyperspin, open the Sega Model 2 Emulator. 
 ; Under Video enable "auto switch to fullscreen".
 ; Open the EMULATOR.INI and set your Dir1 to your roms dir (no backslash needed)
+; model2.zip must exist in your rom path which contains the needed bios files for the system.
 ;----------------------------------------------------------------------------
 StartModule()
 FadeInStart()
+
+CheckFile(romPath . "\model2.zip","Could not locate ""model2.zip"" which contains the bios files for this emulator. Please make sure it exists in the same folder as your roms.")
 
 Run(executable . A_Space . romName,emuPath,"Hide")
 
