@@ -2,8 +2,8 @@ MEmu = MFME
 MEmuV = v3.2 & v9.4 & v10.1a
 MURL = http://www.fruit-emu.com/
 MAuthor = djvj
-MVersion = 2.0.1
-MCRC = DEE1A30F
+MVersion = 2.0.2
+MCRC = DF4EE612
 iCRC = 85E674CF
 MID = 635038268906095729
 MSystem = "Fruit Machine","MFME"
@@ -56,8 +56,7 @@ ResetKey := IniReadCheck(settingsFile, "Settings", "ResetKey","F12",,1)								;
 
 
 If ambientSound = true
-{
-	ambientSoundFile := CheckFile(ambientSoundFile)
+{	ambientSoundFile := CheckFile(ambientSoundFile)
 	ambientSoundPlayer := CheckFile(ambientSoundPlayer)
 	SplitPath, ambientSoundPlayer, ambientSoundPlayerName, ambientSoundPlayerPath
 }
@@ -65,8 +64,7 @@ If ambientSound = true
 ; This gets rid of the emu window that pops up on launch
 ; GUI creates the splash screen at launch. GUI 3 creates the background that persists during gameplay.
 If fadeIn = true
-{
-	FadeInStart()
+{	FadeInStart()
 	Gui 5: +LastFound
 	WinGet GUI_ID5, ID
 	Gui 5: -AlwaysOnTop -Caption +ToolWindow
@@ -85,11 +83,13 @@ If MinimizeWindows = true
 	WinMinimizeAll
 
 If resizeDesktop = true
-{
-	;Sleep, 1000 ; probably don't need this
-	displaySettings := GetDisplaySettingsAlt() ; Retrieve current display settings
-	StringSplit, displayArray, displaySettings, |
-	ChangeDisplaySettings( displayArray1 , ResizeW , ResizeH )
+{	;Sleep, 1000 ; probably don't need this
+	originalScreenRes := CurrentDisplaySettings(0) ; reads the current resolution
+	originalScreenRes := CheckForNearestSupportedRes( originalScreenRes ) ;assures that the current resolution is a compatible mode (sometimes the frequency can be wrongly defined on the previous function, this line double check this to avoid any issues).
+	StringSplit, originalScreenResArray, originalScreenRes, |,  
+	supportedRes := CheckForNearestSupportedRes( "1280|1024|" . originalScreenResArray3 . "|" originalScreenResArray4 ) ; determine the supported res nearest to the desired 1280x1024 res.
+	StringSplit, supportedResArray, supportedRes , |,     ; ResArray1 - width, ResArray2 - height, ResArray3 - color, ResArray4 - frequency
+	ChangeDisplaySettings(supportedResArray1,supportedResArray2,supportedResArray3,supportedResArray4) ; changes the res to 1280x1024
 	;Sleep, 1000 ; probably don't need this
 }
 
@@ -110,29 +110,27 @@ WinActivate, ahk_class TForm1
 WinWaitActive("ahk_class TForm1")
 
 If Magnify = true
-{
-	Sleep, 500
+{	Sleep, 500
 	magnifierExe:=CheckFile(A_WinDir . "\system32\magnify.exe","Could not find Windows Magnifier in " . A_WinDir . "\system32\magnify.exe`nPlease disable it's use in the module, or copy it to the above folder.")
 	magPID := Process("Exist", "magnify.exe")
 	If magPID != 0
 		Process("Close", "magnify.exe")
 	If A_OSVersion not in WIN_2003, WIN_XP, WIN_2000, WIN_NT4, WIN_95, WIN_98, WIN_M
-	{
-	RootKey = HKCU
-	SubKey = Software\Microsoft\ScreenMagnifier
-	If (MagnifyWinPosX = "" or MagnifyWinPosX = "ERROR")	; places window in bottom right corner if not defined
-		MagnifyWinPosX := A_ScreenWidth - MagnifyWinSizeW
-	If (MagnifyWinPosY = "" or MagnifyWinPosX = "ERROR")
-		MagnifyWinPosY := A_ScreenHeight - MagnifyWinSizeH
-	MagnifyWinPosY := IniReadCheck(settingsFile, "Settings", "MagnifyWinPosY",(A_ScreenHeight - MagnifyWinSizeH),,1)
-	regwrite, REG_DWORD ,%RootKey%,%SubKey%,MagnifierUIWindowMinimized, 1 			; start with ui minimized
-	regwrite, REG_DWORD ,%RootKey%,%SubKey%,MagnificationMode, 1					;choosing docked mode
-	regwrite, REG_DWORD ,%RootKey%,%SubKey%,ClassicDocked, 0 						;choosing classic window mode
-	regwrite, REG_DWORD ,%RootKey%,%SubKey%,Magnification, %MagnifyPercentage% 		;Magnification Percentage
-	regwrite, REG_DWORD ,%RootKey%,%SubKey%,ClassicWindowCX, %MagnifyWinSizeW%		;Window Width
-	regwrite, REG_DWORD ,%RootKey%,%SubKey%,ClassicWindowCY, %MagnifyWinSizeH% 		;Window Height
-	regwrite, REG_DWORD ,%RootKey%,%SubKey%,ClassicWindowX, %MagnifyWinPosX%		;Window Pos x
-	regwrite, REG_DWORD ,%RootKey%,%SubKey%,ClassicWindowY, %MagnifyWinPosY% 		;Window Pos y
+	{	RootKey = HKCU
+		SubKey = Software\Microsoft\ScreenMagnifier
+		If (MagnifyWinPosX = "" or MagnifyWinPosX = "ERROR")	; places window in bottom right corner if not defined
+			MagnifyWinPosX := A_ScreenWidth - MagnifyWinSizeW
+		If (MagnifyWinPosY = "" or MagnifyWinPosX = "ERROR")
+			MagnifyWinPosY := A_ScreenHeight - MagnifyWinSizeH
+		MagnifyWinPosY := IniReadCheck(settingsFile, "Settings", "MagnifyWinPosY",(A_ScreenHeight - MagnifyWinSizeH),,1)
+		regwrite, REG_DWORD ,%RootKey%,%SubKey%,MagnifierUIWindowMinimized, 1 			; start with ui minimized
+		regwrite, REG_DWORD ,%RootKey%,%SubKey%,MagnificationMode, 1					;choosing docked mode
+		regwrite, REG_DWORD ,%RootKey%,%SubKey%,ClassicDocked, 0 						;choosing classic window mode
+		regwrite, REG_DWORD ,%RootKey%,%SubKey%,Magnification, %MagnifyPercentage% 		;Magnification Percentage
+		regwrite, REG_DWORD ,%RootKey%,%SubKey%,ClassicWindowCX, %MagnifyWinSizeW%		;Window Width
+		regwrite, REG_DWORD ,%RootKey%,%SubKey%,ClassicWindowCY, %MagnifyWinSizeH% 		;Window Height
+		regwrite, REG_DWORD ,%RootKey%,%SubKey%,ClassicWindowX, %MagnifyWinPosX%		;Window Pos x
+		regwrite, REG_DWORD ,%RootKey%,%SubKey%,ClassicWindowY, %MagnifyWinPosY% 		;Window Pos y
 	}
 	Run(magnifierExe) ;,, Min
 	WinWait("ahk_class Screen Magnifier Window",,5)
@@ -148,8 +146,7 @@ If Magnify = true
 	}
 	XpBelow = false
 	If A_OSVersion in WIN_2003,WIN_XP,WIN_2000,WIN_NT4,WIN_95,WIN_98,WIN_M
-	{
-		XpBelow = true
+	{	XpBelow = true
 		WinSet, Style, -0xC00000, ahk_class Screen Magnifier Window		;Removes the titlebar of the magnifier window
 		WinSet, Style, -0x40000, ahk_class Screen Magnifier Window		;Removes the border of the magnifier window
 		WinMinimize, ahk_class MagUIClass
@@ -180,7 +177,7 @@ If ambientSound = true
 
 ;restore original resolution
 If resizeDesktop = true
-{	ChangeDisplaySettings( displayArray1 , displayArray2 , displayArray3 )
+{	ChangeDisplaySettings(originalScreenResArray1,originalScreenResArray2,originalScreenResArray3,originalScreenResArray4) ; restore the res to the original resolution
 	Sleep, 1000
 }
 
