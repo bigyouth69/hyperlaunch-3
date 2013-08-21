@@ -1,9 +1,9 @@
 MEmu = Higan
-MEmuV =  v0.92
+MEmuV =  v0.93
 MURL = http://byuu.org/higan/
 MAuthor = djvj
-MVersion = 2.0
-MCRC = 7FBE8F6A
+MVersion = 2.0.1
+MCRC = CB7C0AA9
 iCRC = A3607D8A
 MID = 635038268899159961
 MSystem = "Nintendo Entertainment System","Nintendo Famicom""Nintendo Game Boy","Nintendo Game Boy Color","Nintendo Satellaview","Nintendo Super Famicom","Super Nintendo Entertainment System"
@@ -18,6 +18,7 @@ MSystem = "Nintendo Entertainment System","Nintendo Famicom""Nintendo Game Boy",
 ; higan stores its config @ C:\Users\%USER%\AppData\Roaming\higan
 ;----------------------------------------------------------------------------
 StartModule()
+; BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
@@ -33,16 +34,16 @@ BezelStart()
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 ; Set desired fullscreen mode
-higanFile := CheckFile(A_AppData . "\higan\settings.cfg")
+higanFile := CheckFile(A_AppData . "\higan\settings.bml")
 FileRead, higanCfg, %higanFile%
-currentFullScreen := (InStr(higanCfg, "Video::StartFullScreen = true") ? ("true") : ("false"))
+currentFullScreen := (InStr(higanCfg, "StartFullScreen: true") ? ("true") : ("false"))
 If ( Fullscreen != "true" And currentFullScreen = "true" ) {
 	; StringReplace, higanCfg, higanCfg, Video::FullScreenMode = 1, Video::FullScreenMode = 0
-	StringReplace, higanCfg, higanCfg, Video::StartFullScreen = true, Video::StartFullScreen = false
+	StringReplace, higanCfg, higanCfg, StartFullScreen: true, StartFullScreen: false
 	SaveFile(higanCfg, higanFile)
 } Else If ( Fullscreen = "true" And currentFullScreen = "false" ) {
 	; StringReplace, higanCfg, higanCfg, Video::FullScreenMode = 0, Video::FullScreenMode = 1
-	StringReplace, higanCfg, higanCfg, Video::StartFullScreen = false, Video::StartFullScreen = true
+	StringReplace, higanCfg, higanCfg, StartFullScreen: false, StartFullScreen: true
 	SaveFile(higanCfg, higanFile)
 }
 
