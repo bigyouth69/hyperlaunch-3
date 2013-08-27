@@ -2,11 +2,11 @@ MEmu = Fusion
 MEmuV =  v3.64
 MURL = http://www.eidolons-inn.net/tiki-index.php?page=Kega
 MAuthor = djvj
-MVersion = 2.0.1
-MCRC = 2FF1B16
-iCRC = D5A323FE
+MVersion = 2.0.2
+MCRC = E561A2BA
+iCRC = 99F6170B
 MID = 635038268893895568
-MSystem = "Samsung Gam Boy","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","Sega Mega-CD","Sega SG-1000"
+MSystem = "Samsung Gam Boy","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","Sega Mega-CD","Sega SC-3000","Sega SG-1000"
 ;----------------------------------------------------------------------------
 ; Notes:
 ; Don't forget to setup your bios or you might just get a black screen.
@@ -27,10 +27,11 @@ MSystem = "Samsung Gam Boy","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis"
 ; For P2_Controller - 0=None, 1=Gamepad, 2=Multitap, 3=Mouse, 4=Super Scope, 5=Justifier, 6=Dual Justifiers, 7=Serial USART
 ;----------------------------------------------------------------------------
 StartModule()
+; BezelGUI()
 FadeInStart()
 
 ; The object controls how the module reacts to different systems. Fusion can play a lot of systems, but changes itself slightly so this module has to adapt 
-mType := Object("Samsung Gam Boy","sms","Sega 32X","32X","Sega CD","scd","Sega Mega-CD","scd","Sega Game Gear","gg","Sega Genesis","gen","Sega Mega Drive","gen","Sega Master System","sms","Sega SG-1000","sms")
+mType := Object("Samsung Gam Boy","sms","Sega 32X","32X","Sega CD","scd","Sega Mega-CD","scd","Sega Game Gear","gg","Sega Genesis","gen","Sega Mega Drive","gen","Sega Master System","sms","Sega SC-3000","sms","Sega SG-1000","sms")
 ident := mType[systemName]	; search 1st array for the systemName identifier mednafen uses
 If !ident
 	ScriptError("Your systemName is: " . systemName . "`nIt is not one of the known supported systems for this Fusion module: " . moduleName)
@@ -39,7 +40,6 @@ Log("Module - Started reading module ini")
 settingsFile := modulePath . "\" . moduleName . ".ini"
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 hideTitleBar := IniReadCheck(settingsFile, "Settings", "hideTitleBar","true",,1)	; Removes the border, titlebar, menubar, and centers the emu on your screen. Only need this if fullscreen is false
-windowedResolution := IniReadCheck(settingsFile, "Settings", "windowedResolution","960x720",,1) ;  Sets the windowed resolution (it can be only one of these options: 320x240, 640x480, 960x720, 1280x960)
 controllerReassigningEnabled := IniReadCheck(settingsFile, systemName, "Controller_Reassigning_Enabled","false",,1)
 defaultGenP1Controller := IniReadCheck(settingsFile, systemName, "Default_Genesis_P1_Controller",2,,1)
 defaultGenP1bController := IniReadCheck(settingsFile, systemName, "Default_Genesis_P1b_Controller",2,,1)
@@ -111,20 +111,9 @@ hideEmu := (If Fullscreen = "true" ? ("Hide") : (""))
 fullscreen := (If Fullscreen = "true" ? ("-fullscreen") : (""))
 
 If bezelPath ; Setting windowed mode resolution
-{	If windowedResolution
-	{	If (windowedResolution="326x288")
-			DWSLine := "DWindowSize=240,0,64,1"
-		Else If (windowedResolution="646x528")
-			DWSLine := "DWindowSize=224,1,128,2"
-		Else If (windowedResolution="966x768")
-			DWSLine := "DWindowSize=208,2,192,3"
-		Else If (windowedResolution="1286x1008")
-			DWSLine := "DWindowSize=192,3,0,5"
-		fusionini := regexreplace(fusionini,"DWindowSize=[0-9]+,[0-9]+,[0-9]+,[0-9]+",DWSLine) ; setting windowed resolution
-		fusionini := regexreplace(fusionini,"GameGearZoom=0","GameGearZoom=1") ; disabling emulator default bezel
-		If controllerReassigningEnabled != true	; no need to save file if it's going to be written later
-			SaveFile(fusionIni, fusionFile)
-	}
+{	fusionini := regexreplace(fusionini,"GameGearZoom=0","GameGearZoom=1") ; disabling emulator default bezel
+	If controllerReassigningEnabled != true	; no need to save file if it's going to be written later
+		SaveFile(fusionIni, fusionFile)
 }
 
  ; Allows you to set on a per-rom basis the controller type plugged into controller ports 1 and 2
