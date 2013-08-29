@@ -2,11 +2,11 @@ MEmu = MESS
 MEmuV =  v0.148
 MURL = http://www.mess.org/
 MAuthor = djvj
-MVersion = 2.0.6
-MCRC = CEC00D18
+MVersion = 2.0.7
+MCRC = D4831997
 iCRC = D61C6C86
 MID = 635038268905515239
-MSystem = "Amstrad GX4000","APF Imagination Machine","Apple IIGS","Atari 2600","Atari 5200","Atari 7800","Bally Astrocade","Casio PV-1000","Casio PV-2000","ColecoVision","Creatronic Mega Duck","Emerson Arcadia 2001","Entex AdventureVision","Epoch Game Pocket Computer","Epoch Super Cassette Vision","Fairchild Channel F","Funtech Super Acan","GCE Vectrex","Interton VC4000","Magnavox Odyssey 2","Mattel Aquarius","Mattel Intellivision","NEC PC Engine","NEC PC Engine-CD","NEC SuperGrafx","NEC TurboGrafx-16","NEC TurboGrafx-CD","Nintendo Entertainment System","Nintendo Game Boy","Nintendo Game Boy Advance","Nintendo Game Boy Color","Nintendo Virtual Boy","Philips CD-i","RCA Studio II","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","SNK Neo Geo AES","SNK Neo Geo CD","SNK Neo Geo Pocket","SNK Neo Geo Pocket Color","Super Nintendo Entertainment System","Texas Instruments TI 99-4A","Tiger Game.com","VTech CreatiVision","Watara Supervision"
+MSystem = "Amstrad GX4000","APF Imagination Machine","Apple IIGS","Atari 2600","Atari 5200","Atari 7800","Bally Astrocade","Casio PV-1000","Casio PV-2000","ColecoVision","Creatronic Mega Duck","Emerson Arcadia 2001","Entex AdventureVision","Epoch Game Pocket Computer","Epoch Super Cassette Vision","Fairchild Channel F","Funtech Super Acan","GCE Vectrex","Interton VC4000","Magnavox Odyssey 2","Mattel Aquarius","Mattel Intellivision","NEC PC Engine","NEC PC Engine-CD","NEC SuperGrafx","NEC TurboGrafx-16","NEC TurboGrafx-CD","Nintendo 64","Nintendo Entertainment System","Nintendo Game Boy","Nintendo Game Boy Advance","Nintendo Game Boy Color","Nintendo Virtual Boy","Philips CD-i","RCA Studio II","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","SNK Neo Geo AES","SNK Neo Geo CD","SNK Neo Geo Pocket","SNK Neo Geo Pocket Color","Sony PlayStation","Super Nintendo Entertainment System","Texas Instruments TI 99-4A","Tiger Game.com","VTech CreatiVision","Watara Supervision"
 ;----------------------------------------------------------------------------
 ; Notes:
 ; Exit fade will only work correctly if you don't have Esc, the default MESS exit key,  as your exit key. If you use Esc, turn off the ExitScreen
@@ -40,7 +40,8 @@ MSystem = "Amstrad GX4000","APF Imagination Machine","Apple IIGS","Atari 2600","
 ; NEC PC Engine-CD - ??
 ; NEC SuperGrafx - N/A
 ; NEC TurboGrafx-16 - N/A
-; NEC TurboGrafx-CD - ??
+; NEC TurboGrafx-CD - "Super CD-ROM2 System V3.01 (U).pce" [262,144 bytes] (placed in the roms subfolder in the emuPath)
+; Nintendo 64 - n64
 ; Nintendo Entertainment System - N/A
 ; Nintendo Game Boy - gameboy
 ; Nintendo Game Boy Advance - gba
@@ -55,6 +56,7 @@ MSystem = "Amstrad GX4000","APF Imagination Machine","Apple IIGS","Atari 2600","
 ; SNK Neo Geo CD - neocd
 ; SNK Neo Geo Pocket - ngp
 ; SNK Neo Geo Pocket Color - ngpc
+; Sony PlayStation - psa, pse, psj, psu
 ; Super Nintendo Entertainment System - snes
 ; Texas Instruments TI 99-4A - ti99_4a
 ; Tiger Game.com - gamecom
@@ -93,10 +95,11 @@ MSystem = "Amstrad GX4000","APF Imagination Machine","Apple IIGS","Atari 2600","
 ; For floppy games make sure you have a RPK dump of an extended basic rom on your roms folder. It should be named "extended_basic.rpk"
 ;----------------------------------------------------------------------------
 StartModule()
+; BezelGUI()
 FadeInStart()
 
 ; This object controls how the module reacts to different systems. MESS can play a lot of systems, but needs to know what system you want to run, so this module has to adapt.
-mType := Object("Amstrad GX4000","gx4000","APF Imagination Machine","apfimag","Apple IIGS","apple2gs","Atari 2600","a2600","Atari 5200","a5200","Atari 7800","a7800","Bally Astrocade","astrocde","Casio PV-1000","pv1000","Casio PV-2000","pv2000","ColecoVision","coleco","Creatronic Mega Duck","megaduck","Emerson Arcadia 2001","arcadia","Entex AdventureVision","advision","Epoch Game Pocket Computer","gamepock","Epoch Super Cassette Vision","scv","Fairchild Channel F","channelf","Funtech Super Acan","supracan","GCE Vectrex","vectrex","Interton VC 4000","vc4000","Magnavox Odyssey 2","odyssey2","Mattel Aquarius","aquarius","Mattel Intellivision","intv","NEC PC Engine","pce","NEC PC Engine-CD","pce","NEC SuperGrafx","sgx","NEC TurboGrafx-16","pce","NEC TurboGrafx-CD","pce","Nintendo Entertainment System","nes","Nintendo Game Boy","gameboy","Nintendo Game Boy Advance","gba","Nintendo Game Boy Color","gbcolor","Nintendo Virtual Boy","vboy","Philips CD-i","cdimono1","RCA Studio II","studio2","Sega Game Gear","gamegear","Sega Genesis","genesis","Sega Master System","sms","Sega Mega Drive","genesis","SNK Neo Geo AES","aes","SNK Neo Geo CD","neocdz","SNK Neo Geo Pocket","ngp","SNK Neo Geo Pocket Color","ngpc","Super Nintendo Entertainment System","snes","Texas Instruments TI 99-4A","ti99_4a","Tiger Game.com","gamecom","VTech CreatiVision","crvision","Watara Supervision","svision")
+mType := Object("Amstrad GX4000","gx4000","APF Imagination Machine","apfimag","Apple IIGS","apple2gs","Atari 2600","a2600","Atari 5200","a5200","Atari 7800","a7800","Bally Astrocade","astrocde","Casio PV-1000","pv1000","Casio PV-2000","pv2000","ColecoVision","coleco","Creatronic Mega Duck","megaduck","Emerson Arcadia 2001","arcadia","Entex AdventureVision","advision","Epoch Game Pocket Computer","gamepock","Epoch Super Cassette Vision","scv","Fairchild Channel F","channelf","Funtech Super Acan","supracan","GCE Vectrex","vectrex","Interton VC 4000","vc4000","Magnavox Odyssey 2","odyssey2","Mattel Aquarius","aquarius","Mattel Intellivision","intv","NEC PC Engine","pce","NEC PC Engine-CD","pce","NEC SuperGrafx","sgx","NEC TurboGrafx-16","tg16","NEC TurboGrafx-CD","tg16","Nintendo 64","n64","Nintendo Entertainment System","nes","Nintendo Game Boy","gameboy","Nintendo Game Boy Advance","gba","Nintendo Game Boy Color","gbcolor","Nintendo Virtual Boy","vboy","Philips CD-i","cdimono1","RCA Studio II","studio2","Sega Game Gear","gamegear","Sega Genesis","genesis","Sega Master System","sms","Sega Mega Drive","genesis","SNK Neo Geo AES","aes","SNK Neo Geo CD","neocdz","SNK Neo Geo Pocket","ngp","SNK Neo Geo Pocket Color","ngpc","Sony PlayStation","psx","Super Nintendo Entertainment System","snes","Texas Instruments TI 99-4A","ti99_4a","Tiger Game.com","gamecom","VTech CreatiVision","crvision","Watara Supervision","svision")
 ident := mType[systemName]	; search object for the systemName identifier MESS uses
 If !ident
 	ScriptError("Your systemName is: " . systemName . "`nIt is not one of the known supported systems for this MESS module: " . moduleName)
@@ -182,9 +185,18 @@ If UseSoftwareList != true
 	{	param1 := "-bios asia-aes" ;can also be jap-aes (default), but the asian one has english menus for most games
 		param2 := "-rompath " . """" . "roms;" . romPath . """"
 		param3 := "-cart " . romName
-	}Else If (ident = "neocdz" || ident = "cdimono1" || (ident = "pce" && (systemName = "NEC TurboGrafx-CD" || systemName = "NEC PC Engine-CD")))	; SNK Neo Geo CD, Philips CD-i, NEC PC Engine-CD or NEC TurboGrafx-CD
+	}Else If (ident = "neocdz" || ident = "cdimono1" || ident = "psx" || (ident = "tg16" && systemName = "NEC TurboGrafx-CD") || (ident = "pce" && systemName = "NEC PC Engine-CD"))	; SNK Neo Geo CD, Philips CD-i, Sony PlayStation, NEC PC Engine-CD or NEC TurboGrafx-CD
 	{	If romExtension not in .chd,.cue
 			ScriptError("MESS only supports " . systemName . " games in chd and cue format. It does not support:`n" . romExtension)
+		If (systemName = "NEC TurboGrafx-CD") {		; NEC TurboGrafx-CD needs an additional bios mounted as a cart to run
+			; tgcdBios := CheckFile(emuPath . "\roms\CD-ROM System V2.01 (U).pce")	; older bios that doesn't seem to work with many games
+			tgcdBios := CheckFile(emuPath . "\roms\Super CD-ROM2 System V3.01 (U).pce")
+			param2 := "-cart " . """" . tgcdBios . """"
+		} Else If (ident = "psx") {		; Sony PlayStation
+			ident = psu	; changing ident sent to Mess to use the USA bios
+			; SelectMemCard()	; future function to swap around memcards
+			; Usage: mc1 "J:\MESS\software\psu\card1.mc" 
+		}
 		param1 := "-cdrm " . """" . romPath . "\" . romName . romExtension . """"
 	}Else If ident = gamecom	; Tiger Game.com
 	{	If romExtension != .txt
