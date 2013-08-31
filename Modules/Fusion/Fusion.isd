@@ -15,15 +15,9 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Removes the border, titlebar, menubar, and centers the emu on your screen. Only need this if fullscreen is false</DESCRIPTION>
 						</KEY>
-						<KEY name="windowedResolution" required="false" nullable="false">
-							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>Sets the windowed resolution (it can be only one of these options: 320x240, 640x480, 960x720, 1280x960)</DESCRIPTION>
-							<VALUES>
-								<VALUE>320x240</VALUE>
-								<VALUE>640x480</VALUE>
-								<VALUE>960x720</VALUE>
-								<VALUE>1280x960</VALUE>
-							</VALUES>
+						<KEY name="UseRamCarts" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, creates and loads a unique 128k Ram Cart for each Sega CD and Mega CD game on launch</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>

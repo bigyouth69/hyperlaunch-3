@@ -2,9 +2,9 @@ MEmu = Fusion
 MEmuV =  v3.64
 MURL = http://www.eidolons-inn.net/tiki-index.php?page=Kega
 MAuthor = djvj
-MVersion = 2.0.2
-MCRC = E561A2BA
-iCRC = 99F6170B
+MVersion = 2.0.3
+MCRC = 60FFCCE0
+iCRC = 7C7876C0
 MID = 635038268893895568
 MSystem = "Samsung Gam Boy","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","Sega Mega-CD","Sega SC-3000","Sega SG-1000"
 ;----------------------------------------------------------------------------
@@ -40,6 +40,7 @@ Log("Module - Started reading module ini")
 settingsFile := modulePath . "\" . moduleName . ".ini"
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 hideTitleBar := IniReadCheck(settingsFile, "Settings", "hideTitleBar","true",,1)	; Removes the border, titlebar, menubar, and centers the emu on your screen. Only need this if fullscreen is false
+useRamCarts := IniReadCheck(settingsFile, "Settings", "UseRamCarts","true",,1)
 controllerReassigningEnabled := IniReadCheck(settingsFile, systemName, "Controller_Reassigning_Enabled","false",,1)
 defaultGenP1Controller := IniReadCheck(settingsFile, systemName, "Default_Genesis_P1_Controller",2,,1)
 defaultGenP1bController := IniReadCheck(settingsFile, systemName, "Default_Genesis_P1b_Controller",2,,1)
@@ -86,83 +87,57 @@ Log("Module - Finished reading module ini")
 BezelStart("fixResMode")
 
 fusionFile := CheckFile(emuPath . "\fusion.ini")
-FileRead, fusionIni, %fusionFile%
+fusionIni := LoadProperties(fusionFile)	; load the config into memory
+currentFullScreen := ReadProperty(fusionIni,"FullScreen")	; read current fullscreen state
 
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 If romExtension in .7z,.rar
-	ScriptError(MEmu . " only supports uncompressed or zip compressed roms. Please enable 7z support in HLHQ to use this module/emu.")
+	ScriptError(MEmu . " only supports uncompressed or zip compressed roms. Please enable 7z support in HLHQ to use this module/emu for this extension: """ . romExtension . """")
 
-; Setting Fullscreen setting in cfg if it doesn't match what user wants above
-currentFullScreen := (InStr(fusionIni, "FullScreen=1") ? ("true") : ("false"))
-
-
-If ( Fullscreen != "true" And currentFullScreen = "true" ) {
-	StringReplace, fusionIni, fusionIni, FullScreen=1, FullScreen=0
+If ( Fullscreen != "true" And currentFullScreen = "1" ) {
+	WriteProperty(fusionIni,"FullScreen", 0)
 	If controllerReassigningEnabled != true	; no need to save file if it's going to be written later
-		SaveFile(fusionIni, fusionFile)
-} Else If ( Fullscreen = "true" And currentFullScreen = "false" ) {
-	StringReplace, fusionIni, fusionIni, FullScreen=0, FullScreen=1
+		SaveProperties(fusionFile,fusionIni)	; save fusionFile to disk
+} Else If ( Fullscreen = "true" And currentFullScreen = "0" ) {
+	WriteProperty(fusionIni,"FullScreen", 1)
 	If controllerReassigningEnabled != true	; no need to save file if it's going to be written later
-		SaveFile(fusionIni, fusionFile)
+		SaveProperties(fusionFile,fusionIni)	; save fusionFile to disk
 }
 
 hideEmu := (If Fullscreen = "true" ? ("Hide") : (""))
 fullscreen := (If Fullscreen = "true" ? ("-fullscreen") : (""))
 
 If bezelPath ; Setting windowed mode resolution
-{	fusionini := regexreplace(fusionini,"GameGearZoom=0","GameGearZoom=1") ; disabling emulator default bezel
+{	WriteProperty(fusionIni,"GameGearZoom", 1) ; disabling emulator default bezel
 	If controllerReassigningEnabled != true	; no need to save file if it's going to be written later
-		SaveFile(fusionIni, fusionFile)
+		SaveProperties(fusionFile,fusionIni)	; save fusionFile to disk
 }
 
  ; Allows you to set on a per-rom basis the controller type plugged into controller ports 1 and 2
 If controllerReassigningEnabled = true
 {	Log("Module - Started reassigning Fusion's ini controls")
-	Loop, Parse, fusionIni, `n
-		If InStr(A_LoopField,"Joystick1Type")
-			newCfg .= "Joystick1Type=" . (If genP1Controller ? genP1Controller : defaultGenP1Controller) . "`r`n"	; sets controls for P1 to rom's P1 control type if exists, else sets to default P1 control type
-		Else If InStr(A_LoopField,"Joystick1bType")
-			newCfg .= "Joystick1bType=" . (If genP1bController ? genP1bController : defaultGenP1bController) . "`r`n"	; sets controls for P1b to rom's P1b control type if exists, else sets to default P1b control type
-		Else If InStr(A_LoopField,"Joystick1cType")
-			newCfg .= "Joystick1cType=" . (If genP1cController ? genP1cController : defaultGenP1cController) . "`r`n"	; sets controls for P1c to rom's P1c control type if exists, else sets to default P1c control type
-		Else If InStr(A_LoopField,"Joystick1dType")
-			newCfg .= "Joystick1dType=" . (If genP1dController ? genP1dController : defaultGenP1dController) . "`r`n"	; sets controls for P1d to rom's P1d control type if exists, else sets to default P1d control type
-		Else If InStr(A_LoopField,"Joystick2Type")
-			newCfg .= "Joystick2Type=" . (If genP2Controller ? genP2Controller : defaultGenP2Controller) . "`r`n"	; sets controls for P2 to rom's P2 control type if exists, else sets to default P2 control type
-		Else If InStr(A_LoopField,"Joystick2bType")
-			newCfg .= "Joystick2bType=" . (If genP2bController ? genP2bController : defaultGenP2bController) . "`r`n"	; sets controls for P2b to rom's P2b control type if exists, else sets to default P2b control type
-		Else If InStr(A_LoopField,"Joystick2cType")
-			newCfg .= "Joystick2cType=" . (If genP2cController ? genP2cController : defaultGenP2cController) . "`r`n"	; sets controls for P2c to rom's P2c control type if exists, else sets to default P2c control type
-		Else If InStr(A_LoopField,"Joystick2dType")
-			newCfg .= "Joystick2dType=" . (If genP2dController ? genP2dController : defaultGenP2dController) . "`r`n"	; sets controls for P2d to rom's P2d control type if exists, else sets to default P2d control type
-		Else If InStr(A_LoopField,"Joystick1MSType")
-			newCfg .= "Joystick1MSType=" . (If smsP1Controller ? smsP1Controller : defaultSMSP1Controller) . "`r`n"	; sets controls for sms P1 to rom's sms P1 control type if exists, else sets to default sms P1 control type
-		Else If InStr(A_LoopField,"Joystick2MSType")
-			newCfg .= "Joystick2MSType=" . (If smsP2Controller ? smsP2Controller : defaultSMSP2Controller) . "`r`n"	; sets controls for sms P2 to rom's sms P2 control type if exists, else sets to default sms P2 control type
-		Else If InStr(A_LoopField,"Joystick1Using")
-			newCfg .= "Joystick1Using=" . (If genP1Use ? genP1Use : defaultGenP1Use) . "`r`n"	; sets controls for P1 to rom's P1 control using if exists, else sets to default P1 control using
-		Else If InStr(A_LoopField,"Joystick1bUsing")
-			newCfg .= "Joystick1bUsing=" . (If genP1bUse ? genP1bUse : defaultGenP1bUse) . "`r`n"	; sets controls for P1b to rom's P1b control using if exists, else sets to default P1b control using
-		Else If InStr(A_LoopField,"Joystick1cUsing")
-			newCfg .= "Joystick1cUsing=" . (If genP1cUse ? genP1cUse : defaultGenP1cUse) . "`r`n"	; sets controls for P1c to rom's P1c control using if exists, else sets to default P1c control using
-		Else If InStr(A_LoopField,"Joystick1dUsing")
-			newCfg .= "Joystick1dUsing=" . (If genP1dUse ? genP1dUse : defaultGenP1dUse) . "`r`n"	; sets controls for P1d to rom's P1d control using if exists, else sets to default P1d control using
-		Else If InStr(A_LoopField,"Joystick2Using")
-			newCfg .= "Joystick2Using=" . (If genP2Use ? genP2Use : defaultGenP2Use) . "`r`n"	; sets controls for P2 to rom's P2 control using if exists, else sets to default P2 control using
-		Else If InStr(A_LoopField,"Joystick2bUsing")
-			newCfg .= "Joystick2bUsing=" . (If genP2bUse ? genP2bUse : defaultGenP2bUse) . "`r`n"	; sets controls for P2b to rom's P2b control using if exists, else sets to default P2b control using
-		Else If InStr(A_LoopField,"Joystick2cUsing")
-			newCfg .= "Joystick2cUsing=" . (If genP2cUse ? genP2cUse : defaultGenP2cUse) . "`r`n"	; sets controls for P2c to rom's P2c control using if exists, else sets to default P2c control using
-		Else If InStr(A_LoopField,"Joystick2dUsing")
-			newCfg .= "Joystick2dUsing=" . (If genP2dUse ? genP2dUse : defaultGenP2dUse) . "`r`n"	; sets controls for P2d to rom's P2d control using if exists, else sets to default P2d control using
-		Else If InStr(A_LoopField,"Joystick1MSUsing")
-			newCfg .= "Joystick1MSUsing=" . (If smsP1Use ? smsP1Use : defaultSMSP1Use) . "`r`n"	; sets controls for sms P1 to rom's sms P1 control using if exists, else sets to default sms P1 control using
-		Else If InStr(A_LoopField,"Joystick2MSUsing")
-			newCfg .= "Joystick2MSUsing=" . (If smsP2Use ? smsP2Use : defaultSMSP2Use) . "`r`n"	; sets controls for sms P2 to rom's sms P2 control using if exists, else sets to default sms P2 control using
-		Else
-			newCfg .= If A_LoopField = "" ? "" : A_LoopField . "`n"
-	SaveFile(newCfg,fusionFile)
+	WriteProperty(fusionIni,"Joystick1Type", If genP1Controller ? genP1Controller : defaultGenP1Controller)	; sets controls for P1 to rom's P1 control type if exists, else sets to default P1 control type
+	WriteProperty(fusionIni,"Joystick1bType", If genP1bController ? genP1bController : defaultGenP1bController)	; sets controls for P1b to rom's P1b control type if exists, else sets to default P1b control type
+	WriteProperty(fusionIni,"Joystick1cType", If genP1cController ? genP1cController : defaultGenP1cController)	; sets controls for P1c to rom's P1c control type if exists, else sets to default P1c control type
+	WriteProperty(fusionIni,"Joystick1dType", If genP1dController ? genP1dController : defaultGenP1dController)	; sets controls for P1d to rom's P1d control type if exists, else sets to default P1d control type
+	WriteProperty(fusionIni,"Joystick2Type", If genP2Controller ? genP2Controller : defaultGenP2Controller)	; sets controls for P2 to rom's P2 control type if exists, else sets to default P2 control type
+	WriteProperty(fusionIni,"Joystick2bType", If genP2bController ? genP2bController : defaultGenP2bController)	; sets controls for P2b to rom's P2b control type if exists, else sets to default P2b control type
+	WriteProperty(fusionIni,"Joystick2cType", If genP2cController ? genP2cController : defaultGenP2cController)	; sets controls for P2c to rom's P2c control type if exists, else sets to default P2c control type
+	WriteProperty(fusionIni,"Joystick2dType", If genP2dController ? genP2dController : defaultGenP2dController)	; sets controls for P2d to rom's P2d control type if exists, else sets to default P2d control type
+	WriteProperty(fusionIni,"Joystick1MSType", If smsP1Controller ? smsP1Controller : defaultSMSP1Controller)	; sets controls for sms P1 to rom's sms P1 control type if exists, else sets to default sms P1 control type
+	WriteProperty(fusionIni,"Joystick2MSType", If smsP2Controller ? smsP2Controller : defaultSMSP2Controller)	; sets controls for sms P2 to rom's sms P2 control type if exists, else sets to default sms P2 control type
+	WriteProperty(fusionIni,"Joystick1Using", If genP1Use ? genP1Use : defaultGenP1Use)	; sets controls for P1 to rom's P1 control using if exists, else sets to default P1 control using
+	WriteProperty(fusionIni,"Joystick1bUsing", If genP1bUse ? genP1bUse : defaultGenP1bUse)	; sets controls for P1b to rom's P1b control using if exists, else sets to default P1b control using
+	WriteProperty(fusionIni,"Joystick1cUsing", If genP1cUse ? genP1cUse : defaultGenP1cUse)	; sets controls for P1c to rom's P1c control using if exists, else sets to default P1c control using
+	WriteProperty(fusionIni,"Joystick1dUsing", If genP1dUse ? genP1dUse : defaultGenP1dUse)	; sets controls for P1d to rom's P1d control using if exists, else sets to default P1d control using
+	WriteProperty(fusionIni,"Joystick2Using", If genP2Use ? genP2Use : defaultGenP2Use)	; sets controls for P2 to rom's P2 control using if exists, else sets to default P2 control using
+	WriteProperty(fusionIni,"Joystick2bUsing", If genP2bUse ? genP2bUse : defaultGenP2bUse)	; sets controls for P2b to rom's P2b control using if exists, else sets to default P2b control using
+	WriteProperty(fusionIni,"Joystick2cUsing", If genP2cUse ? genP2cUse : defaultGenP2cUse)	; sets controls for P2c to rom's P2c control using if exists, else sets to default P2c control using
+	WriteProperty(fusionIni,"Joystick2dUsing", If genP2dUse ? genP2dUse : defaultGenP2dUse)	; sets controls for P2d to rom's P2d control using if exists, else sets to default P2d control using
+	WriteProperty(fusionIni,"Joystick1MSUsing", If smsP1Use ? smsP1Use : defaultSMSP1Use)	; sets controls for sms P1 to rom's sms P1 control using if exists, else sets to default sms P1 control using
+	WriteProperty(fusionIni,"Joystick2MSUsing", If smsP2Use ? smsP2Use : defaultSMSP2Use)	; sets controls for sms P2 to rom's sms P2 control using if exists, else sets to default sms P2 control using
+	SaveProperties(fusionFile,fusionIni)	; save fusionFile to disk
 	Log("Module - Finished reassigning Fusion's ini controls")
 }
 
@@ -170,6 +145,49 @@ If controllerReassigningEnabled = true
 Run(executable . " -auto -" . ident . " " . fullscreen . " """ . romPath . "\" . romName . romExtension . """", emuPath, hideEmu)
 
 WinWait("Fusion ahk_class KegaClass")
+WinWaitActive("Fusion ahk_class KegaClass")
+
+If (ident = "scd" && useRamCarts = "true")	; Sega CD or Mega CD only
+{	brmPath := ReadProperty(fusionIni,"BRMFiles")		; read BRM path
+	IfNotExist, %brmPath%
+		FileCreateDir, %brmPath%	; create brmPath if it does not exist
+	selectRamWin := "Select RAM Cart Size ahk_class #32770"
+	createRamWin := "Create RAM Cart ahk_class #32770"
+	loadRamWin := "Load RAM Cart ahk_class #32770"
+	; Create New Ram Cart if it doesn't exist already
+	IfNotExist, %brmPath%\%romName%.crm
+	{	PostMessage, 0x111, 40036,,,ahk_class KegaClass	; Open Create New Ram Cart Window
+		WinWait, %selectRamWin%
+		WinSet, Transparent, On, %selectRamWin%
+		Control, Check,, Button7, %selectRamWin%
+		ControlSend, Button1, {Enter}, %selectRamWin%
+		WinWait, %createRamWin%
+		WinSet, Transparent, On, %createRamWin%
+		WinWaitActive, %createRamWin%
+		Loop {
+			ControlGetText, edit1Text, Edit1, %createRamWin%
+			If ( edit1Text = brmPath . "\" . romName . ".crm" )
+				Break
+			Sleep, 100
+			ControlSetText, Edit1, %brmPath%\%romName%.crm, %createRamWin%
+		}
+		ControlSend, Button1, {Enter}, %createRamWin% ; Select Save
+	}
+	; Now load the Ram Cart
+	PostMessage, 0x111, 40035,,,ahk_class KegaClass	; Open Load Ram Cart Window
+	WinWait, %loadRamWin%
+	WinSet, Transparent, On, %loadRamWin%
+	WinWaitActive, %loadRamWin%
+	Loop {
+		ControlGetText, edit1Text, Edit1, %loadRamWin%
+		If ( edit1Text = brmPath . "\" . romName . ".crm" )
+			Break
+		Sleep, 100
+		ControlSetText, Edit1, %brmPath%\%romName%.crm, %loadRamWin%
+	}
+	ControlSend, Button1, {Enter}, %loadRamWin% ; Select Open
+}
+
 WinWaitActive("Fusion ahk_class KegaClass")
 
 Loop { ; looping until Fusion is done loading game
