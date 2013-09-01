@@ -2,8 +2,8 @@ MEmu = CCS64
 MEmuV = v3.9
 MURL = http://www.ccs64.com/
 MAuthor = djvj
-MVersion = 2.0
-MCRC = 6C50D63B
+MVersion = 2.0.1
+MCRC = 98AA8DCC
 iCRC = 2D6D3A54
 MID = 635038268878192501
 MSystem = "Commodore 64"
@@ -14,7 +14,7 @@ MSystem = "Commodore 64"
 ; Not all roms autoload for an unknown reason
 ; fastload seems to not work
 
-; Supports prg, p00, p01, t64, d64, g41, g64, tap, crt, c64
+; Supports prg, p00, p01, prg, t64, d64, g41, g64, tap, crt, c64
 ; CLI Syntax:
 ; CCS64 rom [-cfg filename] [-fastload] [-normalload] [-autorun] [-manualrun] [-window] [hardsid id]
 ;----------------------------------------------------------------------------
@@ -22,8 +22,8 @@ StartModule()
 FadeInStart()
 7z(romPath, romName, romExtension, 7zExtractPath)
 
-If romExtension not in .c64,.crt,.d64,.g41,.g64,.p00,.p01,.t64,.tap
-	ScriptError("Your rom has an extension of " . romExtension . ", only these extensions are supported:`nc64,crt,d64,g41,g64,p00,p01,t64,tap")
+If romExtension not in .c64,.crt,.d64,.g41,.g64,.p00,.p01,.prg,.t64,.tap
+	ScriptError("Your rom has an extension of " . romExtension . ", only these extensions are supported:`nc64,crt,d64,g41,g64,p00,p01,prg,t64,tap")
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
 videoMode := IniReadCheck(settingsFile, "Settings", "VideoMode","1024x768x32",,1)
