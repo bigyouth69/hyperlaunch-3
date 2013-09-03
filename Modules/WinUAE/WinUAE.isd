@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="Commodore Amiga CD32" required="false">
+			<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="UseMouse" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Mouse for this game, the UAE configuration file that's loaded will depend on this value.</DESCRIPTION>
+						</KEY>
+						<KEY name="DelayHack" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true for those games that will only boot when inserted during the cd32 bios boot screen.</DESCRIPTION>
+						</KEY>
+						<KEY name="VideoMode" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Video Mode for this game (PAL/NTSC).</DESCRIPTION>
+							<VALUES>
+								<VALUE>PAL</VALUE>
+								<VALUE>NTSC</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Options" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Add any extra WinUAE CLI options we might want for that particular game.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="Commodore CDTV" required="false">
+			<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="UseMouse" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Mouse for this game, the UAE configuration file that's loaded will depend on this value.</DESCRIPTION>
+						</KEY>
+						<KEY name="DelayHack" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true for those games that will only boot when inserted during the cd32 bios boot screen.</DESCRIPTION>
+						</KEY>
+						<KEY name="VideoMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Video Mode for this game (PAL/NTSC).</DESCRIPTION>
+							<VALUES>
+								<VALUE>PAL</VALUE>
+								<VALUE>NTSC</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Options" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Add any extra WinUAE CLI options we might want for that particular game.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="Commodore Amiga" required="false">
+			<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="PathToWHDFolder" required="false" nullable="false">
+							<KEYTYPE>FolderPath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Relative path to your WHD installation folder, defaults to EmuPath\HDD\WHD. Path relative to the emulator folder.</DESCRIPTION>
+							<PATHTYPE>Relative</PATHTYPE>
+							<BASEPATH>%EmulatorPath%</BASEPATH>
+						</KEY>
+						<KEY name="PathToWorkBenchBase" required="false" nullable="false">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Relative path to your default workbench drive. Defaults to EmuPath\HDD\Workbench31_Lite.vhd. Path relative to the emulator folder.</DESCRIPTION>
+							<PATHTYPE>Relative</PATHTYPE>
+							<BASEPATH>%EmulatorPath%</BASEPATH>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="VideoMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Video Mode for this game (PAL/NTSC).</DESCRIPTION>
+							<VALUES>
+								<VALUE>PAL</VALUE>
+								<VALUE>NTSC</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="FloppySpeed" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Floppy drive speed.</DESCRIPTION>
+							<VALUES>
+								<VALUE>turbo</VALUE>
+								<VALUE>100</VALUE>
+								<VALUE>200</VALUE>
+								<VALUE>400</VALUE>
+								<VALUE>800</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="QuickStartMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>If the game requires a specific quick-start mode define it here. By default AGA games will start in a1200,1 and non-AGA in a500,1 modes.</DESCRIPTION>
+						</KEY>
+						<KEY name="ImmediateBlitter" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you want to enable Immediate Blittler. This is mostly useful for some WHDLoad games that will show some random graphics glitches.</DESCRIPTION>
+						</KEY>
+						<KEY name="RequiresWB" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if the game requires WorkBench to run</DESCRIPTION>
+						</KEY>
+						<KEY name="CustomWB" required="false" nullable="false">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>If a game requires a Custom WorkBench installation, select your WorkBench HDD here. Path relative to the Emulator folder.</DESCRIPTION>
+							<PATHTYPE>Relative</PATHTYPE>
+							<BASEPATH>%EmulatorPath%</BASEPATH>
+						</KEY>
+						<KEY name="WHDLoadOptions" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>WHDLoad startup options specific for this game.</DESCRIPTION>
+						</KEY>
+						<KEY name="NeverExtract" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if this game should never be extracted. This might be needed for some WHDLoad games that cannot be extracted under Windows.</DESCRIPTION>
+						</KEY>
+						<KEY name="Options" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Add any extra WinUAE CLI options we might want for that particular game.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>
