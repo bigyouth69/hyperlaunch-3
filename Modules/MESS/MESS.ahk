@@ -2,8 +2,8 @@ MEmu = MESS
 MEmuV =  v0.148
 MURL = http://www.mess.org/
 MAuthor = djvj
-MVersion = 2.0.8
-MCRC = 7613B26C
+MVersion = 2.0.9
+MCRC = 78BAA3B5
 iCRC = D61C6C86
 MID = 635038268905515239
 MSystem = "Amstrad GX4000","APF Imagination Machine","Apple IIGS","Atari 2600","Atari 5200","Atari 7800","Bally Astrocade","Casio PV-1000","Casio PV-2000","ColecoVision","Creatronic Mega Duck","Emerson Arcadia 2001","Entex AdventureVision","Epoch Game Pocket Computer","Epoch Super Cassette Vision","Fairchild Channel F","Funtech Super Acan","GCE Vectrex","Interton VC4000","Magnavox Odyssey 2","Mattel Aquarius","Mattel Intellivision","NEC PC Engine","NEC PC Engine-CD","NEC SuperGrafx","NEC TurboGrafx-16","NEC TurboGrafx-CD","Nintendo 64","Nintendo Entertainment System","Nintendo Game Boy","Nintendo Game Boy Advance","Nintendo Game Boy Color","Nintendo Virtual Boy","Philips CD-i","RCA Studio II","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","SNK Neo Geo AES","SNK Neo Geo CD","SNK Neo Geo Pocket","SNK Neo Geo Pocket Color","Sony PlayStation","Super Nintendo Entertainment System","Texas Instruments TI 99-4A","Tiger Game.com","VTech CreatiVision","Watara Supervision"
@@ -155,8 +155,8 @@ If UseSoftwareList != true
 				; If using the mainCart , send expansionLocation to MESS. This will require DirectInput to be enabled on the MESS build! Else we are loading a Disk game
 				param1:="-gromport multi -cart1", param2:="""" . romPath . "\" . (If mainCart ? (mainCart):(basicCart)) . """", param3:="-peb:slot2 32kmem -peb:slot3 speech -peb:slot6 tirs232 -peb:slot8 hfdc", param4:="-flop1", param5:="""" . romPath . "\" . romName . romExtension . """"
 			Else If romExtension = .rpk	; Cart Game (RPK Format)
-				param1:="-gromport multi -cart1", param2:="""" . romPath . "\" . romName . romExtension . """"
-			param6 := "-ui_active -peb:slot3 speech" ;Enable partial keyboard mode at startup
+				param1:="-gromport multi -cart1", param2:="""" . romPath . "\" . romName . romExtension . """", param3:="-peb:slot3 speech"
+			param6 := "-ui_active" ;Enable partial keyboard mode at startup
 		}Else if ident = apple2gs	; Apple IIGS
 		{	externalOS := IniReadCheck(messSysINI, romName, "External_OS","false",,1)
 			2gsSystemFile:="System6.2mg"	;For games without OS included, always force this name and error out if not found
