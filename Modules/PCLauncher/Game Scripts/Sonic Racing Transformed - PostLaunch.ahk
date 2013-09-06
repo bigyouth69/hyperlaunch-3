@@ -1,14 +1,18 @@
-﻿#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
-SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
-
+﻿; Author: djvj
+; Purpose: Handle launcher windows for PC Games. These windows pop up before the game and usually require some type of input or button you have to press to start the game.
+;----------------------------------------------------------------------------------------------------
+; Launcher Settings:
 ; this should be the window information from the launcher window where we need to intervene before the game launches
 launcherWindow = Sonic & All-Stars Racing Transformed - Steam
 ; this should be the window information from the game itself so we know it is safe to exit this script w/o erroring
 gameWindow = Sonic & All-Stars Racing Transformed ahk_class ASN
 ; this is the window information of your Frontend to be used on exit if there was an error with this script
 frontendTitle=Hyperspin
+;----------------------------------------------------------------------------------------------------
 
+#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
+SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
+SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 
 WinWait, %launcherWindow%,,10	; waiting 10 seconds for the launcher window to show
 If !ErrorLevel

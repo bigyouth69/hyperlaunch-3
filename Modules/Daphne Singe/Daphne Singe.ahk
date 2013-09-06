@@ -2,8 +2,8 @@ MEmu = Daphne Singe
 MEmuV =  v1.14
 MURL = http://www.singeengine.com/cms/
 MAuthor = djvj
-MVersion = 2.0
-MCRC = 886E604E
+MVersion = 2.0.1
+MCRC = 4FF69607
 iCRC = 3F762B18
 MID = 635038268880264228
 MSystem = "American Laser Games","WoW Action Max"
@@ -56,14 +56,14 @@ daphneWidth := IniReadCheck(settingsFile, "settings", "daphneWidth","1024",,1)
 daphneHeight := IniReadCheck(settingsFile, "settings", "daphneHeight","768",,1)
 
 ; Emptying variables if they are not set
-fs := (If Fullscreen = "true" ? ("-fullscreen_window") : ("")) ; fullscreen_window mode allows guncon and aimtraks to work
-w := (daphneWidth ? ("-x " . daphneWidth) : (""))
-h := (daphneHeight ? ("-y " . daphneHeight) : (""))
+fullscreen := (If Fullscreen = "true" ? ("-fullscreen_window") : ("")) ; fullscreen_window mode allows guncon and aimtraks to work
+daphneWidth := (daphneWidth ? ("-x " . daphneWidth) : (""))
+daphneHeight := (daphneHeight ? ("-y " . daphneHeight) : (""))
 
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 ; This allows us to send variables, that when empty, are not sent to the Run command
-Run(executable . " singe vldp " . w . A_Space . h . A_Space . fs . A_Space . "-framefile """ . romPath . "\" . romName . ".txt""" . A_Space . "-script """ . romPath . "\" . romName . ".singe""", emuPath)
+Run(executable . " singe vldp " . daphneWidth . A_Space . daphneHeight . A_Space . fullscreen . A_Space . "-framefile """ . romPath . "\" . romName . ".txt""" . A_Space . "-script """ . romPath . "\" . romName . ".singe""", emuPath)
 
 WinWait("DAPHNE ahk_class SDL_app")
 WinWaitActive("DAPHNE ahk_class SDL_app")

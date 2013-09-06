@@ -1,5 +1,5 @@
-gamePath=D:\Fix-It Felix Jr\Game\FixitFelixJr.exe		; the full path and exe of FixitFelixJr.exe
-BezelPath=D:\Fix-It Felix Jr\Game\bezel.png		; the full path and extension to bezel file
+GamePath=D:\PC Games\Fix-It Felix Jr\Game\FixitFelixJr.exe		; the full path and exe of FixitFelixJr.exe
+BezelPath=D:\PC Games\Fix-It Felix Jr\Game\bezel.png		; the full path and extension to bezel file
 zoom=200		; Frame Resolution-Only 33,50,100,200 are supported
 YAdjust=0	; adjusts vertically how far off center from the middle of the screen, 0=center, negative value moves up, positive value moves down
 XAdjust=0 	; adjusts horizontally how far off center from the middle of the screen, 0=center, negative value moves to left, positive value moves to right
@@ -9,16 +9,25 @@ BackgroundColor=yellow	; changes background color, see here for available colors
 HideTaskBar=true
 ; rotation=90	;	still need to rotate monitor, no point in having enabled
 ;----------------------------------------------------------------------------------------------------
+IfNotExist, %GamePath%
+{	MsgBox,, Error, Cannot find %GamePath%`nPlease edit the GamePath in %A_ScriptName% to point to the game and recompile it., 8
+	Goto, Exit
+}
 If HideTaskBar = true
 {	WinHide ahk_class Shell_TrayWnd
 	WinHide, ahk_class Button
 }
-SplitPath,gamePath,fileName,fileDir
+SplitPath, GamePath, fileName, fileDir
 
 Gui, Felix1: New, -Caption +ToolWindow +OwnDialogs
 Gui, Felix1: Color, %BackgroundColor%
 If ShowBezel = true
+{	IfNotExist, %BezelPath%
+	{	MsgBox,, Error, Cannot find %BezelPath%`nPlease edit the BezelPath in %A_ScriptName% to point to your bezel and recompile it., 8
+		Goto, Exit
+	}
 	Gui, Felix1: Add, Picture, W%A_ScreenWidth% H%A_ScreenHeight%, %BezelPath%
+}
 Gui, Felix1: Show, x0 y0 h%A_ScreenHeight% w%A_ScreenWidth%
  
 ; rotation := If (rotation=90 || rotation=180 || rotation=270) ? " -rotate=" . rotation . " fullscreen" : ""
@@ -34,11 +43,15 @@ DllCall("SetMenu", uint, winHwnd, uint, 0) ; Remove the MenuBar
 CenterWindow(title)
 Process, WaitClose, %fileName%
 WinClose, ahk_class FOCAL Test Shell
+
+Exit:
+
 If HideTaskBar = true
 {	WinShow, ahk_class Shell_TrayWnd
 	WinShow, ahk_class Button
 }
 ExitApp
+
 
 ;-----Control Remaps-----
 ;~3::c ;Insert Coin
