@@ -11,6 +11,10 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
 						</KEY>
+						<KEY name="KeepAspect" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, the module will remove as many elements of the emu window as possible and maximize it without going true fullscreen</DESCRIPTION>
+						</KEY>
 						<KEY name="WinX" required="false" nullable="true" minLength="0">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>Only works with fullscreen disabled. X position of your screen (in pixels) you want the top left corner of the emulator's window. (0 is top left corner of your screen)</DESCRIPTION>
