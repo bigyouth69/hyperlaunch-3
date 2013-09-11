@@ -15,6 +15,7 @@ MSystem = "Nintendo Game Boy","Nintendo Game Boy Color","Nintendo Game Boy Advan
 ; linking feature since this module is for one gameboy only.
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"

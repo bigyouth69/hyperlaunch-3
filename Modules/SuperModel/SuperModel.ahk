@@ -2,9 +2,9 @@ MEmu = SuperModel
 MEmuV = r251
 MURL = http://www.supermodel3.com/
 MAuthor = djvj & chillin
-MVersion = 2.0
-MCRC = 9542479
-iCRC = B5F25585
+MVersion = 2.0.1
+MCRC = 980A7616
+iCRC = 5FC07503
 MID = 635038268926572770
 MSystem = "Sega Model 3"
 ;----------------------------------------------------------------------------
@@ -15,44 +15,54 @@ MSystem = "Sega Model 3"
 StartModule()
 FadeInStart()
 
-settingsFile := modulePath . "\" . moduleName . ".ini"
-Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
-Widescreen := IniReadCheck(settingsFile, "Settings", "Widescreen","true",,1)
-ConfigInputs := IniReadCheck(settingsFile, "Settings", "ConfigInputs","false",,1)
-Resolution := IniReadCheck(settingsFile, "Settings", "Resolution",A_ScreenWidth . "`," . A_ScreenHeight,,1)	; Width,Height
-vertShader := IniReadCheck(settingsFile, "Settings", "vertShader",A_Space,,1)					; Filename of the 3D vertex shader
-fragShader := IniReadCheck(settingsFile, "Settings", "fragShader",A_Space,,1)					; Filename of the 3D fragment shader
-inputSystem := IniReadCheck(settingsFile, "Settings", "inputSystem","dinput",,1)				; Choices are dinput (default), xinput, & rawinput. Use dinput for most setups. Use xinput if you use XBox 360 controllers. Use rawinput for multiple mice or keyboard support.
-forceFeedback := IniReadCheck(settingsFile, "Settings", "forceFeedback","true",,1)			; Turns on force feedback if you have a controller that supports it. Scud Race' (including 'Scud Race Plus'), 'Daytona USA 2' (both editions), and 'Sega Rally 2' are the only games that support it.
+settingsFile := emuPath . "\Config\Supermodel.ini"
+res := IniReadCheck(settingsFile, "daytona2 ", "XResolution ",,,1)
+msgbox % res
+exitapp
 
-frequency := IniReadCheck(SettingsFile, romName, "frequency","25",,1)
-throttle := IniReadCheck(SettingsFile, romName, "throttle","25",,1)
+settingsFile := modulePath . "\" . moduleName . ".ini"
+Fullscreen := IniReadCheck(settingsFile, "Settings|" . romName, "Fullscreen","true",,1)
+Widescreen := IniReadCheck(settingsFile, "Settings|" . romName, "Widescreen","true",,1)
+ConfigInputs := IniReadCheck(settingsFile, "Settings|" . romName, "ConfigInputs","false",,1)
+Resolution := IniReadCheck(settingsFile, "Settings|" . romName, "Resolution",A_ScreenWidth . "`," . A_ScreenHeight,,1)	; Width,Height
+vertShader := IniReadCheck(settingsFile, "Settings|" . romName, "VertShader",A_Space,,1)					; Filename of the 3D vertex shader
+fragShader := IniReadCheck(settingsFile, "Settings|" . romName, "FragShader",A_Space,,1)					; Filename of the 3D fragment shader
+inputSystem := IniReadCheck(settingsFile, "Settings|" . romName, "InputSystem","dinput",,1)				; Choices are dinput (default), xinput, & rawinput. Use dinput for most setups. Use xinput if you use XBox 360 controllers. Use rawinput for multiple mice or keyboard support.
+forceFeedback := IniReadCheck(settingsFile, "Settings|" . romName, "ForceFeedback","true",,1)			; Turns on force feedback if you have a controller that supports it. Scud Race' (including 'Scud Race Plus'), 'Daytona USA 2' (both editions), and 'Sega Rally 2' are the only games that support it.
+frequency := IniReadCheck(SettingsFile, "Settings|" . romName, "Frequency","25",,1)
+throttle := IniReadCheck(SettingsFile, "Settings|" . romName, "Throttle","false",,1)
+multiThreading := IniReadCheck(SettingsFile, "Settings|" . romName, "MultiThreading","true",,1)
+musicVolume := IniReadCheck(SettingsFile, "Settings|" . romName, "MusicVolume",,,1)
+soundVolume := IniReadCheck(SettingsFile, "Settings|" . romName, "SoundVolume",,,1)
 
 ; freq = -ppc-frequency=%frequency%
-freq := (If frequency != "" ? ("-ppc-frequency=" . frequency) : (""))
-throttle := (If throttle = "true" ? ("") : ("-no-throttle"))
-fullscreen := (If Fullscreen = "true" ? ("-fullscreen") : ("-window"))
-widescreen := (If widescreen = "true" ? ("-wide-screen") : (""))
-resolution := (If Resolution != "" ? ("-res=" . Resolution) : (""))
-vertShader := (If vertShader != "" ? ("-vert-shader=" . vertShader) : (""))
-fragShader := (If fragShader != "" ? ("-frag-shader=" . fragShader) : (""))
-inputSystem := (If inputSystem != "" ? ("-input-system=" . inputSystem) : (""))
-forceFeedback := (If forceFeedback = "true" ? ("-force-feedback") : (""))
+freq := If frequency != "" ? "-ppc-frequency=" . frequency : ""
+throttle := If throttle = "true" ? "" : "-no-throttle"
+fullscreen := If Fullscreen = "true" ? "-fullscreen" : "-window"
+widescreen := If widescreen = "true" ? "-wide-screen" : ""
+resolution := If Resolution != "" ? "-res=" . Resolution : ""
+vertShader := If vertShader != "" ? "-vert-shader=""" . vertShader . """" : ""
+fragShader := If fragShader != "" ? "-frag-shader=""" . fragShader . """" : ""
+inputSystem := If inputSystem != "" ? "-input-system=" . inputSystem : ""
+forceFeedback := If forceFeedback = "true" ? "-force-feedback" : ""
+multiThreading := If multiThreading = "true" ? "" : "-no-threads"
+musicVolume := If musicVolume != "" ? "-music-volume=" . musicVolume : ""
+soundVolume := If soundVolume != "" ? "-sound-volume=" . soundVolume : ""
 
 If ConfigInputs = true
-	Run(executable . " -config-inputs",emuPath)
+	Run(executable . " -config-inputs", emuPath)
 Else
-	Run(executable . " """ . romPath . "\" . romName . romExtension . """ " . fullscreen . " " . widescreen . " " . resolution . " " . freq . " " . throttle . " " . vertShader . " " . fragShader . " " . inputSystem . " " . forceFeedback,emuPath,"Min")
+	Run(executable . " """ . romPath . "\" . romName . romExtension . """ " . fullscreen . " " . widescreen . " " . resolution . " " . freq . " " . throttle . " " . vertShader . " " . fragShader . " " . inputSystem . " " . forceFeedback . " " . multiThreading, emuPath, "Min")
 
 WinWait("Supermodel")
 
 If ConfigInputs = true
-{	WinWait("AHK_class ConsoleWindowClass")
-	WinGetPos,,, width,, AHK_class ConsoleWindowClass
+{	WinWait("ahk_class ConsoleWindowClass")
+	WinGetPos,,, width,, ahk_class ConsoleWindowClass
 	x := ( A_ScreenWidth / 2 ) - ( width / 2 )
-	WinMove, AHK_class ConsoleWindowClass,, %x%, 0,, %A_ScreenHeight%
+	WinMove, ahk_class ConsoleWindowClass,, %x%, 0,, %A_ScreenHeight%
 	WinHide, Supermodel
-	WinActivate, AHK_class ConsoleWindowClass
+	WinActivate, ahk_class ConsoleWindowClass
 } Else {
 	WinWaitActive("Supermodel ahk_class SDL_app")
 	Sleep, 1000

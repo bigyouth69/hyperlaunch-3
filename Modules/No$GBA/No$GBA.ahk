@@ -18,6 +18,7 @@ MSystem = "Nintendo DS","Nintendo Game Boy Advance"
 ; On first run No$Zoomer you will ask you to point to the No$GBA executable
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"

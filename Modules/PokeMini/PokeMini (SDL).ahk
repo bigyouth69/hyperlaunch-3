@@ -2,8 +2,8 @@ MEmu = PokeMini SDL
 MEmuV =  v0.5.2
 MURL = https://code.google.com/p/pokemini/
 MAuthor = djvj
-MVersion = 2.0
-MCRC = 2B2E44AD
+MVersion = 2.0.1
+MCRC = 10DC45FC
 iCRC = 9DAE6F8
 MID = 635038268915913898
 MSystem = "Nintendo Pokemon Mini"
@@ -14,6 +14,7 @@ MSystem = "Nintendo Pokemon Mini"
 ; Emu requires zlib1.dll to be installed or exist in the emu folder, get it here if you don't have it: http://sourceforge.net/projects/libpng/?source=dlp
 ;------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"

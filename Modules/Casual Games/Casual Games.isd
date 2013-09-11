@@ -11,6 +11,10 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>If true remaps windows Start keys to Return to prevent accidental leaving of game.</DESCRIPTION>
 						</KEY>
+						<KEY name="ForceCursor" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, the cursor will be made visible for use in all games for this system. Use this in conjunction with this system's "Hide Cursor" option to hide the cursor on launch, but unhide it when in game.</DESCRIPTION>
+						</KEY>
 					</KEYS>
 				</SECTION>
 				<SECTION name="%RomName%" required="false">
@@ -22,8 +26,12 @@
 							<PATHTYPE>Absolute</PATHTYPE>
 						</KEY>
 						<KEY name="FadeTitle" required="false" nullable="true">
-							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>This is the Window Title &amp; Class of your application. Use this only if you have a problem with the module closing Fade In on its own. To find the Title/Class you can use the AutoIt3 Window Spy utility installed with AutoHotKey or my utility @ http://www.hyperspin-fe.com/forum/showthread.php?15014-Window-Logger</DESCRIPTION>
+							<KEYTYPE>WinTitle</KEYTYPE>
+							<DESCRIPTION>This is the Window Title &amp; Class of your game. Use this only if you have a problem with the module closing Fade In on its own or if the game is not closing with your exit emu key. To find the Title/Class you can use the AutoIt3 Window Spy utility installed with AutoHotKey or my utility @ http://www.hyperspin-fe.com/forum/showthread.php?15014-Window-Logger</DESCRIPTION>
+						</KEY>
+						<KEY name="ForceCursor" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, the cursor will be made visible for use in this game. Use this in conjunction with this system's "Hide Cursor" option to hide the cursor on launch, but unhide it when in game.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>

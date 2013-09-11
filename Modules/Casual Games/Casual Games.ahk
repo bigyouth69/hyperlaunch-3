@@ -2,9 +2,9 @@ MEmu = Casual Games
 MEmuV = N/A
 MURL =
 MAuthor = djvj
-MVersion = 2.0.1
-MCRC = 30150D5F
-iCRC = 71E1A04D
+MVersion = 2.0.2
+MCRC = BD9F0726
+iCRC = B0DEF839
 MID = 635038268877672071
 MSystem = "PopCap","Big Fish Games"
 ;----------------------------------------------------------------------------
@@ -22,7 +22,7 @@ MSystem = "PopCap","Big Fish Games"
 ;
 ; Example:
 ; [Alchemy Deluxe]
-; gamePath = C:\Roms\Alchemy Deluxe\Alchemy Deluxe.exe
+; gamePath = C:\Roms\Alchemy Deluxe\AlcDeluxe.exe
 ;
 ; You no longer use blank txt files with this module.
 ; Set SkipChecks to "Rom and Emu" when using this module.
@@ -39,9 +39,11 @@ StartModule()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
-remapWinKeys := IniReadCheck(settingsFile, "settings", "remapWinKeys","true",,1)
-gamePath := IniReadCheck(settingsFile, romName, "gamePath",A_Space,,1)
-fadeTitle := IniReadCheck(settingsFile, romName, "FadeTitle",A_Space,,1)
+remapWinKeys := IniReadCheck(settingsFile, "settings", "remapWinKeys", "true",,1)
+gamePath := IniReadCheck(settingsFile, romName, "gamePath", A_Space,,1)
+fadeTitle := IniReadCheck(settingsFile, romName, "FadeTitle", A_Space,,1)
+forceCursor := IniReadCheck(settingsFile, "settings", "ForceCursor", true,,1)
+forceCursor := IniReadCheck(settingsFile, romName, "ForceCursor", forceCursor,,1)
 
 If romExtension in .zip.7z.rar
 	ScriptError("Compressed games are not supported in this Casual Games Module. Please extract your games to their own folder and correctly configure a gamePath in the module's ini.")
@@ -74,6 +76,9 @@ Process("Priority", game_PID, "High")
 
 FadeInExit()
 
+If forceCursor = true
+	SystemCursor("On")
+
 ; These conditionals are here to resolve win7 compatibility issues with these games (their exes don't close when you exit the game)
 If romName = Super Collapse 3
 {	Sleep, 3000
@@ -97,11 +102,9 @@ Return
 
 CloseProcess:
 	FadeOutStart()
-
-activeWin := WinExist("A")
-WinGet, procName, ProcessPath, ahk_id %activeWin%
-newPID := Process("Exist", gName . "." . gExt)
-Log("POPCAP MODULE DEBUG 5 (EXIT) - rom process: " . newPID . " - active window HWND ID is " . activeWin . " and is located at: " . procName)
-
-	WinClose("ahk_pid " . game_PID)
+	activeWin := WinExist("A")
+	WinGet, procName, ProcessPath, ahk_id %activeWin%
+	newPID := Process("Exist", gName . "." . gExt)
+	Log("Module - DEBUG 5 (EXIT) - rom process: " . newPID . " - active window HWND ID is " . activeWin . " and is located at: " . procName,4)
+	WinClose(If fadeTitle ? fadeTitle : "ahk_pid " . game_PID)	; If fadeTitle is set, use that to close the game, otherwise use the PID
 Return

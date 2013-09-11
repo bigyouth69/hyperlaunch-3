@@ -17,6 +17,7 @@ MSystem = "Nintendo DS"
 ; Fullscreen is controlled from the module's .ini
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := CheckFile(modulePath . "\" . moduleName . ".ini")

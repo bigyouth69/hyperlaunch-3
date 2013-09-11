@@ -12,6 +12,7 @@ MSystem = "Nintendo Game Boy","Nintendo Game Boy Color"
 ; Emu has no fullscreen, so this module will make it look fullscreen for you
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"

@@ -17,6 +17,7 @@ MSystem = "AAE"
 ; You can also start the emu and press TAB to set options.
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"

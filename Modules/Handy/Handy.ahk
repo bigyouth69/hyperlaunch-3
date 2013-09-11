@@ -38,6 +38,7 @@ MSystem = "Atari Lynx"
 ; Settings are stored in the registry @ HKEY_CURRENT_USER\Software\Irwell Expert Systems\handy\Version 1.0
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 7z(romPath, romName, romExtension, 7zExtractPath)

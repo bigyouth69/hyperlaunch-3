@@ -13,6 +13,7 @@ MSystem = "Nintendo Game Boy","Nintendo Game Boy Color","Nintendo Game Boy Advan
 ; Fullscreen is controlled via the variable below
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"

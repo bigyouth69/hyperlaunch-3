@@ -17,6 +17,7 @@ MSystem = "Sega Pico"
 ; To use use different Game Pad images, create a folder in your emulator folder\pico\GamePads and save the image as romName.png - with romName being the name of the game you are using it for  
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"

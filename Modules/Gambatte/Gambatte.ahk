@@ -12,6 +12,7 @@ MSystem = "Nintendo Game Boy","Nintendo Game Boy Color"
 ; Gambatte stores it's config in the registry @ HKEY_CURRENT_USER\Software\gambatte
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"

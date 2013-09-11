@@ -12,6 +12,7 @@ MSystem = "Sony PSP"
 ; CLI options: http://forums.ppsspp.org/showthread.php?tid=339&pid=17117#pid17117
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"

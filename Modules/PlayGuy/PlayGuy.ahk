@@ -13,6 +13,7 @@ MSystem = "Nintendo Game Boy","Nintendo Game Boy Color"
 ; Leave the emu in windowed mode and the module will control going fullscreen from the HLHQ module setting.
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"

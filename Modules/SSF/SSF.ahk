@@ -34,6 +34,7 @@ MSystem = "Sega Saturn","Sega ST-V"
 ; If it seems like it's taking a long time to load, it probably is. You are going to stare at the black screen while SSF is decoding the roms.
 ;------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"

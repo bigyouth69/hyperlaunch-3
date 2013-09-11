@@ -21,17 +21,17 @@
 						</KEY>
 						<KEY name="Resolution" required="false" nullable="true">
 							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>Width,Height  -- Put in the resolution you want to play at. WIdth,Height. Don't forget the comma separating the two values.Leave blank to use default monitor's resolution.</DESCRIPTION>
+							<DESCRIPTION>Width,Height  -- Put in the resolution you want to play at. WIdth,Height. Don't forget the comma separating the two values. Leave blank to use default monitor's resolution.</DESCRIPTION>
 						</KEY>
-						<KEY name="vertShader" required="false" nullable="true">
-							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>This is the filename + extension of your 3D vertex shader. Leave blank to not use one.</DESCRIPTION>
+						<KEY name="VertShader" required="false" nullable="true">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<DESCRIPTION>This is the full file path of your 3D vertex shader. Leave blank to use the global one.</DESCRIPTION>
 						</KEY>
-						<KEY name="fragShader" required="false" nullable="true">
-							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>This is the filename + extension of your 3D fragment shader. Leave blank to not use one.</DESCRIPTION>
+						<KEY name="FragShader" required="false" nullable="true">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<DESCRIPTION>This is the full file path of your 3D fragment shader. Leave blank to use the global one.</DESCRIPTION>
 						</KEY>
-						<KEY name="inputSystem" required="false" nullable="false">
+						<KEY name="InputSystem" required="false" nullable="false">
 							<KEYTYPE>String</KEYTYPE>
 							<DESCRIPTION>Choices are dinput (default), xinput, &amp; rawinput. Use dinput for most setups. Use xinput if you use XBox 360 controllers. Use rawinput for multiple mice or keyboard support.</DESCRIPTION>
 							<VALUES>
@@ -40,24 +40,87 @@
 								<VALUE>rawinput</VALUE>
 							</VALUES>
 						</KEY>
-						<KEY name="forceFeedback" required="false" nullable="false">
+						<KEY name="ForceFeedback" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Turns on force feedback if you have a controller that supports it. Scud Race' (including 'Scud Race Plus'), 'Daytona USA 2' (both editions), and 'Sega Rally 2' are the only games that support it.</DESCRIPTION>
+						</KEY>
+						<KEY name="Frequency" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>To improve performance, Supermodel underclocks the PowerPC down to 25 MHz by default.  This may be the cause of some games running too slowly even when the frame rate is at 60 FPS (which is the native rate).  You may want to experiment with increasing the clock frequency, although this comes with a performance penalty.</DESCRIPTION>
+						</KEY>
+						<KEY name="Throttle" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>By default, Supermodel limits the frame rate to 60 Hz.  This has no impact on performance except when the frame rate exceeds 60 FPS on fast systems. This can be disabled with the '-no-throttle' option. (true) otherwise leave blank.</DESCRIPTION>
+						</KEY>
+						<KEY name="MultiThreading" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>By default, Supermodel enables Multi Threading. The PowerPC, graphics rendering, and user interface are run in one thread, sound emulation in a second thread, and the drive board in a third.  It is enabled by default. On single-core systems, multi-threading adds overhead and slows Supermodel down but can make audio sound a bit smoother.</DESCRIPTION>
+						</KEY>
+						<KEY name="MusicVolume" required="false" nullable="false" minLength="0" maxLength="200">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Specifies the volume of MPEG music produced by the Digital Sound Board and the audio produced by the sound board in percent. The default is 100, which is full volume, and the valid range of v is 0 (muted) to 200.</DESCRIPTION>
+						</KEY>
+						<KEY name="SoundVolume" required="false" nullable="false" minLength="0" maxLength="200">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Specifies the volume of MPEG music produced by the Digital Sound Board and the audio produced by the sound board in percent. The default is 100, which is full volume, and the valid range of v is 0 (muted) to 200.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>
 				<SECTION name="%RomName%" required="false">
 					<SECTIONTYPE>Rom</SECTIONTYPE>
 					<KEYS>
-						<KEY name="frequency" required="false" nullable="true">
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="WideScreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Widescreen mode</DESCRIPTION>
+						</KEY>
+						<KEY name="ConfigInputs" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true will launch SuperModel into the config inputs menu, Leave false to play games.</DESCRIPTION>
+						</KEY>
+						<KEY name="Resolution" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Width,Height  -- Put in the resolution you want to play at. WIdth,Height. Don't forget the comma separating the two values. Leave blank to use global resolution.</DESCRIPTION>
+						</KEY>
+						<KEY name="VertShader" required="false" nullable="true">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<DESCRIPTION>This is the full file path of your 3D vertex shader. Leave blank to use the global one.</DESCRIPTION>
+						</KEY>
+						<KEY name="FragShader" required="false" nullable="true">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<DESCRIPTION>This is the full file path of your 3D fragment shader. Leave blank to use the global one.</DESCRIPTION>
+						</KEY>
+						<KEY name="InputSystem" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Choices are dinput (default), xinput, &amp; rawinput. Use dinput for most setups. Use xinput if you use XBox 360 controllers. Use rawinput for multiple mice or keyboard support.</DESCRIPTION>
+							<VALUES>
+								<VALUE>dinput</VALUE>
+								<VALUE>xinput</VALUE>
+								<VALUE>rawinput</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Frequency" required="false" nullable="true">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>To improve performance, Supermodel underclocks the PowerPC down to 25 MHz by default.  This may be the cause of some games running too slowly even when the frame rate is at 60 FPS (which is the native rate).  You may want to experiment with increasing the clock frequency, although this comes with a performance penalty.</DESCRIPTION>
 						</KEY>
-						<KEY name="throttle" required="false" nullable="false">
+						<KEY name="Throttle" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
-							<DESCRIPTION>By default, Supermodel limits the frame rate to 60 Hz.  This has no impact on
-performance except when the frame rate exceeds 60 FPS on fast systems.  This
-can be disabled with the '-no-throttle' option. (true) otherwise leave blank.</DESCRIPTION>
+							<DESCRIPTION>By default, Supermodel limits the frame rate to 60 Hz.  This has no impact on performance except when the frame rate exceeds 60 FPS on fast systems. This can be disabled with the '-no-throttle' option. (true) otherwise leave blank.</DESCRIPTION>
+						</KEY>
+						<KEY name="MultiThreading" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>By default, Supermodel enables Multi Threading. The PowerPC, graphics rendering, and user interface are run in one thread, sound emulation in a second thread, and the drive board in a third.  It is enabled by default. On single-core systems, multi-threading adds overhead and slows Supermodel down but can make audio sound a bit smoother.</DESCRIPTION>
+						</KEY>
+						<KEY name="MusicVolume" required="false" nullable="false" minLength="0" maxLength="200">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Specifies the volume of MPEG music produced by the Digital Sound Board and the audio produced by the sound board in percent. The default is 100, which is full volume, and the valid range of v is 0 (muted) to 200.</DESCRIPTION>
+						</KEY>
+						<KEY name="SoundVolume" required="false" nullable="false" minLength="0" maxLength="200">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Specifies the volume of MPEG music produced by the Digital Sound Board and the audio produced by the sound board in percent. The default is 100, which is full volume, and the valid range of v is 0 (muted) to 200.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>

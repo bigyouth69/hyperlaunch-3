@@ -26,6 +26,7 @@ MSystem = "Nintendo Entertainment System","Nintendo Famicom""Nintendo Game Boy",
 ; For P2_Controller - 0=None, 1=Gamepad, 2=Multitap, 3=Mouse, 4=Super Scope, 5=Justifier, 6=Dual Justifiers, 7=Serial USART
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := CheckFile(modulePath . "\" . moduleName . ".ini")

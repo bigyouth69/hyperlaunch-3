@@ -24,6 +24,7 @@ MSystem = "Sony PlayStation 2"
 ; The module will only insert memory cards into Slot 1. So save your games there.
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"

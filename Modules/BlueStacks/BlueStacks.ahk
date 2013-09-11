@@ -18,6 +18,7 @@ MSystem = "Android"
 ; BlueStacks stores its config in the registry @ HKEY_LOCAL_MACHINE\SOFTWARE\BlueStacks
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"

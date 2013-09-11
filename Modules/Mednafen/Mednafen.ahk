@@ -1,9 +1,9 @@
 MEmu = Mednafen
-MEmuV =  v0.9.26 WIP
+MEmuV =  v0.9.31 WIP
 MURL = http://mednafen.sourceforge.net/
 MAuthor = djvj
-MVersion = 2.0.4
-MCRC = 5F08D51C
+MVersion = 2.0.5
+MCRC = 7ECA1014
 iCRC = 5D855D01
 MID = 635038268903923913
 MSystem = "Atari Lynx","Bandai Wonderswan","Bandai Wonderswan Color","NEC PC Engine","NEC PC Engine-CD","NEC PC-FX","NEC SuperGrafx","NEC TurboGrafx-16","NEC TurboGrafx-CD","Nintendo Entertainment System","Nintendo Famicom","Nintendo Famicom Disk System","Nintendo Game Boy","Nintendo Game Boy Advance","Nintendo Game Boy Color","Nintendo Super Famicom","Nintendo Virtual Boy","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","SNK Neo Geo Pocket","SNK Neo Geo Pocket Color","Sony PlayStation","Super Nintendo Entertainment System"
@@ -57,10 +57,10 @@ MSystem = "Atari Lynx","Bandai Wonderswan","Bandai Wonderswan Color","NEC PC Eng
 ; Create a folder called "firmware" in your mednafen folder and place all your bios files (ex. scph5501.bin) in there. Set the options below so mednafen can find them
 ; This module only supports Daemon Tools when mounting with a cue extension for psx.
 ; Set your rom extension to cue
-; Getting Multi-Disc games requires a DT drive in Daemon Tools, SCSI does not seem to be supported as mednafen didn't read the TOC from it.
 ; Multi-Disc games REQUIRES Daemon Tools, do not attempt to swap discs any other way as it is not supported by this module.
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 ; The next 2 objects control how the module reacts to different systems. Mednafen can play a lot of systems, but changes itself slightly so this module has to adapt 
@@ -187,11 +187,12 @@ If bezelPath ; defining xscale and yscale relative to the bezel windowed mode
 ; Mount the CD using DaemonTools
 If (romExtension = ".cue" && dtEnabled = "true" && ident = "psx") {	; only Sony PlayStation tested
 	Log("Module - Mounting rom in Daemon Tools")
-	DaemonTools("mount",romPath . "\" . romName . romExtension,"dt")	; forcing dt drive, scsi does not work in mednafen
+	DaemonTools("get")
+	DaemonTools("mount",romPath . "\" . romName . romExtension)
 	useDT = 1
 }
 
-Run(executable . " " . emuFullscreen . " " . stretch . " " . vDriver . " " . (If Fullscreen = "true" ? xRes . " " . yRes : xscale . " " . yscale) . " " . sgfxMode . " " . naBios . " " . euBios . " " . jpBios . " " . pceCDBios . " " . pcfxBios . " " . rotateScreen . " " . (If useDT ? "-loadcd " . ident : """" . romPath . "\" . romName . romExtension . """"), emuPath)
+Run(executable . " " . emuFullscreen . " " . stretch . " " . vDriver . " " . (If Fullscreen = "true" ? xRes . " " . yRes : xscale . " " . yscale) . " " . sgfxMode . " " . naBios . " " . euBios . " " . jpBios . " " . pceCDBios . " " . pcfxBios . " " . rotateScreen . " " . (If useDT ? "-physcd " . dtDriveLetter . ":" : """" . romPath . "\" . romName . romExtension . """"), emuPath)
 
 ; WinWait, % (If ident2 ? ("Mednafen") : (romName)) . " ahk_class SDL_app"
 ; WinWaitActive, % (If ident2 ? ("Mednafen") : (romName)) . " ahk_class SDL_app"

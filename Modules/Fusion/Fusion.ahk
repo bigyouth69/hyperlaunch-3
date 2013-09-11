@@ -2,9 +2,9 @@ MEmu = Fusion
 MEmuV =  v3.64
 MURL = http://www.eidolons-inn.net/tiki-index.php?page=Kega
 MAuthor = djvj
-MVersion = 2.0.3
-MCRC = 60FFCCE0
-iCRC = 7C7876C0
+MVersion = 2.0.4
+MCRC = 2E8D456B
+iCRC = 1CD0BC01
 MID = 635038268893895568
 MSystem = "Samsung Gam Boy","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","Sega Mega-CD","Sega SC-3000","Sega SG-1000"
 ;----------------------------------------------------------------------------
@@ -17,6 +17,7 @@ MSystem = "Samsung Gam Boy","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis"
 ;
 ; Sega CD
 ; Configure your Sega CD bios first by going to Options -> Set Config -> Sega CD
+; Set the scsi drive you want to use manually by going to Options -> CD Drive and seleting the one that corresponds to your scsi drive in DT. A dt drive is not supported by the emu, it must be scsi.
 ;
 ; Defining per-game controller types:
 ; In the module ini, set Controller_Reassigning_Enabled to true
@@ -27,7 +28,7 @@ MSystem = "Samsung Gam Boy","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis"
 ; For P2_Controller - 0=None, 1=Gamepad, 2=Multitap, 3=Mouse, 4=Super Scope, 5=Justifier, 6=Dual Justifiers, 7=Serial USART
 ;----------------------------------------------------------------------------
 StartModule()
-; BezelGUI()
+BezelGUI()
 FadeInStart()
 
 ; The object controls how the module reacts to different systems. Fusion can play a lot of systems, but changes itself slightly so this module has to adapt 
@@ -41,6 +42,7 @@ settingsFile := modulePath . "\" . moduleName . ".ini"
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 hideTitleBar := IniReadCheck(settingsFile, "Settings", "hideTitleBar","true",,1)	; Removes the border, titlebar, menubar, and centers the emu on your screen. Only need this if fullscreen is false
 useRamCarts := IniReadCheck(settingsFile, "Settings", "UseRamCarts","true",,1)
+DTWaitTime := IniReadCheck(settingsFile, systemName, "DTWaitTime","0",,1)
 controllerReassigningEnabled := IniReadCheck(settingsFile, systemName, "Controller_Reassigning_Enabled","false",,1)
 defaultGenP1Controller := IniReadCheck(settingsFile, systemName, "Default_Genesis_P1_Controller",2,,1)
 defaultGenP1bController := IniReadCheck(settingsFile, systemName, "Default_Genesis_P1b_Controller",2,,1)
@@ -62,6 +64,7 @@ defaultGenP2cUse := IniReadCheck(settingsFile, systemName, "Default_Genesis_P2c_
 defaultGenP2dUse := IniReadCheck(settingsFile, systemName, "Default_Genesis_P2d_Use",1,,1)
 defaultSMSP1Use := IniReadCheck(settingsFile, systemName, "Default_SMS_P1_Use",1,,1)
 defaultSMSP2Use := IniReadCheck(settingsFile, systemName, "Default_SMS_P2_Use",1,,1)
+perfectSync := IniReadCheck(settingsFile, romName, "PerfectSync","false",,1)
 genP1Controller := IniReadCheck(settingsFile, romName, "Genesis_P1_Controller",,,1)
 genP1bController := IniReadCheck(settingsFile, romName, "Genesis_P1b_Controller",,,1)
 genP1cController := IniReadCheck(settingsFile, romName, "Genesis_P1c_Controller",,,1)
@@ -84,11 +87,12 @@ smsP1Use := IniReadCheck(settingsFile, romName, "SMS_P1_Use",,,1)
 smsP2Use := IniReadCheck(settingsFile, romName, "SMS_P2_Use",,,1)
 Log("Module - Finished reading module ini")
 
-BezelStart("fixResMode")
+BezelStart()
 
 fusionFile := CheckFile(emuPath . "\fusion.ini")
 fusionIni := LoadProperties(fusionFile)	; load the config into memory
 currentFullScreen := ReadProperty(fusionIni,"FullScreen")	; read current fullscreen state
+currentPerfectSync := ReadProperty(fusionIni,"PerfectSync")	; read current PerfectSync state
 
 7z(romPath, romName, romExtension, 7zExtractPath)
 
@@ -101,6 +105,16 @@ If ( Fullscreen != "true" And currentFullScreen = "1" ) {
 		SaveProperties(fusionFile,fusionIni)	; save fusionFile to disk
 } Else If ( Fullscreen = "true" And currentFullScreen = "0" ) {
 	WriteProperty(fusionIni,"FullScreen", 1)
+	If controllerReassigningEnabled != true	; no need to save file if it's going to be written later
+		SaveProperties(fusionFile,fusionIni)	; save fusionFile to disk
+}
+
+If ( perfectSync != "true" And currentPerfectSync = "1" ) {
+	WriteProperty(fusionIni,"PerfectSync", 0)
+	If controllerReassigningEnabled != true	; no need to save file if it's going to be written later
+		SaveProperties(fusionFile,fusionIni)	; save fusionFile to disk
+} Else If ( perfectSync = "true" And currentPerfectSync = "0" ) {
+	WriteProperty(fusionIni,"PerfectSync", 1)
 	If controllerReassigningEnabled != true	; no need to save file if it's going to be written later
 		SaveProperties(fusionFile,fusionIni)	; save fusionFile to disk
 }
@@ -141,8 +155,19 @@ If controllerReassigningEnabled = true
 	Log("Module - Finished reassigning Fusion's ini controls")
 }
 
-; This allows us to send variables, that when empty, are not sent to the Run command
-Run(executable . " -auto -" . ident . " " . fullscreen . " """ . romPath . "\" . romName . romExtension . """", emuPath, hideEmu)
+scdExtension := InStr(".cue|.bin|.iso",romExtension)	; the sega cd extensions supported by fusion
+
+If (ident = "scd" && dtEnabled = "true" && scdExtension) {
+	If dtUseSCSI = false
+		Log("Module - Daemon Tools drive type is set to ""dt"" but only ""scsi"" is supported for Fusion. Forcing scsi drive.", 2)
+	DaemonTools("mount", romPath . "\" . romName . romExtension, (If dtUseSCSI = "false" ? "scsi" : ""))
+	Sleep, DTWaitTime
+	Run(executable . " -auto -" . ident . " " . fullscreen, emuPath, hideEmu)
+} Else {
+	If (ident = "scd" && dtEnabled = "true" && !scdExtension)
+		Log("Module - " . romExtension . " is not a supported cd image extension for Fusion. Launching Fusion without DT support.", 2)
+	Run(executable . " -auto -" . ident . " " . fullscreen . " """ . romPath . "\" . romName . romExtension . """", emuPath, hideEmu)
+}
 
 WinWait("Fusion ahk_class KegaClass")
 WinWaitActive("Fusion ahk_class KegaClass")
@@ -213,6 +238,17 @@ BezelExit()
 FadeOutExit()
 ExitModule()
 
+
+MultiGame:
+	; msgbox % "selectedRom = " . selectedRom . "`nselected game = " . currentButton . "`nmgRomPath = " . mgRomPath . "`nmgRomExt = " . mgRomExt . "`nmgRomName = "  . mgRomName
+	; Unmount the CD from DaemonTools
+	If ( romExtension = ".cue" && dtEnabled = "true" )
+		DaemonTools("unmount")
+	Sleep, 500	; Required to prevent  DT from bugging
+	; Mount the CD using DaemonTools
+	If ( romExtension = ".cue" && dtEnabled = "true" )
+		DaemonTools("mount",selectedRom)
+Return
 
 Center(title) {
 	WinGetPos, X, Y, width, height, %title%

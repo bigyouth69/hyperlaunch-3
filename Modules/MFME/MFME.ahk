@@ -2,9 +2,9 @@ MEmu = MFME
 MEmuV = v3.2 & v9.4 & v10.1a
 MURL = http://www.fruit-emu.com/
 MAuthor = djvj
-MVersion = 2.0.2
-MCRC = DF4EE612
-iCRC = 85E674CF
+MVersion = 2.0.2 TEST
+MCRC = 6FA84955
+iCRC = BD98DE05
 MID = 635038268906095729
 MSystem = "Fruit Machine","MFME"
 ;----------------------------------------------------------------------------
@@ -30,6 +30,8 @@ MSystem = "Fruit Machine","MFME"
 ; If you use Magnifier mode, start it manually once and set it's view to Dock, then Exit
 ; If you want the script to be able to move and remove the border/title of the magnifier window, it has to be done as admin or you need to turn off UAC.
 ; Optionally you can set MagnifyWrapper.exe to run as admin if you are on win7 or greater and it will close Magnifier on exit
+; One known issue is the magnifier window sometimes won't launch with the desired position on screen. Yet if you launch it manually it will show where you previously told it to start. I can't find the solution to this as the values are being stored in the registry properly.
+; Magnifier's settings are stored in the registry @ HKEY_CURRENT_USER\Software\Microsoft\ScreenMagnifier
 ;
 ; MFME stores its settings in the registry @ HKEY_USERS\S-1-5-21-440413192-1003725550-97281542-1001\Software\CJW\MFME
 ; As far as I can tell, there is no way to go fullscreen (only v3.2 supports it)
@@ -44,16 +46,19 @@ ResizeH := IniReadCheck(settingsFile, "Settings", "ResizeH","1024",,1)					; Do 
 BackgroundPic := IniReadCheck(settingsFile, "Settings", "BackgroundPic",modulePath . "\Background.png",,1)
 Magnify := IniReadCheck(settingsFile, "Settings", "Magnify","true",,1)			; Create a windows magnifier window in the bottom right corner to see things closer over your cursor
 MagnifyPercentage := IniReadCheck(settingsFile, "Settings", "MagnifyPercentage","200",,1)
-MagnifyWinSizeW := IniReadCheck(settingsFile, "Settings", "MagnifyWinSizeW","245",,1)
-MagnifyWinSizeH := IniReadCheck(settingsFile, "Settings", "MagnifyWinSizeH","245",,1)
-MagnifyWinPosX := IniReadCheck(settingsFile, "Settings", "MagnifyWinPosX",A_Space,,1)
-MagnifyWinPosY := IniReadCheck(settingsFile, "Settings", "MagnifyWinPosY",A_Space,,1)
+MagnifyAlignment := IniReadCheck(settingsFile, "Settings", "MagnifyAlignment","Bottom Right Corner",,1)
+magWinW := IniReadCheck(settingsFile, "Settings", "MagnifyWinSizeW","245",,1)
+magWinH := IniReadCheck(settingsFile, "Settings", "MagnifyWinSizeH","245",,1)
+magWinX := IniReadCheck(settingsFile, "Settings", "MagnifyWinPosX",A_Space,,1)
+magWinY := IniReadCheck(settingsFile, "Settings", "MagnifyWinPosY",A_Space,,1)
 ambientSound := IniReadCheck(settingsFile, "Settings", "ambientSound","true",,1)
 ambientSoundFile := IniReadCheck(settingsFile, "Settings", "ambientSoundFile",moduleExtensionsPath . "\Quiet atmosphere in a small restaurant (indistinct speech) - 1978 (1R8,reprocessed).mp3",,1)
 ambientSoundPlayer := IniReadCheck(settingsFile, "Settings", "ambientSoundPlayer",moduleExtensionsPath . "\djAmbiencePlayer.exe",,1)
 ambientStopKey := IniReadCheck(settingsFile, "Settings", "ambientStopKey","PAUSE",,1)
 ResetKey := IniReadCheck(settingsFile, "Settings", "ResetKey","F12",,1)								; key to reset the game while playing
 
+currentFloat := A_FormatFloat 	; backup current float
+SetFormat, Float, 6.2
 
 If ambientSound = true
 {	ambientSoundFile := CheckFile(ambientSoundFile)
@@ -62,14 +67,17 @@ If ambientSound = true
 }
 
 ; This gets rid of the emu window that pops up on launch
-; GUI creates the splash screen at launch. GUI 3 creates the background that persists during gameplay.
+; GUI 5 creates the background that persists during gameplay.
 If fadeIn = true
-{	FadeInStart()
+{	; must keep fade on its own line so it passes authenticity checks
+	FadeInStart()
 	Gui 5: +LastFound
 	WinGet GUI_ID5, ID
 	Gui 5: -AlwaysOnTop -Caption +ToolWindow
 	Gui 5: Color, %loadingColor%
-	Gdip_GetImageDimensions(BackgroundPic, backgroundPicW, backgroundPicH)
+	backgroundPicHandle := Gdip_CreateBitmapFromFile(fadeInLyr1File)
+	Gdip_GetImageDimensions(backgroundPicHandle, backgroundPicW, backgroundPicH)
+	Log("Module - BackgroundPic's dimensions are: " . backgroundPicW . "x" . backgroundPicH,4)
 	backXPos := ( A_ScreenWidth / 2 ) - ( backgroundPicW / 2 )
 	backYPos := ( A_ScreenHeight / 2 ) - ( backgroundPicH / 2 )
 	Gui 5: Add, Picture,x%backXPos% y%backYPos%, %BackgroundPic%
@@ -115,54 +123,54 @@ If Magnify = true
 	magPID := Process("Exist", "magnify.exe")
 	If magPID != 0
 		Process("Close", "magnify.exe")
-	If A_OSVersion not in WIN_2003, WIN_XP, WIN_2000, WIN_NT4, WIN_95, WIN_98, WIN_M
-	{	RootKey = HKCU
-		SubKey = Software\Microsoft\ScreenMagnifier
-		If (MagnifyWinPosX = "" or MagnifyWinPosX = "ERROR")	; places window in bottom right corner if not defined
-			MagnifyWinPosX := A_ScreenWidth - MagnifyWinSizeW
-		If (MagnifyWinPosY = "" or MagnifyWinPosX = "ERROR")
-			MagnifyWinPosY := A_ScreenHeight - MagnifyWinSizeH
-		MagnifyWinPosY := IniReadCheck(settingsFile, "Settings", "MagnifyWinPosY",(A_ScreenHeight - MagnifyWinSizeH),,1)
-		regwrite, REG_DWORD ,%RootKey%,%SubKey%,MagnifierUIWindowMinimized, 1 			; start with ui minimized
-		regwrite, REG_DWORD ,%RootKey%,%SubKey%,MagnificationMode, 1					;choosing docked mode
-		regwrite, REG_DWORD ,%RootKey%,%SubKey%,ClassicDocked, 0 						;choosing classic window mode
-		regwrite, REG_DWORD ,%RootKey%,%SubKey%,Magnification, %MagnifyPercentage% 		;Magnification Percentage
-		regwrite, REG_DWORD ,%RootKey%,%SubKey%,ClassicWindowCX, %MagnifyWinSizeW%		;Window Width
-		regwrite, REG_DWORD ,%RootKey%,%SubKey%,ClassicWindowCY, %MagnifyWinSizeH% 		;Window Height
-		regwrite, REG_DWORD ,%RootKey%,%SubKey%,ClassicWindowX, %MagnifyWinPosX%		;Window Pos x
-		regwrite, REG_DWORD ,%RootKey%,%SubKey%,ClassicWindowY, %MagnifyWinPosY% 		;Window Pos y
-	}
-	Run(magnifierExe) ;,, Min
-	WinWait("ahk_class Screen Magnifier Window",,5)
-	If ErrorLevel {
-		SetKeyDelay, 50
-		Send,^!d	; turning on docked mode - does not work w/o admin mode
-		Sleep, 3000
-	}
-	WinWait("ahk_class Screen Magnifier Window",,6)
-	If ErrorLevel {
-		mfmeError=1
-		Gosub, CloseProcess
-	}
-	XpBelow = false
+	
+	GetMagWinPosition(magWinX, magWinY, magWinW, magWinH, MagnifyAlignment)	; Calculate the positioning of the Magnify Window
+	
+	; If A_OSVersion not in WIN_2003, WIN_XP, WIN_2000, WIN_NT4, WIN_95, WIN_98, WIN_M
+	; {	RootKey = HKCU
+		; SubKey = Software\Microsoft\ScreenMagnifier
+		; regwrite, REG_DWORD ,%RootKey%,%SubKey%,MagnifierUIWindowMinimized, 1 			; start with ui minimized
+		; regwrite, REG_DWORD ,%RootKey%,%SubKey%,MagnificationMode, 1					;choosing docked mode
+		; regwrite, REG_DWORD ,%RootKey%,%SubKey%,ClassicDocked, 0 						;choosing classic window mode
+		; regwrite, REG_DWORD ,%RootKey%,%SubKey%,Magnification, %MagnifyPercentage% 		;Magnification Percentage
+		; regwrite, REG_DWORD ,%RootKey%,%SubKey%,ClassicWindowX, %magWinX%		;Window Pos x
+		; regwrite, REG_DWORD ,%RootKey%,%SubKey%,ClassicWindowY, %magWinY% 		;Window Pos y
+		; regwrite, REG_DWORD ,%RootKey%,%SubKey%,ClassicWindowCX, %magWinW%		;Window Width
+		; regwrite, REG_DWORD ,%RootKey%,%SubKey%,ClassicWindowCY, %magWinH% 		;Window Height
+	; }
+	; Run(magnifierExe) ;,, Min
+	; WinWait("ahk_class Screen Magnifier Window",,5)
+	; If ErrorLevel {
+		; SetKeyDelay, 50
+		; Send,^!d	; turning on docked mode - does not work w/o admin mode
+		; Sleep, 3000
+	; }
+	; WinWait("ahk_class Screen Magnifier Window",,6)
+	; If ErrorLevel {
+		; mfmeError=1
+		; Gosub, CloseProcess
+	; }
 	If A_OSVersion in WIN_2003,WIN_XP,WIN_2000,WIN_NT4,WIN_95,WIN_98,WIN_M
 	{	XpBelow = true
 		WinSet, Style, -0xC00000, ahk_class Screen Magnifier Window		;Removes the titlebar of the magnifier window
 		WinSet, Style, -0x40000, ahk_class Screen Magnifier Window		;Removes the border of the magnifier window
 		WinMinimize, ahk_class MagUIClass
-		WinMove, ahk_class Screen Magnifier Window,, %MagnifyWinPosX%, %MagnifyWinPosY%, %MagnifyWinSizeW%, %MagnifyWinSizeH% 
+		WinMove, ahk_class Screen Magnifier Window,, %magWinX%, %magWinY%, %magWinW%, %magWinH% 
 	} Else {
 		;This is because of UAC control if it's turned off this will run much smoother
-		errorLvl := Run("MagnifyWrapper.exe """ . executable . """", modulePath,"UseErrorLevel")
+		; errorLvl := Run("MagnifyWrapper.exe """ . executable . """ " . x . " " . y, modulePath,"UseErrorLevel")
+		errorLvl := Run("MagnifyWrapper.exe """ . executable . """ " . magWinX . " " . magWinY . " " . magWinW . " " . magWinH, modulePath,"UseErrorLevel")
 		If errorLvl {
 			mfmeError=1
-			Gosub, CloseProcess
+			Goto, CloseProcess
 		}
 	}
 }
 
 If ambientSound = true
 	Run(ambientSoundPlayerName . " """ . ambientSoundFile . """ " . ambientStopKey, ambientSoundPlayerPath)
+
+SetFormat, Float, %currentFloat%	; restore previous value
 
 FadeInExit()
 
@@ -194,6 +202,43 @@ If mfmeError {
 FadeOutExit()
 ExitModule()
 
+
+GetMagWinPosition(ByRef x, ByRef y, ByRef w, ByRef h,pos){
+	SysGet, b, 2 ; SM_CXVSCROLL - Get size of scrollbars, use this to adjust the size, and position of the final window. If this is not adjusted, the magnifier window has white background on the bottom and right sides.
+	If (pos = "Center") {
+		x := ( A_ScreenWidth / 2 ) - ( w / 2 ) + ( b / 2 )
+		y := ( A_ScreenHeight / 2 ) - ( h / 2 ) + ( b / 2 )
+	} Else If (pos = "Top Left Corner") {
+		x := 0
+		y := 0
+	} Else If (pos = "Top Right Corner") {
+		x := A_ScreenWidth - w + b
+		y := 0
+	} Else If (pos = "Bottom Left Corner") {
+		x := 0
+		y := A_ScreenHeight - h + b
+	} Else If (pos = "Bottom Right Corner") {
+		x := A_ScreenWidth - w + b
+		y := A_ScreenHeight - h + b
+	} Else If (pos = "Top Center") {
+		x := ( A_ScreenWidth / 2 ) - ( w / 2 ) + ( b / 2 )
+		y := 0
+	} Else If (pos = "Bottom Center") {
+		x := ( A_ScreenWidth / 2 ) - ( w / 2 ) + b
+		y := A_ScreenHeight - h + b
+	} Else If (pos = "Left Center") {
+		x := 0
+		y := ( A_ScreenHeight / 2 ) - ( h / 2 ) + ( b / 2 )
+	} Else If (pos = "Right Center") {
+		x := A_ScreenWidth - w + b
+		y := ( A_ScreenHeight / 2 ) - ( h / 2 ) + ( b / 2 )
+	} Else {
+		x := x
+		y := y
+	}
+	w := w - b
+	h := h - b
+}
 
 Reset:
 	Send !r

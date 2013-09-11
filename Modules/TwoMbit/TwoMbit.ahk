@@ -13,6 +13,7 @@ MSystem = "Sega Master System","Sega Game Gear"
 ; Set your fullscreen resolution by starting the emu manually and going to Video->Fullscreen
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"

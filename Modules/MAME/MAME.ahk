@@ -17,6 +17,7 @@ MSystem = "AAE","Cave","LaserDisc","MAME","Nintendo Arcade Systems","Sega Model 
 ; If you use MAME for AAE, create a vector.ini in mame's ini subfolder and paste these HLSL settings in there: http://www.mameworld.info/ubbthreads/showflat.php?Cat=&Number=309968&page=&view=&sb=5&o=&vc=1
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := CheckFile(modulePath . "\" . moduleName . ".ini")

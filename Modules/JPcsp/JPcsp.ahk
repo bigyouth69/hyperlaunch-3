@@ -16,6 +16,7 @@ MSystem = "Sony PSP"
 ; Under Display, set your resolution to NATIVE and check the box to start fullscreen (custom resolutions cause a black screen at boot in fullscreen mode, only native does not)
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 SetRegView, 64	; required to read 64-bit parts of the registry
 

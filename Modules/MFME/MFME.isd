@@ -37,6 +37,22 @@
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>Magnification Zoom Percentage</DESCRIPTION>
 						</KEY>
+						<KEY name="MagnifyAlignment" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Magnifier Window Alignment. If you want to define the position, set this option to Custom and define the MagnifyWinPosX and MagnifyWinPosY options.</DESCRIPTION>
+							<VALUES>
+								<VALUE>Center</VALUE>
+								<VALUE>Top Left Corner</VALUE>
+								<VALUE>Top Right Corner</VALUE>
+								<VALUE>Bottom Left Corner</VALUE>
+								<VALUE>Bottom Right Corner</VALUE>
+								<VALUE>Top Center</VALUE>
+								<VALUE>Bottom Center</VALUE>
+								<VALUE>Left Center</VALUE>
+								<VALUE>Right Center</VALUE>
+								<VALUE>Custom</VALUE>
+							</VALUES>
+						</KEY>
 						<KEY name="MagnifyWinSizeW" required="false" nullable="true" minLength="1">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>Magnification Window Width</DESCRIPTION>

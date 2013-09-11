@@ -16,6 +16,7 @@ MSystem = "Nintendo Game Boy","Nintendo Game Boy Color"
 ; You can set your fullscreen res by dragging the window to your desired size or selecting one of the Window sizes
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"

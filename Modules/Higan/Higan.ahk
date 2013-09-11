@@ -2,8 +2,8 @@ MEmu = Higan
 MEmuV =  v0.93
 MURL = http://byuu.org/higan/
 MAuthor = djvj
-MVersion = 2.0.1
-MCRC = CB7C0AA9
+MVersion = 2.0.2
+MCRC = 9E8E3C57
 iCRC = A3607D8A
 MID = 635038268899159961
 MSystem = "Nintendo Entertainment System","Nintendo Famicom""Nintendo Game Boy","Nintendo Game Boy Color","Nintendo Satellaview","Nintendo Super Famicom","Super Nintendo Entertainment System"
@@ -18,7 +18,7 @@ MSystem = "Nintendo Entertainment System","Nintendo Famicom""Nintendo Game Boy",
 ; higan stores its config @ C:\Users\%USER%\AppData\Roaming\higan
 ;----------------------------------------------------------------------------
 StartModule()
-; BezelGUI()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"

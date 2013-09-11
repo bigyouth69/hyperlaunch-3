@@ -16,6 +16,7 @@ MSystem = "SNK Neo Geo CD"
 ; NeoRaine does not support zipped cd images, like cue/iso/bin. It does however support zipped games when these images are extracted with their contents inside the zip.
 ;-------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"

@@ -22,6 +22,7 @@ MSystem = "Samsung Gam Boy","Sega Game Gear","Sega Master System"
 ; Note: Sound is slightly broken up compared to Fusion
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
