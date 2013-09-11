@@ -1,8 +1,8 @@
-MCRC=AFE99C63
-MVersion=1.0.9
+MCRC=79CCCEE3
+MVersion=1.1.0
 
 StartModule(){
-	Global gameSectionStartTime,gameSectionStartHour,dbName,romPath,romName,romExtension,systemName,MEmu,MEmuV,MURL,MAuthor,MVersion,MCRC,iCRC,MSystem,romMapTable,romMappingLaunchMenuEnabled,romMenuRomName,7zEnabled
+	Global gameSectionStartTime,gameSectionStartHour,dbName,romPath,romName,romExtension,systemName,MEmu,MEmuV,MURL,MAuthor,MVersion,MCRC,iCRC,MSystem,romMapTable,romMappingLaunchMenuEnabled,romMenuRomName,7zEnabled,hideCursor,toggleCursorKey
 	Log("StartModule - Started")
 	Log("StartModule - MEmu: " . MEmu . "`r`n`t`t`t`t`tMEmuV: " . MEmuV . "`r`n`t`t`t`t`tMURL: " . MURL . "`r`n`t`t`t`t`tMAuthor: " . MAuthor . "`r`n`t`t`t`t`tMVersion: " . MVersion . "`r`n`t`t`t`t`tMCRC: " . MCRC . "`r`n`t`t`t`t`tiCRC: " . iCRC . "`r`n`t`t`t`t`tMID: " . MID . "`r`n`t`t`t`t`tMSystem: " . MSystem)
 	If InStr(MSystem,systemName)
@@ -21,9 +21,13 @@ StartModule(){
 	{	Log("StartModule - Not setting romName because Launch Menu was used and 7z will take care of it.",4)
 		romName := 	; If a romMapTable exists with roms, do not fill romName yet as 7z will take care of that.
 	} Else
-	{	Log("StartModule - Setting romName to the dbName sent to HyperLaunch: " . romMenuRomName,4)
+	{	Log("StartModule - Setting romName to the dbName sent to HyperLaunch: " . dbName,4)
 		romName := dbName	; Use dbName if previous checks are false
 	}
+	If hideCursor = true
+		SystemCursor("Off")
+	If toggleCursorKey
+		XHotKeywrapper(toggleCursorKey,"ToggleCursor")
 	; romName := If romName ? romName : If romMapTable.MaxIndex() ? "" : dbName	; OLD METHOD, keeping this here until the split apart conditionals have been tested enough. ; if romName was filled at some point, use it, else if a romMapTable exists with roms, do not fill romName yet as 7z will take care of that. Use dbName if previous checks are false
 	gameSectionStartTime := A_TickCount
 	gameSectionStartHour := A_Now
@@ -33,14 +37,18 @@ StartModule(){
 
 ; ExitModule function in case we need to call anything on the module's exit routine, like UpdateStatistics for HyperPause or UnloadKeymapper
 ExitModule(){
-	Global statisticsEnabled,keymapperEnabled,keymapper,logShowCommandWindow,zz
+	Global statisticsEnabled,keymapperEnabled,keymapper,keymapperAHKMethod,logShowCommandWindow,pToken,cmdWindowTable,zz
 	Log("ExitModule - Started")
 	If statisticsEnabled = true
 		Gosub, UpdateStatistics
 	If keymapperEnabled = true
 		RunKeyMapper%zz%("unload",keymapper)
+	If keymapperAHKMethod = External
+		RunAHKKeymapper%zz%("unload")
 	If logShowCommandWindow = true
-		Process("Close", "cmd.exe")
+		for index, element in cmdWindowTable
+			Process("Close", cmdWindowTable[A_Index,1])	; close each opened cmd.exe
+	Gdip_Shutdown(pToken)	; gdi+ may now be shutdown on exiting the thread
 	Log("ExitModule - Ended")
 	Log("End of Module Logs",,,1)
 	ExitApp
@@ -50,7 +58,7 @@ WinWait(winTitle,winText="",secondsToWait=30,excludeTitle="",excludeText=""){
 	Global detectFadeErrorEnabled, logLevel
 	If logLevel > 3
 		GetActiveWindowStatus()
-	Log("Module WinWait - Waiting for " . winTitle)
+	Log("WinWait - Waiting for " . winTitle)
 	WinWait, %winTitle% ,%winText% , %secondsToWait% , %excludeTitle% ,%excludeText%
 	curErr := ErrorLevel	; have to store this because GetActiveWindowStatus will reset it
 	If logLevel > 3
@@ -66,7 +74,7 @@ WinWaitActive(winTitle,winText="",secondsToWait=30,excludeTitle="",excludeText="
 	Global detectFadeErrorEnabled, logLevel
 	If logLevel > 3
 		GetActiveWindowStatus()
-	Log("Module WinWaitActive - Waiting for """ . winTitle . """")
+	Log("WinWaitActive - Waiting for """ . winTitle . """")
 	WinWaitActive, %winTitle% ,%winText% , %secondsToWait% , %excludeTitle% ,%excludeText%
 	curErr := ErrorLevel	; have to store this because GetActiveWindowStatus will reset it
 	If logLevel > 3
@@ -79,13 +87,13 @@ WinWaitActive(winTitle,winText="",secondsToWait=30,excludeTitle="",excludeText="
 }
 
 WinWaitClose(winTitle,winText="",secondsToWait="",excludeTitle="",excludeText=""){
-	Log("Module WinWaitClose - Waiting for """ . winTitle . """ to close")
+	Log("WinWaitClose - Waiting for """ . winTitle . """ to close")
 	WinWaitClose, %winTitle% ,%winText% , %secondsToWait% , %excludeTitle% ,%excludeText%
 	Return ErrorLevel
 }
 
 WinClose(winTitle,winText="",secondsToWait="",excludeTitle="",excludeText=""){
-	Log("Module WinClose - Closing: " . winTitle)
+	Log("WinClose - Closing: " . winTitle)
 	WinClose, %winTitle%, %winText% , %secondsToWait%, %excludeTitle%, %excludeText%
 	If (secondsToWait = "" || !secondsToWait)
 		secondsToWait := 2	; need to always have some timeout for this command otherwise it will wait forever
@@ -94,12 +102,16 @@ WinClose(winTitle,winText="",secondsToWait="",excludeTitle="",excludeText=""){
 }
 
 Run(target,workingDir="",useErrorLevel="",ByRef outputVarPID=""){
-	Global logShowCommandWindow,logCommandWindow
-	Log("Module Run - Running: " . workingDir . "\" . target)
+	Static targetCount
+	Global logShowCommandWindow,logCommandWindow,cmdWindowTable
+	targetCount++
+	Log("Run - Running: " . workingDir . "\" . target)
+	If !cmdWindowTable
+		cmdWindowTable := []	; initialize array, this is used so all the windows can be properly closed on exit
 	If logShowCommandWindow = true
 	{	Run, %ComSpec% /k , %workingDir% ,,outputVarPID
 		curErr := ErrorLevel
-		Log("Module Run - Showing Command Window to troubleshoot launching. ProcessID: " . outputVarPID)
+		Log("Run - Showing Command Window to troubleshoot launching. ProcessID: " . outputVarPID)
 		WinWait, ahk_pid %outputVarPID%
 		WinActivate, ahk_pid %outputVarPID%
 		WinWaitActive, ahk_pid %outputVarPID%,,2
@@ -110,8 +122,11 @@ Run(target,workingDir="",useErrorLevel="",ByRef outputVarPID=""){
 			If ErrorLevel
 				ScriptError("Could not put focus onto the command window. Please try turning off Fade In if you have it enabled in order to see it")
 		}
+		WinGet, procName, ProcessName, ahk_pid %outputVarPID%	; get the name of the process (which should usually be cmd.exe)
+		cmdWindowTable[targetCount,1] := procName	; store the ProcessName being ran in column 1
+		cmdWindowTable[targetCount,2] := outputVarPID	; store the PID of the application being ran in column 2
 		If logCommandWindow = true
-			SendInput, {Raw}%target% 1>"%A_ScriptDir%\command_output.log" 2>"%A_ScriptDir%\command_error.log"	; send the text to the command window and log the output to file
+			SendInput, {Raw}%target% 1>"%A_ScriptDir%\command_%targetCount%_output.log" 2>"%A_ScriptDir%\command_%targetCount%_error.log"	; send the text to the command window and log the output to file
 		Else
 			SendInput, {Raw}%target%	; send the text to the command window and run it
 		Send, {Enter}
@@ -119,12 +134,12 @@ Run(target,workingDir="",useErrorLevel="",ByRef outputVarPID=""){
 		Run, %target%, %workingDir%, %useErrorLevel%, outputVarPID
 		curErr := ErrorLevel
 	}
-	Log("Module Run - """ . target . """ Process ID: " . outputVarPID, 4)
+	Log("Run - """ . target . """ Process ID: " . outputVarPID, 4)
 	Return curErr
 }
 
 Process(cmd,name,param=""){
-	Log("Module Process - " . cmd . A_Space . name . A_Space . param)
+	Log("Process - " . cmd . A_Space . name . A_Space . param)
 	Process, %cmd%, %name%, %param%
 	Return ErrorLevel
 }
@@ -215,7 +230,7 @@ CheckFile(file,msg="",timeout=6,crc="",crctype="",logerror=""){
 ; h = height of error box
 ; txt = font size
 ScriptError(error,timeout=6,w=600,h=150,txt=15){
-	Global HLMediaPath,exitScriptKey,HLFile,HLErrSoundPath
+	Global HLMediaPath,exitScriptKey,HLFile,HLErrSoundPath,logShowCommandWindow,cmdWindowTable
 
 	XHotKeywrapper(exitEmulatorKey,"CloseProcess","OFF")
 	XHotKeywrapper(exitEmulatorKey,"CloseError","ON")
@@ -269,7 +284,7 @@ ScriptError(error,timeout=6,w=600,h=150,txt=15){
 
 	CloseError:
 		endTime := A_TickCount
-		Loop{	; fade out
+		Loop {	; fade out
 			t := ((TimeElapsed := A_TickCount-endTime) < 300) ? (255*(1-timeElapsed/300)) : 0
 			UpdateLayeredWindow(Error10_ID,hdc10, 0, 0, A_ScreenWidth, A_ScreenHeight,t)
 			If t <= 0
@@ -281,10 +296,16 @@ ScriptError(error,timeout=6,w=600,h=150,txt=15){
 		Gdip_DeleteBrush(pBrush)
 		Gdip_DisposeImage(WarningBitmap), SelectObject(hdc10, obm10), DeleteObject(hbm10), DeleteDC(hdc10), Gdip_DeleteGraphics(G10)
 		Gui, ErrorGUI_10: Destroy
-		Gdip_Shutdown(pToken)
+		Gdip_Shutdown(pToken)	; gdi+ may now be shutdown on exiting the program
 		Log(error,3)
-		ExitApp
-	Return
+		
+		ExitModule()	; attempting to use this method which has the small chance to cause an infinite ScriptError loop, but no need to duplicate code to clean up on errors
+		; Below cleanup exists because we can't call other functions that may cause additional scripterrors and put the thread in an infinite loop
+		; If logShowCommandWindow = true
+		; {	for index, element in cmdWindowTable
+				; Process, Close, % cmdWindowTable[A_Index,1]	; close each opened cmd.exe
+		; }
+		; ExitApp
 }
 
 ; Log usage:
@@ -330,22 +351,32 @@ AlignColumn(txt,pad=9,char=" "){
 	Return txt
 }
 
+; section: Allows | separated values so multiple sections can be checked.
 IniReadCheck(file,section,key,defaultvalue="",errorMsg="",logType="") {
-	IniRead, iniVar, %file%, %section%, %key%, %defaultvalue%
-	If IniVar = ERROR	; if key does not exist, delete ERROR as the value
-		iniVar :=
-	If (iniVar = ""  and !logType) {
-		If errorMsg
-			ScriptError(errorMsg)
-		Else
-			IniWrite, %defaultValue%, %file%, %section%, %key%
-		Return defaultValue
+	Loop, Parse, section, |
+	{	section%A_Index% := A_LoopField	; keep each parsed section in its own var
+		If iniVar	; if last loop's iniVar has a value, update this loop's default value with it
+			defaultValue := If A_Index = 1 ? defaultValue : iniVar	; on first loop, default value will be the one sent to the function, on following loops it gets the value from the previous loop
+		IniRead, iniVar, %file%, % section%A_Index%, %key%, %defaultvalue%
+		If (IniVar = "ERROR" || iniVar = A_Space)	; if key does not exist or is a space, delete ERROR as the value
+			iniVar :=
+		If (A_Index = 1 && iniVar = ""  and !logType) {
+			If errorMsg
+				ScriptError(errorMsg)
+			Else
+				IniWrite, %defaultValue%, %file%, % section%A_Index%, %key%
+			Return defaultValue
+		}
+		If (logType and iniVar) {	; only log if a key exists and logType set
+			logAr := ["Module","Bezel"]
+			Log(logAr[logType] . " Setting - [" . section%A_Index% . "] - " . key . ": " . iniVar)
+		}
+		If iniVar	; if IniVar contains a value, update the lastIniVar
+			lastIniVar := iniVar
 	}
-	If (logType and iniVar) {	; only log if a key exists and logType set
-		logAr := ["Module","Bezel"]
-		Log(logAr[logType] . " Setting - " . key . ": " . iniVar)
-	}
-	Return iniVar
+	If defaultValue = %A_Space%	; this prevents the var from existing when it's actually blank
+		defaultValue :=
+	Return If A_Index = 1 ? iniVar : If lastIniVar ? lastIniVar : defaultValue	; if this is the first loop, always return the iniVar. If any other loop, return the lastinivar if it was filled, otherwise send the last updated defaultvalue
 }
 
 ; Toggles hiding/showing a MenuBar
@@ -450,6 +481,41 @@ GetBGPicPosition(ByRef retX,ByRef retY,ByRef retW,ByRef retH,w,h,pos){
 	}
 }
 
+; Usage, params 1&2 are byref so supply the var you want to be filled with the calculated positions. Next 4 are the original pics xy,w,h. Last is the position the user wants.
+GetFadePicPosition(ByRef retX, ByRef retY,x,y,w,h,pos){
+	If (pos = "Center") {
+		retX := ( A_ScreenWidth / 2 ) - ( w / 2 )
+		retY := ( A_ScreenHeight / 2 ) - ( h / 2 )
+	} Else If (pos = "Top Left Corner") {
+		retX := 0
+		retY := 0
+	} Else If (pos = "Top Right Corner") {
+		retX := A_ScreenWidth - w
+		retY := 0
+	} Else If (pos = "Bottom Left Corner") {
+		retX := 0
+		retY := A_ScreenHeight - h
+	} Else If (pos = "Bottom Right Corner") {
+		retX := A_ScreenWidth - w
+		retY := A_ScreenHeight - h
+	} Else If (pos = "Top Center") {
+		retX := ( A_ScreenWidth / 2 ) - ( w / 2 )
+		retY := 0
+	} Else If (pos = "Bottom Center") {
+		retX := ( A_ScreenWidth / 2 ) - ( w / 2 )
+		retY := A_ScreenHeight - h
+	} Else If (pos = "Left Center") {
+		retX := 0
+		retY := ( A_ScreenHeight / 2 ) - ( h / 2 )
+	} Else If (pos = "Right Center") {
+		retX := A_ScreenWidth - w
+		retY := ( A_ScreenHeight / 2 ) - ( h / 2 )
+	} Else {
+		retX := x
+		retY := y
+	}
+}
+
 ; Function to pause and wait for a user to press any key to continue.
 ; IdleCheck usage:
 ; t = timeout in ms to break out of function
@@ -503,18 +569,18 @@ CreateRomTable(table) {
 				Loop, % currentPath . "\" . dbNamePre . A_Space . typeArray[typeArrayIndex] . "*", 1,1	; we now know to only look for files & folders that have our rom & media type in them.
 				{	indexTotal ++
 					Log(A_LoopFileFullPath,4)
-					Log("CreateRomTable - Looking for: " . currentPath . "\" . dbNamePre . A_Space . typeArray[typeArrayIndex] . A_LoopFileExt,4)
+					Log("CreateRomTable - Looking for: " . currentPath . "\" . dbNamePre . A_Space . typeArray[typeArrayIndex] . "*." . A_LoopFileExt,4)
 					If romExtensionOrig contains % A_LoopFileExt	; Now we narrow down to all matching files using our original extension. Next we use this data to build an array of our files to populate the GUI.
 					{	romCount += 1
 						matchedRom := 1	; Allows to break out of the loops once we matched our rom
-						table[romCount,1] := A_LoopFileFullPath	; Store A_LoopFileFullPath in column 1
-						table[romCount,2] := A_LoopFileName	; Store A_LoopFileName in column 2
-						table[romCount,3] := RegExReplace(table[romCount, 2], "\..*")	; Store the filename with mediatype # but w/o an extension in column 3
+						table[romCount,1] := A_LoopFileFullPath	; Store A_LoopFileFullPath (full file path and file) in column 1
+						table[romCount,2] := A_LoopFileName	; Store A_LoopFileName (the full filename and extension) in column 2
+						table[romCount,3] := RegExReplace(table[romCount, 2], "\..*")	; Store the filename with media type # but w/o an extension in column 3
 						pos := RegExMatch(table[romCount,2], regExCheck)	; finds position of our multi media type so we can trim away and generate the imageText and check if rom is part of a set. This pulls only the filenames out of the table in column 2.
 						uncleanTxt:= SubStr(table[romCount,2], pos + 1)	; remove everything but the media type and # and ext from our file name
-						table[romCount,4] := dbNamePre	; store dbName w/o the media type, used for HP and updating statistics
-						table[romCount,5] := RegExReplace(uncleanTxt, "\(|\)|\..*")	; clean the remainder, removing () and ext, then store it as column 4 in our table to be used for our imageText
-						table[romCount,6] := SubStr(table[romCount,5],1,4)	; copies the imagetype to be used to column 5
+						table[romCount,4] := dbNamePre	; store dbName w/o the media type and #, used for HP and updating statistics in column 4
+						table[romCount,5] := RegExReplace(uncleanTxt, "\(|\)|\..*")	; clean the remainder, removing () and ext, then store it as column 5 in our table to be used for our imageText, this is the media type and #
+						table[romCount,6] := SubStr(table[romCount,5],1,4)	; copies just the media type to column 6
 						Log("CreateRomTable - Adding found game to Rom Table: " . A_LoopFileFullPath,4)
 					}
 				}
@@ -525,7 +591,7 @@ CreateRomTable(table) {
 	Return table
 }
 
-; Label used by HP and Fade animation to read the Hyperspin's XML 
+; Label used by HP and Fade animation to read the Hyperspin's XML
 ReadHyperSpinXML:
 	Log("ReadHyperSpinXML - Started")
 	FileRead, xmlDescription, %frontendPath%\Databases\%systemName%\%systemName%.xml
@@ -628,12 +694,17 @@ FileGetVersionInfo_AW( peFile="", StringFileInfo="", Delimiter="|") {
 	Return Info
 }
 
-; StrX function because some modules use it and HyperPause needs it
+; StrX function because some modules use it and HyperPause needs it for ReadHyperSpinXML
 StrX( H,  BS="",BO=0,BT=1,   ES="",EO=0,ET=1,  ByRef N="" ) {
 	Return SubStr(H,P:=(((Z:=StrLen(ES))+(X:=StrLen(H))+StrLen(BS)-Z-X)?((T:=InStr(H,BS,0,((BO
 	 <0)?(1):(BO))))?(T+BT):(X+1)):(1)),(N:=P+((Z)?((T:=InStr(H,ES,0,((EO)?(P+1):(0))))?(T-P+Z
 	 +(0-ET)):(X+P)):(X)))-P)
 }
+
+ToggleCursor:
+	Log("ToggleCursor - Hotkey """ . toggleCursorKey . """ pressed, toggling cursor visibility")
+	SystemCursor("Toggle")
+Return
 
 ; Function to hide/unhide the mouse cursor
 SystemCursor(OnOff=1)   ; INIT = "I","Init"; OFF = 0,"Off"; TOGGLE = -1,"T","Toggle"; ON = others
@@ -768,6 +839,11 @@ WriteProperty(cfgArray,keyName,Value,AddSpaces=0,AddQuotes=0) {
 ;------------------------------------- Daemon Tools Function -------------------------------------
 ;-------------------------------------------------------------------------------------------------------------
 
+; Action: Can be get (get's the drive letter associated to the chosen drive type), mount (mount a disc), unmount (unmount a disc)
+; File: Full path to file you want to mount (only need to provide this when using action type "mount"
+; Type: Leave blank to use auto mode or what the user has chosen in HLHQ for that system. To force a specific drive type, send "dt" or "scsi" in the module
+; Drive: A drive number for DT can be sent in the scenario a user has multiple dt or scsi drives and prefers to not use the first one (0). This is not used in any module to date.
+
 DaemonTools(action,file="",type="",drive=0){
 	Log("DaemonTools - Started - action is " . action)
 	Global dtPath,dtUseSCSI,dtAddDrive,dtDriveLetter,7zFormatsNoP
@@ -817,9 +893,9 @@ DaemonTools(action,file="",type="",drive=0){
 ;--------------------------------------------- 7z Functions ---------------------------------------------
 ;-------------------------------------------------------------------------------------------------------------
 
-7z(ByRef 7zP, ByRef 7zN, ByRef 7zE, ByRef 7zExP){
+7z(ByRef 7zP, ByRef 7zN, ByRef 7zE, ByRef 7zExP,call=""){
 	Global 7zEnabled,7zFormats,7zFormatsNoP,7zPath,7zAttachSystemName,romExtensions,skipchecks,romMatchExt,systemName,dbName,MEmu
-	Global fadeIn,fadeLyr37zAnimation,fadeLyr3Animation ,fadeLyr3Type,HLObject,7zTempRomExists,used7z,romExSize,7z1stRomPath,7zRomPath
+	Global fadeIn,fadeLyr37zAnimation,fadeLyr3Animation ,fadeLyr3Type,HLObject,7zTempRomExists,use7zAnimation,romExSize,7z1stRomPath,7zRomPath,7zPID,7zStatus
 	Global romMapTable,romMappingFirstMatchingExt,romMenuRomName ;,romMappingEnabled
 	Static 7z1stUse
 	If 7zEnabled = true
@@ -831,8 +907,9 @@ DaemonTools(action,file="",type="",drive=0){
 			; msgbox Rom map table does not exist`nRom name passed to 7z`nHandle rom`, if archive type pass further into 7z else if not`, skip 7z and run rom as is`nNO CHANGES NEEDED TO HANDLE THIS SCENARIO
 		; Else If ( !romMapTable.MaxIndex() && !7zN )	; if romMapTable does not contain a rom and romName not passed
 			; msgbox Rom map table does not exist`nNo rom name passed to 7z`nShould never see this error because no rom exists else if we are going to have to error out
-		Log("7z - Started, received " . 7zP . "\" . 7zN . 7zE . ". If rom is an archive, it will extract to " . 7zExP)
+		Log("7z - Started, " . (If 7zN ? "received " . 7zP . "\" . 7zN . 7zE . ". If rom is an archive, it will extract to " . 7zExP : "but no romName was received"))
 		7z1stUse ++	; increasing var each time 7z is used
+		7zStatus :=	; this var keeps track of where 7z is inside this function. This is needed so other parts of HL stay in sync and don't rush through their own routines
 
 		Loop, Parse, romExtensions, |	; parse out 7zFormat extensions from romExtensions so the dll doesn't have to parse as many
 		{	If A_LoopField not in %7zFormatsNoP%
@@ -850,9 +927,14 @@ DaemonTools(action,file="",type="",drive=0){
 			7zUsed = 1	; flag that we used 7z for this launch
 			Loop % romMapTable.MaxIndex()	; Loop through all found rom map inis
 			{	altArchiveFullPath := romMapTable[A_Index,2], romMapIni := romMapTable[A_Index,1] ;, romMapKey := "Alternate_Rom_Name"
+				If !firstAltArchiveFullPath
+					firstAltArchiveFullPath := altArchiveFullPath	; storing this so it can be used if skipchecks is enabled and there are multiple paths found, we only want to send the first in this scenario
+				Log("7z - Found a path to a previously found rom in romMapTable: """ . altArchiveFullPath . """",4)
 				IniRead, altRomName, %romMapIni%, %dbName%, Alternate_Rom_Name
 				If (altRomName = "" || altRomName = "ERROR")	; if multiple alt roms were defined, do a check if user defined the key with "_1"
 					IniRead, altRomName, %romMapIni%, %dbName%, Alternate_Rom_Name_1
+				If !(altRomName = "" || altRomName = "ERROR")
+					Log("7z - Mapping ini contains an Alternate_Rom_Name of """ . altRomName . """",4)
 				SplitPath, altArchiveFullPath,, 7zP, 7zE, 7zN	; assign vars to what is needed for the rest of 7z. This is where we define romPath, romName, and romExtension when none were provided to 7z because we used a map table instead.
 				7zE := "." . 7zE
 				If romFromDLL := COM_Invoke(HLObject, "findFileInZip", altArchiveFullPath, If (altRomName != "" && altRomName != "ERROR") ? altRomName : 7zN, romTypeExtensions)	; if altRomName is a valid name, search for it, otherwise search for the 7zN
@@ -870,6 +952,10 @@ DaemonTools(action,file="",type="",drive=0){
 				Log("7z - Loading Mapped Rom: """ . romFromDLL . """ found inside """ . 7zP . "\" . 7zN . 7zE . """")
 				romFromRomMap = 1
 				romIn7z = true	; avoid a duplicate check later
+			} Else if skipChecks != false	; this scenario is when a rom map is used to load an archive with no valid  rom name or extension, like scummvm compressed roms, and relinking those roms to a different name
+			{	SplitPath, firstAltArchiveFullPath,, 7zP, 7zE, 7zN	; assign vars to what is needed for the rest of 7z. This is where we define romPath, romName, and romExtension when none were provided to 7z because we used a map table instead.
+				7zE := "." . 7zE
+				Log("7z - A matching rom was not found inside the archive, but skipChecks is set to " . skipChecks . ", so continuing with extraction of the first found rom in the table: " . firstAltArchiveFullPath,4)
 			} Else
 				ScriptError("Scanned all defined ""Alternate_Archive_Name"" and no defined ""Alternate_Rom_Name"" found in any provided Rom Map ini files for """ . dbName . """")
 
@@ -929,17 +1015,22 @@ DaemonTools(action,file="",type="",drive=0){
 					7zN := dllName				; set romName to the found rom from the dll
 				romFound = true					; telling rest of function rom found so it exists successfully and to skip to end
 				7zTempRomExists = true	; telling the animation that the rom already exists so it doesn't try to show a 7z animation
+				; Log("7z - TESTING 1 -- 7zP: " . 7zP)
+				; Log("7z - TESTING 1 -- 7zN: " . 7zN)
+				; Log("7z - TESTING 1 -- 7zE: " . 7zE)
 				Log("7z - File already exists in """ . 7zExPCheck . """. Breaking out of 7z to load existing file",4)
 				If fadeIn = true
 				{	Log("7z - FadeIn is true, but no extraction needed as it already exists in 7z_Extract_Path. Using Fade_Layer_3_Animation instead.",4)
-					GoSub, %fadeLyr3Animation%	; still need to provide an animation because the 7z one won't trigger below
+					useNon7zAnimation = 1
 				}
 			}
-		} Else If 7zE in %7zFormats%	; only need this condition if using the standard 7z method
+		} Else If 7zE in %7zFormats%	; only need this condition if using the standard 7z method and provided rom doesnt need 7z to load
 		{	Log("7z - Provided rom extension """ . 7zE . """ is not an archive type, turning off 7z and running rom directly.")
 			7zEnabled = false	; need to tell the animation to load a non-7z animation
 			If fadeIn = true
-				GoSub, %fadeLyr3Animation%	; still need to provide an animation because the we are already passed the FadeInStart GoSub
+			{	Log("7z - FadeIn is true, but no extraction needed for this rom. Using Fade_Layer_3_Animation instead.",4)
+				useNon7zAnimation = 1
+			}
 		}
 
 		; This section is seperate because I use a couple methods in the above block of code and the below code would be duplicated it it was moved up.
@@ -954,13 +1045,28 @@ DaemonTools(action,file="",type="",drive=0){
 			Else
 				Log("7z - Extracted path of rom will be " . pathLength . " in length and within the 255 character limit.")
 
-			If fadeIn = true
+			SplitPath, 7zRomPath,,outDir,,,outDrive	; grabbing the outDrive because sometimes supplying just the 7zRomPath or outDir to check for space doesn't always return a number
+			DriveSpaceFree, 7zFreeSpace, %outDrive%	; get free space in MB of this drive/folder
+			If ((7zFreeSpace * 1000000) < romExSize)	; if the free space on the drive is less than the extracted game's size, error out
+				ScriptError("You do not have enough free space in """ . outdir . """ to extract this game. Please choose a different folder or free up space on the drive. Free: " . 7zFreeSpace . " MB / Need: " . (romExSize // 1000000) . " MB")
+			Else
+				Log("7z - The 7zExtractPath has " . 7zFreeSpace . " MB of free space which is enough to extract this game: " . (romExSize // 1000000) . " MB")
+
+			If (fadeIn = "true" && !call)
 			{	Log("7z - FadeIn is true, starting timer to update Layer 3 animation with 7z.exe statistics",4)
-				SetTimer, UpdateFadeFor7z, -1	; Create a new timer to start updating Layer 3 of fade
-			}
+				use7zAnimation = true	; this will tell the Fade animation (so progress bar is shown) that 7z is being used to extract a rom
+				SetTimer, UpdateFadeFor7z%zz%, -1	; Create a new timer to start updating Layer 3 of fade. This needs to be a settimer otherwise progress bar gets stuck at 0 during extraction because the thread is waiting for that loop to finish and 7z never starts.
+				; Gosub, UpdateFadeFor7z%zz%	; Create a new timer to start updating Layer 3 of fade
+			} Else if (call="mg") {	; If 7z was called from MG, we need start updating its progress bar
+				Log("7z - MG triggered 7z, starting the MG Progress Bar",4)
+				SetTimer, UpdateMGFor7z%zz%, -1
+			} Else if (call="hp") {	; If 7z was called from HyperPause, we need start updating its progress bar
+				Log("7z - HyperPause triggered 7z, starting the HyperPause Progress Bar",4)
+				SetTimer, HyperPause_UpdateFor7z%zz%, -1
+			}	
 
 			Log("7z - Starting 7z extraction of " . 7zP . "\" . 7zN . 7zE . "  to " . 7zRomPath,4)
-			RunWait, %7zPath% x "%7zP%\%7zN%%7zE%" -aoa -o"%7zRomPath%",,Hide ; perform the extraction and overwrite all
+			RunWait, %7zPath% x "%7zP%\%7zN%%7zE%" -aoa -o"%7zRomPath%", 7zPID,Hide ; perform the extraction and overwrite all
 			If ErrorLevel
 			{	If ErrorLevel = 1
 					Error = Non fatal error, file may be in use by another application
@@ -977,12 +1083,12 @@ DaemonTools(action,file="",type="",drive=0){
 				ScriptError("7zip.exe Error: " . Error)
 			}
 			Log("7z - Finished 7z extraction",4)
+			7zPID:=	; clear the PID because 7z is not running anymore
 			If (FileExist(7zExPCheck . "\" . dllName . "." . dllExt) || skipchecks != "false") { ; after extracting, if the rom now exists in our temp dir, or we are skipping looking, update 7zE, and break out
 				7zP := 7zExPCheck
 				7zE = .%dllExt%
 				If skipChecks != Rom Extension
 					7zN := dllName	; update the romName just in case it was different from the name supplied to 7z, never update 7zN if skipChecks is set to Rom Extension
-				used7z = true	; this will tell 7zCleanup that 7z was used to extract a rom
 				romFound = true
 				; 7zN := dllName
 				If skipChecks not in Rom Only,Rom and Emu
@@ -999,20 +1105,31 @@ DaemonTools(action,file="",type="",drive=0){
 				ScriptError("No extracted files found in " . 7zExP . "`nCheck that you are not exceeding the 255 character limit and this file is in the root of your archive:`n" . 7zN . foundExt,10)
 			If 7z1stUse = 1	; If this is the first time 7z was used (rom launched from FE), set this var so that 7zCleanup knows where to find it for deletion. MultiGame extractions will be stored in the romTable for deletion.
 				7z1stRomPath := 7zRomPath
-		} Else
+		} Else {
 			Log("7z - This rom type does not need 7z: """ . 7zE . """")
+			useNon7zAnimation = 1
+		}
+		If (useNon7zAnimation && !mg)		; this got flagged above if 7z is on, but 7z was not used or needed for the current rom. Since the 7z call is after FadeInStart in the module, we need to start call the animation here now.
+		{	Log("7z - Starting non-7z FadeIn animation.",4)
+			; SetTimer, UpdateFadeForNon7z%zz%, -1	; Create a new timer to start fade non-7z animation because jumping out of a function via gosub does not work
+			Gosub, UpdateFadeForNon7z%zz%	; Create a new timer to start fade non-7z animation because jumping out of a function via gosub does not work
+			; GoSub, %fadeLyr3Animation%	; still need to provide an animation because the 7z animation won't trigger above
+		}
+		; Log("7z - TESTING 2 -- 7zP: " . 7zP)
+		; Log("7z - TESTING 2 -- 7zN: " . 7zN)
+		; Log("7z - TESTING 2 -- 7zE: " . 7zE)
 		Log("7z - Ended")
 	}
 }
 
 7zCleanUp() {
-	Global romTable,dbName,mgEnabled
+	Global romTable,dbName,mgEnabled,hpEnabled
 	Global 7zEnabled,7zDelTemp,7zCanceled,7z1stRomPath
 	If (7zEnabled = "true" && (7zDelTemp = "true" or 7zCanceled))	; if user wants to delete temp files or user canceled a 7z extraction
 	{	Log("7zCleanUp - Started")
 		romTableExists := IsObject(romTable)	; if romTable was ever created, it would be an object, which is what this checks for
-		If (mgEnabled = "true"  && romTableExists)
-		{	Log("7zCleanUp - romTable exists and MG is enabled. Parsing the table to delete any roms that were extracted",4)
+		If ((mgEnabled = "true" || hpEnabled = "true") && romTableExists)
+		{	Log("7zCleanUp - romTable exists and MG or HP is enabled. Parsing the table to delete any roms that were extracted",4)
 			for index, element in romTable
 				If % romTable[A_Index, 19]
 				{	FileRemoveDir, % romTable[A_Index, 19], 1	; remove each game that was extracted with 7z
@@ -1086,40 +1203,38 @@ StdoutToVar_CreateProcess(sCmd, bStream = False, sDir = "", sInput = "")
 	; }
 ; }
 
-GetTimeString(time)
-{
-    if(time<0)
-        return time
-    if time is not number
-        return time
+GetTimeString(time) {
+	If (time<0)
+		Return time
+	If time is not number
+		Return time
 	Days := time // 86400
 	Hours := Mod(time, 86400) // 3600
 	Minutes := Mod(time, 3600) // 60
 	Seconds := Mod(time, 60)
-	if(Days<>0){
+	If (Days<>0) {
 		If Strlen(Hours) = 1
-		Hours = 0%Hours%
+			Hours = 0%Hours%
 		If Strlen(Minutes) = 1
-		Minutes = 0%Minutes%
+			Minutes = 0%Minutes%
 		If Strlen(Seconds) = 1
-		Seconds = 0%Seconds%
+			Seconds = 0%Seconds%
 		TimeString = %Days% d %Hours% h %Minutes% m %Seconds% s
-	} else if(Hours<>0){
+	} Else If (Hours<>0) {
 		If Strlen(Minutes) = 1
-		Minutes = 0%Minutes%
+			Minutes = 0%Minutes%
 		If Strlen(Seconds) = 1
-		Seconds = 0%Seconds%
+			Seconds = 0%Seconds%
 		TimeString = %Hours% h %Minutes% m %Seconds% s
-	} else if(Minutes<>0) {
-        If Strlen(Seconds) = 1
-		Seconds = 0%Seconds%
+	} Else If (Minutes<>0) {
+		If Strlen(Seconds) = 1
+			Seconds = 0%Seconds%
 		TimeString = %Minutes% m %Seconds% s
-    } else if(Seconds<>0) {
-        TimeString = %Seconds% s
-    } else {
-	    TimeString = 
-    }
-	return TimeString
+	} Else If (Seconds<>0)
+		TimeString = %Seconds% s
+	Else
+		TimeString = 
+	Return TimeString
 }
 
 ; Display Resolution functions
@@ -1202,4 +1317,27 @@ CheckForNearestSupportedRes(resVar){
 		}
 	}
 Return supportedRes
+}
+
+;-----------------OPEN AND CLOSE PROCESS FUNCTIONS------------
+ProcSus(PID_or_Name)
+{
+   If InStr(PID_or_Name, ".") {
+      Process, Exist, %PID_or_Name%
+      PID_or_Name := ErrorLevel
+   }
+   If !(h := DllCall("OpenProcess", "uInt", 0x1F0FFF, "Int", 0, "Int", PID_or_Name))
+      Return -1
+   DllCall("ntdll.dll\NtSuspendProcess", "Int", h), DllCall("CloseHandle", "Int", h)
+}
+
+ProcRes(PID_or_Name)
+{
+   If InStr(PID_or_Name, ".") {
+      Process, Exist, %PID_or_Name%
+      PID_or_Name := ErrorLevel
+   }
+   If !(h := DllCall("OpenProcess", "uInt", 0x1F0FFF, "Int", 0, "Int", PID_or_Name))
+      Return -1
+   DllCall("ntdll.dll\NtResumeProcess", "Int", h), DllCall("CloseHandle", "Int", h)
 }

@@ -1,5 +1,5 @@
-MCRC=D6EC4F8E
-mVersion=1.0.0
+MCRC=3C8D0E1A
+mVersion=1.0.1
 
 ;Author: bleasby
 ;This file contains all functions and labels related with the HyperLaunch Statistics Saving
@@ -21,11 +21,12 @@ UpdateStatistics:
     HyperPause_StatisticsFile := gameStatisticsPath . systemName . ".ini" 
     HyperPause_GlobalStatisticsFile := gameStatisticsPath . "Global Statistics.ini"
     ;Load ini file previous statistics 
-    gosub, LoadStatistics
+    if !statisticsLoaded
+        gosub, LoadStatistics
     log("Loaded game statistics from ini files:`r`n`t`t`t`t`tNumber_of_Times_Played: " Initial_General_Statistics_Statistic_1 "`r`n`t`t`t`t`tLast_Time_Played: " Initial_General_Statistics_Statistic_2 "`r`n`t`t`t`t`tAverage_Time_Played: " Initial_General_Statistics_Statistic_3 "`r`n`t`t`t`t`tTotal_Time_Played: " Initial_General_Statistics_Statistic_4 "`r`n`t`t`t`t`tSystem_Total_Played_Time: " Initial_General_Statistics_Statistic_5 "`r`n`t`t`t`t`tTotal_Global_Played_Time: " Initial_General_Statistics_Statistic_6, 5)
     ;Updating final statistics values
     Final_General_Statistics_Statistic_1 := Initial_General_Statistics_Statistic_1 + 1 
-    FormatTime, Final_General_Statistics_Statistic_2, gameSectionStartHour, dddd MMMM d, yyyy hh:mm:ss tt
+    FormatTime, Final_General_Statistics_Statistic_2, %gameSectionStartHour%, dddd MMMM d, yyyy hh:mm:ss tt
     Final_General_Statistics_Statistic_4 := Initial_General_Statistics_Statistic_4 + ElapsedTime
     Final_General_Statistics_Statistic_3 := round(Final_General_Statistics_Statistic_4/Final_General_Statistics_Statistic_1)
     Final_General_Statistics_Statistic_5 := Initial_General_Statistics_Statistic_5 + ElapsedTime
@@ -50,7 +51,7 @@ UpdateStatistics:
             Final_General_Statistics_Statistic_1 := Final_General_Statistics_Statistic_1 + RIni_GetKeyValue(1,dbNameMultiDisc,"Number_of_Times_Played", "0") 
             Final_General_Statistics_Statistic_4 := Final_General_Statistics_Statistic_4 + RIni_GetKeyValue(1,dbNameMultiDisc,"Total_Time_Played", "0") 
         }
-        FormatTime, Final_General_Statistics_Statistic_2, gameSectionStartHour, dddd MMMM d, yyyy hh:mm:ss tt
+        FormatTime, Final_General_Statistics_Statistic_2, %gameSectionStartHour%, dddd MMMM d, yyyy hh:mm:ss tt
         Final_General_Statistics_Statistic_3 := round(Final_General_Statistics_Statistic_4/Final_General_Statistics_Statistic_1)
         log("Aggregated Final Statistics to multidisc games:`r`n`t`t`t`t`tNumber_of_Times_Played: " . Final_General_Statistics_Statistic_1 . "`r`n`t`t`t`t`tLast_Time_Played: " . Final_General_Statistics_Statistic_2 . "`r`n`t`t`t`t`tAverage_Time_Played: " . Final_General_Statistics_Statistic_3 . "`r`n`t`t`t`t`tTotal_Time_Played: " . Final_General_Statistics_Statistic_4 . "`r`n`t`t`t`t`tSystem_Total_Played_Time: " . Final_General_Statistics_Statistic_5 . "`r`n`t`t`t`t`tTotal_Global_Played_Time: " . Final_General_Statistics_Statistic_6,5)
     }
@@ -136,6 +137,7 @@ LoadStatistics:
         Initial_Global_Top_Ten_Average_Time_Description_%a_index% := If RIni_GetKeyValue(2,"Top_Ten_Average_Time_Played",A_index . "_Description", "") = -3 ? "" : RIni_GetKeyValue(2,"Top_Ten_Average_Time_Played",A_index . "_Description", "") 
         Initial_Global_Top_Ten_Average_Time_Number_%a_index% := RIni_GetKeyValue(2,"Top_Ten_Average_Time_Played",A_index . "_Time_Played", "0") 
     }    
+    statisticsLoaded := true
 return
 
 WritingStatisticstoFile:

@@ -1,5 +1,5 @@
-MCRC=B387AFF1
-mVersion=1.0.2
+MCRC=2986ED9B
+mVersion=1.0.3
 
 ;Author: bleasby
 ;Thanks to djvj and brolly for helping in the development of HyperPause (without them this would be impossible to achieve)
@@ -41,7 +41,17 @@ HyperPause_Main:
     XHotKeywrapper(hpKey,"TogglePauseMenuStatus","OFF") ;cancel HyperPause key for future reasigning 
     If mgEnabled = true
         XHotKeywrapper(mgKey,"StartMulti","OFF") ;cancel MultiGame key while HyperPause is running
-    Log("Disabled exit emulator and multigame keys",5)
+    If bezelEnabled = true
+	{	Gosub, DisableBezelKeys	; many more bezel keys if they are used need to be disabled
+        if ICRightMenuDraw 
+            Gosub, DisableICRightMenuKeys
+        if ICLeftMenuDraw
+            Gosub, DisableICLeftMenuKeys
+        if (bezelBackgroundsList.MaxIndex() > 1)
+            if bezelBackgroundChangeDur
+                settimer, BezelBackgroundTimer, OFF
+	}
+    Log("Disabled exit emulator, bezel, and multigame keys",5)
 	If (emuIdleShutdown and emuIdleShutdown != "ERROR")	; turn off emuIdleShutdown while in HP
 		SetTimer, EmuIdleCheck, Off
     If (HyperPause_Loaded <> 1){ ; Initiate Gdip+ If first HyperPause run
@@ -104,17 +114,6 @@ HyperPause_Main:
     }
     HyperPause_BeginTime := A_TickCount ;start to count the time expent in the pause menu for statistics purposes
     Log("Setting HP starting time for subtracting from statistics played time: " HyperPause_BeginTime,5)
-    If (HyperPause_Loaded <> 1){ ;set working resolution of the emulator and scalling parameters
-        ScallingFactor := 1
-        If(HyperPause_AutoScallingToScreenResolution="true")
-            {
-            ScallingFactor := A_ScreenWidth/1280
-            VScallingFactor := A_ScreenHeight/800
-            If(ScallingFactor>VScallingFactor)
-                ScallingFactor := VScallingFactor 
-        }
-        Log("Scalable HP factor: " ScallingFactor,5)
-    }
     If !disableLoadScreen ;updating HP_GUI21 for loading screen message If not disabled in the module 
         If !(disableActivateBlackScreen and HyperPause_Disable_Menu="true")
             gosub, LoadingHyperPauseScreen
@@ -133,6 +132,26 @@ HyperPause_Main:
         XHotKeywrapper(hpKey,"TogglePauseMenuStatus","ON")
         Return
     }
+    HyperPause_ChangeRes := RIniHyperPauseLoadVar(3,4, "General Options", "Force_Resolution_Change", "") 
+    if HyperPause_ChangeRes
+        {
+        HyperPause_ScreenResToBeRestored := CheckForNearestSupportedRes( CurrentDisplaySettings(0) )
+		StringSplit, HyperPause_ScreenResToBeRestoredArray, HyperPause_ScreenResToBeRestored , |,     ; ResArray1 - width, ResArray2 - height, ResArray3 - color, ResArray4 - frequency,
+		HyperPause_ForcedRes := CheckForNearestSupportedRes( HyperPause_ChangeRes )
+		StringSplit, HyperPause_ForcedResArray, HyperPause_ForcedRes , |,     ; ResArray1 - width, ResArray2 - height, ResArray3 - color, ResArray4 - frequency,
+		ChangeDisplaySettings(HyperPause_ForcedResArray1,HyperPause_ForcedResArray2,HyperPause_ForcedResArray3,HyperPause_ForcedResArray4)
+    }
+    If (HyperPause_Loaded <> 1){ ;set working resolution of the emulator and scalling parameters
+        ScallingFactor := 1
+        If(HyperPause_AutoScallingToScreenResolution="true")
+            {
+            ScallingFactor := A_ScreenWidth/1280
+            VScallingFactor := A_ScreenHeight/800
+            If(ScallingFactor>VScallingFactor)
+                ScallingFactor := VScallingFactor 
+        }
+        Log("Scalable HP factor: " ScallingFactor,5)
+    }
     If (HyperPause_Loaded <> 1){
         gosub, LoadExternalVariables ;Loading external variables and paths for the first time
         Log("Loaded HP options",5)
@@ -144,9 +163,9 @@ HyperPause_Main:
         Log("Initilized HP variables for the first time",5)
     }
     SavedKeyDelay := A_KeyDelay ;Saving previous key delay and setting the new one for save and load state commands
-    If(A_KeyDelay<HyperPause_SetKeyDelay) 
+    If(A_KeyDelay<HyperPause_SetKeyDelay)  
         SetKeyDelay, %HyperPause_SetKeyDelay%
-	GoSub, InitializePauseMainMenu ;Initializing the main menu and creating HyperPause Guis
+    GoSub, InitializePauseMainMenu ;Initializing the main menu and creating HyperPause Guis
     Log("Initilized HP brushes and guis",5)
     Gosub DrawMainMenu ;Drawing the main menu background and game information
     UpdateLayeredWindow(HP_hwnd22, HP_hdc22,0,0, A_ScreenWidth, A_ScreenHeight)
@@ -197,6 +216,8 @@ HyperPause_Main:
             WinActivate, hpLayer%CurrentGUI%
         }
     }
+	If keymapperAHKMethod = External
+		RunAHKKeymapper%zz%("menu")
     SetTimer, UpdateDescription, 15  ;Setting timer for game description scroling text
     SetTimer, SubMenuUpdate, 100  ;Setting timer for submenu apearance
     ; Clearing Loading HyperPause Screen
@@ -227,14 +248,22 @@ HideHyperSpin: ;Hide HyperSpin with a black Gui
  Return
 
 LoadingHyperPauseScreen: ;Drawning Loading HyperPause Message
+    LoadScreenScaleFactor := 1
+    If(HyperPause_AutoScallingToScreenResolution="true")
+        {
+        LoadScreenScaleFactor := A_ScreenWidth/1280
+        VLoadScreenScaleFactor := A_ScreenHeight/800
+        If(LoadScreenScaleFactor>VLoadScreenScaleFactor)
+            LoadScreenScaleFactor := VLoadScreenScaleFactor
+    }
     HyperPause_AuxiliarScreen_StartText := RIniHyperPauseLoadVar(3,4, "Start and Exit Screen", "Loading_Text", "Loading HyperPause")
     HyperPause_AuxiliarScreen_ExitText := RIniHyperPauseLoadVar(3,4, "Start and Exit Screen", "Exiting_Text", "Exiting HyperPause")
     HyperPause_AuxiliarScreen_Font := RIniHyperPauseLoadVar(3,4, "Start and Exit Screen", "Font", "Bebas Neue")
     HyperPause_AuxiliarScreen_FontSize := RIniHyperPauseLoadVar(3,4, "Start and Exit Screen", "Font_Size", "30")
     HyperPause_AuxiliarScreen_FontColor := RIniHyperPauseLoadVar(3,4, "Start and Exit Screen", "Font_Color", "ff222222")
     HyperPause_AuxiliarScreen_ExitTextMargin := RIniHyperPauseLoadVar(3,4, "Start and Exit Screen", "Text_Margin", "50")
-    HyperPause_AuxiliarScreen_FontSize := round(HyperPause_AuxiliarScreen_FontSize * ScallingFactor)
-    HyperPause_AuxiliarScreen_ExitTextMargin := round(HyperPause_AuxiliarScreen_ExitTextMargin * ScallingFactor)
+    HyperPause_AuxiliarScreen_FontSize := round(HyperPause_AuxiliarScreen_FontSize * LoadScreenScaleFactor)
+    HyperPause_AuxiliarScreen_ExitTextMargin := round(HyperPause_AuxiliarScreen_ExitTextMargin * LoadScreenScaleFactor)
     AuxiliarScreenTextX := HyperPause_AuxiliarScreen_ExitTextMargin
     AuxiliarScreenTextY := A_ScreenHeight - HyperPause_AuxiliarScreen_ExitTextMargin - HyperPause_AuxiliarScreen_FontSize
     OptionsLoadHP = x%AuxiliarScreenTextX% y%AuxiliarScreenTextY% Left c%HyperPause_AuxiliarScreen_FontColor% r4 s%HyperPause_AuxiliarScreen_FontSize% bold
@@ -254,13 +283,13 @@ HPWarningMessage: ;Drawning Warning Message If HyperPause default font not found
             }
         }  
     }  
-    brushWarningBackgroung := Gdip_CreateLineBrushFromRect(0, 0, round(600*ScallingFactor), round(150*ScallingFactor), 0xff555555, 0xff050505)
-    penWarningBackgroung := Gdip_CreatePen(0xffffffff, round(5*ScallingFactor))
-    Gdip_FillRoundedRectangle(HP_G21, brushWarningBackgroung, (A_ScreenWidth - 600*ScallingFactor)//2, (A_ScreenHeight - 150*ScallingFactor)//2, round(600*ScallingFactor), round(150*ScallingFactor), round(25*ScallingFactor))
-    Gdip_DrawRoundedRectangle(HP_G21, penWarningBackgroung, (A_ScreenWidth - 600*ScallingFactor)//2, (A_ScreenHeight - 150*ScallingFactor)//2, round(600*ScallingFactor), round(150*ScallingFactor), round(25*ScallingFactor))
+    brushWarningBackgroung := Gdip_CreateLineBrushFromRect(0, 0, round(600*LoadScreenScaleFactor), round(150*LoadScreenScaleFactor), 0xff555555, 0xff050505)
+    penWarningBackgroung := Gdip_CreatePen(0xffffffff, round(5*LoadScreenScaleFactor))
+    Gdip_FillRoundedRectangle(HP_G21, brushWarningBackgroung, (A_ScreenWidth - 600*LoadScreenScaleFactor)//2, (A_ScreenHeight - 150*LoadScreenScaleFactor)//2, round(600*LoadScreenScaleFactor), round(150*LoadScreenScaleFactor), round(25*LoadScreenScaleFactor))
+    Gdip_DrawRoundedRectangle(HP_G21, penWarningBackgroung, (A_ScreenWidth - 600*LoadScreenScaleFactor)//2, (A_ScreenHeight - 150*LoadScreenScaleFactor)//2, round(600*LoadScreenScaleFactor), round(150*LoadScreenScaleFactor), round(25*LoadScreenScaleFactor))
     WarningBitmap := Gdip_CreateBitmapFromFile(HyperPause_IconsImagePath . "Warning.png")
-    Gdip_DrawImage(HP_G21,WarningBitmap, round((A_ScreenWidth - 600*ScallingFactor)//2 + 25*ScallingFactor),round((A_ScreenHeight - 150*ScallingFactor)//2 + 25*ScallingFactor),round(100*ScallingFactor),round(100*ScallingFactor))
-    Gdip_TextToGraphics(HP_G21, "Please install the HyperPause default fonts located at " . HLMediaPath . "\Fonts folder.`n`nPress HyperPause Key to go back to the game.", "x" round((A_ScreenWidth-600*ScallingFactor)//2+125*ScallingFactor) " y" round((A_ScreenHeight-150*ScallingFactor)//2+25*ScallingFactor) " Center vCenter cffffffff r4 s" round(15*ScallingFactor) " Bold", , round((600 - 50 - 100)*ScallingFactor) , round((150 - 50)*ScallingFactor))
+    Gdip_DrawImage(HP_G21,WarningBitmap, round((A_ScreenWidth - 600*LoadScreenScaleFactor)//2 + 25*LoadScreenScaleFactor),round((A_ScreenHeight - 150*LoadScreenScaleFactor)//2 + 25*LoadScreenScaleFactor),round(100*LoadScreenScaleFactor),round(100*LoadScreenScaleFactor))
+    Gdip_TextToGraphics(HP_G21, "Please install the HyperPause default fonts located at " . HLMediaPath . "\Fonts folder.`n`nPress HyperPause Key to go back to the game.", "x" round((A_ScreenWidth-600*LoadScreenScaleFactor)//2+125*LoadScreenScaleFactor) " y" round((A_ScreenHeight-150*LoadScreenScaleFactor)//2+25*LoadScreenScaleFactor) " Center vCenter cffffffff r4 s" round(15*LoadScreenScaleFactor) " Bold", , round((600 - 50 - 100)*LoadScreenScaleFactor) , round((150 - 50)*LoadScreenScaleFactor))
     UpdateLayeredWindow(HP_hwnd21, HP_hdc21, 0, 0, A_ScreenWidth, A_ScreenHeight)
 Return
  
@@ -277,6 +306,7 @@ FirstTimeHyperPauseRun: ;Loading pause menu variables (first time run only)
     VerticalPanFullScreen := 0
     TotalSubMenuGuidesPages = 0 
     TotalSubMenuManualsPages = 0 
+    TotalSubMenuHistoryPages = 0 
     TotalSubMenuControllerPages = 0 
     TotalSubMenuArtworkPages = 0 
     FileRemoveDir, %HyperPause_GuidesTempPath%, 1   ;removing temp folders for pdf and compressed files
@@ -284,6 +314,15 @@ FirstTimeHyperPauseRun: ;Loading pause menu variables (first time run only)
     FileRemoveDir, %HyperPause_ArtworkTempPath%, 1
     FileRemoveDir, %HyperPause_ControllerTempPath%, 1 
     Lettersandnumbers = a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,0,1,2,3,4,5,6,7,8,9,/,\ ;List of letters and numbers for using in line validation on moves list
+    ;Description name without (Disc X)
+    If !romTable
+        romTable:=CreateRomTable(dbName)
+    Totaldiscsofcurrentgame:=romTable.MaxIndex()
+    If (Totaldiscsofcurrentgame>1){ 
+        DescriptionNameWithoutDisc := romTable[1,4]
+    } else {
+        DescriptionNameWithoutDisc := dbName
+    }
     ;Defining supported files in txt, pdf and images menu
     Supported_Images = png
     If (HyperPause_SupportAdditionalImageFiles="true")
@@ -291,7 +330,7 @@ FirstTimeHyperPauseRun: ;Loading pause menu variables (first time run only)
     Supported_Extensions = %Supported_Images%,pdf,txt,%7zFormatsNoP%
     StringReplace, CommaSeparated_MusicFilesExtension, HyperPause_MusicFilesExtension, |,`,, All
     ;checking for bad written labels and non included labels (and adding them to the end of HyperPause_MainMenu_Labels)
-    FullMainMenuLabelsList = Controller|Change Disc|Save State|Load State|HighScore|Artwork|Guides|Manuals|Videos|Sound|Statistics|Moves List|Shutdown
+    FullMainMenuLabelsList = Controller|Change Disc|Save State|Load State|HighScore|Artwork|Guides|Manuals|Videos|Sound|Statistics|Moves List|History|Shutdown
     StringReplace, CommaSeparated_FullMainMenuLabelsList, FullMainMenuLabelsList, |,`,, All
     Loop, parse, HyperPause_MainMenu_Labels,|,
         {
@@ -339,7 +378,6 @@ FirstTimeHyperPauseRun: ;Loading pause menu variables (first time run only)
             Loop, parse, Supported_Images,`,,
                 Loop, %HyperPause_BackgroundsPath%_Default\*.%A_LoopField%, 0
                     HPBackground.Insert(A_LoopFileFullPath)
-    ;VarizeDbName := Varize(dbName) ; Necessary to avoid invalid characters in RIni functions.
     Log("Starting Creating Contents List",5)
     Loop, parse, HyperPause_MainMenu_Labels,|, ;Loading Submenu information and excluding empty sub menus
         {
@@ -363,9 +401,15 @@ FirstTimeHyperPauseRun: ;Loading pause menu variables (first time run only)
         If((temp_mainmenulabel="SaveState")or(temp_mainmenulabel="LoadState")){
             Log("Loading " temp_mainmenulabel " Contents",5)
             If(HyperPause_SaveandLoadMenuEnabled="true"){
-                Loop, parse, hp%temp_mainmenulabel%KeyCodes,|, ;counting total save and load state slots
+                loop, 10
                     {
-                    TotalSubMenuItems%temp_mainmenulabel%++
+                    currentLabel := temp_mainmenulabel . "Slot" . a_index
+                    if IsLabel(currentLabel) 
+                        TotalSubMenuItems%temp_mainmenulabel%++
+                }
+                if (TotalSubMenuItems%temp_mainmenulabel%<1){
+                    Loop, parse, hp%temp_mainmenulabel%KeyCodes,|, ;counting total save and load state slots
+                        TotalSubMenuItems%temp_mainmenulabel%++
                 } 
                 If(TotalSubMenuItems%temp_mainmenulabel%<1){ ;Removing Save and Load State menus If no contents found 
                     If(temp_mainmenulabel="SaveState")
@@ -383,7 +427,7 @@ FirstTimeHyperPauseRun: ;Loading pause menu variables (first time run only)
         If(temp_mainmenulabel="ChangeDisc"){
             Log("Loading Change Disc Contents",5)
             If(HyperPause_ChangeDiscMenuEnabled="true"){
-                TotalSubMenuItems%temp_mainmenulabel%:=romTable.MaxIndex() ;Checking If the game is a multi Disc game, loading images and counting total disc sub menu items
+                TotalSubMenuItems%temp_mainmenulabel%:=Totaldiscsofcurrentgame ;Checking If the game is a multi Disc game, loading images and counting total disc sub menu items
                 If (Totaldiscsofcurrentgame>1){
                     If romExtensionOrig contains %7zFormats%
                         If % 7zEnabled = "true"
@@ -491,7 +535,8 @@ FirstTimeHyperPauseRun: ;Loading pause menu variables (first time run only)
                 {
                 If (HyperPause_StatisticsMenuEnabled="true"){
                     Log("Loading Statistics Contents",5)
-                    gosub, LoadStatistics ;Load Game Statistics Information
+                    if !statisticsLoaded 
+                        gosub, LoadStatistics ;Load Game Statistics Information
                     CreatingStatisticsVariablestoSubmenu()
                 } Else {
                     StringReplace, HyperPause_MainMenu_Labels, HyperPause_MainMenu_Labels, Statistics|, ;Removing the Statistics submenu If user defined to not show it
@@ -500,6 +545,14 @@ FirstTimeHyperPauseRun: ;Loading pause menu variables (first time run only)
                StringReplace, HyperPause_MainMenu_Labels, HyperPause_MainMenu_Labels, Statistics|, 
            }
         }    
+        If(temp_mainmenulabel="History"){
+            Log("Loading History.dat Contents",5)
+            If(HyperPause_HistoryMenuEnabled="true"){
+                loadHistoryDataInfo() ;creating History Dat submenu list
+            } Else {
+                StringReplace, HyperPause_MainMenu_Labels, HyperPause_MainMenu_Labels, History|, ;Removing the History Dat submenu If user defined to not show it
+            }
+        }
         If(temp_mainmenulabel="Shutdown"){
             If(HyperPause_ShutdownLabelEnabled="true"){
                 Log("Adding Shutdown Label",5)
@@ -607,7 +660,6 @@ InitializePauseMainMenu: ;Drawing the main menu for the first time (constructing
     ;Loading auxiliar parameters
     MenuChanged = 1
     ItemSelected = 0
-    ChandeDiscSelected = false
     ;Wheel random image
     If WheelImageList[1]
         {
@@ -625,6 +677,7 @@ InitializePauseMainMenu: ;Drawing the main menu for the first time (constructing
     HyperPause_MainMenu_BackgroundBrushV := Gdip_BrushCreateSolid("0x" . HyperPause_MainMenu_BackgroundBrush)
     HyperPause_SubMenu_GuidesSelectedBrushV := Gdip_BrushCreateSolid("0x" . HyperPause_SubMenu_GuidesSelectedBrush)
     HyperPause_SubMenu_ManualsSelectedBrushV := Gdip_BrushCreateSolid("0x" . HyperPause_SubMenu_ManualsSelectedBrush)
+    HyperPause_SubMenu_HistorySelectedBrushV := Gdip_BrushCreateSolid("0x" . HyperPause_SubMenu_HistorySelectedBrush)
     HyperPause_SubMenu_ControllerSelectedBrushV := Gdip_BrushCreateSolid("0x" . HyperPause_SubMenu_ControllerSelectedBrush)
     HyperPause_SubMenu_ArtworkSelectedBrushV := Gdip_BrushCreateSolid("0x" . HyperPause_SubMenu_ArtworkSelectedBrush)
     HyperPause_SubMenu_FullScreenTextBrushV := Gdip_BrushCreateSolid("0x" . HyperPause_SubMenu_FullScreenTextBrush)
@@ -665,7 +718,7 @@ InitializePauseMainMenu: ;Drawing the main menu for the first time (constructing
         try ComObjConnect(wmpVideo, "wmpVideo_")
         catch e
             Log("A Windows Media Player Video exception was thrown: " . e , 5)
-        try wmpVideo.settings.volume := 100
+        try wmpVideo.settings.volume := HyperPause_VideoPlayerVolumeLevel
         try wmpVideo.settings.autoStart := false
         If(HyperPause_EnableVideoLoop="true")
             try wmpVideo.Settings.setMode("Loop",true)
@@ -678,7 +731,7 @@ InitializePauseMainMenu: ;Drawing the main menu for the first time (constructing
         }
     }   
     HyperPause_VolumeMaster := round(getMasterVolume())
-    If (SelectedMenuOption:="Video"){
+    If (SelectedMenuOption="Video"){
         AnteriorFilePath:=
         V2Submenuitem := 1
         try CurrentVideoPlayStatus := wmpVideo.playState
@@ -857,7 +910,7 @@ Return
 DrawSubMenu: ;Drawing SubMenu Background
     Gdip_GraphicsClear(HP_G26)
     Gdip_GraphicsClear(HP_G27)
-    If not ((SelectedMenuOption = "Controller") and (TotalSubMenuItemsController=0)) {
+    If not ((SelectedMenuOption = "Controller") and (TotalSubMenuItemsController=0)) or (SelectedMenuOption = "Shutdown") {
         Point1x := HyperPause_SubMenu_TopRightChamfer
         Point1y := HyperPause_SubMenu_Height-HyperPause_SubMenu_Height
         Point2x := 0
@@ -873,11 +926,13 @@ DrawSubMenu: ;Drawing SubMenu Background
         SoundPlay %HyperPause_MenuSoundPath%hpsubmenu.wav
     Else
         submenuMouseClickChange =
-    Loop, parse, HyperPause_MainMenu_Labels,|
-    {
-        If (HyperPause_MainMenuItem = a_Index) { 
-            StringReplace, SelectedMenuOption, A_LoopField, %A_SPACE%,, All
-            Gosub %SelectedMenuOption%
+    If not (SelectedMenuOption = "Shutdown") {
+        Loop, parse, HyperPause_MainMenu_Labels,|
+        {
+            If (HyperPause_MainMenuItem = a_Index) { 
+                StringReplace, SelectedMenuOption, A_LoopField, %A_SPACE%,, All
+                Gosub %SelectedMenuOption%
+            }
         }
     }
     UpdateLayeredWindow(HP_hwnd26, HP_hdc26,ConfigMenuX,ConfigMenuY, ConfigMenuWidth, ConfigMenuHeight)
@@ -888,7 +943,7 @@ Return
 
 
 SubMenuUpdate: ;Drawing SubMenu Contents
-		If ((A_TimeIdlePhysical >= HyperPause_SubMenu_DelayinMilliseconds) and (MenuChanged = 1)) {
+		If ((A_TimeIdle >= HyperPause_SubMenu_DelayinMilliseconds) and (MenuChanged = 1)) {
             If(HyperPause_Active=true)
                 gosub, DisableKeys
             If SelectedMenuOption
@@ -914,7 +969,7 @@ Return
 ;-------Controller Sub Menu------- 
 Controller:
     ;drawing config controls option
-    If (keymapperEnabled = "true") and (JoyIDsEnabled = "true"){
+    If (keymapperEnabled = "true") {
         If FileExist(HyperPause_KeymapperMediaPath . "Controller Images\controller disconnected.png") {
             controllerDisconnectedBitmap := Gdip_CreateBitmapFromFile(HyperPause_KeymapperMediaPath . "Controller Images\controller disconnected.png")
             Gdip_GetImageDimensions(controllerDisconnectedBitmap, BitmapW, BitmapH)
@@ -973,7 +1028,6 @@ Controller:
             Gdip_FillRoundedRectangle(HP_G29, HyperPause_SubMenu_FullScreenTextBrushV, 0, 0, HyperPause_ControllerFullScreenWidth, A_ScreenHeight-2*HyperPause_SubMenu_FullScreenMargin, HyperPause_SubMenu_FullScreenRadiusofRoundedCorners)
             ;drawing the exit full screen button
             ControllerTextButtonSize := MeasureText(0,"Restore Preferred Order",HyperPause_SubMenu_LabelFont,HyperPause_SubMenu_FontSize,"bold")+HyperPause_SubMenu_AdditionalTextMarginContour 
-            
             TextSize := MeasureText(0,"Exit Control Config",HyperPause_SubMenu_LabelFont,HyperPause_SubMenu_FontSize,"bold")+HyperPause_SubMenu_AdditionalTextMarginContour 
             ControllerTextButtonSize := If ControllerTextButtonSize > TextSize ? ControllerTextButtonSize : TextSize
             If (V2SubMenuItem = 1){
@@ -1004,7 +1058,6 @@ Controller:
             If (V2SubMenuItem = 2)
                 Gdip_DrawRoundedRectangle(HP_G29, HyperPause_SubMenu_ControllerSelectedPen, posX, posY, Width, Height,HyperPause_SubMenu_RadiusofRoundedCorners)
             ;drawing Control Banners
-            
             BannerMargin := (HyperPause_ControllerFullScreenWidth-BannerWidth)//2
             PlayerX := PlayerX+BannerMargin
             BitmapX := BitmapX+BannerMargin
@@ -1043,8 +1096,71 @@ Controller:
                     Gdip_DrawImage(HP_G29, controllerDisconnectedBitmap, BitmapX+(maxImageWidthSize-controllerDisconnectedBitmapW)//2, BannerPosY, controllerDisconnectedBitmapW, HyperPause_ControllerBannerHeight)
                 Gdip_TextToGraphics(HP_G29, joyConnectedInfo[a_index+firstbanner-1,7], "x" . ControllerNameX+maxControllerTextsize//2 . " y" . BannerPosY+(HyperPause_ControllerBannerHeight-HyperPause_SubMenu_FontSize)//2 . " Center c" . color . " r4 s" . HyperPause_SubMenu_FontSize . " bold", HyperPause_SubMenu_LabelFont, 0, 0)
             }
+            ; drawing submenu with profile options
+            If  (HSubMenuItem = 2) {
+                If (V2SubMenuItem > 2){
+                    possibleProfilesList := Keymapper_HyperPauseProfileList(joyConnectedInfo[V2SubMenuItem-2,2],V2SubMenuItem-2,keymapper)
+                    If  V3SubMenuItem < 1 
+                        V3SubMenuItem := % possibleProfilesList.MaxIndex() 
+                    If  V3SubMenuItem > % possibleProfilesList.MaxIndex() 
+                        V3SubMenuItem = 1
+                    profilesListMargin := round(10*ScallingFactor)
+                    firstColumnWidth := round(30*ScallingFactor)
+                    secondColumnWidth := MeasureText(0,"emulator",HyperPause_SubMenu_Font,HyperPause_SubMenu_SmallFontSize,"bold")
+                    thirdColumnWidth := 0
+                    Loop, % possibleProfilesList.MaxIndex() 
+                        {
+                        tempWidth := MeasureText(0,possibleProfilesList[a_index,1],HyperPause_SubMenu_Font,HyperPause_SubMenu_SmallFontSize,"bold")
+                        if (tempWidth > thirdColumnWidth)
+                            thirdColumnWidth := tempWidth
+                    }
+                    titleWidth := MeasureText(0,"Choose the Profile That you want to load",HyperPause_SubMenu_LabelFont,HyperPause_SubMenu_FontSize,"bold") + 2*profilesListMargin 
+                    profilesListWidth := if ((firstColumnWidth+secondColumnWidth+thirdColumnWidth+4*profilesListMargin) > titleWidth) ? (firstColumnWidth+secondColumnWidth+thirdColumnWidth+4*profilesListMargin) : titleWidth
+                    Gdip_FillRoundedRectangle(HP_G29, HyperPause_SubMenu_SelectedBrushV, BannerMargin+HyperPause_selectedControllerBannerDisplacement, BannerTitleY+HyperPause_vDistanceBetweenBanners, profilesListWidth, (possibleProfilesList.MaxIndex())*(HyperPause_SubMenu_SmallFontSize + profilesListMargin) + 2*(HyperPause_SubMenu_FontSize + profilesListMargin) + profilesListMargin,HyperPause_SubMenu_RadiusofRoundedCorners)
+                    Gdip_TextToGraphics(HP_G29, "Choose the Profile That you want to load:", "x" . BannerMargin+HyperPause_selectedControllerBannerDisplacement+profilesListMargin . " y" . BannerTitleY+HyperPause_vDistanceBetweenBanners+profilesListMargin . " Left c" . HyperPause_MainMenu_LabelSelectedColor . " r4 s" . HyperPause_SubMenu_FontSize . " bold", HyperPause_SubMenu_LabelFont)
+                    Gdip_TextToGraphics(HP_G29, "Type", "x" . BannerMargin+HyperPause_selectedControllerBannerDisplacement+firstColumnWidth+2*profilesListMargin . " y" . BannerTitleY+HyperPause_vDistanceBetweenBanners+2*profilesListMargin+HyperPause_SubMenu_FontSize . " Left c" . HyperPause_MainMenu_LabelSelectedColor . " r4 s" . HyperPause_SubMenu_FontSize . " bold", HyperPause_SubMenu_LabelFont)
+                    Gdip_TextToGraphics(HP_G29, "File Name", "x" . BannerMargin+HyperPause_selectedControllerBannerDisplacement+firstColumnWidth+secondColumnWidth+3*profilesListMargin . " y" . BannerTitleY+HyperPause_vDistanceBetweenBanners+2*profilesListMargin+HyperPause_SubMenu_FontSize . " Left c" . HyperPause_MainMenu_LabelSelectedColor . " r4 s" . HyperPause_SubMenu_FontSize . " bold", HyperPause_SubMenu_LabelFont)
+                    if !profileRecommendedBitmap
+                        If FileExist(HLMediaPath . "\Menu Images\HyperPause\Icons\Recommended.png") 
+                            profileRecommendedBitmap := Gdip_CreateBitmapFromFile(HLMediaPath . "\Menu Images\HyperPause\Icons\Recommended.png")
+                    if !profileQuestionMarkBitmap
+                        If FileExist(HLMediaPath . "\Menu Images\HyperPause\Icons\QuestionMark.png") 
+                            profileQuestionMarkBitmap := Gdip_CreateBitmapFromFile(HLMediaPath . "\Menu Images\HyperPause\Icons\QuestionMark.png")    
+                    if !selectedProfile[V2SubMenuItem-2,1] {
+                        currentSelectedProfile := 1 
+						If (keymapper = "xpadder") {
+							selectedProfile[V2SubMenuItem-2,1] := 1
+							selectedProfile[V2SubMenuItem-2,2] := possibleProfilesList[1,4] ;store for later use with xpadder and joytokey run functions
+						} else if (keymapper="joy2key") OR (keymapper = "joytokey") {
+							Loop, 16
+							{
+								selectedProfile[A_Index,1] := 1
+								selectedProfile[A_Index,2] := possibleProfilesList[1,4] ;store for later use with xpadder and joytokey run functions
+							}
+						}
+					} else
+                        currentSelectedProfile := selectedProfile[V2SubMenuItem-2,1]
+                    Loop, % possibleProfilesList.MaxIndex()
+                        {
+                        If (a_index = V3SubMenuItem)
+                            color := HyperPause_MainMenu_LabelSelectedColor
+                        Else If (a_index = currentSelectedProfile)
+                            color := "ffffff00"
+                        Else
+                            color := HyperPause_MainMenu_LabelDisabledColor
+                        If possibleProfilesList[a_index,3]
+                            Gdip_DrawImage(HP_G29, profileRecommendedBitmap, BannerMargin+HyperPause_selectedControllerBannerDisplacement+profilesListMargin, BannerTitleY+HyperPause_vDistanceBetweenBanners+3*profilesListMargin+2*HyperPause_SubMenu_FontSize + (a_index-1)*(profilesListMargin+HyperPause_SubMenu_SmallFontSize)-(firstColumnWidth-HyperPause_SubMenu_SmallFontSize)//2, firstColumnWidth, firstColumnWidth)
+                         else
+                            Gdip_DrawImage(HP_G29, profileQuestionMarkBitmap, BannerMargin+HyperPause_selectedControllerBannerDisplacement+profilesListMargin, BannerTitleY+HyperPause_vDistanceBetweenBanners+3*profilesListMargin+2*HyperPause_SubMenu_FontSize + (a_index-1)*(profilesListMargin+HyperPause_SubMenu_SmallFontSize)-(firstColumnWidth-HyperPause_SubMenu_SmallFontSize)//2, firstColumnWidth, firstColumnWidth) 
+                        Gdip_TextToGraphics(HP_G29, possibleProfilesList[a_index,2], "x" . BannerMargin+HyperPause_selectedControllerBannerDisplacement+firstColumnWidth+2*profilesListMargin . " y" . BannerTitleY+HyperPause_vDistanceBetweenBanners+3*profilesListMargin+2*HyperPause_SubMenu_FontSize + (a_index-1)*(profilesListMargin+HyperPause_SubMenu_SmallFontSize) . " Left c" . color . " r4 s" . HyperPause_SubMenu_SmallFontSize . " bold", HyperPause_SubMenu_Font)
+                        Gdip_TextToGraphics(HP_G29, possibleProfilesList[a_index,1], "x" . BannerMargin+HyperPause_selectedControllerBannerDisplacement+firstColumnWidth+secondColumnWidth+3*profilesListMargin . " y" . BannerTitleY+HyperPause_vDistanceBetweenBanners+3*profilesListMargin+2*HyperPause_SubMenu_FontSize + (a_index-1)*(profilesListMargin+HyperPause_SubMenu_SmallFontSize) . " Left c" . color . " r4 s" . HyperPause_SubMenu_SmallFontSize . " bold", HyperPause_SubMenu_Font)
+                    }
+                }
+            } else {
+                V3SubMenuItem := 1
+            }
             ;drawing moving selected controller banner
-            If (V2SubMenuItem <= 2)
+            If (V2SubMenuItem <= 2) or (HSubMenuItem = 2)
                 SelectedController :=
             If SelectedController {
                 BannerPosY := BannerTitleY+HyperPause_vDistanceBetweenBanners+(V2SubMenuItem-2-firstbanner+1-1)*(HyperPause_ControllerBannerHeight+HyperPause_vDistanceBetweenBanners)
@@ -1134,10 +1250,11 @@ Return
 SaveState:
     If(VSubMenuItem<>0){
         SubMenuHelpText("Press Select Key to Save the Game")
-        SaveStateBackgroundFile := RIni_GetKeyValue(1,dbName,"SaveState" . VSubMenuItem . "Screenshot", false)
+        if (HyperPause_SaveStateScreenshot = "true")
+            SaveStateBackgroundFile := RIni_GetKeyValue(1,dbName,"SaveState" . VSubMenuItem . "Screenshot", false)
         If SaveStateBackgroundFile
             {
-            SaveStateBackgroundBitmap := Gdip_CreateBitmapFromFile(SaveStateBackgroundFile)
+            SaveStateBackgroundBitmap := Gdip_CreateBitmapFromFile(HyperPause_SaveScreenshotPath . SaveStateBackgroundFile)
             Gdip_GraphicsClear(HP_G22) 
             Gdip_DrawImage(HP_G22, SaveStateBackgroundBitmap, 0, 0, A_ScreenWidth, A_ScreenHeight)
             UpdateLayeredWindow(HP_hwnd22, HP_hdc22, 0, 0, A_ScreenWidth, A_ScreenHeight)
@@ -1160,7 +1277,7 @@ LoadState:
         SaveStateBackgroundFile := RIni_GetKeyValue(1,dbName,"SaveState" . VSubMenuItem . "Screenshot", false)
         If SaveStateBackgroundFile
             {
-            SaveStateBackgroundBitmap := Gdip_CreateBitmapFromFile(SaveStateBackgroundFile)
+            SaveStateBackgroundBitmap := Gdip_CreateBitmapFromFile(HyperPause_SaveScreenshotPath . SaveStateBackgroundFile)
             Gdip_GraphicsClear(HP_G22) 
             Gdip_DrawImage(HP_G22, SaveStateBackgroundBitmap, 0, 0, A_ScreenWidth, A_ScreenHeight)
             UpdateLayeredWindow(HP_hwnd22, HP_hdc22, 0, 0, A_ScreenWidth, A_ScreenHeight)
@@ -1187,7 +1304,7 @@ StateMenuList:
     posStateX2 := HyperPause_State_HMargin+WidthofStateText+HyperPause_State_DistBetweenLabelandHour
     posStateY := HyperPause_State_VMargin
     posStateY2 := HyperPause_State_VMargin+HyperPause_SubMenu_FontSize-HyperPause_SubMenu_SmallFontSize
-    Loop, parse, hp%SelectedMenuOption%KeyCodes,|, 
+    Loop, % TotalSubMenuItems%SelectedMenuOption% 
     {    
     If(VSubMenuItem = A_index ){
         color := HyperPause_MainMenu_LabelSelectedColor
@@ -1527,6 +1644,11 @@ Return
 
 ;-------Videos Sub Menu-------
 Videos:
+    try CurrentMusicPlayStatus := wmpMusic.playState
+    If (CurrentMusicPlayStatus = 3) {
+        try wmpMusic.controls.pause  
+        MusicPausedonVideosMenu := true
+    }        
     TextImagesAndPDFMenu("Videos")
 Return
 
@@ -2002,12 +2124,15 @@ Manuals:
     TextImagesAndPDFMenu("Manuals")
 Return
 
+;-------History dat Sub Menu-------
+History:
+    TextImagesAndPDFMenu("History")
+Return
+
 ;-----------------COMMANDS-------------
 MoveRight:
     If FunctionRunning
         Return   
-    If(VSubMenuItem = -1)
-        Return
     If(VSubMenuItem=0){
         If (SelectedMenuOption:="Video"){
             AnteriorFilePath:=
@@ -2017,6 +2142,11 @@ MoveRight:
                 try VideoPosition%videoplayingindex% := wmpVideo.controls.currentPosition
                 Log("VideoPosition at main menu change:" "VideoPosition"videoplayingindex " " VideoPosition%videoplayingindex%,5)
                 try wmpVideo.controls.stop
+            }
+            if MusicPausedonVideosMenu
+                {
+                try wmpMusic.controls.play
+                MusicPausedonVideosMenu := false                    
             }
             Gui,HP_GUI31: Show, Hide
             Gui, HP_GUI32: Show
@@ -2056,7 +2186,7 @@ MoveRight:
             Gosub SubMenuSwap 
             gosub, DrawSubMenu   
             Return
-        } Else If ((FullScreenView = 1) and ((SelectedMenuOption="Guides") or (SelectedMenuOption="Manuals") or (SelectedMenuOption="Controller") or (SelectedMenuOption="Artwork")) and (CurrentFileExtension = "txt")){
+        } Else If ((FullScreenView = 1) and ((SelectedMenuOption="Guides") or (SelectedMenuOption="Manuals") or (SelectedMenuOption="History") or (SelectedMenuOption="Controller") or (SelectedMenuOption="Artwork")) and (CurrentFileExtension = "txt")){
             V2SubMenuItem := V2SubMenuItem+1
             If  V2SubMenuItem < 1 
             V2SubMenuItem = % TotaltxtPages
@@ -2071,10 +2201,17 @@ MoveRight:
             Gosub SubMenuSwap   
             gosub, DrawSubMenu
             Return   
+        } Else If ((SelectedMenuOption="Controller") and (VSubMenuItem = -1) and (FullScreenView=1)){   
+            If (V2SubMenuItem > 2)
+                HSubMenuItem := HSubMenuItem+1
+            Else 
+                HSubMenuItem := 1
+            Gosub SubMenuSwap
+            gosub, DrawSubMenu
         } Else {
             HSubMenuItem := HSubMenuItem+1
             Gosub SubMenuSwap 
-            If not ((SelectedMenuOption="Controller") and (VSubMenuItem = -1) and (FullScreenView=1))
+            if (VSubMenuItem >= 0)
                 HSubmenuitem%SelectedMenuOption%VSubmenuitem%VSubmenuitem% = % HSubMenuItem            
             gosub, DrawSubMenu
         }
@@ -2089,8 +2226,6 @@ Return
 MoveLeft:
     If FunctionRunning
         Return 
-    If(VSubMenuItem = -1)
-        Return
     If(VSubMenuItem=0){
         If (SelectedMenuOption:="Video"){
             AnteriorFilePath:=
@@ -2100,6 +2235,11 @@ MoveLeft:
                 try VideoPosition%videoplayingindex% := wmpVideo.controls.currentPosition
                 Log("VideoPosition at main menu change:" "VideoPosition"videoplayingindex " " VideoPosition%videoplayingindex%,5)
                 try wmpVideo.controls.stop
+            }
+            if MusicPausedonVideosMenu
+                {
+                try wmpMusic.controls.play
+                MusicPausedonVideosMenu := false                    
             }
             Gui,HP_GUI31: Show, Hide
             Gui, HP_GUI32: Show
@@ -2139,7 +2279,7 @@ MoveLeft:
             Gosub SubMenuSwap 
             gosub, DrawSubMenu   
             Return
-        } Else If ((FullScreenView = 1) and ((SelectedMenuOption="Guides") or (SelectedMenuOption="Manuals") or (SelectedMenuOption="Controller") or (SelectedMenuOption="Artwork")) and (CurrentFileExtension = "txt")){
+        } Else If ((FullScreenView = 1) and ((SelectedMenuOption="Guides") or (SelectedMenuOption="Manuals") or (SelectedMenuOption="History") or (SelectedMenuOption="Controller") or (SelectedMenuOption="Artwork")) and (CurrentFileExtension = "txt")){
             V2SubMenuItem := V2SubMenuItem-1
             If  V2SubMenuItem < 1 
             V2SubMenuItem = % TotaltxtPages
@@ -2153,11 +2293,18 @@ MoveLeft:
             VSubMenuItem := VSubMenuItem-1
             Gosub SubMenuSwap   
             gosub, DrawSubMenu
-            Return   
+            Return  
+        } Else If ((SelectedMenuOption="Controller") and (VSubMenuItem = -1) and (FullScreenView=1)){   
+            If (V2SubMenuItem > 2)
+                HSubMenuItem := HSubMenuItem-1
+            Else 
+                HSubMenuItem := 1
+            Gosub SubMenuSwap
+            gosub, DrawSubMenu
         } Else {
             HSubMenuItem := HSubMenuItem-1
             Gosub SubMenuSwap
-            If not ((SelectedMenuOption="Controller") and (VSubMenuItem = -1) and (FullScreenView=1))
+            if (VSubMenuItem >= 0)
                 HSubmenuitem%SelectedMenuOption%VSubmenuitem%VSubmenuitem% = % HSubMenuItem
             gosub, DrawSubMenu
         }
@@ -2181,11 +2328,15 @@ MoveUp:
     Previous_VSubMenuItem := VSubMenuItem
     If((SelectedMenuOption="Controller") and (VSubMenuItem = -1) and (FullScreenView=1)){
         VSubMenuItem := VSubMenuItem+1
-        V2SubMenuItem := V2SubMenuItem-1
-        If  V2SubMenuItem < 1 
-            V2SubMenuItem = 18
-        If  V2SubMenuItem > 18
-            V2SubMenuItem = 1
+        if (HSubMenuItem=2) {
+            V3SubMenuItem := V3SubMenuItem-1
+        } else {
+            V2SubMenuItem := V2SubMenuItem-1
+			If  V2SubMenuItem < 1 
+				V2SubMenuItem = 18
+			If  V2SubMenuItem > 18
+				V2SubMenuItem = 1
+        }
     }
     VSubMenuItem := VSubMenuItem-1
     If((SelectedMenuOption="Statistics")and(HSubMenuItem>1)){
@@ -2200,7 +2351,7 @@ MoveUp:
         If  V2SubMenuItem > % TotalMovesListPages
             V2SubMenuItem = 1
     }
-    If(((SelectedMenuOption="Guides") or (SelectedMenuOption="Manuals") or (SelectedMenuOption="Controller") or (SelectedMenuOption="Artwork") or (SelectedMenuOption="Guides"))and(HSubMenuItem>1)and (VSubMenuItem>=0)){
+    If(((SelectedMenuOption="Guides") or (SelectedMenuOption="Manuals") or (SelectedMenuOption="History") or (SelectedMenuOption="Controller") or (SelectedMenuOption="Artwork"))and(HSubMenuItem>1)and (VSubMenuItem>=0)){
         If((CurrentFileExtension <> "pdf") and (CurrentFileExtension <> "folder") and (CurrentCompressedFileExtension<> "true")){
             VSubMenuItem := VSubMenuItem+1
         }
@@ -2260,11 +2411,15 @@ MoveDown:
     Previous_VSubMenuItem := VSubMenuItem
     If((SelectedMenuOption="Controller") and (VSubMenuItem = -1) and (FullScreenView=1)){
         VSubMenuItem := VSubMenuItem-1
-        V2SubMenuItem := V2SubMenuItem+1
-        If  V2SubMenuItem < 1 
-            V2SubMenuItem = 18
-        If  V2SubMenuItem > 18
-            V2SubMenuItem = 1
+        if (HSubMenuItem=2) {
+            V3SubMenuItem := V3SubMenuItem+1
+        } else {
+            V2SubMenuItem := V2SubMenuItem+1
+			If  V2SubMenuItem < 1 
+				V2SubMenuItem = 18
+			If  V2SubMenuItem > 18
+				V2SubMenuItem = 1
+        }
     }
     VSubMenuItem := VSubMenuItem+1
     If((SelectedMenuOption="Statistics")and(HSubMenuItem>1)){
@@ -2279,7 +2434,7 @@ MoveDown:
         If  V2SubMenuItem > % TotalMovesListPages
             V2SubMenuItem = 1
     }
-    If(((SelectedMenuOption="Guides") or (SelectedMenuOption="Manuals") or (SelectedMenuOption="Controller") or (SelectedMenuOption="Artwork") or (SelectedMenuOption="Guides"))and (HSubMenuItem>1) and (VSubMenuItem>=0)){
+    If(((SelectedMenuOption="Guides") or (SelectedMenuOption="Manuals") or (SelectedMenuOption="History") or (SelectedMenuOption="Controller") or (SelectedMenuOption="Artwork"))and (HSubMenuItem>1) and (VSubMenuItem>=0)){
         If((CurrentFileExtension <> "pdf") and (CurrentFileExtension <> "folder") and (CurrentCompressedFileExtension<> "true")){
             VSubMenuItem := VSubMenuItem-1
         }
@@ -2448,7 +2603,7 @@ SubMenuSwap:
         If  V2SubMenuItem > % StatisticsTablecount
             V2SubMenuItem = 1
     }    
-    If((SelectedMenuOption="Guides")or(SelectedMenuOption="Artwork")or(SelectedMenuOption="Manuals")){
+    If((SelectedMenuOption="Guides")or(SelectedMenuOption="Artwork")or(SelectedMenuOption="History")or(SelectedMenuOption="Manuals")){
         If  HSubMenuItem < 0
             HSubMenuItem = 1
         If  HSubMenuItem > % TotalCurrentPages
@@ -2459,20 +2614,27 @@ SubMenuSwap:
             VSubMenuItem = 0
     }
     If(SelectedMenuOption="Controller"){
-        If  HSubMenuItem < 0
-            HSubMenuItem = 1
-        If  HSubMenuItem > % TotalCurrentPages
-            HSubMenuItem = 1 
-        If (keymapperEnabled = "true") and (JoyIDsEnabled = "true"){
-            If  VSubMenuItem < -1
-                VSubMenuItem = % TotalSubMenuItems%SelectedMenuOption%
-            If  VSubMenuItem > % TotalSubMenuItems%SelectedMenuOption%
-                VSubMenuItem = -1
-        } Else {
-            If  VSubMenuItem < 0
-                VSubMenuItem = % TotalSubMenuItems%SelectedMenuOption%
-            If  VSubMenuItem > % TotalSubMenuItems%SelectedMenuOption%
-                VSubMenuItem = 0            
+        If((SelectedMenuOption="Controller") and (VSubMenuItem = -1) and (FullScreenView=1)){
+            If  HSubMenuItem < 0
+                HSubMenuItem = 2
+            If  HSubMenuItem > 2
+                HSubMenuItem = 1 
+            If (keymapperEnabled = "true") {
+                If  VSubMenuItem < -1
+                    VSubMenuItem = % TotalSubMenuItems%SelectedMenuOption%
+                If  VSubMenuItem > % TotalSubMenuItems%SelectedMenuOption%
+                    VSubMenuItem = -1
+            } Else {
+                If  VSubMenuItem < 0
+                    VSubMenuItem = % TotalSubMenuItems%SelectedMenuOption%
+                If  VSubMenuItem > % TotalSubMenuItems%SelectedMenuOption%
+                    VSubMenuItem = 0            
+            }
+        } else {
+            If  HSubMenuItem < 0
+                HSubMenuItem = 1
+            If  HSubMenuItem > % TotalCurrentPages
+                HSubMenuItem = 1 
         }
     }    
     If(SelectedMenuOption="Videos"){
@@ -2508,18 +2670,57 @@ ToggleItemSelectStatus:
         ItemSelected=1
         gosub, ExitHyperPause
     }
-    If((SelectedMenuOption="SaveState")or(SelectedMenuOption="ChangeDisc")){ 
+    If(SelectedMenuOption="SaveState"){ 
         ItemSelected=1
         gosub, ExitHyperPause
     }
-    If(((SelectedMenuOption="Statistics") or (SelectedMenuOption="Guides") or (SelectedMenuOption="Manuals") or (SelectedMenuOption="Controller") or (SelectedMenuOption="Artwork") or ((SelectedMenuOption="MovesList") and (HSubMenuItem=2)) or (SelectedMenuOption="HighScore")) and (VSubMenuItem > 0)){
+    If(SelectedMenuOption="ChangeDisc"){
+        gosub, DisableKeys
+        SetTimer, UpdateDescription, off
+        SetTimer, DiscChangeUpdate, off
+        ItemSelected=1
+        selectedRom:=romTable[HSubMenuItem,1]	; need to convert this for the next line to work
+        selectedRomNum:=romTable[HSubMenuItem,5]	; Store selected rom's Media and number
+        Log("SelectGame - User selected to load: " . selectedRom,4)
+        SplitPath, selectedRom,,HyperPause_RomPath,HyperPause_RomExt,HyperPause_DbName
+        HyperPause_RomExt := "." . HyperPause_RomExt	; need to add the period back in otherwise ByRef on the 7z call doesn't work
+        ;creating Disc Changing Screen
+        Loop, 9 {
+            If not (A_Index=8) {
+                CurrentGUI := A_Index+23
+                Gdip_GraphicsClear(HP_G%CurrentGUI%)
+                UpdateLayeredWindow(HP_hwnd%CurrentGUI%, HP_hdc%CurrentGUI%, 0, 0, A_ScreenWidth, A_ScreenHeight)
+            }
+        }
+        DiscChangeTextWidth := MeasureText(0,"Changing Disc",HyperPause_MainMenu_LabelFont,HyperPause_MainMenu_LabelFontsize,"bold")
+        Gdip_FillRoundedRectangle(HP_G24, BlackGradientBrush, (A_ScreenWidth-DiscChangeTextWidth)//2-5*ScallingFactor, (A_ScreenHeight-HyperPause_MainMenu_LabelFontsize)//2-5*ScallingFactor, DiscChangeTextWidth+10*ScallingFactor, HyperPause_MainMenu_LabelFontsize+10*ScallingFactor,5*ScallingFactor)
+        Gdip_TextToGraphics(HP_G24, "Changing Disc", "x" . (A_ScreenWidth-DiscChangeTextWidth)//2 . "y" . (A_ScreenHeight-HyperPause_MainMenu_LabelFontsize)//2 . "Centre c" . HyperPause_MainMenu_LabelSelectedColor . "r4 s" . HyperPause_MainMenu_LabelFontsize . " bold", HyperPause_MainMenu_LabelFont)	
+        UpdateLayeredWindow(HP_hwnd24, HP_hdc24, 0, 0, A_ScreenWidth, A_ScreenHeight)
+        If 7zEnabled = true	; Only need to continue If 7z support is turned on, this check is in case emu supports loading of compressed roms. No need to decompress our rom If it does
+            {	
+            If HyperPause_RomExt in %7zFormats%	; Check If our selected rom is compressed.
+                {	
+                Log("SelectGame - This game needs 7z to load. Sending it off for extraction: " . HyperPause_RomPath . "\" . HyperPause_DbName . HyperPause_RomExt,4)
+                7z%HSubMenuItem% := 7z(HyperPause_RomPath, HyperPause_DbName, HyperPause_RomExt, 7zExtractPath, "hp")	; Send chosen game to 7z for processing. We get back the same vars but updated to the new location.
+                selectedRom := HyperPause_RomPath . "\" . HyperPause_DbName . HyperPause_RomExt
+                Log("SelectGame - Returned from 7z extraction, path to new rom is: " . selectedRom,4)
+                romTable[HSubMenuItem,19] := HyperPause_RomPath	; storing path to extracted rom in column 19 so 7zCleanUp knows to delete it later
+                Log("SelectGame - Stored """ . HyperPause_RomPath . """ for deletion in 7zCleanup.",4)
+            } Else {
+                Log("SelectGame - This game does not need 7z. Sending it directly to the emu or to Daemon Tools If required.",4)
+            }
+            Log("SelectGame - Ended")
+        }
+        Gosub, ExitHyperPause
+    }
+    If(((SelectedMenuOption="Statistics") or (SelectedMenuOption="Guides") or (SelectedMenuOption="Manuals") or (SelectedMenuOption="History") or (SelectedMenuOption="Controller") or (SelectedMenuOption="Artwork") or ((SelectedMenuOption="MovesList") and (HSubMenuItem=2)) or (SelectedMenuOption="HighScore")) and (VSubMenuItem > 0)){
         If !((CurrentFileExtension = "txt") and (HSubMenuItem=1)){
             If(FullScreenView = 1){
                 If(SelectedMenuOption="MovesList"){
                     AdjustedPage := % (((V2SubMenuItem-1)*(LinesperFullScreenPage%SelectedMenuOption%))/LinesperPage%SelectedMenuOption%)+1
                     V2SubMenuItem := Floor(AdjustedPage)
                 }
-                If(((SelectedMenuOption="Manuals") and (CurrentFileExtension = "txt")) or ((SelectedMenuOption="Guides") and (CurrentFileExtension = "txt"))){
+                If(((SelectedMenuOption="Manuals") and (CurrentFileExtension = "txt")) or ((SelectedMenuOption="Guides") and (CurrentFileExtension = "txt")) or ((SelectedMenuOption="History") and (CurrentFileExtension = "txt"))){
                     AdjustedPage := % (((V2SubMenuItem-1)*(LinesperFullScreenPage%SelectedMenuOption%))/LinesperPage%SelectedMenuOption%)+1
                     V2SubMenuItem := Floor(AdjustedPage)
                     HSubmenuitem%SelectedMenuOption%V2Submenuitem%VSubmenuitem% = % V2SubMenuItem
@@ -2533,7 +2734,7 @@ ToggleItemSelectStatus:
                     AdjustedPage := % (((V2SubMenuItem-1)*(LinesperPage%SelectedMenuOption%))/LinesperFullScreenPage%SelectedMenuOption%)+1
                     V2SubMenuItem := Floor(AdjustedPage)
                 }
-                If(((SelectedMenuOption="Manuals") and (CurrentFileExtension = "txt")) or ((SelectedMenuOption="Guides") and (CurrentFileExtension = "txt"))){
+                If(((SelectedMenuOption="Manuals") and (CurrentFileExtension = "txt")) or ((SelectedMenuOption="Guides") and (CurrentFileExtension = "txt")) or ((SelectedMenuOption="History") and (CurrentFileExtension = "txt"))){
                      AdjustedPage := % (((V2SubMenuItem-1)*(LinesperPage%SelectedMenuOption%))/LinesperFullScreenPage%SelectedMenuOption%)+1
                     V2SubMenuItem := Floor(AdjustedPage)
                     HSubmenuitem%SelectedMenuOption%V2Submenuitem%VSubmenuitem% = % V2SubMenuItem
@@ -2560,31 +2761,56 @@ ToggleItemSelectStatus:
                 }
                 gosub, DrawSubMenu 
             } Else If(V2SubMenuItem > 2){
-                If (JoyIDsEnabled = "true") {
-                    If SelectedController 
-                        {
-                        Mid1 := joyConnectedInfo[SelectedController,3]
-						Pid1 := joyConnectedInfo[SelectedController,4]
-						Guid1 := joyConnectedInfo[SelectedController,5]
-						ChangeJoystickID%zz%(Mid1,Pid1,GUID1,V2SubMenuItem-2)
-                        Mid2 := joyConnectedInfo[V2SubMenuItem-2,3]
-						Pid2 := joyConnectedInfo[V2SubMenuItem-2,4]
-						Guid2 := joyConnectedInfo[V2SubMenuItem-2,5]
-						ChangeJoystickID%zz%(Mid2,Pid2,GUID2,SelectedController)
-                        RunKeymapper%zz%("menu",keymapper)
-                        SelectedController := ""
-                        Loop, 10 { ;Activating HyperPause Screen
-                            CurrentGUI := A_Index+21
-                            WinActivate, hpLayer%CurrentGUI%
+                If (HSubMenuItem = 2) {
+                    currentSelectedJoy := V2SubMenuItem-2
+                    currentSelectedProfileNumber := V3SubMenuItem
+					KeymapperProfileChangeInHyperPause = 1
+                    if !selectedProfile
+                        selectedProfile := []
+					If (keymapper = "xpadder") {
+						selectedProfile[V2SubMenuItem-2,1] := V3SubMenuItem
+						selectedProfile[V2SubMenuItem-2,2] := possibleProfilesList[V3SubMenuItem,4] ;store for later use with xpadder and joytokey run functions
+					} else if (keymapper="joy2key") OR (keymapper = "joytokey") {
+						Loop, 16
+						{
+							selectedProfile[A_Index,1] := V3SubMenuItem
+							selectedProfile[A_Index,2] := possibleProfilesList[V3SubMenuItem,4] ;store for later use with xpadder and joytokey run functions
+						}
+					}
+                    currentSelectedProfileFileName := possibleProfilesList[V3SubMenuItem,1] ;FileName
+                    currentSelectedProfileFolderType := possibleProfilesList[V3SubMenuItem,2] ;FolderType
+                    currentSelectedProfileControllerSpecificBoolean := possibleProfilesList[V3SubMenuItem,3] ;Controller_specific_Boolean
+                    currentSelectedProfileFilePath := possibleProfilesList[V3SubMenuItem,4] ;FilePath
+     
+                    HSubMenuItem = 1
+                    gosub, DrawSubMenu 
+                } else {
+                    If (JoyIDsEnabled = "true") {
+                        If SelectedController 
+                            {
+                            Mid1 := joyConnectedInfo[SelectedController,3]
+                            Pid1 := joyConnectedInfo[SelectedController,4]
+                            Guid1 := joyConnectedInfo[SelectedController,5]
+                            ChangeJoystickID%zz%(Mid1,Pid1,GUID1,V2SubMenuItem-2)
+                            Mid2 := joyConnectedInfo[V2SubMenuItem-2,3]
+                            Pid2 := joyConnectedInfo[V2SubMenuItem-2,4]
+                            Guid2 := joyConnectedInfo[V2SubMenuItem-2,5]
+                            ChangeJoystickID%zz%(Mid2,Pid2,GUID2,SelectedController)
+                            RunKeymapper%zz%("menu",keymapper)
+                            SelectedController := ""
+                            Loop, 10 { ;Activating HyperPause Screen
+                                CurrentGUI := A_Index+21
+                                WinActivate, hpLayer%CurrentGUI%
+                            }
+                            gosub, DrawSubMenu 
+                        } Else {
+                            SelectedController := V2SubMenuItem-2
+                            gosub, DrawSubMenu 
                         }
-                        gosub, DrawSubMenu 
                     } Else {
-                        SelectedController := V2SubMenuItem-2
-                        gosub, DrawSubMenu 
+                        tooltip, Enable JoyIDs to be able to change the controller order 
+                        settimer,EndofToolTipDelay, -2000   
                     }
-                } Else {
-                    tooltip, Enable JoyIDs to be able to change the controller order 
-                    settimer,EndofToolTipDelay, -2000   
                 }
             }
         } Else {
@@ -2833,16 +3059,20 @@ ExitHyperPause:
             current := A_Index
             Loop, 19 
                 {
-                If (A_Index > 6)
+                If (A_Index > 6 && A_Index != 19)	; do not wipe column 19 which has 7zCleanup data
+
                     romTable[current, A_Index] := ""
             }
         }
     }
+    if HyperPause_ChangeRes
+        ChangeDisplaySettings(HyperPause_ScreenResToBeRestoredArray1,HyperPause_ScreenResToBeRestoredArray2,HyperPause_ScreenResToBeRestoredArray3,HyperPause_ScreenResToBeRestoredArray4)
     If !disableLoadScreen
         If !disableActivateBlackScreen
             WinActivate, HyperPauseBlackScreen
-    Loop, 10 {
-        If not (A_Index=9) {
+    Loop, 11
+        {
+		If not (A_Index=10) {
             CurrentGUI := A_Index+21
             SelectObject(HP_hdc%CurrentGUI%, HP_obm%CurrentGUI%)
             DeleteObject(HP_hbm%CurrentGUI%)
@@ -2854,8 +3084,8 @@ ExitHyperPause:
     If(TotalSubMenuItemsVideos>0)
         Gui, HP_GUI31: Destroy
     Log("Guis destroyed",5)
-    Gdip_DeleteBrush(BlackGradientBrush), Gdip_DeleteBrush(PBRUSH), Gdip_DeleteBrush(HyperPause_SubMenu_BackgroundBrushV), Gdip_DeleteBrush(HyperPause_SubMenu_SelectedBrushV), Gdip_DeleteBrush(HyperPause_SubMenu_DisabledBrushV), Gdip_DeleteBrush(HyperPause_BackgroundBrushV), Gdip_DeleteBrush(HyperPause_SubMenu_GuidesSelectedBrushV), Gdip_DeleteBrush(HyperPause_SubMenu_ManualsSelectedBrushV), Gdip_DeleteBrush(HyperPause_SubMenu_ControllerSelectedBrushV), Gdip_DeleteBrush(HyperPause_SubMenu_ArtworkSelectedBrushV),Gdip_DeleteBrush(HyperPause_SubMenu_FullScreenTextBrushV), Gdip_DeleteBrush(HyperPause_SubMenu_FullScreenBrushV)
-    Log("Brushes deleted",5)
+    Gdip_DeleteBrush(BlackGradientBrush), Gdip_DeleteBrush(PBRUSH), Gdip_DeleteBrush(HyperPause_SubMenu_BackgroundBrushV), Gdip_DeleteBrush(HyperPause_SubMenu_SelectedBrushV), Gdip_DeleteBrush(HyperPause_SubMenu_DisabledBrushV), Gdip_DeleteBrush(HyperPause_BackgroundBrushV), Gdip_DeleteBrush(HyperPause_SubMenu_GuidesSelectedBrushV), Gdip_DeleteBrush(HyperPause_SubMenu_ManualsSelectedBrushV), Gdip_DeleteBrush(HyperPause_SubMenu_HistorySelectedBrushV), Gdip_DeleteBrush(HyperPause_SubMenu_ControllerSelectedBrushV), Gdip_DeleteBrush(HyperPause_SubMenu_ArtworkSelectedBrushV),Gdip_DeleteBrush(HyperPause_SubMenu_FullScreenTextBrushV), Gdip_DeleteBrush(HyperPause_SubMenu_FullScreenBrushV), Gdip_DeleteBrush(HyperPause_7zProgress_BackgroundBrush), Gdip_DeleteBrush(HyperPause_7zProgress_BarBackBrush), Gdip_DeleteBrush(HyperPause_7zProgress_BarBrush) 
+	Log("Brushes deleted",5)
     Gdip_DisposeImage(MainMenuBackgroundBitmap), Gdip_DisposeImage(WheelImageBitmap), Gdip_DisposeImage(PauseImageBitmap), Gdip_DisposeImage(SoundBitmap), Gdip_DisposeImage(MuteBitmap), Gdip_DisposeImage(ButtonToggleONBitmap), Gdip_DisposeImage(ButtonToggleOFFBitmap), Gdip_DisposeImage(CurrentBitmap), Gdip_DisposeImage(SelectedBitmap), Gdip_DisposeImage(pGameScreenshot)
     Loop, 5
         Gdip_DisposeImage(HyperPauseMusicBitmap%A_Index%)
@@ -2872,12 +3102,34 @@ ExitHyperPause:
         Gdip_DisposeImage(romTable[A_Index, 17]), Gdip_DisposeImage(romTable[A_Index, 18])
     }      
     Log("Disposed images",5)
-    If (keymapperEnabled = "true") and (keymapperHyperLaunchProfileEnabled = "true") {
-        RunKeymapper%zz%("load",keymapper)
+    If (keymapperEnabled = "true") {
+		If (KeymapperProfileChangeInHyperPause = 1) {
+			SplitPath, keymapperFullPath, keymapperExe, keymapperPath, keymapperExt
+			If (keymapper = "xpadder") {
+				Loop, 16
+				{
+					ControllerName := joystickArray[A_Index,1]
+					If ControllerName {
+						If !ProfilesInIdOrder
+							ProfilesInIdOrder := selectedProfile[A_Index,2]
+						Else
+							ProfilesInIdOrder .= "|" . selectedProfile[A_Index,2]
+					}
+				}
+				RunXpadder%zz%(keymapperPath,keymapperExe,ProfilesInIdOrder,joystickArray)
+				ProfilesInIdOrder := "" 		;clear so this variable doesn't grow by duplication on 2nd or more closings of HyperPause
+			} Else If (keymapper="joy2key") OR (keymapper = "joytokey") {
+				RunJoyToKey%zz%(keymapperPath,keymapperExe,selectedProfile[1,2])
+				}
+		} Else If (keymapperHyperLaunchProfileEnabled = "true") {
+			RunKeymapper("load",keymapper)
+		}
         If !disableLoadScreen
             If !disableActivateBlackScreen
                 WinActivate, HyperPauseBlackScreen
     }
+	If keymapperAHKMethod = External
+		RunAHKKeymapper%zz%("load")
     If !disableSuspendEmu  ;Unsuspending Emulator Process 
         {
         ProcRes(emulatorProcessName)
@@ -2912,25 +3164,39 @@ ExitHyperPause:
     Log("Setting HP starting end for subtracting from statistics played time: " HyperPause_EndTime,5)
     TotalElapsedTimeinPause :=  If TotalElapsedTimeinPause ? TotalElapsedTimeinPause + (HyperPause_EndTime-HyperPause_BeginTime)//1000 : (HyperPause_EndTime-HyperPause_BeginTime)//1000
     If !disableLoadScreen {
-        SelectObject(HP_hdc21, HP_obm21)
-        DeleteObject(HP_hbm21)
-        DeleteDC(HP_hdc21)
-        Gdip_DeleteGraphics(HP_G21)
-        Gui, HP_GUI21: Destroy  
+        If ( !((ItemSelected=1) and (SelectedMenuOption="ChangeDisc")) or ((ItemSelected=1) and (SelectedMenuOption="ChangeDisc") and !(forceMGGuiDestroy)) ) {
+            SelectObject(HP_hdc21, HP_obm21)
+            DeleteObject(HP_hbm21)
+            DeleteDC(HP_hdc21)
+            Gdip_DeleteGraphics(HP_G21)
+            Gui, HP_GUI21: Destroy  
+        }
     }
     Log("Black Screen Gui destroyed",5)
     XHotKeywrapper(exitEmulatorKey,"CloseProcess","ON")
     XHotKeywrapper(hpKey,"TogglePauseMenuStatus","ON")
     If mgEnabled = true
         XHotKeywrapper(mgKey,"StartMulti","ON")
-    Log("Enabling HyperLaunch Keys",5)
+    If bezelEnabled = true
+	{	Gosub, EnableBezelKeys	; turning on the bezel keys
+        if ICRightMenuDraw 
+            Gosub, EnableICRightMenuKeys
+        if ICLeftMenuDraw
+            Gosub, EnableICLeftMenuKeys
+        if (bezelBackgroundsList.MaxIndex() > 1)
+            if bezelBackgroundChangeDur
+                settimer, BezelBackgroundTimer, %bezelBackgroundChangeDur%
+	}
+    Log("Enabled exit emulator, bezel, and multigame keys",5)
     Gosub, SendCommandstoEmulator
-    If((ItemSelected=1)and(SelectedMenuOption="ChangeDisc")){ 
-        If statisticsEnabled = true
-            gosub, UpdateStatistics
-        gameSectionStartTime := A_TickCount
-        gameSectionStartHour := A_Now
-        gosub, MultiGame
+    If !disableLoadScreen {
+        If ((ItemSelected=1) and (SelectedMenuOption="ChangeDisc") and (forceMGGuiDestroy)) {
+            SelectObject(HP_hdc21, HP_obm21)
+            DeleteObject(HP_hbm21)
+            DeleteDC(HP_hdc21)
+            Gdip_DeleteGraphics(HP_G21)
+            Gui, HP_GUI21: Destroy  
+        }
     }
     SetKeyDelay, %SavedKeyDelay%
     Log("HyperPause Closed",1)
@@ -3002,6 +3268,17 @@ SimplifiedExitHyperPause:
     XHotKeywrapper(hpKey,"TogglePauseMenuStatus","ON")
     If mgEnabled = true
         XHotKeywrapper(mgKey,"StartMulti","ON")
+	If bezelEnabled = true
+	{	Gosub, EnableBezelKeys	; turning on the bezel keys
+        if ICRightMenuDraw 
+            Gosub, EnableICRightMenuKeys
+        if ICLeftMenuDraw
+            Gosub, EnableICLeftMenuKeys
+        if (bezelBackgroundsList.MaxIndex() > 1)
+            if bezelBackgroundChangeDur
+                settimer, BezelBackgroundTimer, %bezelBackgroundChangeDur%
+	}
+	Log("Enabled exit emulator, bezel, and multigame keys",5)
     HyperPause_Active:=false
     HyperPause_Running:=false
 Return
@@ -3009,52 +3286,136 @@ Return
 SendCommandstoEmulator:
     If (ItemSelected = 1){
         If((SelectedMenuOption="SaveState")or(SelectedMenuOption="LoadState")){ 
-            Loop, parse, hp%SelectedMenuOption%KeyCodes,|, 
-            {
-                If(VSubMenuItem=A_Index){
-                    If(SelectedMenuOption="SaveState") {
-                        SaveTime := "This game was saved in " A_DDDD ", " A_MMMM " " A_DD ", " A_YYYY ", at " A_Hour ":" A_Min ":" A_Sec  
-                        RIni_SetKeyValue(1,dbName, SelectedMenuOption . VSubMenuItem . "SaveTime",SaveTime) ; makes sure that save state info is saved on statistics update   
-                        IniWrite, %SaveTime%, %HyperPause_GameStatistics%%systemName%.ini, %dbName%, %SelectedMenuOption%%VSubMenuItem%SaveTime ; saves save state info between HYperPause menu calls
-                    }         
-                    KeySelected:=A_LoopField
-                    break
+            currentLabel := SelectedMenuOption . "Slot" . VSubMenuItem
+            if IsLabel(currentLabel) 
+                {
+                Gosub %currentLabel%
+                If(SelectedMenuOption="SaveState") {
+                    SaveTime := "This game was saved in " A_DDDD ", " A_MMMM " " A_DD ", " A_YYYY ", at " A_Hour ":" A_Min ":" A_Sec  
+                    RIni_SetKeyValue(1,dbName, SelectedMenuOption . VSubMenuItem . "SaveTime",SaveTime) ; makes sure that save state info is saved on statistics update   
+                    IniWrite, %SaveTime%, %HyperPause_GameStatistics%%systemName%.ini, %dbName%, %SelectedMenuOption%%VSubMenuItem%SaveTime ; saves save state info between HYperPause menu calls
+                } 
+            } else {
+                Loop, parse, hp%SelectedMenuOption%KeyCodes,|, 
+                {
+                    If(VSubMenuItem=A_Index){
+                        If(SelectedMenuOption="SaveState") {
+                            SaveTime := "This game was saved in " A_DDDD ", " A_MMMM " " A_DD ", " A_YYYY ", at " A_Hour ":" A_Min ":" A_Sec  
+                            RIni_SetKeyValue(1,dbName, SelectedMenuOption . VSubMenuItem . "SaveTime",SaveTime) ; makes sure that save state info is saved on statistics update   
+                            IniWrite, %SaveTime%, %HyperPause_GameStatistics%%systemName%.ini, %dbName%, %SelectedMenuOption%%VSubMenuItem%SaveTime ; saves save state info between HYperPause menu calls
+                        }         
+                        KeySelected:=A_LoopField
+                        break
+                    }
                 }
-            }
-            sleep, %HyperPause_DelaytoSendKeys%
-            Loop, parse, KeySelected,;, 
-            {
-                If InStr(A_LoopField,"Sleep"){
-                    StringReplace, SleepPeriod, A_LoopField, Sleep, , all
-                    Sleep, %SleepPeriod%
-                } Else {
-                    Send, , %A_LoopField%
+                sleep, %HyperPause_DelaytoSendKeys%
+                Loop, parse, KeySelected,;, 
+                {
+                    If InStr(A_LoopField,"Sleep"){
+                        StringReplace, SleepPeriod, A_LoopField, Sleep, , all
+                        Sleep, %SleepPeriod%
+                    } Else {
+                        Send, , %A_LoopField%
+                    }
                 }
+                Log(SelectedMenuOption " KeySelected " KeySelected " sent to the emulator",1)
             }
-            Log(SelectedMenuOption " KeySelected " KeySelected " sent to the emulator",1)
-            
-            If(SelectedMenuOption="SaveState") {
-                gosub, SaveScreenshot   
+            If(SelectedMenuOption="SaveState") and (HyperPause_SaveStateScreenshot = "true") {
+                gosub, SaveScreenshot  
                 RIni_SetKeyValue(1,dbName, "SaveState" . VSubMenuItem . "Screenshot",CurrentScreenshotFileName) ; makes sure that save state info is saved on statistics update   
                 IniWrite, %CurrentScreenshotFileName%, %HyperPause_GameStatistics%%systemName%.ini, %dbName%, SaveState%VSubMenuItem%Screenshot ; saves save state info between HYperPause menu calls
             }
         }
         If(SelectedMenuOption="ChangeDisc"){
-            ChandeDiscSelected = true
-            ;selectedRom:=HPromTable[HSubMenuItem,1]
-            selectedRom:=romTable[HSubMenuItem,1]
-            SplitPath, selectedRom,,mgRomPath,mgRomExt,mgDbName
-            If romNeeds7z {
-                mgRomExt:="." . mgRomExt
-                7z%currentButton% := 7z(mgRomPath, mgDbName, mgRomExt, 7zExtractDir)
-                ;HPromTable[HSubMenuItem,19]:=mgRomPath . mgDbName
-                romTable[HSubMenuItem,19]:=mgRomPath . mgDbName
-            }
-            Log("Change Disc command sent to module",1)
+            If statisticsEnabled = true
+                gosub, UpdateStatistics
+            gameSectionStartTime := A_TickCount
+            gameSectionStartHour := A_Now
+            Log("HyperPauseExit - Processing MultiGame label in module.",4)
+            gosub, MultiGame
+            Log("HyperPauseExit - Finished Processing MultiGame label.",4)
         }
     }
 Return
 
+
+;--- Change Disc Labels
+
+HyperPause_UpdateFor7z:
+	Gosub, HyperPause_ProgressBarAnimation	; Calling HyperPause progress bar animation
+Return
+
+HyperPause_ProgressBarAnimation:
+	; start the progress bar animation Loop
+	Log("HyperPause_ProgressBarAnimation - Started")
+	currentFloat := A_FormatFloat 
+	SetFormat, Float, 3.2	; required otherwise calculations below falsely trigger
+	HyperPause_7zProgress_FinishedBar := 0
+    Loop {
+		Gdip_GraphicsClear(HP_G25)
+		; Updating 7z extraction info
+		romExPercentageAndFile := COM_Invoke(HLObject, "getExtractionSize", 7zRomPath, 0)	; Get the current file being extracted and size of the 7z Extract Path - (Extraction Progress (Accurate Method))
+		Loop, Parse, romExPercentageAndFile, |	; StringSplit oddly doesn't work for some unknown reason, must resort to a parsing Loop instead
+			If A_Index = 1
+			{
+				romExCurSize := A_LoopField									; Store bytes extracted
+				percentage := (A_LoopField / romExSize) * 100	; Calculate percentage extracted
+			} Else If A_Index = 2
+				romExFile := A_LoopField
+		; Drawing progress Bar
+		; Appearance Options:
+		HyperPause_7zProgress_BarW := round(600*ScallingFactor)
+		HyperPause_7zProgress_BarH := round(30*ScallingFactor)
+		HyperPause_7zProgress_BarBackgroundMargin := round(40*ScallingFactor)
+		HyperPause_7zProgress_BarBackgroundRadius := round(10*ScallingFactor) 
+		HyperPause_7zProgress_BarX := (A_ScreenWidth - HyperPause_7zProgress_BarW)//2 - HyperPause_7zProgress_BarBackgroundMargin 
+		HyperPause_7zProgress_BarY := 3*(A_ScreenHeight)//4 - (HyperPause_7zProgress_BarH+HyperPause_7zProgress_BarBackgroundMargin)//2
+		HyperPause_7zProgress_BarR := round(10*ScallingFactor)
+		HyperPause_7zProgress_BarBackgroundColor := "BB000000"
+		HyperPause_7zProgress_BarBackColor := "BB555555"
+		HyperPause_7zProgress_BarColor := "DD00BFFF"
+		HyperPause_7zProgress_BarHatchStyle := 3
+		HyperPause_7zProgress_BarText1Options := "cFFFFFFFF r4 s" . round(20*ScallingFactor) . " Right Bold"
+		HyperPause_7zProgress_BarText1 := "Loading Game"
+		HyperPause_7zProgress_BarText2Options := "cFFFFFFFF r4 s" . round(20*ScallingFactor) . " Right Bold"
+		HyperPause_7zProgress_BarText2 := "Extraction Complete"
+        HyperPause_7zProgress_Font := "BEBAS NEUE"
+		; Drawing Bar Background
+		HyperPause_7zProgress_BackgroundBrush := Gdip_BrushCreateSolid("0x" . HyperPause_7zProgress_BarBackgroundColor)
+		HyperPause_7zProgress_BarBackBrush := Gdip_BrushCreateSolid("0x" . HyperPause_7zProgress_BarBackColor)
+		HyperPause_7zProgress_BarBrush := Gdip_BrushCreateHatch(0x00000000, "0x" . HyperPause_7zProgress_BarColor, HyperPause_7zProgress_BarHatchStyle) 
+		Gdip_FillRoundedRectangle(HP_G25, HyperPause_7zProgress_BackgroundBrush, 0, 0, HyperPause_7zProgress_BarW+2*HyperPause_7zProgress_BarBackgroundMargin, HyperPause_7zProgress_BarH+2*HyperPause_7zProgress_BarBackgroundMargin,HyperPause_7zProgress_BarBackgroundRadius)
+		Gdip_FillRoundedRectangle(HP_G25, HyperPause_7zProgress_BarBackBrush, HyperPause_7zProgress_BarBackgroundMargin, HyperPause_7zProgress_BarBackgroundMargin, HyperPause_7zProgress_BarW, HyperPause_7zProgress_BarH, HyperPause_7zProgress_BarR)
+		; Drawing Progress Bar
+		If percentage > 100
+			percentage := 100
+		If(HyperPause_7zProgress_BarW*percentage/100<3*HyperPause_7zProgress_BarR)	; avoiding glitch in rounded rectangle drawing when they are too small
+			currentRBar := HyperPause_7zProgress_BarR * ((HyperPause_7zProgress_BarW*percentage/100)/(3*HyperPause_7zProgress_BarR))
+		Else
+			currentRBar := HyperPause_7zProgress_BarR
+		Gdip_TextToGraphics(HP_G25, round(percentage) . "%", "x" round(HyperPause_7zProgress_BarBackgroundMargin+HyperPause_7zProgress_BarW*percentage/100) " y" (HyperPause_7zProgress_BarBackgroundMargin-20*ScallingFactor)//2 . " " . HyperPause_7zProgress_BarText1Options, HyperPause_7zProgress_Font, 0, 0)
+		If percentage < 100
+			If (fadeBarInfoText = "true")
+				Gdip_TextToGraphics(HP_G25, HyperPause_7zProgress_BarText1, "x" HyperPause_7zProgress_BarBackgroundMargin+HyperPause_7zProgress_BarW " y" HyperPause_7zProgress_BarBackgroundMargin+HyperPause_7zProgress_BarH+(HyperPause_7zProgress_BarBackgroundMargin-20*ScallingFactor)//2 . " " . HyperPause_7zProgress_BarText1Options, HyperPause_7zProgress_Font, 0, 0)
+		Else {	; bar is at 100%
+			HyperPause_7zProgress_FinishedBar:= 1
+			Log("HyperPause_ProgressBarAnimation - Bar reached 100%",4)
+			If (fadeBarInfoText = "true")
+				Gdip_TextToGraphics(HP_G25, HyperPause_7zProgress_BarText2, "x" HyperPause_7zProgress_BarBackgroundMargin+HyperPause_7zProgress_BarW " y" HyperPause_7zProgress_BarBackgroundMargin+HyperPause_7zProgress_BarH+(HyperPause_7zProgress_BarBackgroundMargin-20*ScallingFactor)//2 . " " . HyperPause_7zProgress_BarText2Options, HyperPause_7zProgress_Font, 0, 0)
+		}
+		Gdip_FillRoundedRectangle(HP_G25, HyperPause_7zProgress_BarBrush, HyperPause_7zProgress_BarBackgroundMargin, HyperPause_7zProgress_BarBackgroundMargin, HyperPause_7zProgress_BarW*percentage/100, HyperPause_7zProgress_BarH,currentRBar)
+		UpdateLayeredWindow(HP_hwnd25, HP_hdc25,HyperPause_7zProgress_BarX,HyperPause_7zProgress_BarY, HyperPause_7zProgress_BarW+2*HyperPause_7zProgress_BarBackgroundMargin, HyperPause_7zProgress_BarH+2*HyperPause_7zProgress_BarBackgroundMargin)
+		Process, Exist, 7z.exe	; This breaks out of 7z.exe If it's no longer running. Sometimes an extraction was very quick or there was an error and we don't want to be stuck in an infinite Loop
+		If !ErrorLevel ; bar is at 100% or 7z is already closed or user interrupted fade, so break out
+		{	Log("HyperPause_ProgressBarAnimation - 7z.exe is no longer running, breaking out of progress loop.",4)
+			Break
+		}
+		If HyperPause_7zProgress_FinishedBar
+			Break
+	}
+	SetFormat, Float, %currentFloat%	; restore previous float
+	Log("HyperPause_ProgressBarAnimation - Ended")
+Return
 
 ;-----------------SUB MENU LIST AND DRAWING FUNCTIONS------------
 VideosSubMenuList(SubMenuName)
@@ -3433,8 +3794,10 @@ MultiContentSubMenuList(SubMenuName)
         }
     }
     VMargin := % HyperPause_%SubMenuName%_VMargin ;Counting total number of pages in txt files
-    LinesperPage%SubMenuName% := round((HyperPause_SubMenu_Height-VMargin)/(1.5*HyperPause_SubMenu_SmallFontSize)) ;Number of Lines per page
-    LinesperFullScreenPage%SubMenuName% := round((A_ScreenHeight - HyperPause_SubMenu_FullScreenMargin - 5*HyperPause_SubMenu_FullScreenFontSize)/(1.5*HyperPause_SubMenu_SmallFontSize)) ;Number of lines in Full Screen    
+    LinesperPage%SubMenuName% := round((HyperPause_SubMenu_Height-2*VMargin-2*HyperPause_SubMenu_SmallFontSize)/(HyperPause_SubMenu_SmallFontSize)) ;Number of Lines per page
+    LinesperFullScreenPage%SubMenuName% := round((A_ScreenHeight - 4*HyperPause_SubMenu_FullScreenMargin-2*HyperPause_SubMenu_SmallFontSize)/(HyperPause_SubMenu_SmallFontSize)) ;Number of lines in Full Screen    
+    ;LinesperPage%SubMenuName% := round((HyperPause_SubMenu_Height-VMargin)/(1.5*HyperPause_SubMenu_SmallFontSize)) ;Number of Lines per page
+    ;LinesperFullScreenPage%SubMenuName% := round((A_ScreenHeight - HyperPause_SubMenu_FullScreenMargin - 5*HyperPause_SubMenu_FullScreenFontSize)/(1.5*HyperPause_SubMenu_SmallFontSize)) ;Number of lines in Full Screen    
     Loop, % TotalSubMenuItems%SubMenuName%
         {
         count2 := A_index
@@ -3478,7 +3841,7 @@ MultiContentSubMenuList(SubMenuName)
     }        
     If (SubMenuName="Controller") {
         If (FileCount=0) 
-            If !((keymapperEnabled = "true") and (JoyIDsEnabled = "true"))
+            If !((keymapperEnabled = "true"))
                 StringReplace, HyperPause_MainMenu_Labels, HyperPause_MainMenu_Labels, %SubMenuName%|,
     } Else If (FileCount=0){ ;excluding submenu If no files are found 
         StringReplace, HyperPause_MainMenu_Labels, HyperPause_MainMenu_Labels, %SubMenuName%|,
@@ -3486,6 +3849,121 @@ MultiContentSubMenuList(SubMenuName)
  Return   
 }
 
+
+loadHistoryDataInfo(){
+	global
+    IniRead, historyDatSystemName, %HyperPause_HistoryDatPath%System Names.ini, Settings, %systemName%, %A_Space%
+    IniRead, romNameToSearch, %HyperPause_HistoryDatPath%%systemName%.ini, %dbName%, Alternate_Rom_Name, %A_Space%
+    if !romNameToSearch
+        romNameToSearch := dbName
+    FileRead, historyContents, %HyperPause_HistoryDatPath%History.dat
+    FoundPos := RegExMatch(historyContents, "i)" . "\$\s*" . historyDatSystemName . "\s*=\s*.*\b" . romNameToSearch . "\b\s*,")
+    If !FoundPos {
+        If !GameXMLInfo
+            gosub ReadHyperSpinXML
+        If XMLcloneof
+            FoundPos := RegExMatch(historyContents, "i)" . "\$\s*" . historyDatSystemName . "\s*=\s*.*\b" . XMLcloneof . "\b\s*,")
+    }
+    If FoundPos
+        {
+        FoundPos2 := RegExMatch(historyContents, "i)\$end",EndString,FoundPos)
+        StringMid, HistoryDataText, historyContents, % FoundPos, % FoundPos2-FoundPos
+        historySectionNumber := 1
+        HistoryList := "|"
+        Loop, parse, HistoryDataText, `n, `r  
+            {
+            if historyDatSectionName%historySectionNumber% := historyDatSection(A_LoopField)
+                {
+                currentHistorySectionNumber := historySectionNumber
+                historySectionNumber++
+            } else if (historySectionNumber>1) {
+                HistoryFileTxtContents%currentHistorySectionNumber% := % HistoryFileTxtContents%currentHistorySectionNumber% . "`n`r" . A_LoopField
+            }
+        }
+        count := 0
+        loop, % currentHistorySectionNumber
+            {
+            if !InStr(historyDatSectionName%A_Index%, "SOURCES") {
+                count++
+                HistoryFileTxtContents%count%:=RegExReplace(HistoryFileTxtContents%count%,"^\s+|\s+$")
+                HistoryList := % HistoryList . historyDatSectionName%count% . "|"
+                HistoryFileExtension%count%:="txt"
+            }
+        }
+        TotalSubMenuItemsHistory := count
+        If (TotalSubMenuItemsHistory=0){ ;excluding submenu If no items are found 
+            StringReplace, HyperPause_MainMenu_Labels, HyperPause_MainMenu_Labels, History|,
+            Return
+        }
+        StringTrimRight, HistoryList, HistoryList, 1
+        StringTrimLeft, HistoryList, HistoryList, 1
+        HistoryMaxFontListWidth = %HyperPause_SubMenu_MinimumTextBoxWidth% ;determining max text size of submenulabels and initializing video positions
+        Loop, parse, HistoryList,|, 
+            {
+            FontListWidth := MeasureText(0,A_LoopField,HyperPause_SubMenu_LabelFont,HyperPause_SubMenu_LabelFontSize,"bold")+HyperPause_SubMenu_AdditionalTextMarginContour
+            If(FontListWidth>HistoryMaxFontListWidth){
+                HistoryMaxFontListWidth := FontListWidth
+            }    
+        }        
+        VMargin := % HyperPause_History_VMargin ;Counting total number of pages in txt files
+        LinesperPageHistory := round((HyperPause_SubMenu_Height-2*VMargin-2*HyperPause_SubMenu_SmallFontSize)/(HyperPause_SubMenu_SmallFontSize)) ;Number of Lines per page
+        LinesperFullScreenPageHistory := round((A_ScreenHeight - 4*HyperPause_SubMenu_FullScreenMargin-2*HyperPause_SubMenu_SmallFontSize)/(HyperPause_SubMenu_SmallFontSize)) ;Number of lines in Full Screen    
+        ;LinesperPageHistory := round((HyperPause_SubMenu_Height-VMargin)/(1.5*HyperPause_SubMenu_SmallFontSize)) ;Number of Lines per page
+        ;LinesperFullScreenPageHistory := round((A_ScreenHeight - HyperPause_SubMenu_FullScreenMargin - 5*HyperPause_SubMenu_FullScreenFontSize)/(1.5*HyperPause_SubMenu_SmallFontSize)) ;Number of lines in Full Screen    
+        Loop, % TotalSubMenuItemsHistory
+            {
+            count2:=A_Index
+            count3:=1
+            count4:=1
+            FileTxtWidth%count2% := MeasureText(0,HistoryFileTxtContents%count2%,HyperPause_SubMenu_Font,HyperPause_SubMenu_SmallFontSize,"Regular")
+            Loop, parse, HistoryFileTxtContents%count2%, `n, `r  
+                {
+                FirstLine := (count3-1)*LinesperPageHistory
+                LastLine := FirstLine + LinesperPageHistory
+                FullScreenFirstLine := % (count4-1) * LinesperFullScreenPageHistory
+                FullScreenLastLine := % FullScreenFirstLine + LinesperFullScreenPageHistory
+                HistoryFileTxtContents%count2%Page%count3% := % HistoryFileTxtContents%count2%Page%count3% A_LoopField "`r`n"
+                If(A_index >= FirstLine){
+                    If(A_index > LastLine){
+                    count3++
+                    }
+                }
+                HistoryFileTxtContents%count2%FullScreenPage%count4% := % HistoryFileTxtContents%count2%FullScreenPage%count4% A_LoopField "`r`n"
+                If(A_index >= FullScreenFirstLine){
+                    If(A_index > FullScreenLastLine){
+                        count4++
+                    }
+                }    
+            }
+            TotalV2SubMenuItemsHistory%count2% := % count3
+            TotalFullScreenV2SubMenuItemsHistory%count2% := % count4
+        }
+    } else {
+		StringReplace, HyperPause_MainMenu_Labels, HyperPause_MainMenu_Labels, History|,
+        Return
+    }
+Return	
+}
+
+historyDatSection(line){
+	line:=RegExReplace(line,"^\s+|\s+$")  ; remove leading and trailing
+	if InStr(line, "$bio")
+		Return "DESCRIPTION"
+	if !( InStr(line, "-") = 1 )
+		Return 0
+	if !( InStr(line, "-",false,0) = StrLen(line) )
+		Return 0
+	StringTrimLeft, line, line, 1
+	StringTrimRight, line, line, 1
+	line:=RegExReplace(line,"^\s+|\s+$")  ; remove leading and trailing
+	sectionName := line
+	StringReplace, line, line, %A_SPACE%, , All
+	If line is upper
+		Return %sectionName%
+	else
+		Return 0
+Return
+}
       
       
 TextImagesAndPDFMenu(SubMenuName)
@@ -3962,7 +4440,16 @@ ReadMovesListInformation() ;Reading Moves List info
         TotalSubMenuItemsMovesList++
     }
     If (TotalSubMenuItemsMovesList<>0){    ;Loading button images
-        Loop, %HyperPause_MovesListImagePath%\Icons\*.png, 0
+        If FileExist(HyperPause_MovesListImagePath . systemName . "\"  . dbName . "\*.png")
+            HyperPause_MovesListCurrentPath := HyperPause_MovesListImagePath . systemName . "\"  . dbName . "\"
+        Else If FileExist(HyperPause_MovesListImagePath . systemName . "\"  . DescriptionNameWithoutDisc . "\*.png")
+            HyperPause_MovesListCurrentPath := HyperPause_MovesListImagePath . systemName . "\"  . DescriptionNameWithoutDisc . "\"
+        Else If FileExist(HyperPause_MovesListImagePath . systemName . "\_Default\*.png")
+            HyperPause_MovesListCurrentPath := HyperPause_MovesListImagePath . systemName . "\_Default\"
+        Else FileExist(HyperPause_MovesListImagePath . "_Default\*.png")
+            HyperPause_MovesListCurrentPath := HyperPause_MovesListImagePath . "_Default\"
+        Log("Moves List icons path: " . HyperPause_MovesListCurrentPath,5)
+        Loop, %HyperPause_MovesListCurrentPath%\*.png, 0
             { 
             StringTrimRight, FileNameWithoutExtension, A_LoopFileName, 4 
             CommandDatImageFileList .= FileNameWithoutExtension . "`,"
@@ -4007,7 +4494,7 @@ CreatingStatisticsVariablestoSubmenu()
     If(Initial_General_Statistics_Statistic_2=0){
         Value_General_Statistics_Statistic_2 := "Never"
     } Else {
-        FormatTime, Value_General_Statistics_Statistic_2, gameSectionStartTime, dddd MMMM d, yyyy hh:mm:ss tt
+        FormatTime, Value_General_Statistics_Statistic_2, %gameSectionStartHour%, dddd MMMM d, yyyy hh:mm:ss tt
     }
     If (Initial_General_Statistics_Statistic_3>0)
         Value_General_Statistics_Statistic_3 := GetTimeString(Initial_General_Statistics_Statistic_3) . " per session"
@@ -4154,6 +4641,9 @@ LoadExternalVariables:
     HyperPause_MovesListImagePath := HLMediaPath . "\Moves List\" 
     IfNotExist, %HyperPause_MovesListImagePath%
 		FileCreateDir, %HyperPause_MovesListImagePath%
+    HyperPause_HistoryDatPath := HLDataPath . "\History\"
+    IfNotExist, %HyperPause_HistoryDatPath%
+		FileCreateDir, %HyperPause_HistoryDatPath%
     HyperPause_KeymapperMediaPath := HLMediaPath . "\Keymapper\" 
     ;HyperPause Data paths    
     HyperPause_GameInfoPath := HLDataPath . "\Game Info\"
@@ -4165,6 +4655,9 @@ LoadExternalVariables:
     HyperPause_GameStatistics := HLDataPath . "\Statistics\"
     IfNotExist, %HyperPause_GameStatistics%
 		FileCreateDir, %HyperPause_GameStatistics%
+    HyperPause_SaveScreenshotPath := HLMediaPath . "\Artwork\" . systemname . "\" . dbName . "\Screenshots\"
+        IfNotExist, %HyperPause_SaveScreenshotPath%
+            FileCreateDir, %HyperPause_SaveScreenshotPath%
     ; Front End related Paths
     WheelImagePath := frontendPath . "\Media\" . systemName . "\Images\Wheel\"
     MediaImagePath := frontendPath . "\Media\" . systemName . "\Images\"
@@ -4198,6 +4691,7 @@ LoadExternalVariables:
     HyperPause_ArtworkMenuEnabled := RIniHyperPauseLoadVar(3,4, "General Options", "Artwork_Menu_Enabled", "true")  
     HyperPause_GuidesMenuEnabled := RIniHyperPauseLoadVar(3,4, "General Options", "Guides_Menu_Enabled", "true")  
     HyperPause_ManualsMenuEnabled := RIniHyperPauseLoadVar(3,4, "General Options", "Manuals_Menu_Enabled", "true")  
+    HyperPause_HistoryMenuEnabled := RIniHyperPauseLoadVar(3,4, "General Options", "History_Menu_Enabled", "true")  
     HyperPause_SoundMenuEnabled := RIniHyperPauseLoadVar(3,4, "General Options", "Sound_Menu_Enabled", "true")  
     HyperPause_VideosMenuEnabled := RIniHyperPauseLoadVar(3,4, "General Options", "Videos_Menu_Enabled", "true")
     HyperPause_StatisticsMenuEnabled := RIniHyperPauseLoadVar(3,4, "General Options", "Statistics_Menu_Enabled", "true")  
@@ -4213,7 +4707,7 @@ LoadExternalVariables:
     ;Main Menu Options
     HyperPause_MainMenu_GlobalBackground := RIniHyperPauseLoadVar(3,4, "Main Menu Appearance Options", "Enable_Global_Background", "true")  
     HyperPause_MainMenu_BackgroundAlign := RIniHyperPauseLoadVar(3,4, "Main Menu Appearance Options", "Background_Align_Image", "Align to Top Left")  
-    HyperPause_MainMenu_Labels := RIniHyperPauseLoadVar(3,4, "Main Menu Appearance Options", "Main_Menu_Items", "Controller|Change Disc|Save State|Load State|HighScore|Artwork|Guides|Manuals|Videos|Sound|Statistics|Moves List|Shutdown")
+    HyperPause_MainMenu_Labels := RIniHyperPauseLoadVar(3,4, "Main Menu Appearance Options", "Main_Menu_Items", "Controller|Change Disc|Save State|Load State|HighScore|Artwork|Guides|Manuals|Videos|Sound|Statistics|Moves List|History|Shutdown")
     HyperPause_MainMenu_ShowClock := RIniHyperPauseLoadVar(3,4, "Main Menu Appearance Options", "Enable_Clock", "true")
     HyperPause_MainMenu_ClockFont := RIniHyperPauseLoadVar(3,4, "Main Menu Appearance Options", "Clock_Font", "Bebas Neue")
     HyperPause_MainMenu_ClockFontSize := RIniHyperPauseLoadVar(3,4, "Main Menu Appearance Options", "Clock_Font_Size", "15")
@@ -4249,7 +4743,7 @@ LoadExternalVariables:
     HyperPause_SubMenu_BackgroundBrush := RIniHyperPauseLoadVar(3,4, "SubMenu Appearance Options", "Background_Brush", "44000000")
     HyperPause_SubMenu_LabelFont := RIniHyperPauseLoadVar(3,4, "SubMenu Appearance Options", "Label_Font", "Bebas Neue")
     HyperPause_SubMenu_LabelFontSize := RIniHyperPauseLoadVar(3,4, "SubMenu Appearance Options", "Label_Font_Size", "25")
-    HyperPause_SubMenu_Font := RIniHyperPauseLoadVar(3,4, "SubMenu Appearance Options", "Content_Font", "Arial")
+    HyperPause_SubMenu_Font := RIniHyperPauseLoadVar(3,4, "SubMenu Appearance Options", "Content_Font", "Lucida Console")
     HyperPause_SubMenu_FontSize := RIniHyperPauseLoadVar(3,4, "SubMenu Appearance Options", "Content_Font_Size", "20")
     HyperPause_SubMenu_SmallFontSize := RIniHyperPauseLoadVar(3,4, "SubMenu Appearance Options", "Content_Small_Font_Size", "15")
     HyperPause_SubMenu_HelpFont := RIniHyperPauseLoadVar(3,4, "SubMenu Appearance Options", "Help_Font", "Bebas Neue")
@@ -4273,6 +4767,7 @@ LoadExternalVariables:
     HyperPause_State_VMargin := RIniHyperPauseLoadVar(3,4, "SubMenu Save and Load State Appearance Options", "Vertical_Margin", "60")
     HyperPause_DelaytoSendKeys := RIniHyperPauseLoadVar(3,4, "SubMenu Save and Load State Appearance Options", "Delay_to_Send_Keys", "500")
     HyperPause_SetKeyDelay := RIniHyperPauseLoadVar(3,4, "SubMenu Save and Load State Appearance Options", "Set_Key_Delay", "200")
+    HyperPause_SaveStateScreenshot := RIniHyperPauseLoadVar(3,4, "SubMenu Save and Load State Appearance Options", "Enable_Save_State_Screenshot", "true") 
     ;Sound Menu Options
     HyperPause_SoundBar_SingleBarWidth := RIniHyperPauseLoadVar(3,4, "SubMenu Sound Control Appearance Options", "Single_Bar_Width", "20")
     HyperPause_SoundBar_SingleBarSpacing := RIniHyperPauseLoadVar(3,4, "SubMenu Sound Control Appearance Options", "Single_Bar_Spacing", "5")
@@ -4297,6 +4792,7 @@ LoadExternalVariables:
     HyperPause_SubMenu_SizeofMusicPlayerButtons := RIniHyperPauseLoadVar(3,4, "SubMenu Sound Control Appearance Options", "Size_of_Music_Player_Buttons", "50")
     HyperPause_SubMenu_MusicPlayerVDist := RIniHyperPauseLoadVar(3,4, "SubMenu Sound Control Appearance Options", "Music_Player_Vertical_Distance", "50")
     HyperPause_SoundButtonGrowingEffectVelocity := RIniHyperPauseLoadVar(3,4, "SubMenu Sound Control Appearance Options", "Sound_Button_Growing_Velocity", "1") 
+    HyperPause_MusicPlayerVolumeLevel := RIniHyperPauseLoadVar(3,4, "SubMenu Sound Control Appearance Options", "Music_Player_Volume_Level", "100")
     ;Change Disc Options
     HyperPause_ChangeDisc_VMargin := RIniHyperPauseLoadVar(3,4, "SubMenu Change Disc Appearance Options", "Vertical_Margin", "30")
     HyperPause_ChangeDisc_TextDisttoImage := RIniHyperPauseLoadVar(3,4, "SubMenu Change Disc Appearance Options", "Text_Distance_to_Image", "20") 
@@ -4350,6 +4846,14 @@ LoadExternalVariables:
     HyperPause_Manuals_VdistBetwLabels := RIniHyperPauseLoadVar(3,4, "SubMenu Manuals Appearance Options", "Vertical_Distance_Between_Labels", "50") 
     HyperPause_Manuals_HdistBetwLabelsandPages := RIniHyperPauseLoadVar(3,4, "SubMenu Manuals Appearance Options", "Horizontal_Distance_Between_Labels_and_Pages", "50") 
     HyperPause_Manuals_PageNumberFontColor := RIniHyperPauseLoadVar(3,4, "SubMenu Manuals Appearance Options", "Page_Number_Font_Color", "00000000") 
+    ;History Menu Options
+    HyperPause_History_VMargin := RIniHyperPauseLoadVar(3,4, "SubMenu History Appearance Options", "Vertical_Margin", "30") 
+    HyperPause_History_HMargin := RIniHyperPauseLoadVar(3,4, "SubMenu History Appearance Options", "Horizontal_Margin", "30") 
+    HyperPause_History_HdistBetwPages := RIniHyperPauseLoadVar(3,4, "SubMenu History Appearance Options", "Horizontal_Distance_Between_Pages", "50") 
+    HyperPause_SubMenu_HistorySelectedBrush := RIniHyperPauseLoadVar(3,4, "SubMenu History Appearance Options", "Selected_Brush", "33ffff00") 
+    HyperPause_History_VdistBetwLabels := RIniHyperPauseLoadVar(3,4, "SubMenu History Appearance Options", "Vertical_Distance_Between_Labels", "50") 
+    HyperPause_History_HdistBetwLabelsandPages := RIniHyperPauseLoadVar(3,4, "SubMenu History Appearance Options", "Horizontal_Distance_Between_Labels_and_Pages", "50") 
+    HyperPause_History_PageNumberFontColor := RIniHyperPauseLoadVar(3,4, "SubMenu History Appearance Options", "Page_Number_Font_Color", "00000000") 
     ;Controller Menu Options
     HyperPause_Controller_VMargin := RIniHyperPauseLoadVar(3,4, "SubMenu Controller Appearance Options", "Vertical_Margin", "30") 
     HyperPause_Controller_HMargin := RIniHyperPauseLoadVar(3,4, "SubMenu Controller Appearance Options", "Horizontal_Margin", "30") 
@@ -4387,6 +4891,7 @@ LoadExternalVariables:
     HyperPause_SubMenu_SizeofVideoButtons := RIniHyperPauseLoadVar(3,4, "SubMenu Videos Appearance Options", "Size_of_Video_Player_Buttons", "45") 
     HyperPause_SubMenu_SpaceBetweenVideoButtons := RIniHyperPauseLoadVar(3,4, "SubMenu Videos Appearance Options", "Space_Between_Video_Player_Buttons", "15") 
     HyperPause_SubMenu_SpaceBetweenLabelsandVideoButtons := RIniHyperPauseLoadVar(3,4, "SubMenu Videos Appearance Options", "Space_Between_Label_and_Video_Player_Buttons", "30") 
+    HyperPause_VideoPlayerVolumeLevel := RIniHyperPauseLoadVar(3,4, "SubMenu Videos Appearance Options", "Video_Player_Volume_Level", "100") 
     ;Start and exit screen
     HyperPause_AuxiliarScreen_StartText := RIniHyperPauseLoadVar(3,4, "Start and Exit Screen", "Loading_Text", "Loading HyperPause") 
     HyperPause_AuxiliarScreen_ExitText := RIniHyperPauseLoadVar(3,4, "Start and Exit Screen", "Exiting_Text", "Exiting HyperPause") 
@@ -4490,6 +4995,11 @@ AutoAdjustMenutoScreenResolution:
     HyperPause_Manuals_HdistBetwPages := round(HyperPause_Manuals_HdistBetwPages * ScallingFactor)
     HyperPause_Manuals_VdistBetwLabels := round(HyperPause_Manuals_VdistBetwLabels * ScallingFactor)
     HyperPause_Manuals_HdistBetwLabelsandPages := round(HyperPause_Manuals_HdistBetwLabelsandPages * ScallingFactor)
+    HyperPause_History_VMargin := round(HyperPause_History_VMargin * ScallingFactor)
+    HyperPause_History_HMargin := round(HyperPause_History_HMargin * ScallingFactor)
+    HyperPause_History_HdistBetwPages := round(HyperPause_History_HdistBetwPages * ScallingFactor)
+    HyperPause_History_VdistBetwLabels := round(HyperPause_History_VdistBetwLabels * ScallingFactor)
+    HyperPause_History_HdistBetwLabelsandPages := round(HyperPause_History_HdistBetwLabelsandPages * ScallingFactor)
     HyperPause_Controller_VMargin := round(HyperPause_Controller_VMargin * ScallingFactor)
     HyperPause_Controller_HMargin := round(HyperPause_Controller_HMargin * ScallingFactor)
     HyperPause_Controller_HdistBetwPages := round(HyperPause_Controller_HdistBetwPages * ScallingFactor)
@@ -4514,31 +5024,6 @@ AutoAdjustMenutoScreenResolution:
     HyperPause_AuxiliarScreen_FontSize := round(HyperPause_AuxiliarScreen_FontSize * ScallingFactor)
     HyperPause_AuxiliarScreen_ExitTextMargin := round(HyperPause_AuxiliarScreen_ExitTextMargin * ScallingFactor)
 Return
-
-
-;-----------------OPEN AND CLOSE PROCESS FUNCTIONS------------
-ProcSus(PID_or_Name)
-{
-   If InStr(PID_or_Name, ".") {
-      Process, Exist, %PID_or_Name%
-      PID_or_Name := ErrorLevel
-   }
-   If !(h := DllCall("OpenProcess", "uInt", 0x1F0FFF, "Int", 0, "Int", PID_or_Name))
-      Return -1
-   DllCall("ntdll.dll\NtSuspendProcess", "Int", h), DllCall("CloseHandle", "Int", h)
-}
-
-ProcRes(PID_or_Name)
-{
-   If InStr(PID_or_Name, ".") {
-      Process, Exist, %PID_or_Name%
-      PID_or_Name := ErrorLevel
-   }
-   If !(h := DllCall("OpenProcess", "uInt", 0x1F0FFF, "Int", 0, "Int", PID_or_Name))
-      Return -1
-   DllCall("ntdll.dll\NtResumeProcess", "Int", h), DllCall("CloseHandle", "Int", h)
-}
-
 
 ;-----------------SOUND CONTROL FUNCTIONS------------
 ;Draw the colored progress bars.
@@ -4625,7 +5110,7 @@ IsWinXPOrBelow() {
 ;Main Menu Clock
 Clock:
     Gdip_GraphicsClear(HP_G28)
-    FormatTime, CurrentTime, A_Now, dddd MMMM d, yyyy hh:mm:ss tt
+    FormatTime, CurrentTime, %A_Now%, dddd MMMM d, yyyy hh:mm:ss tt
     CurrentTimeTextLenghtWidth := MeasureText(0,CurrentTime,HyperPause_MainMenu_ClockFont,HyperPause_MainMenu_ClockFontSize,"Regular")
     posCurrentTimeX := CurrentTimeTextLenghtWidth + HyperPause_SubMenu_AdditionalTextMarginContour
     OptionsCurrentTime = x%posCurrentTimeX% y0 Right c%HyperPause_MainMenu_LabelDisabledColor% r4 s%HyperPause_MainMenu_ClockFontSize% Regular
@@ -4708,7 +5193,7 @@ HyperPause_MusicPlayer:
             }
         }
         ;loading music player songs
-        try wmpMusic.settings.volume := 100
+        try wmpMusic.settings.volume := HyperPause_MusicPlayerVolumeLevel
         try wmpMusic.settings.autoStart := false
         try wmpMusic.Settings.setMode("shuffle",false)
         If((HyperPause_EnableMusicOnStartup = "true") and (InitialMuteState<>1))
@@ -4842,10 +5327,10 @@ SaveScreenshot:
     HyperPause_SaveScreenshotPath := HLMediaPath . "\Artwork\" . systemname . "\" . dbName . "\Screenshots\"
         IfNotExist, %HyperPause_SaveScreenshotPath%
             FileCreateDir, %HyperPause_SaveScreenshotPath%
-    CurrentScreenshotFileName := HyperPause_SaveScreenshotPath . A_Now . ".bmp"
+    CurrentScreenshotFileName := A_Now . ".png"
     pToken := Gdip_Startup()
-    CaptureScreen(CurrentScreenshotFileName)
-    ToolTip, Screenshot saved (%CurrentScreenshotFileName%), 0,A_ScreenHeight
+    CaptureScreen(HyperPause_SaveScreenshotPath . CurrentScreenshotFileName)
+    ToolTip, Screenshot saved (%HyperPause_SaveScreenshotPath%%CurrentScreenshotFileName%), 0,A_ScreenHeight
     settimer,EndofToolTipDelay, -2000   
     If HyperPause_Loaded
         {
@@ -4885,32 +5370,12 @@ Return
 
 CaptureScreen(File)
 {
-	nL = 0 ;SysGet, nL, 76
-	nT = 0 ;SysGet, nT, 77
-	nW := A_ScreenWidth ;SysGet, nW, 78
-	nH := A_ScreenHeight ;SysGet, nH, 79
-	mDC := DllCall("CreateCompatibleDC", "Uint", 0)
-	hBM := CreateDIBSection(nW, nH, mDC)
-	oBM := DllCall("SelectObject", "Uint", mDC, "Uint", hBM)
-	hDC := DllCall("GetDC", "Uint", 0)
-	DllCall("BitBlt", "Uint", mDC, "int", 0, "int", 0, "int", nW, "int", nH, "Uint", hDC, "int", nL, "int", nT, "Uint", 0x40000000 | 0x00CC0020)
-	DllCall("ReleaseDC", "Uint", 0, "Uint", hDC)
-	DllCall("SelectObject", "Uint", mDC, "Uint", oBM)
-	DllCall("DeleteDC", "Uint", mDC)
-	SaveHBITMAPToFile(hBM, File)
+    Global
+    screenBitmapPointer := Gdip_BitmapFromScreen()
+    Gdip_SaveBitmapToFile(screenBitmapPointer, File)
+    return
 }
 
-
-SaveHBITMAPToFile(hBitmap, sFile)
-{
-	DllCall("GetObject", "Uint", hBitmap, "int", VarSetCapacity(oi,84,0), "Uint", &oi)
-    hFile:=	DllCall("CreateFile", "Uint", &sFile, "Uint", 0x40000000, "Uint", 0, "Uint", 0, "Uint", 2, "Uint", 0, "Uint", 0)
-	DllCall("WriteFile", "Uint", hFile, "int64P", 0x4D42|14+40+NumGet(oi,44)<<16, "Uint", 6, "UintP", 0, "Uint", 0)
-	DllCall("WriteFile", "Uint", hFile, "int64P", 54<<32, "Uint", 8, "UintP", 0, "Uint", 0)
-	DllCall("WriteFile", "Uint", hFile, "Uint", &oi+24, "Uint", 40, "UintP", 0, "Uint", 0)
-	DllCall("WriteFile", "Uint", hFile, "Uint", NumGet(oi,20), "Uint", NumGet(oi,44), "UintP", 0, "Uint", 0)
-	DllCall("CloseHandle", "Uint", hFile)
-}
 
 EndofToolTipDelay:
 	ToolTip

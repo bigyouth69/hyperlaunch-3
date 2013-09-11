@@ -1,5 +1,5 @@
-MCRC=A2787BAA
-MVersion=1.0.3
+MCRC=2050AE27
+MVersion=1.0.4
 
 FadeInStart(){
 	Gosub, FadeInStart
@@ -42,15 +42,15 @@ CloseFadeIn:
 	fadeInActive:=	; interrupts the fade loop if it is checking this var
 	fadeInEndTime := fadeInEndTime - A_TickCount	; turns off user set FadeInDelay by increasing the var checked in the timer
 	t1 = 100	; sets image-based fade animation to the last loop (100%) and completes animation
-	Process, Exist, 7z.exe
+	Process("Exist", "7z.exe")
 	If ErrorLevel {
 		7zCanceled=1
-		Process, Close, 7z.exe	; if 7z is running and extracting a game, it force closes 7z and returns to the front end (acts as a 7z cancel)
-		Log("User cancelled 7z extraction. Ending HyperLaunch and returning to Front End")
-		Process, WaitClose, 7z.exe	; wait until 7z is closed so we don't try to delete files too fast
+		Process("Close", "7z.exe")	; if 7z is running and extracting a game, it force closes 7z and returns to the front end (acts as a 7z cancel)
+		Log("User cancelled 7z extraction. Ending HyperLaunch and returning to Front End",3)
+		Process("WaitClose", "7z.exe")	; wait until 7z is closed so we don't try to delete files too fast
 		Sleep, 200	; just force a little more time to help prevent files from still being locked
 		7zCleanUp()	; must delete partially extracted file
-		ExitApp
+		ExitModule()
 	}
 	Log("CloseFadeIn - Ended",4)
 Return
@@ -72,6 +72,11 @@ Return
 
 UpdateFadeFor7z:
 	Gosub, %fadeLyr37zAnimation%	; Calling user set animation function for 7z
+	CLR_Stop()
+Return
+
+UpdateFadeForNon7z:
+	Gosub, %fadeLyr3Animation%	; Calling user set animation function for 7z when no 7z extraction took place
 	CLR_Stop()
 Return
 
@@ -226,13 +231,12 @@ FadeInExit:
 			Gdip_DisposeImage(fadeLyr%A_Index%Pic), SelectObject(hdc%A_Index%, obm%A_Index%), DeleteObject(hbm%A_Index%), DeleteDC(hdc%A_Index%), Gdip_DeleteGraphics(G%A_Index%)
 			Gui, Fade_GUI%A_Index%: Destroy
 		}
-		Gdip_Shutdown(pToken)	; gdi+ may now be shutdown on exiting the program
 		If mgEnabled = true
 			XHotKeywrapper(mgKey,"StartMulti","ON")
 		If hpEnabled = true
 			XHotKeywrapper(hpKey,"TogglePauseMenuStatus","ON")
 		XHotKeywrapper(exitEmulatorKey,"CloseProcess","ON")
-		Log("FadeInExit ended, waiting for user to close launched application",4)
+		Log("FadeInExit - Ended, waiting for user to close launched application",4)
 	}
 	gameSectionStartTime := A_TickCount
 	gameSectionStartHour := A_Now ; These two vars are in StartModule() and here because we need a way of it always being created if the module does not have Fade support. It's more accurate if used here vs starting in StartModule()
@@ -240,7 +244,7 @@ Return
 
 FadeOutStart:
 	If fadeOut = true
-	{	Log("FadeOutStart started",4)
+	{	Log("FadeOutStart - Started",4)
 		If !pToken := Gdip_Startup()	; Start gdi+
 			ScriptError("Gdiplus failed to start. Please ensure you have gdiplus on your system")
 
@@ -289,19 +293,32 @@ FadeOutStart:
 				Gdip_DrawImage(outG1, lyr1OutPic, 0, 0,fadeLyr1OutPicWNew+1,fadeLyr1OutPicHNew+1, 0, 0, lyr1OutPicW, lyr1OutPicH)
 			}
 		}
-
 		UpdateLayeredWindow(out1_ID, outhdc1, 0, 0, A_ScreenWidth, A_ScreenHeight)
-		Gui Fade_GUI8: Show
+
+		If fadeOutExtraScreen = true	; if user wants to use a temporary extra gui layer for this system right before fadeOut starts
+		{	Log("FadeOutStart - Creating temporary FadeOutExtraScreen",4)
+			Gosub, FadeOutExtraScreen
+		}
+		Gui Fade_GUI8: Show	; show layer -1 GUI
 		%fadeOutTransitionAnimation%("in",fadeOutDuration)
+
 		fadeOutEndTime := A_TickCount + fadeOutDelay
-		Log("FadeOutStart ended",4)
+		Log("FadeOutStart - Ended",4)
 	}
+Return
+
+FadeOutExtraScreen:
+	StringTrimLeft,fadeLyr1ColorNoAlpha,fadeLyr1Color,2	; for legacy gui, we need to trim the alpha from the color as it's not supported
+	Gui, FadeOutExtraScreen: New, +HwndFadeOutExtraScreen_ID +ToolWindow -Caption +AlwaysOnTop +OwnDialogs, FadeOutExtraScreen	; Is always on top, has no taskbar entry, no caption, and msgboxes will appear on top of the GUI
+	Gui, FadeOutExtraScreen:Color, %fadeLyr1ColorNoAlpha%
+	Gui, FadeOutExtraScreen:Show, x0 y0 h%A_ScreenHeight% w%A_ScreenWidth% Hide
+	AnimateWindow(FadeOutExtraScreen_ID, "in", "fade", 50) ; animate FadeOutExtraScreen in quickly
 Return
 
 FadeOutExit:
 	StopGlobalUserFeatures%zz%()	; stoping global user functions here so they are closed before fade screen exits
 	If fadeOut = true
-	{	Log("FadeOutExit started",4)
+	{	Log("FadeOutExit - Started",4)
 		If fadeOutExitDelay {	; if user wants to use a delay
 			If !fadeOutExitDelayStart {	; checking if starttime was set already, this prevents looping and restarting of this timer by pressing the interrupt key over and over
 				fadeOutExitDelayStart := A_TickCount
@@ -335,24 +352,23 @@ FadeOutExit:
 		Gdip_DeleteBrush(pBrush)
 		Gdip_DisposeImage(lyr1OutPic), SelectObject(outhdc1, outobm1), DeleteObject(outhbm1), DeleteDC(outhdc1), Gdip_DeleteGraphics(outG1)
 		Gui, Fade_GUI8: Destroy
-		Gdip_Shutdown(pToken)	; gdi+ may now be shutdown on exiting the program
 		if GifAnimation
 			{
 			AniGif_DestroyControl(hAniGif1)
 			Gui, Fade_GifAnim_GUI: Destroy
 		}
 		
-		Log("FadeOutExit ended",4)
+		Log("FadeOutExit - Ended",4)
 	}
 Return
 
 FadeInDelay:
-	Log("FadeInDelay started",4)
+	Log("FadeInDelay - Started",4)
 	While fadeInActive && (fadeInEndTime > A_TickCount) {
 		Sleep, 100
 		Continue
 	}
-	Log("FadeInDelay ended",4)
+	Log("FadeInDelay - Ended",4)
 Return
 
 FadeLayer4Anim:
@@ -407,85 +423,30 @@ Return
 GetFadePicFile(name,num){
 	Global fadeImgPath,dbName,systemName,fadeSystemAndRomLayersOnly
 	fadePicType = png|gif|tif|bmp|jpg
-	romFile := fadeImgPath . "\" . systemName . "\" . dbName . "\" . name . " " . num 
-	systemFile := fadeImgPath . "\" . systemName . "\_Default\" . name . " " . num 
-	globalFile := fadeImgPath . "\_Default\" . name . " " . num 	
-	fadePicList := []
-	Log("GetFadePicFile - Checking if any Fade " . name . A_Space . num . " images exist in: " . romFile . "*.*",4)
-	If FileExist(romFile . "*.*")
-        Loop, parse, fadePicType,|,
-		{	Log("GetFadePicFile - Looking for Fade " . name . A_Space . num . " pic: " . romFile . "*." . A_LoopField,4)
-            Loop, % romFile . "*." . A_LoopField
-			{	Log("GetFadePicFile - Found Fade " . name . A_Space . num . " pic: " . A_LoopFileFullPath,4)
-				fadePicList.Insert(A_LoopFileFullPath)
+	fadePicPath1 := fadeImgPath . "\" . systemName . "\" . dbName . "\" . name . " " . num	; rom file
+	fadePicPath2 := fadeImgPath . "\" . systemName . "\_Default\" . name . " " . num	; system file
+	fadePicPath3 := fadeImgPath . "\_Default\" . name . " " . num	; global file
+	fadePicList := []	; initialize array
+	Loop, 3 {
+		Log("GetFadePicFile - Checking if any Fade " . name . A_Space . num . " images exist in: " . fadePicPath%A_Index% . "*.*",4)
+		fadePicIndex := A_Index	; so it can be used in the next loop
+		If FileExist(fadePicPath%A_Index% . "*.*")
+			Loop, Parse, fadePicType,|
+			{	Log("GetFadePicFile - Looking for Fade " . name . A_Space . num . " pic: " . fadePicPath%fadePicIndex% . "*." . A_LoopField,4)
+				Loop, % fadePicPath%fadePicIndex% . "*." . A_LoopField
+				{	Log("GetFadePicFile - Found Fade " . name . A_Space . num . " pic: " . A_LoopFileFullPath,4)
+					fadePicList.Insert(A_LoopFileFullPath)
+				}
 			}
+		If fadePicList[1]	; if we filled anything in the array, stop here, randomize pics found	, and return
+		{	Random, RndmfadePic, 1, % fadePicList.MaxIndex()
+			file := fadePicList[RndmfadePic]
+			Log("GetFadePicFile - Randomized images and Fade " . name . " " . num . " will use " . file)
+			Return file
 		}
-	If !fadePicList[1]
-	{	Log("GetFadePicFile - Checking if any Fade " . name . A_Space . num . " images exist in: " . systemFile . "*.*",4)
-		If FileExist(systemFile . "*.*")
-            Loop, parse, fadePicType,|,
-			{	Log("GetFadePicFile - Looking for Fade " . name . A_Space . num . " pic: " . systemFile . "*." . A_LoopField,4)
-                Loop, % systemFile . "*." . A_LoopField
-				{	Log("GetFadePicFile - Found Fade " . name . A_Space . num . " pic: " . A_LoopFileFullPath,4)
-                    fadePicList.Insert(A_LoopFileFullPath)
-				}
-			}
 	}
-	If !fadePicList[1]
-	{	Log("GetFadePicFile - Checking if any Fade " . name . A_Space . num . " images exist in: " . globalFile . "*.*",4)
-		If FileExist(globalFile . "*.*")
-            Loop, parse, fadePicType,|,
-			{	Log("GetFadePicFile - Looking for Fade " . name . A_Space . num . " pic: " . globalFile . "*." . A_LoopField,4)
-                Loop, % globalFile . "*." . A_LoopField
-				{	Log("GetFadePicFile - Found Fade " . name . A_Space . num . " pic: " . A_LoopFileFullPath,4)
-                    fadePicList.Insert(A_LoopFileFullPath)	
-				}
-			}
-	}
-	If fadePicList[1]
-	{
-		Random, RndmfadePic, 1, % fadePicList.MaxIndex()
-		file := fadePicList[RndmfadePic]		
-	}
-	Log("GetFadePicFile - Randomized images and Fade " . name . " " . num . " will use " . file)
-	Return file
 }
 
-; Usage, params 1&2 are byref so supply the var you want to be filled with the calculated positions. Next 4 are the original pics xy,w,h. Last is the position the user wants.
-GetFadePicPosition(ByRef retX, ByRef retY,x,y,w,h,pos){
-		If (pos = "Center") {
-			retX := ( A_ScreenWidth / 2 ) - ( w / 2 )
-			retY := ( A_ScreenHeight / 2 ) - ( h / 2 )
-		} Else If (pos = "Top Left Corner") {
-			retX := 0
-			retY := 0
-		} Else If (pos = "Top Right Corner") {
-			retX := A_ScreenWidth - w
-			retY := 0
-		} Else If (pos = "Bottom Left Corner") {
-			retX := 0
-			retY := A_ScreenHeight - h
-		} Else If (pos = "Bottom Right Corner") {
-			retX := A_ScreenWidth - w
-			retY := A_ScreenHeight - h
-		} Else If (pos = "Top Center") {
-			retX := ( A_ScreenWidth / 2 ) - ( w / 2 )
-			retY := 0
-		} Else If (pos = "Bottom Center") {
-			retX := ( A_ScreenWidth / 2 ) - ( w / 2 )
-			retY := A_ScreenHeight - h
-		} Else If (pos = "Left Center") {
-			retX := 0
-			retY := ( A_ScreenHeight / 2 ) - ( h / 2 )
-		} Else If (pos = "Right Center") {
-			retX := A_ScreenWidth - w
-			retY := ( A_ScreenHeight / 2 ) - ( h / 2 )
-		} Else {
-			retX := x
-			retY := y
-		}
-}
-	
 GetFadeAnimFiles(name,num){
 	Global fadeImgPath,dbName,systemName,fadeSystemAndRomLayersOnly
 	fadePicType = png|bmp|gif|jpg

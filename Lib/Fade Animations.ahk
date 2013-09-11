@@ -1,5 +1,5 @@
-MCRC=13BFD877
-MVersion=1.0.3
+MCRC=AA51CC2D
+MVersion=1.0.4
 
 ; Default transition animation used for Fade_In
 DefaultAnimateFadeIn(direction,time){
@@ -32,8 +32,13 @@ DefaultAnimateFadeIn(direction,time){
 
 ; Default transition animation used for Fade_Out
 DefaultAnimateFadeOut(direction,time){
-	Global outhdc1,out1_ID
+	Global outhdc1,out1_ID,fadeOutBlackScreenEnabled,FadeOutBlackScreen_ID
 	Log("DefaultAnimateFadeOut - Started")
+	If fadeOutBlackScreenEnabled = true
+	{	Log("DefaultAnimateFadeOut - Destroying FadeOutBlackScreen",4)
+		AnimateWindow(FadeOutBlackScreen_ID, "out", "fade", 100) ; animate FadeOutBlackScreen out quickly
+		Gui, FadeOutBlackScreen:Destroy	; destroy the temporary FadeOutBlackScreen
+	}
 	startTime := A_TickCount
 	Loop{
 		t := ((TimeElapsed := A_TickCount-startTime) < time) ? (If direction="in" ? 255*(timeElapsed/time) : 255*(1-(timeElapsed/time))) : (If direction="in" ? 255 : 0)
@@ -56,8 +61,7 @@ LegacyFadeInTransition(direction,time){
 	; msgbox, fadeInLyr1File: %fadeInLyr1File%`nfadeLyr1PicW: %fadeLyr1PicW%`nfadeLyr1PicH: %fadeLyr1PicH%`n1_ID: %1_ID%`ndirection: %direction%`ntime: %time%`n
 
 	If direction = in
-	{
-		Log("LegacyFadeInTransition - Drawing First FadeIn Image.", 1)
+	{	Log("LegacyFadeInTransition - Drawing First FadeIn Image.", 1)
 		Gui, Fade_GUI1:Color, %fadeLyr1ColorNoAlpha%
 		GetBGPicPosition(fadeLyr1PicXNew,fadeLyr1PicYNew,fadeLyr1PicWNew,fadeLyr1PicHNew,fadeLyr1PicW,fadeLyr1PicH,fadeLyr1AlignImage)	; get the background pic's new position and size
 		If (fadeLyr1AlignImage = "Stretch and Lose Aspect")
@@ -73,8 +77,7 @@ LegacyFadeInTransition(direction,time){
 		Gui, Fade_GUI1:Show, x0 y0 h%A_ScreenHeight% w%A_ScreenWidth% Hide
 	}
 	If direction = out
-		{
-		SetTimer, FadeLayer4Anim, Off
+	{	SetTimer, FadeLayer4Anim, Off
 		Gdip_GraphicsClear(G2)
 		Gdip_GraphicsClear(G3)
 		Gdip_GraphicsClear(G4)
@@ -93,7 +96,7 @@ LegacyFadeInTransition(direction,time){
 
 ; Legacy fadeout animation for use when gdi does not work with an emulator. Jpgs are not supported and will not show on this legacy gui
 LegacyFadeOutTransition(direction,time){
-	Global out1_ID,lyr1OutPicW,lyr1OutPicH,lyr1OutFile,fadeLyr1Color,fadeLyr1AlignImage
+	Global out1_ID,lyr1OutPicW,lyr1OutPicH,lyr1OutFile,fadeLyr1Color,fadeLyr1AlignImage,fadeOutBlackScreenEnabled,FadeOutBlackScreen_ID
 	Log("LegacyFadeOutTransition - Started")
 	StringTrimLeft,fadeLyr1ColorNoAlpha,fadeLyr1Color,2	; for legacy gui, we need to trim the alpha from the color as it's not supported
 
@@ -112,6 +115,11 @@ LegacyFadeOutTransition(direction,time){
 		Else	; place the pic so the top left corner matches the screen's top left corner, also the default
 			Gui, Fade_GUI8:Add, Picture,w%fadeLyr1OutPicWNew% h%fadeLyr1OutPicHNew% x0 y0, %lyr1OutFile%
 		Gui, Fade_GUI8:Show, x0 y0 h%A_ScreenHeight% w%A_ScreenWidth% Hide
+	}
+	If fadeOutBlackScreenEnabled = true
+	{	Log("LegacyFadeOutTransition - Destroying FadeOutBlackScreen",4)
+		AnimateWindow(FadeOutBlackScreen_ID, "out", "fade", 100) ; animate FadeOutBlackScreen out quickly
+		Gui, FadeOutBlackScreen:Destroy	; destroy the temporary FadeOutBlackScreen
 	}
 	AnimateWindow(out1_ID, direction, "fade", time) ; animate in fadeLayer1
 	; AnimateWindow(out1_ID, direction, "slide bt", time) ; slide
@@ -210,7 +218,7 @@ DefaultFadeAnimation:
 	Else 
 		fadeLyr4PicX := fadeLyr4PicX-fadeLyr4PicPad
 	;====== Loading Bar options
-	If ((fadeLyr3Type = "bar") or (fadeLyr3Type = "ImageAndBar")) and (found7z="true") and (7zEnabled = "true") and !7zTempRomExists
+	If ((fadeLyr3Type = "bar") or (fadeLyr3Type = "ImageAndBar")) and (found7z="true") and (7zEnabled = "true") and !7zTempRomExists and use7zAnimation
 		{
 		;Creating Progress Bar Brushes
 		fadeBrushWindow1 := Gdip_CreateLineBrushFromRect(0, 0, fadeBarWindowW, fadeBarWindowH, 0xff555555, 0xff050505)
@@ -519,8 +527,6 @@ DefaultFadeAnimation:
 				Number_of_Times_Played := Number_of_Times_Played . " times"
 			If(Last_Time_Played=0)
 				Last_Time_Played := "Never"
-			Else
-				FormatTime, Last_Time_Played, Last_Time_Played, dddd MMMM d, yyyy hh:mm:ss tt
 			If (Average_Time_Played>0)
 				Average_Time_Played := GetTimeString(Average_Time_Played) . " per session"
 			Total_Time_Played := GetTimeString(Total_Time_Played)
@@ -606,8 +612,12 @@ DefaultFadeAnimation:
 				} Else {
 					Loop, 6
 						{
-						If ((fadestatsInfoTextPlacement="bottomRight") or (fadestatsInfoTextPlacement="bottomLeft"))
-							Displacement := Displacement + (maxstatsInfoTextSize+10)
+						If ((fadestatsInfoTextPlacement="bottomRight") or (fadestatsInfoTextPlacement="bottomLeft")) {
+							if statsInfoText[A_Index,2] 
+								Displacement := Displacement + (maxstatsInfoTextSize+10)
+							else if (A_Index=1)
+								Displacement := (maxstatsInfoTextSize+10)								
+						}
 						If (fadestatsInfoTextPlacement="topRight")
 							statsInfoText[A_Index,4] := "x" . A_ScreenWidth-fadeStatsInfoTextMargin . " y" . Displacement+fadeStatsInfoTextMargin . " Right " . statsInfoText[A_Index,4]	
 						Else If (fadestatsInfoTextPlacement="topLeft")
@@ -616,8 +626,10 @@ DefaultFadeAnimation:
 							statsInfoText[A_Index,4] := "x" . A_ScreenWidth-fadeStatsInfoTextMargin . " y" . A_ScreenHeight-Displacement-fadeStatsInfoTextMargin . " Right " . statsInfoText[A_Index,4]
 						Else If (fadestatsInfoTextPlacement="bottomLeft")
 							statsInfoText[A_Index,4] := "x" . fadeStatsInfoTextMargin . " y" . A_ScreenHeight-Displacement-fadeStatsInfoTextMargin . " Left " . statsInfoText[A_Index,4]
-						If ((fadestatsInfoTextPlacement="topRight") or (fadestatsInfoTextPlacement="topLeft"))
-							Displacement := Displacement + (maxstatsInfoTextSize+10)
+						If ((fadestatsInfoTextPlacement="topRight") or (fadestatsInfoTextPlacement="topLeft")) {
+							if statsInfoText[A_Index,2] 
+								Displacement := Displacement + (maxstatsInfoTextSize+10)
+						}
 					}
 				}
 			}
@@ -656,7 +668,7 @@ DefaultFadeAnimation:
 	startTime := A_TickCount
 	SetFormat, Float, 3.2
 	;checking for extraction sound
-	If (found7z="true") and (7zEnabled = "true") and (7zSounds = "true") and !7zTempRomExists {
+	If (found7z="true") and (7zEnabled = "true") and (7zSounds = "true") and !7zTempRomExists and use7zAnimation {
 		If not (fadeLyr3Type = image and fadeLyr3ImgFollow7zProgress = false) {
 			If FileExist( HLMediaPath . "\Fade\" . SystemName . "\" . dbName . "\7z extracting.mp3")
 				extractionSound := HLMediaPath . "\Fade\" . SystemName . "\" . dbName . "\7z extracting.mp3"
@@ -674,9 +686,9 @@ DefaultFadeAnimation:
 	Loop {	
 		Gdip_GraphicsClear(G3)
 		;====== Updating 7z extraction info
-		If (found7z="true") and (7zEnabled = "true")  and !7zTempRomExists {
+		If (found7z="true") and (7zEnabled = "true")  and !7zTempRomExists and use7zAnimation {
 			If not (fadeLyr3Type = image and fadeLyr3ImgFollow7zProgress = false) {
-				romExPercentageAndFile := COM_Invoke(HLObject, "getExtractionSize", 7zRomPath, 1000)	; Get the current file being extracted and size of the 7z Extract Path - (Extraction Progress (Accurate Method))
+				romExPercentageAndFile := COM_Invoke(HLObject, "getExtractionSize", 7zRomPath, 0)	; Get the current file being extracted and size of the 7z Extract Path - (Extraction Progress (Accurate Method))
 				Loop, Parse, romExPercentageAndFile, |	; StringSplit oddly doesn't work for some unknown reason, must resort to a parsing Loop instead
 				{
 					If A_Index = 1
@@ -695,7 +707,7 @@ DefaultFadeAnimation:
 				{
 				If fadeLyr3Repeat != 0	; Only Loop animation If user does not want a static image
 					{
-					If (found7z="true") and (7zEnabled = "true") and (fadeLyr3ImgFollow7zProgress="true") and !7zTempRomExists {
+					If (found7z="true") and (7zEnabled = "true") and (fadeLyr3ImgFollow7zProgress="true") and !7zTempRomExists and use7zAnimation {
 						Gdip_DrawImage(G3, fadeLyr3Pic, fadeLyr3PicX-fadeLyr3CanvasX, fadeLyr3PicY-fadeLyr3CanvasY, fadeLyr3PicW*romExPercentage/100, fadeLyr3PicH, 0, 0, (fadeLyr3PicW//fadeLyr3Adjust)*romExPercentage/100, fadeLyr3PicH//fadeLyr3Adjust)	; draw layer 3 image onto screen on layer 3 and adjust the size If set
 						If (romExPercentage >= 100){
 							If 7zEnded
@@ -727,7 +739,7 @@ DefaultFadeAnimation:
 			fadeLyr3Drawn := true
 		}
 		;====== Drawing Bar
-		If (found7z="true") and (7zEnabled = "true")  and !7zTempRomExists {
+		If (found7z="true") and (7zEnabled = "true")  and !7zTempRomExists and use7zAnimation {
 			If (fadeLyr3Type = "bar") or (fadeLyr3Type = "ImageAndBar")
 				{
 				; Bar Window
@@ -752,7 +764,7 @@ DefaultFadeAnimation:
 				If percentage < 100
 					{
 					If (fadeBarInfoText = "true")
-						Gdip_TextToGraphics(G3, fadeText1, "x" xTopLeft+fadeText2X-fadeLyr3CanvasX " y" yTopLeft+fadeText2Y-fadeLyr3CanvasY . " " . fadeText2Options, fadeFont, 0, 0)
+						Gdip_TextToGraphics(G3, fadeText1, "x" xTopLeft+fadeText2X-fadeLyr3CanvasX " y" yTopLeft+fadeText2Y-fadeLyr3CanvasY . " " . fadeText1Options, fadeFont, 0, 0)
 				} Else {	; bar is at 100%
 					finishedBar:= 1
 					If (fadeBarInfoText = "true")
@@ -777,7 +789,7 @@ DefaultFadeAnimation:
 		Sleep, 5	; This slows down how often the animation gets updated (a pseudo FPS)
 	}
 	;stoping extraction sound and checking for complete sound
-	If (found7z="true") and (7zEnabled = "true") and (7zSounds = "true") and !7zTempRomExists {
+	If (found7z="true") and (7zEnabled = "true") and (7zSounds = "true") and !7zTempRomExists and use7zAnimation {
 		If extractionSound
 			SoundPlay, blank.mp3  ; playing non existent file to stop extraction sound.
 		If FileExist( HLMediaPath . "\Fade\" . SystemName . "\" . dbName . "\7z complete.mp3")

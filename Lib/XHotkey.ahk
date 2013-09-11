@@ -1,4 +1,4 @@
-MCRC=8E5CFEEF
+MCRC=E6BA52F0
 MVersion=1.0.1
 
 ; xHotkey Functions:
@@ -23,12 +23,14 @@ MVersion=1.0.1
 ; ---------------------------------------------
 ; XHOTKEY FUNCTION CODE WRAPPER
 ; ---------------------------------------------
-; H1 - means to enable hold for 1 second of the key group to go to label
+; H1000 - means to enable hold for 1 second of the key group to go to label
 ; S or nothing - means to enable single click of the key group to go to label
 ; D - means to enable double click of the key group to go to label (if you use a number after the D, D600:, it means that xhotkey will wait 600 miliseconds for a second key press)
 ; T - means to enable more than two clicks of the key group to go to label
 
 XHotKeywrapper(ExtendedKeyName,GeneralLabel,Options="ON"){
+	if !ExtendedKeyName
+		return
 	Loop, parse, ExtendedKeyName, |, %A_Space% 
 		{
 		Nooption := true
@@ -112,6 +114,8 @@ XHotkey(ExtendedKeyName,LabelForSingleKey="",Options="ON",LabelForHoldKey="",Key
 ;xHotkey Table Creation
 XHotkeyTableCreation(KeyGroup,LabelForSingleKey="",Options="",LabelForHoldKey="",KeyHoldWait="",LabelForDoubleClick="",LabelForMoreThanTwoClicks="",DoubleClickKeyWait=""){
 	Global
+	GoSubTimeDelay := 30 ; minimun time in miliseconds between key commands (necessary to avoid multiple gosub calls) 
+	LabelHoldCallDelay := 3000 ; minimun time in miliseconds between labels call after a hold call (necessary to avoid ghost label calls after an hold key press)  
 	KeyGroup := RegexReplace( KeyGroup, "^\s+|\s+$") ; KeyGroup without any spaces
 	;Saving sorted Keys to avoid considering different ordered keys as different table items (ex. A&S and S&A should be the same table item)
 	Keys := Array_Lib()
@@ -239,7 +243,7 @@ XHotkeyTableCreation(KeyGroup,LabelForSingleKey="",Options="",LabelForHoldKey=""
 			} else { ; defining extended hotkey command if there are more them two simultaneous keys pressed (more them one for joy), or if it has hold, double or more click presses
 				Loop, Parse, KeyGroup, &,%a_space%
 					{
-					Hotkey, % XHotKeyTable[currentGroup,A_Index,2], HotKeyModeProcess, %Options% ; go to sub to test multiple key press if any exit emulatgor key is pressed
+					Hotkey, % XHotKeyTable[currentGroup,A_Index,2], HotKeyModeProcess, %Options% ; go to sub to test multiple key press if any exit emulator key is pressed
 					XHotKeyTable[currentGroup,1,12] := true
 				}
 			}
@@ -251,7 +255,10 @@ XHotkeyTableCreation(KeyGroup,LabelForSingleKey="",Options="",LabelForHoldKey=""
 }
 
 HotKeyModeProcess:
-	currentkey := A_ThisHotkey ; current pressed keyasas
+	if(A_TickCount < LastHotKeyModeProcessTime+GoSubTimeDelay) ; XHotkeyMinimunDelay  necessary to avoid multiple calls to subs in multiple Key groups
+		return
+	LastHotKeyModeProcessTime := A_TickCount	
+	currentkey := A_ThisHotkey ; current pressed keys
 	replace := {"~":"","*":"","$":""} ; Saving current Key without modifiers to use on Keywait 
 	For what, with in replace
 		{
@@ -271,8 +278,21 @@ HotKeyModeProcess:
 					KeyWait, %currentKey%, t%currentKeyHoldWait%
 				else
 					KeyWait, %currentKey%
-				If not (GetKeyState(currentKey,"p")) ; it is not a hold key press  
+				If (GetKeyState(currentKey,"p")) ; could be a hold key press  
 					{
+					if IsLabel(CurrentPressandHoldLabel)
+						if XHotKeyTable[currentGroup,2,13]
+							if (A_TickCount > lastHoldLabelCall + LabelHoldCallDelay)
+								{
+								lastHoldLabelCall := A_TickCount
+								Gosub, %CurrentPressandHoldLabel%
+							}
+					LastGoSubTime := A_TickCount
+					currentHoldKeyPressed := currentKey
+					SetTimer, checkHoldKeyUp, 50
+					XHotKeyTable[currentGroup,1,5] := 0 ; reset the count to prepare for the next series of presses
+					Return
+				} else {
 					if (XHotKeyTable[currentGroup,1,5]) > 0 { ; SetTimer already started, so we log the keypress instead
 						if (IgnoreMultipleKeys>0) { ; necessary to avoid multiple key count in multiple Key groups
 							IgnoreMultipleKeys--
@@ -294,23 +314,12 @@ HotKeyModeProcess:
 						if IsLabel(CurrentSinglePressLabel)
 							{
 							if XHotKeyTable[currentGroup,1,13]
-								if(A_TickCount > GoSubTimeDelay + LastGoSubTime) ; necessary to avoid multiple calls to subs in multiple Key groups
+								if (A_TickCount > lastHoldLabelCall + LabelHoldCallDelay)
 									Gosub %CurrentSinglePressLabel%
 							LastGoSubTime := A_TickCount
-							GoSubTimeDelay := 10 ; minimun time in miliseconds between key commands (necessary to avoid multiple gosub calls) 
 						}
 						XHotKeyTable[ActiveCurrentGroup,1,5] := 0 ; reset the count to prepare for the next series of presses
 					}
-					Return
-				} else { ;it is a hold key press
-					if IsLabel(CurrentPressandHoldLabel)
-						if XHotKeyTable[currentGroup,2,13]
-							if(A_TickCount > GoSubTimeDelay + LastGoSubTime) ; necessary to avoid multiple calls to subs in multiple Key groups
-								Gosub, %CurrentPressandHoldLabel%
-					currentHoldKeyPressed := currentKey
-					SetTimer, checkHoldKeyUp, 50
-					LastGoSubTime := A_TickCount
-					XHotKeyTable[currentGroup,1,5] := 0 ; reset the count to prepare for the next series of presses
 					Return
 				}
 			}
@@ -319,12 +328,8 @@ HotKeyModeProcess:
 Return
 
 checkHoldKeyUp:
-	if (GetKeyState(currentHoldKeyPressed,"p")){
-		GoSubTimeDelay := 3000
-	} else {
-		GoSubTimeDelay := 10
+	if !(GetKeyState(currentHoldKeyPressed,"p"))
 		SetTimer, checkHoldKeyUp, off
-	}
 return
 
 MultipleClickCheck: ;checking if the key group was pressed once, twice or more times.
@@ -334,23 +339,20 @@ MultipleClickCheck: ;checking if the key group was pressed once, twice or more t
 	CurrentLabelForMoreThanTwoClicks := % XHotKeyTable[ActiveCurrentGroup,1,10]
 	if (XHotKeyTable[ActiveCurrentGroup,1,5] > 2) and (IsLabel(CurrentLabelForMoreThanTwoClicks)) { ; The key was pressed three or more times.
 		if XHotKeyTable[currentGroup,4,13]
-			if(A_TickCount > GoSubTimeDelay + LastGoSubTime) ; necessary to avoid multiple calls to subs in multiple Key groups
+			if (A_TickCount > lastHoldLabelCall + LabelHoldCallDelay)
 				Gosub, %CurrentLabelForMoreThanTwoClicks%
 		LastGoSubTime := A_TickCount
-		GoSubTimeDelay := 10 ; minimun time in miliseconds between key commands (necessary to avoid multiple gosub calls) 
 	} else if (XHotKeyTable[ActiveCurrentGroup,1,5] > 1) and (IsLabel(CurrentDoubleClickLabel)) { ; The key was pressed twice.
 		if XHotKeyTable[currentGroup,3,13]
-			if(A_TickCount > GoSubTimeDelay + LastGoSubTime) ; necessary to avoid multiple calls to subs in multiple Key groups
+			if (A_TickCount > lastHoldLabelCall + LabelHoldCallDelay)
 				Gosub, %CurrentDoubleClickLabel%
 		LastGoSubTime := A_TickCount
-		GoSubTimeDelay := 10 ; minimun time in miliseconds between key commands (necessary to avoid multiple gosub calls) 
 	} else {
 		if IsLabel(CurrentSinglePressLabel)
 			if XHotKeyTable[currentGroup,1,13]
-				if(A_TickCount > GoSubTimeDelay + LastGoSubTime) ; necessary to avoid multiple calls to subs in multiple Key groups
+				if (A_TickCount > lastHoldLabelCall + LabelHoldCallDelay)
 					Gosub %CurrentSinglePressLabel%
 		LastGoSubTime := A_TickCount
-		GoSubTimeDelay := 10 ; minimun time in miliseconds between key commands (necessary to avoid multiple gosub calls) 
 	}
 	XHotKeyTable[ActiveCurrentGroup,1,5] := 0 ; reset the count to prepare for the next series of presses
 Return
