@@ -1,4 +1,4 @@
-MCRC=D814931
+MCRC=F3D99F7D
 mVersion=1.0.4
 
 ;Author: bleasby
@@ -3122,7 +3122,7 @@ ExitHyperPause:
 				RunJoyToKey%zz%(keymapperPath,keymapperExe,selectedProfile[1,2])
 				}
 		} Else If (keymapperHyperLaunchProfileEnabled = "true") {
-			RunKeymapper("load",keymapper)
+			RunKeymapper%zz%("load",keymapper)
 		}
         If !disableLoadScreen
             If !disableActivateBlackScreen
