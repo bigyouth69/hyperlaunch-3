@@ -1,5 +1,5 @@
-MCRC=2986ED9B
-mVersion=1.0.3
+MCRC=D814931
+mVersion=1.0.4
 
 ;Author: bleasby
 ;Thanks to djvj and brolly for helping in the development of HyperPause (without them this would be impossible to achieve)
@@ -1099,7 +1099,7 @@ Controller:
             ; drawing submenu with profile options
             If  (HSubMenuItem = 2) {
                 If (V2SubMenuItem > 2){
-                    possibleProfilesList := Keymapper_HyperPauseProfileList(joyConnectedInfo[V2SubMenuItem-2,2],V2SubMenuItem-2,keymapper)
+                    possibleProfilesList := Keymapper_HyperPauseProfileList%zz%(joyConnectedInfo[V2SubMenuItem-2,2],V2SubMenuItem-2,keymapper)
                     If  V3SubMenuItem < 1 
                         V3SubMenuItem := % possibleProfilesList.MaxIndex() 
                     If  V3SubMenuItem > % possibleProfilesList.MaxIndex() 
