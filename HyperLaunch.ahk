@@ -1003,7 +1003,7 @@ If keymapperAHKMethod = Internal
 }
 
 ; Running VJoy & checking to make sure it actually ran
-If vJoyEnabled = true
+If vJoyEnabled = trues
 {	; CheckFile(vJoyPath) ; Verify VJoy exists in location user specified
 	SplitPath, vJoyPath, vJoyExe, vJoyPath	; split apart path and redefine vars
 	vJoyProfilePath := profilePath . "\VJoy"
