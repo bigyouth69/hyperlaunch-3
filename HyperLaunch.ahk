@@ -990,7 +990,7 @@ If ( hideDesktop = "true" && fadeIn != "true" ){
 
 If keymapperEnabled = true
 	If keymapper not in xpadder,joytokey,joy2key
-		ScriptError("Your global keymapper is set to """ . keymapperGlobal . """ and this system is set to """ . keymapperSystem . """. Supported choices are xpadder or joytokey and only one can be used per system",8)
+		ScriptError("Your keymapper is set to """ . keymapper . """. Supported choices are xpadder or joytokey and only one can be used per system",8)
 If keymapperAHKMethod = Internal
 {	Log("Main - Loading Internal AHK Keymapping")
 	Profile2Load := GetAHKProfile(ahkRomProfile . "|" . ahkEmuProfile . "|" . ahkSystemProfile . "|" . ahkDefaultProfile)
