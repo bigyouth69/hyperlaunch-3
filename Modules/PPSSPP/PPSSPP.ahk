@@ -2,14 +2,15 @@ MEmu = PPSSPP
 MEmuV =  v0.7.6-15
 MURL = http://www.ppsspp.org/
 MAuthor = djvj
-MVersion = 2.0
-MCRC = BCFCF78F
+MVersion = 2.0.1
+MCRC = 38E1B00D
 iCRC = 86DE2C7A
 MID = 635038268916444338
 MSystem = "Sony PSP"
 ;----------------------------------------------------------------------------
 ; Notes:
 ; CLI options: http://forums.ppsspp.org/showthread.php?tid=339&pid=17117#pid17117
+; Compatibility List: http://forums.ppsspp.org/showthread.php?tid=1473
 ;----------------------------------------------------------------------------
 StartModule()
 BezelGUI()

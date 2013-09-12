@@ -3,7 +3,7 @@ MEmuV =  v0.93
 MURL = http://byuu.org/higan/
 MAuthor = djvj
 MVersion = 2.0.2
-MCRC = 9E8E3C57
+MCRC = 723A9893
 iCRC = A3607D8A
 MID = 635038268899159961
 MSystem = "Nintendo Entertainment System","Nintendo Famicom""Nintendo Game Boy","Nintendo Game Boy Color","Nintendo Satellaview","Nintendo Super Famicom","Super Nintendo Entertainment System"
@@ -38,11 +38,9 @@ higanFile := CheckFile(A_AppData . "\higan\settings.bml")
 FileRead, higanCfg, %higanFile%
 currentFullScreen := (InStr(higanCfg, "StartFullScreen: true") ? ("true") : ("false"))
 If ( Fullscreen != "true" And currentFullScreen = "true" ) {
-	; StringReplace, higanCfg, higanCfg, Video::FullScreenMode = 1, Video::FullScreenMode = 0
 	StringReplace, higanCfg, higanCfg, StartFullScreen: true, StartFullScreen: false
 	SaveFile(higanCfg, higanFile)
 } Else If ( Fullscreen = "true" And currentFullScreen = "false" ) {
-	; StringReplace, higanCfg, higanCfg, Video::FullScreenMode = 0, Video::FullScreenMode = 1
 	StringReplace, higanCfg, higanCfg, StartFullScreen: false, StartFullScreen: true
 	SaveFile(higanCfg, higanFile)
 }
