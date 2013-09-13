@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true emulator will run fullscreen.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%SystemName%" required="false">
+					<SECTIONTYPE>System</SECTIONTYPE>
+					<KEYS>
+						<KEY name="SuperGameBoyMode" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set this system to use Super Game Boy mode. Only affects Nintendo Super Game Boy and Nintendo Game Boy.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+					<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="SuperGameBoyMode" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set this rom to use Super Game Boy mode. Only affects Nintendo Super Game Boy and Nintendo Game Boy.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+		</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>
