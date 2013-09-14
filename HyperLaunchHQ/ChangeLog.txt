@@ -10,7 +10,28 @@
                                        Release History                                       
 =============================================================================================
 
-v1.0.10 (August 13th, 2013):
+v1.0.11.0 (September 13th, 2013):
+  * Added module file location to the Module Info panel
+  * Added new ini keys : Keymapper_AHK_Method and Fade_Out_Extra_Screen
+  * Added support for configuring HyperPause's History menu settings
+  * Added support for all the new HyperPause keys (except bezel/instruction cards)
+  * WinTitle button will now only be enabled when a game is selected in the table (module 
+    settings form)
+  * Added button to launch games directly from within the module settings form in order to make 
+    testing your settings easier
+  * Fixed a bug where audit wasn't running for databases with a single game
+  * Fixed a bug where the WinTitle text box would still get updated even if the user cancelled 
+    the process
+  * Added the ability to be able to edit your database files from within HLHQ using your configured 
+    text editor
+  * Added support for custom named xpadder profiles for keymapper
+
+v1.0.10.1 (August 17th, 2013):
+  * Fixed bug introduced in last version where absolute file paths were being rejected by the 
+    validator
+  * Moved Alternate Emulators tab to the last position in the Games section
+
+v1.0.10.0 (August 13th, 2013):
   * Added support for file/folder paths relative to the emulator folder in the module settings 
     form
   * HLHQ will now remember the last selected main tab and will start on that tab next time you 
@@ -23,14 +44,14 @@ v1.0.10 (August 13th, 2013):
   * Fixed bug in Module validator that made HLHQ crash when certain special characters were used
   * Added warning when you try to audit a system that doesn't have a default emulator set
 
-v1.0.9 (August 5th, 2013):
+v1.0.9.0 (August 5th, 2013):
   * Fixed serious bug in the save/load state form. Setting weren't being loaded properly and 
     by consequence they were being saved with the wrong values
   * Added the ability to launch a game through HyperLaunch from within the module settings form
   * Added support for the new admissible values for the ini key Restore_Front_End_On_Exit, it's 
     not a boolean any longer
 
-v1.0.8 (July 30th, 2013):
+v1.0.8.0 (July 30th, 2013):
   * Added ability to export have/missing lists from both audit panel. Supports both Text and 
     HTML output formats
   * Added support for HyperLaunch's new Player 2 navigation keys
@@ -49,7 +70,7 @@ v1.0.8 (July 30th, 2013):
   * Added support for 2 new HyperPause ini keys : Bar_Vertical_Offset and Full_Screen_Help_Text_Timer
   * Split General Settings\HyperLaunch tab into 2 moving all controls keys in it's own tab
 
-v1.0.7 (July 23rd, 2013):
+v1.0.7.0 (July 23rd, 2013):
   * Fixed 3DArcade plugin to properly handle rom names with dots in their filenames
   * Added code to handle errors while accessing the clipboard in some machines, only a warning 
     will be written to the log file now
@@ -57,7 +78,7 @@ v1.0.7 (July 23rd, 2013):
     fail if the system trying to look into a protected folder
   * Replaced FolderBrowserDialog by a customized version of it to allow manual path entering
 
-v1.0.6 (July 17th, 2013):
+v1.0.6.0 (July 17th, 2013):
   * Copy log contents to clipboard directly from HLHQ
   * Changed again the layout in the module settings editor, added a GridSplitter this time 
     hopefully it will solve all situations
@@ -68,7 +89,7 @@ v1.0.6 (July 17th, 2013):
   * Added the port number each controller is connected to under the xpadder tab in the keymapper
     screen
 
-v1.0.5 (July 12th, 2013):
+v1.0.5.0 (July 12th, 2013):
   * Added Full System Audit feature. It's now possible to audit the roms several or all of your 
     systems at once
   * Corrected bug with GridSplitter in the keymappers panel where it wasn't resizing properly
@@ -77,8 +98,7 @@ v1.0.5 (July 12th, 2013):
   * Added ScrollViewer on module settings editor form in order to support lower resolution 
     monitors
 
-v1.0.4 (July 6th, 2013):
-
+v1.0.4.0 (July 6th, 2013):
   * Added the ability to launch your frontend from HLHQ (From General Settings tab)
   * System Notes feature - You can now add your own personal text notes for any system you 
     want (Settings tab)
@@ -86,15 +106,13 @@ v1.0.4 (July 6th, 2013):
   * Database Plugin System added. You can create your own plugins to make HLHQ read your 
     databases from any format, making it possible to use HLHQ with any frontend
 
-v1.0.3 (July 3rd, 2013):
-
+v1.0.3.0 (July 3rd, 2013):
   * Added support for the 7z_Sounds ini key
   * Changed module parser to support the new MSystem tag declaration
   * Corrected log parser to support log entries using the pipe character
   * Other minor bug fixes
 
-v1.0.2 (June 28th, 2013):
-
+v1.0.2.0 (June 28th, 2013):
   * Fixed crash when reseting General Settings to the default values
   * Added a feature to check if HyperLaunch is running and the ability to stop it from the 
     HyperLaunchHQ panel
@@ -102,10 +120,8 @@ v1.0.2 (June 28th, 2013):
   * ISD : Added support for new key type (FileNameNoExt)
   * Several other minor bug fixes and corrections
 
-v1.0.1 (June 23rd, 2013):
-
+v1.0.1.0 (June 23rd, 2013):
   * Removed an empty space from the Fade_Stats_Info_Order default value
 
-v1.0.0 (June 22nd, 2013):
-
+v1.0.0.0 (June 22nd, 2013):
   * First public release
