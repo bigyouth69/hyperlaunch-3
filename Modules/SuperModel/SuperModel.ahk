@@ -2,9 +2,9 @@ MEmu = SuperModel
 MEmuV = r251
 MURL = http://www.supermodel3.com/
 MAuthor = djvj & chillin
-MVersion = 2.0.1
-MCRC = 980A7616
-iCRC = 5FC07503
+MVersion = 2.0.2
+MCRC = 14FD908
+iCRC = 7677A2C1
 MID = 635038268926572770
 MSystem = "Sega Model 3"
 ;----------------------------------------------------------------------------
@@ -15,16 +15,12 @@ MSystem = "Sega Model 3"
 StartModule()
 FadeInStart()
 
-settingsFile := emuPath . "\Config\Supermodel.ini"
-res := IniReadCheck(settingsFile, "daytona2 ", "XResolution ",,,1)
-msgbox % res
-exitapp
-
 settingsFile := modulePath . "\" . moduleName . ".ini"
 Fullscreen := IniReadCheck(settingsFile, "Settings|" . romName, "Fullscreen","true",,1)
 Widescreen := IniReadCheck(settingsFile, "Settings|" . romName, "Widescreen","true",,1)
 ConfigInputs := IniReadCheck(settingsFile, "Settings|" . romName, "ConfigInputs","false",,1)
-Resolution := IniReadCheck(settingsFile, "Settings|" . romName, "Resolution",A_ScreenWidth . "`," . A_ScreenHeight,,1)	; Width,Height
+screenWidth := IniReadCheck(settingsFile, "Settings|" . romName, "ScreenWidth",A_ScreenWidth,,1)	; Width
+screenHeight := IniReadCheck(settingsFile, "Settings|" . romName, "ScreenHeight",A_ScreenHeight,,1)	; Height
 vertShader := IniReadCheck(settingsFile, "Settings|" . romName, "VertShader",A_Space,,1)					; Filename of the 3D vertex shader
 fragShader := IniReadCheck(settingsFile, "Settings|" . romName, "FragShader",A_Space,,1)					; Filename of the 3D fragment shader
 inputSystem := IniReadCheck(settingsFile, "Settings|" . romName, "InputSystem","dinput",,1)				; Choices are dinput (default), xinput, & rawinput. Use dinput for most setups. Use xinput if you use XBox 360 controllers. Use rawinput for multiple mice or keyboard support.
@@ -35,17 +31,16 @@ multiThreading := IniReadCheck(SettingsFile, "Settings|" . romName, "MultiThread
 musicVolume := IniReadCheck(SettingsFile, "Settings|" . romName, "MusicVolume",,,1)
 soundVolume := IniReadCheck(SettingsFile, "Settings|" . romName, "SoundVolume",,,1)
 
-; freq = -ppc-frequency=%frequency%
 freq := If frequency != "" ? "-ppc-frequency=" . frequency : ""
 throttle := If throttle = "true" ? "" : "-no-throttle"
 fullscreen := If Fullscreen = "true" ? "-fullscreen" : "-window"
 widescreen := If widescreen = "true" ? "-wide-screen" : ""
-resolution := If Resolution != "" ? "-res=" . Resolution : ""
+resolution := If screenWidth != "" ? "-res=" . screenWidth . "`," . screenHeight : ""
 vertShader := If vertShader != "" ? "-vert-shader=""" . vertShader . """" : ""
 fragShader := If fragShader != "" ? "-frag-shader=""" . fragShader . """" : ""
 inputSystem := If inputSystem != "" ? "-input-system=" . inputSystem : ""
 forceFeedback := If forceFeedback = "true" ? "-force-feedback" : ""
-multiThreading := If multiThreading = "true" ? "" : "-no-threads"
+multiThreading := If multiThreading = "true" ? "-gpu-multi-threaded" : "-no-threads"
 musicVolume := If musicVolume != "" ? "-music-volume=" . musicVolume : ""
 soundVolume := If soundVolume != "" ? "-sound-volume=" . soundVolume : ""
 

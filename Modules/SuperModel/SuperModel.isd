@@ -19,9 +19,13 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>If true will launch SuperModel into the config inputs menu, Leave false to play games.</DESCRIPTION>
 						</KEY>
-						<KEY name="Resolution" required="false" nullable="true">
-							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>Width,Height  -- Put in the resolution you want to play at. WIdth,Height. Don't forget the comma separating the two values. Leave blank to use default monitor's resolution.</DESCRIPTION>
+						<KEY name="ScreenWidth" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The global screen width for all games for this system. Defaults to your screen's current width if not set.</DESCRIPTION>
+						</KEY>
+						<KEY name="ScreenHeight" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The global screen height for all games for this system. Defaults to your screen's current height if not set.</DESCRIPTION>
 						</KEY>
 						<KEY name="VertShader" required="false" nullable="true">
 							<KEYTYPE>FilePath</KEYTYPE>
@@ -81,9 +85,13 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>If true will launch SuperModel into the config inputs menu, Leave false to play games.</DESCRIPTION>
 						</KEY>
-						<KEY name="Resolution" required="false" nullable="true">
-							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>Width,Height  -- Put in the resolution you want to play at. WIdth,Height. Don't forget the comma separating the two values. Leave blank to use global resolution.</DESCRIPTION>
+						<KEY name="ScreenWidth" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The screen width for just this game. Leave blank to use global width.</DESCRIPTION>
+						</KEY>
+						<KEY name="ScreenHeight" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The screen height for just this game. Leave blank to use global height.</DESCRIPTION>
 						</KEY>
 						<KEY name="VertShader" required="false" nullable="true">
 							<KEYTYPE>FilePath</KEYTYPE>
