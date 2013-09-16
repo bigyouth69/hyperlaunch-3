@@ -1,5 +1,5 @@
-MCRC=F3D99F7D
-mVersion=1.0.4
+MCRC=B63194B
+mVersion=1.0.5
 
 ;Author: bleasby
 ;Thanks to djvj and brolly for helping in the development of HyperPause (without them this would be impossible to achieve)
@@ -3086,7 +3086,7 @@ ExitHyperPause:
     Log("Guis destroyed",5)
     Gdip_DeleteBrush(BlackGradientBrush), Gdip_DeleteBrush(PBRUSH), Gdip_DeleteBrush(HyperPause_SubMenu_BackgroundBrushV), Gdip_DeleteBrush(HyperPause_SubMenu_SelectedBrushV), Gdip_DeleteBrush(HyperPause_SubMenu_DisabledBrushV), Gdip_DeleteBrush(HyperPause_BackgroundBrushV), Gdip_DeleteBrush(HyperPause_SubMenu_GuidesSelectedBrushV), Gdip_DeleteBrush(HyperPause_SubMenu_ManualsSelectedBrushV), Gdip_DeleteBrush(HyperPause_SubMenu_HistorySelectedBrushV), Gdip_DeleteBrush(HyperPause_SubMenu_ControllerSelectedBrushV), Gdip_DeleteBrush(HyperPause_SubMenu_ArtworkSelectedBrushV),Gdip_DeleteBrush(HyperPause_SubMenu_FullScreenTextBrushV), Gdip_DeleteBrush(HyperPause_SubMenu_FullScreenBrushV), Gdip_DeleteBrush(HyperPause_7zProgress_BackgroundBrush), Gdip_DeleteBrush(HyperPause_7zProgress_BarBackBrush), Gdip_DeleteBrush(HyperPause_7zProgress_BarBrush) 
 	Log("Brushes deleted",5)
-    Gdip_DisposeImage(MainMenuBackgroundBitmap), Gdip_DisposeImage(WheelImageBitmap), Gdip_DisposeImage(PauseImageBitmap), Gdip_DisposeImage(SoundBitmap), Gdip_DisposeImage(MuteBitmap), Gdip_DisposeImage(ButtonToggleONBitmap), Gdip_DisposeImage(ButtonToggleOFFBitmap), Gdip_DisposeImage(CurrentBitmap), Gdip_DisposeImage(SelectedBitmap), Gdip_DisposeImage(pGameScreenshot)
+    Gdip_DisposeImage(MainMenuBackgroundBitmap), Gdip_DisposeImage(WheelImageBitmap), Gdip_DisposeImage(PauseImageBitmap), Gdip_DisposeImage(SoundBitmap), Gdip_DisposeImage(MuteBitmap), Gdip_DisposeImage(ButtonToggleONBitmap), Gdip_DisposeImage(ButtonToggleOFFBitmap), Gdip_DisposeImage(CurrentBitmap), Gdip_DisposeImage(SelectedBitmap), Gdip_DisposeImage(pGameScreenshot) 
     Loop, 5
         Gdip_DisposeImage(HyperPauseMusicBitmap%A_Index%)
     Loop, 6 
@@ -3322,6 +3322,9 @@ SendCommandstoEmulator:
             }
             If(SelectedMenuOption="SaveState") and (HyperPause_SaveStateScreenshot = "true") {
                 gosub, SaveScreenshot  
+                Gdip_DisposeImage(SaveStateBackgroundBitmap)
+                if FileExist(HyperPause_SaveScreenshotPath . SaveStateBackgroundFile)
+                    FileDelete, %HyperPause_SaveScreenshotPath%%SaveStateBackgroundFile% 
                 RIni_SetKeyValue(1,dbName, "SaveState" . VSubMenuItem . "Screenshot",CurrentScreenshotFileName) ; makes sure that save state info is saved on statistics update   
                 IniWrite, %CurrentScreenshotFileName%, %HyperPause_GameStatistics%%systemName%.ini, %dbName%, SaveState%VSubMenuItem%Screenshot ; saves save state info between HYperPause menu calls
             }
