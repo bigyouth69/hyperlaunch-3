@@ -2,8 +2,8 @@ MEmu = Dolphin
 MEmuV =  v3.0 r766
 MURL = http://www.dolphin-emulator.com/
 MAuthor = djvj
-MVersion = 2.0.1
-MCRC = B0A0679D
+MVersion = 2.0.2
+MCRC = 11D8FD1E
 iCRC = 8197DF4
 MID = 635038268884477733
 MSystem = "Nintendo Gamecube","Nintendo Wii"
@@ -16,6 +16,9 @@ MSystem = "Nintendo Gamecube","Nintendo Wii"
 ; Dolphin will sometimes crash when connnecting a Wiimote, then going back to the game. After all Wiimotes are connected that you want to use, it shouldn't have anymore issues.
 ; Convert all your games to ciso using Wii Backup Manager to save alot of space by stripping everything but the game partition. http://www.wiibackupmanager.tk/
 ; Render to Main Window needs to be unchecked, otherwise hotkeys to pair wiimotes will not work in fullscreen. This is done for you if you forget.
+;
+; Bezels:
+; If the game does not fit the window, you can try setting stretch to window manually in dolphin.
 ;
 ; Setting up custom Wiimote profiles:
 ; First set UseCustomProfiles to true below
@@ -31,6 +34,7 @@ MSystem = "Nintendo Gamecube","Nintendo Wii"
 ; If it did not link, press your RefreshKey before the wiimote stops flashing
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGui()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
@@ -40,6 +44,8 @@ HideMouse := IniReadCheck(settingsFile, "Settings", "HideMouse","true",,1)					;
 PairKey := IniReadCheck(settingsFile, "Settings", "PairKey","",,1)							; hotkey to "Pair Up" Wiimotes, delete the key to disable it
 RefreshKey := IniReadCheck(settingsFile, "Settings", "RefreshKey","",,1)						; hotkey to "Refresh" Wiimotes, delete the key to disable it
 Timeout := IniReadCheck(settingsFile, "Settings", "Timeout","5",,1)							; amount in seconds we should wait for the above hotkeys to timeout
+
+BezelStart()
 
 dolphinINI := CheckFile(emuPath . "\User\Config\Dolphin.ini")
 
@@ -96,10 +102,12 @@ Run(executable . " /b /e """ . romPath . "\" . romName . romExtension . """", em
 
 WinWait("Dolphin ahk_class wxWindowNR")
 WinWaitActive("Dolphin ahk_class wxWindowNR")
+BezelDraw()
 
 FadeInExit()
 Process("WaitClose", executable)
 7zCleanUp()
+BezelExit()
 FadeOutExit()
 ExitModule()
 
