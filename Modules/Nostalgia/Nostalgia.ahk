@@ -2,8 +2,8 @@ MEmu = Nostalgia
 MEmuV = v5.0
 MURL = http://www.intellivision.us/intvgames/nostalgia/nostalgia.php
 MAuthor = djvj
-MVersion = 2.0
-MCRC = 16EB2977
+MVersion = 2.0.1
+MCRC = E2C55815
 iCRC = 1E716C97
 MID = 635038268909868866
 MSystem = "Mattel Intellivision"
@@ -17,9 +17,11 @@ MSystem = "Mattel Intellivision"
 ; Nostalgia stores its config in the registry @ HKEY_CURRENT_USER\Software\ShinyTechnologies\Nostalgia
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGui()
 FadeInStart()
 
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
+BezelStart()
 
 ; Setting Fullscreen setting in registry if it doesn't match what user wants above
 currentFullScreen := ReadReg("Full Screen")
@@ -37,10 +39,12 @@ Run(executable . " """ . romPath . "\" . romName . romExtension . """", emuPath)
 
 WinWait("ahk_class NostalgiaGameClass")
 WinWaitActive("ahk_class NostalgiaGameClass")
+BezelDraw()
 
 FadeInExit()
 Process("WaitClose", executable)
 7zCleanUp()
+BezelExit()
 FadeOutExit()
 ExitModule()
 
