@@ -1,4 +1,4 @@
-MCRC=ACFC7085
+MCRC=35ED1E65
 MVersion=1.0.3
 
 BezelGUI(){
@@ -107,8 +107,8 @@ BezelStart(Mode="",parent="",angle="",width="",height=""){
 		bezelMode = Normal
 	else if (Mode = "fixResMode")
 		bezelMode = fixResMode
-	else if (Mode = "MultiScreens")
-		bezelMode = MultiScreens		
+	else if RegExMatch(Mode, "^\d+$")
+		bezelMode = MultiScreens	
 	else
 		bezelLayoutFile = %Mode%	
 	Log("Bezel - Bezel mode " . bezelMode . " selected.",4)
@@ -119,18 +119,28 @@ BezelStart(Mode="",parent="",angle="",width="",height=""){
 	} else
 		Log("Bezel - Assuming that game has horizontal orientation.",4)
 	;Read Bezel Image
-	if forceBezelFileName
-		bezelFileStartingWord := forceBezelFileName
-	else
-		bezelFileStartingWord := "Bezel"
-	bezelPath := BezelFilesPath(bezelFileStartingWord,"png")
+	if (bezelMode = "MultiScreens"){
+		bezelNumberOfScreens := mode
+		bezelPath := BezelFilesPath("Bezel [" . bezelNumberOfScreens . "S]","png")
+	bezelNumberOfScreens . "S]*.png to your bezel folders." ,2)
+	} else {
+		bezelPath := BezelFilesPath("Bezel","png",true)
+	}
 	If bezelPath 
 		{
+		bezelCheckPosTimeout = 5000
 		;-----Loading Image Files into ARRAYs for bezel/background/overlay/instruction card
 		;Setting bezel aleatory choosed file
 		bezelImagesList := []
-		Loop, %bezelPath%\%bezelFileStartingWord%*.png
+		if (bezelMode = "MultiScreens")
+			{
+			Loop, % bezelPath . "\Bezel [" . bezelNumberOfScreens . "S]*.png"
                 bezelImagesList.Insert(A_LoopFileFullPath)
+		} else {
+			Loop, % bezelPath . "\Bezel*.png"
+				if !RegExMatch(A_LoopFileName, "i)\[[0-9]+S\]")
+					 bezelImagesList.Insert(A_LoopFileFullPath)
+		}
 		Random, RndmBezel, 1, % bezelImagesList.MaxIndex()
 		bezelImageFile := bezelImagesList[RndmBezel]
 		Log("Bezel - Loading Bezel image: " . bezelImageFile,1)		
@@ -406,7 +416,7 @@ BezelStart(Mode="",parent="",angle="",width="",height=""){
 			; Updating GUI 1 - Background - with image
 			If bezelBackgroundFile
 				{
-				Gdip_DrawImage(Bezel_G1, bezelBackgroundBitmap, 0, 0,A_ScreenWidth,A_ScreenHeight)        
+				Gdip_DrawImage(Bezel_G1, bezelBackgroundBitmap, 0, 0,A_ScreenWidth+1,A_ScreenHeight+1)        
 				UpdateLayeredWindow(Bezel_hwnd1, Bezel_hdc1,0,0, A_ScreenWidth, A_ScreenHeight)
 				Gui, Bezel_GUI1: Show, na
 				Log("Bezel - Background Screen Position: BezelImage left=" . 0 . " top=" . 0 . " right=" . A_ScreenWidth . " bottom=" . A_ScreenHeight ,5)
@@ -432,34 +442,30 @@ BezelDraw(){
 			var := "BezelLabel"
 			If IsLabel(var)
 				gosub, %var%
-			loop, 8
-				{
-				if !Screen%a_index%ID
-					break
-				If !disableHideTitleBarScreen%a_index%
-					WinSet, Style, -0xC00000, % "ahk_id " . Screen%a_index%ID
-				If !disableHideToggleMenuScreen%a_index%
-					ToggleMenu(Screen%a_index%ID)
-				If !disableHideBorderScreen%a_index%
-					WinSet, Style, -0xC40000, % "ahk_id " . Screen%a_index%ID
-				bezelMultiScreensNumber := a_index
-			}
-			;Moving emulator Window to predefined bezel position 
-			loop, % bezelMultiScreensNumber 
+			loop, %bezelNumberOfScreens%
 				{
 				currentScreen := a_index
+				If !disableHideTitleBarScreen%currentScreen%
+					WinSet, Style, -0xC00000, % "ahk_id " . Screen%currentScreen%ID
+				If !disableHideToggleMenuScreen%currentScreen%
+					ToggleMenu(Screen%a_index%ID)
+				If !disableHideBorderScreen%currentScreen%
+					WinSet, Style, -0xC40000, % "ahk_id " . Screen%currentScreen%ID
+				;Moving emulator Window to predefined bezel position
 				screenPositionLogList := screenPositionLogList . "`r`n`t`t`t`t`tScreen " . currentScreen . ": left=" . bezelScreen%currentScreen%X1 . " top=" . bezelScreen%currentScreen%Y1 . " right=" . (bezelScreen%currentScreen%X1+bezelScreen%currentScreen%W) . " bottom=" . (bezelScreen%currentScreen%Y1+bezelScreen%currentScreen%H)
 				WinMove, % "ahk_id " . Screen%currentScreen%ID, , % bezelScreen%currentScreen%X1, % bezelScreen%currentScreen%Y1, % bezelScreen%currentScreen%W, % bezelScreen%currentScreen%H
 				;check if window moved
+				X:="" , Y:="" , W:="" , H:=""
 				timeout := A_TickCount
 				loop
 					{
+					sleep, 50
 					WinGetPos, X, Y, W, H, % "ahk_id " . Screen%currentScreen%ID
 					if (X=bezelScreen%currentScreen%X1) and (Y=bezelScreen%currentScreen%Y1) and (W=bezelScreen%currentScreen%W) and (H=bezelScreen%currentScreen%H)
 						break
-					if(timeout<A_TickCount-2000)
+					if(timeout < A_TickCount - bezelCheckPosTimeout)
 						break
-					sleep, 20
+					sleep, 50
 					WinMove, % "ahk_id " . Screen%currentScreen%ID, , % bezelScreen%currentScreen%X1, % bezelScreen%currentScreen%Y1, % bezelScreen%currentScreen%W, % bezelScreen%currentScreen%H
 				}
 			}	
@@ -491,14 +497,17 @@ BezelDraw(){
 				bezelScreenX := round(bezelScreenX) , bezelScreenY := round(bezelScreenY), bezelScreenWidth := round(bezelScreenWidth) , bezelScreenHeight := round(bezelScreenHeight)
 				WinMove, ahk_id %emulatorID%, , %bezelScreenX%, %bezelScreenY%, %bezelScreenWidth%, %bezelScreenHeight%
 				; check if window moved
+				X:="" , Y:="" , W:="" , H:=""
+				timeout := A_TickCount
 				loop
 					{
+					sleep, 50
 					WinGetPos, X, Y, W, H, ahk_id %emulatorID%
 					if (X=bezelScreenX) and (Y=bezelScreenY) and (W=bezelScreenWidth) and (H=bezelScreenHeight)
 						break
-					if(timeout<A_TickCount-2000)
+					if(timeout < A_TickCount - bezelCheckPosTimeout)
 						break
-					sleep, 20
+					sleep, 50
 					WinMove, ahk_id %emulatorID%, , %bezelScreenX%, %bezelScreenY%, %bezelScreenWidth%, %bezelScreenHeight%
 				}
 			}
@@ -506,13 +515,15 @@ BezelDraw(){
 		} else if (bezelMode = "fixResMode") {  ; Define coordinates for emulators that does not support custom made resolutions. 
 			WinGet emulatorID, ID, A
 			Log("Bezel - Emulator does not support custom made resolution. Game screen will be centered at the emulator resolution and the bezel png will be drawn around it. The bezel image will be croped if its resolution is bigger them the screen resolution.",1)
-			timeout := A_TickCount
+			X:="" , Y:="" , W:="" , H:=""
+				timeout := A_TickCount
 			loop 
 				{
+				sleep, 50
 				WinGetPos, bezelScreenX, bezelScreenY, bezelScreenWidth, bezelScreenHeight, A
 				if bezelScreenX and bezelScreenY and bezelScreenWidth and bezelScreenHeight
 					break
-				if(timeout<A_TickCount-2000)
+				if(timeout < A_TickCount - bezelCheckPosTimeout)
                     break
 			}
 			Log("Bezel - Emulator Screen Position: left=" . bezelScreenX . " top=" . bezelScreenY . " width=" . bezelScreenWidth . " height=" . bezelScreenHeight ,5)
@@ -535,14 +546,17 @@ BezelDraw(){
 				bezelScreenX := round(bezelScreenX) , bezelScreenY := round(bezelScreenY), bezelScreenWidth := round(bezelScreenWidth) , bezelScreenHeight := round(bezelScreenHeight)
 				WinMove, ahk_id %emulatorID%, , %bezelScreenX%, %bezelScreenY%, %bezelScreenWidth%, %bezelScreenHeight%
 				; check if window moved
+				X:="" , Y:="" , W:="" , H:=""
+				timeout := A_TickCount
 				loop
 					{
+					sleep, 50
 					WinGetPos, X, Y, W, H, ahk_id %emulatorID%
 					if (X=bezelScreenX) and (Y=bezelScreenY) and (W=bezelScreenWidth) and (H=bezelScreenHeight)
 						break
-					if(timeout<A_TickCount-2000)
+					if(timeout < A_TickCount - bezelCheckPosTimeout)
 						break
-					sleep, 20
+					sleep, 50
 					WinMove, ahk_id %emulatorID%, , %bezelScreenX%, %bezelScreenY%, %bezelScreenWidth%, %bezelScreenHeight%
 				}
 			}
@@ -647,7 +661,7 @@ ReadBezelIniFile(){
 	Log("Bezel - Bezel ini file found. Defined screen positions: X1=" . bezelOrigIniScreenX1 . " Y1=" . bezelOrigIniScreenY1 . " X2=" . bezelOrigIniScreenX2 . " Y2=" . bezelOrigIniScreenY2 ,5)	
 	;reading additional screens info
 	if (bezelMode = "MultiScreens") {
-		loop, 7
+		loop, % bezelNumberOfScreens-1
 			{
 			currentScreen := a_index+1
 			bezelScreen%currentScreen%X1 := IniReadCheck(bezelIniFile, "General", "Bezel Screen " . currentScreen . " Top Left X Coordinate", 0)
@@ -688,7 +702,7 @@ BezelCoordinates(CoordinatesMode){
 		bezelScreen1Y1 := bezelScreenY1
 		bezelScreen1X2 := bezelScreenX2
 		bezelScreen1Y2 := bezelScreenY2	
-		loop, 8
+		loop, %bezelNumberOfScreens%
 			{
 			bezelScreen%a_index%W := bezelScreen%a_index%X2-bezelScreen%a_index%X1	
 			bezelScreen%a_index%H := bezelScreen%a_index%Y2-bezelScreen%a_index%Y1
@@ -736,7 +750,7 @@ BezelCoordinates(CoordinatesMode){
 Return
 }
 
-BezelFilesPath(filename,fileextension)
+BezelFilesPath(filename,fileextension,excludeScreens=false)
 {
 	Global HLMediaPath, SystemName, dbName
 	bezelpath1 := HLMediaPath . "\Bezels\" . SystemName . "\" . dbName
@@ -749,33 +763,46 @@ BezelFilesPath(filename,fileextension)
 	bezelpath5 := HLMediaPath . "\Bezels\" . SystemName . "\" . dbName
 	Loop, 5 {
 		Log("Bezel - Looking for " . filename . " in: " . bezelpath%A_Index%,4)
-		If FileExist(bezelpath%A_Index% . "\" . filename . "*." . fileextension)
-			{ 	
-			Log("Bezel - Found " . filename . " art in folder: " . bezelpath%A_Index%,4)
-			bezelPathFound := bezelpath%A_Index%
-			break
+		currentbezelpathNumber := a_index
+		Loop % bezelpath%currentbezelpathNumber% . "\" . filename . "*." . fileextension
+			{
+			if excludeScreens
+				{
+				if !RegExMatch(A_LoopFileName, "i)\[[0-9]+S\]")
+					{
+					Log("Bezel - Found " . filename . " art in folder: " . bezelpath%currentbezelpathNumber%,4)
+					bezelPathFound := bezelpath%currentbezelpathNumber%
+					break
+				}
+			} else {
+				Log("Bezel - Found " . filename . " art in folder: " . bezelpath%currentbezelpathNumber%,4)
+				bezelPathFound := bezelpath%currentbezelpathNumber%
+				break
+			}
 		}
+		if bezelPathFound
+			break
 	}
 	if !bezelPathFound
-		log("Bezel - Bezel is enabled, however none of the bellow valid " . filename . " files exist: " . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . SystemName . "\" . dbName . "\" . filename  . "*." . fileextension . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . SystemName . "\_Default\Vertical\" . filename  . "*." . fileextension . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . SystemName . "\_Default\Horizontal\" . filename  . "*." . fileextension . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . SystemName . "\_Default\" . filename  . "*." . fileextension . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\_Default\" . filename  . "*." . fileextension,4)
+		log("Bezel - Bezel is enabled, however none of the bellow valid " . filename . " files exist: " . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . SystemName . "\" . dbName . "\" . filename  . "*." . fileextension . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . SystemName . "\_Default\Vertical\" . filename  . "*." . fileextension . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . SystemName . "\_Default\Horizontal\" . filename  . "*." . fileextension . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . SystemName . "\_Default\" . filename  . "*." . fileextension . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\_Default\" . filename  . "*." . fileextension,3)
 	Return bezelPathFound
 }		
 
 
 ;Function to load ini values
-RIniBezelLoadVar(gRIniVar,sRIniVar,rRIniVar,gsec,gkey,gdefaultvalue="",ssec=0,skey=0,sdefaultvalue="use_global") {
+RIniBezelLoadVar(gRIniVar,sRIniVar,rRIniVar,gsec,gkey,gdefaultvalue="",ssec=0,skey=0,sdefaultvalue="use_global",rdefaultvalue="use_global") {
     Global
     if not ssec
         ssec := gsec
     if not skey
         skey := gkey
 	X1 := RIni_GetKeyValue(gRIniVar,gsec,gkey)
-	X1 := If (X1 = -2) or (X1 = -3) ? "NOTEXIST" :  X1
+	X1 := If (X1 = -2) or (X1 = -3) ? gdefaultvalue :  X1
 	X2 := RIni_GetKeyValue(sRIniVar,ssec,skey)
-	X2 := If (X2 = -2) or (X2 = -3) ? "NOTEXIST" :  X2
+	X2 := If (X2 = -2) or (X2 = -3) ? sdefaultvalue :  X2
 	X3 := RIni_GetKeyValue(rRIniVar,ssec,skey)
-	X3 := If (X3 = -2) or (X3 = -3) ? "NOTEXIST" :  X3
-	X4 := (If ((X3 = "use_global") or (X3 = "NOTEXIST"))  ? (If ((X2 = "use_global") or (X2 = "NOTEXIST")) ? (X1) : (X2)) : (X3))	
+	X3 := If (X3 = -2) or (X3 = -3) ? rdefaultvalue :  X3
+	X4 := (If (X3 = "use_global")  ? (If (X2 = "use_global") ? (X1) : (X2)) : (X3))	
 	RIni_SetKeyValue(gRIniVar,gsec,gkey,X1)
     RIni_SetKeyValue(sRIniVar,ssec,skey,X2)
 	RIni_SetKeyValue(rRIniVar,ssec,skey,X3)
