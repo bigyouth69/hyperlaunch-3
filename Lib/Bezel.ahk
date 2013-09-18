@@ -1,5 +1,5 @@
-MCRC=95F0131D
-MVersion=1.0.3
+MCRC=E085876C
+MVersion=1.0.4
 
 BezelGUI(){
 	Log("BezelGUI - Started")
@@ -122,8 +122,9 @@ BezelStart(Mode="",parent="",angle="",width="",height=""){
 	if (bezelMode = "MultiScreens"){
 		bezelNumberOfScreens := mode
 		bezelPath := BezelFilesPath("Bezel [" . bezelNumberOfScreens . "S]","png")
-	} else
+	} else {
 		bezelPath := BezelFilesPath("Bezel","png",true)
+	}
 	If bezelPath 
 		{
 		bezelCheckPosTimeout = 5000
@@ -414,7 +415,7 @@ BezelStart(Mode="",parent="",angle="",width="",height=""){
 			; Updating GUI 1 - Background - with image
 			If bezelBackgroundFile
 				{
-				Gdip_DrawImage(Bezel_G1, bezelBackgroundBitmap, 0, 0,A_ScreenWidth,A_ScreenHeight)        
+				Gdip_DrawImage(Bezel_G1, bezelBackgroundBitmap, 0, 0,A_ScreenWidth+1,A_ScreenHeight+1)        
 				UpdateLayeredWindow(Bezel_hwnd1, Bezel_hdc1,0,0, A_ScreenWidth, A_ScreenHeight)
 				Gui, Bezel_GUI1: Show, na
 				Log("Bezel - Background Screen Position: BezelImage left=" . 0 . " top=" . 0 . " right=" . A_ScreenWidth . " bottom=" . A_ScreenHeight ,5)
@@ -782,7 +783,7 @@ BezelFilesPath(filename,fileextension,excludeScreens=false)
 			break
 	}
 	if !bezelPathFound
-		log("Bezel - Bezel is enabled, however none of the bellow valid " . filename . " files exist: " . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . SystemName . "\" . dbName . "\" . filename  . "*." . fileextension . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . SystemName . "\_Default\Vertical\" . filename  . "*." . fileextension . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . SystemName . "\_Default\Horizontal\" . filename  . "*." . fileextension . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . SystemName . "\_Default\" . filename  . "*." . fileextension . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\_Default\" . filename  . "*." . fileextension,4)
+		log("Bezel - Bezel is enabled, however none of the bellow valid " . filename . " files exist: " . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . SystemName . "\" . dbName . "\" . filename  . "*." . fileextension . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . SystemName . "\_Default\Vertical\" . filename  . "*." . fileextension . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . SystemName . "\_Default\Horizontal\" . filename  . "*." . fileextension . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . SystemName . "\_Default\" . filename  . "*." . fileextension . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\_Default\" . filename  . "*." . fileextension,3)
 	Return bezelPathFound
 }		
 

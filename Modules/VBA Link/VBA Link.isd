@@ -33,6 +33,33 @@
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>Value for the height of fullscreen, default is your main monitor height. Make sure the value you set is compatible with your video card and screen. This value is only used when VideoMode is set to 7.</DESCRIPTION>
 						</KEY>
+						<KEY name="VBALink_SplitScreen_2_Players" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Horizontal or Vertical 2 players split screen.</DESCRIPTION>
+							<VALUES>
+								<VALUE>Vertical</VALUE>
+								<VALUE>Horizontal</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="VBALink_SplitScreen_3_Players" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>SplitScreen options for 3 players. For Player1 screen to be on left: P1left. For Player1 screen to be on top: P1top. For Player1 screen to be on bottom: P1bottom. For Player1 screen to be on right: P1right.</DESCRIPTION>
+							<VALUES>
+								<VALUE>P1top</VALUE>
+								<VALUE>P1bottom</VALUE>
+								<VALUE>P1left</VALUE>
+								<VALUE>P1right</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="VBALink" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables VBALink Selection of Number of Players Screen</DESCRIPTION>
+						</KEY>
 					</KEYS>
 				</SECTION>
 			</SECTIONS>

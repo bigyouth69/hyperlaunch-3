@@ -13,7 +13,6 @@ MSystem = "AAE","Cave","LaserDisc","MAME","Nintendo Arcade Systems","Sega Model 
 ; Command Line Options - http://easyemu.mameworld.info/mameguide/mameguide-options.html
 ; High Scores DO NOT SAVE when cheats are enabled!
 ; HLSL Documentation: http://mamedev.org/source/docs/hlsl.txt.html
-; MAME 149 is currently bugged and HyperPause support is broken. Emu does not let you alt-tab out. This is a mamedev issue, not an HL one. See here for bug report: http://mametesters.org/view.php?id=5235
 ; If you use MAME for AAE, create a vector.ini in mame's ini subfolder and paste these HLSL settings in there: http://www.mameworld.info/ubbthreads/showflat.php?Cat=&Number=309968&page=&view=&sb=5&o=&vc=1
 ; If you use bezel, it is recommended to set the module bezel mode to normal, and go to your mame.ini file, on your emulator folder, and choose these options: artwork_crop 1, use_backdrops 1, use_overlays 1, use_bezels 0, use_cpanels 0, use_marquees 0 
 ;----------------------------------------------------------------------------

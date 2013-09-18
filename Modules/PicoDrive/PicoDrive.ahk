@@ -2,8 +2,8 @@ MEmu = PicoDrive
 MEmuV =  v1.45a
 MURL = http://notaz.gp2x.de/pico.php
 MAuthor = bleasby
-MVersion = 2.0.1
-MCRC = B1E71320
+MVersion = 2.0.2
+MCRC = E2F8D6A1
 iCRC = 51B176D4
 mId = 635083171511164818
 MSystem = "Sega Pico"
@@ -26,7 +26,7 @@ desiredScreenRes := IniReadCheck(settingsFile, "Settings", "ScreenRes","",,1)	;	
 
 7z(romPath, romName, romExtension, 7zExtractPath)
 
-BezelStart("ThreeScreensFixRes")
+BezelStart(3)
 
 If bezelPath
 	{
@@ -71,6 +71,11 @@ If bezelPath
 }
 
 ExitModule()
+
+BezelLabel:
+	disableHideToggleMenuScreen2 := true
+	disableHideToggleMenuScreen3 := true
+Return
 
 CloseProcess:
 	FadeOutStart()

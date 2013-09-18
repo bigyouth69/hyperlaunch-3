@@ -1,5 +1,5 @@
 MEmu = MESS
-MEmuV =  v0.148
+MEmuV =  v0.150
 MURL = http://www.mess.org/
 MAuthor = djvj
 MVersion = 2.1.1
