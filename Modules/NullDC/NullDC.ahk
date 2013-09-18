@@ -2,8 +2,8 @@ MEmu = NullDC
 MEmuV =  r141
 MURL = https://code.google.com/p/nulldc/
 MAuthor = djvj
-MVersion = 2.0.1
-MCRC = DF09B23
+MVersion = 2.0.2
+MCRC = E88CD086
 iCRC = 11A924D4
 MID = 635038268910409317
 MSystem = "Sega Dreamcast"
@@ -96,12 +96,13 @@ If dualMonitors = true
 Run(executable, emuPath)
 
 ; TESTING TO HIDE THE CONSOLE WINDOW POPUP, NOTHING WORKS
+WinWait("nullDC ahk_class ndc_main_window")
+WinSet, Transparent, On, nullDC ahk_class ndc_main_window
+WinSet, Transparent, On, ahk_class ConsoleWindowClass	; makes the console window transparent so you don't see it on exit
 Sleep, 2000 ; Enough to hide the startup logo
-; WinWait, ahk_class ConsoleWindowClass
-; WinSet, Transparent, 255, ahk_class ConsoleWindowClass
 ; WinHide, ahk_class ConsoleWindowClass
-; TESTING
 
+; WinSet, Transparent, 255, nullDC ahk_class ndc_main_window
 WinWait("nullDC ahk_class ndc_main_window")
 WinWaitActive("nullDC ahk_class ndc_main_window")
 
@@ -122,6 +123,7 @@ If fullScreen = true
 ; WinActivate, nullDC ahk_class ndc_main_window
 
 FadeInExit()
+WinSet, Transparent, Off, nullDC ahk_class ndc_main_window
 Process("WaitClose", executable)
 7zCleanUp()
 FadeOutExit()
