@@ -2,9 +2,9 @@ MEmu = SSF
 MEmuV =  v0.12 beta R4
 MURL = http://www7a.biglobe.ne.jp/~phantasy/ssf/
 MAuthor = djvj
-MVersion = 2.0.3
-MCRC = C628BFA7
-iCRC = E99E54D8
+MVersion = 2.0.4
+MCRC = FFC4232D
+iCRC = DAC1D75D
 MID = 635038268924991452
 MSystem = "Sega Saturn","Sega ST-V"
 ;------------------------------------------------------------------------
@@ -41,9 +41,15 @@ settingsFile := modulePath . "\" . moduleName . ".ini"
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 ShowBIOS := IniReadCheck(settingsFile, "Settings", "ShowBIOS","false",,1)
 BilinearFiltering := IniReadCheck(settingsFile, "Settings", "BilinearFiltering","true",,1)
-vSync := IniReadCheck(settingsFile, "Settings", "vSync","true",,1)
 WideScreen := IniReadCheck(settingsFile, "Settings", "WideScreen","false",,1)
 Stretch := IniReadCheck(settingsFile, "Settings", "Stretch","false",,1)
+AutoFieldSkip := IniReadCheck(settingsFile, "Settings", "AutoFieldSkip","true",,1)
+EnforceAspectRatioWindow := IniReadCheck(settingsFile, "Settings", "EnforceAspectRatioWindow","true",,1)
+EnforceAspectRatioFullscreen := IniReadCheck(settingsFile, "Settings", "EnforceAspectRatioFullscreen","true",,1)
+FixedWindowResolution := IniReadCheck(settingsFile, "Settings", "FixedWindowResolution","false",,1)
+FixedFullscreenResolution := IniReadCheck(settingsFile, "Settings", "FixedFullscreenResolution","false",,1)
+VSynchWaitWindow := IniReadCheck(settingsFile, "Settings", "VSynchWaitWindow","true",,1)
+VSynchWaitFullscreen := IniReadCheck(settingsFile, "Settings", "VSynchWaitFullscreen","true",,1)
 CDDrive := IniReadCheck(settingsFile, "Settings", "CDDrive","1",,1)
 defaultRegion := IniReadCheck(settingsFile, "Settings", "DefaultRegion","America, Canada, Brazil",,1)
 usBios := IniReadCheck(settingsFile, "Settings", "USBios","",,1)
@@ -60,18 +66,23 @@ If romExtension not in .ccd,.mds,.cue,.iso,.cdi,.nrg
 	ScriptError("SSF only supports extensions ""mds|cue|iso|cdi|nrg"" and you are trying to use """ . romExtension . """")
 
 SSFINI := CheckFile(emuPath . "\SSF.ini")
-
-mySW:=A_ScreenWidth, mySH:=A_ScreenHeight
+mySW := A_ScreenWidth
+mySH := A_ScreenHeight
 
 ; Now let's update all our keys if they differ in the ini
 Fullscreen := If Fullscreen = "true" ? "1" : "0"
 ShowBIOS := If ShowBIOS = "true" ? "0" : "1"
 BilinearFiltering := If BilinearFiltering = "true" ? "1" : "0"
-vSync := If vSync = "true" ? "1" : "0"
 WideScreen := If WideScreen = "true" ? "1" : "0"
 Stretch := If Stretch = "true" ? "1" : "0"
+AutoFieldSkip := If AutoFieldSkip = "true" ? "1" : "0"
+EnforceAspectRatioWindow := If EnforceAspectRatioWindow = "true" ? "1" : "0"
+EnforceAspectRatioFullscreen := If EnforceAspectRatioFullscreen = "true" ? "1" : "0"
+FixedWindowResolution := If FixedWindowResolution = "true" ? "1" : "0"
+FixedFullscreenResolution := If FixedFullscreenResolution = "true" ? "1" : "0"
+VSynchWaitWindow := If VSynchWaitWindow = "true" ? "1" : "0"
+VSynchWaitFullscreen := If VSynchWaitFullscreen = "true" ? "1" : "0"
 defaultRegion := If defaultRegion = "America, Canada, Brazil" ? "1" : If defaultRegion = "Japan, Taiwan, Korea, Philippines" ? "2" : "3"	; translating for easier use later
-
 
 If systemName = Sega Saturn
 {	If RegExMatch(romName, "\(U\)|\(USA\)|\(Braz")
@@ -102,10 +113,15 @@ iniLookup =
 ( ltrim c
 	Screen, FullSize, "%Fullscreen%"
 	Screen, BilinearFiltering, "%BilinearFiltering%"
-	Screen, VSynchWaitFullscreen, "%vSync%"
 	Screen, WideScreen, "%WideScreen%"
 	Screen, StretchScreen, "%Stretch%"
-	Screen, EnforceAspectRatioFullscreen, "1"
+	Screen, AutoFieldSkip, "%AutoFieldSkip%"
+	Screen, EnforceAspectRatioWindow, "%EnforceAspectRatioWindow%"
+	Screen, EnforceAspectRatioFullscreen, "%EnforceAspectRatioFullscreen%"
+	Screen, FixedWindowResolution, "%FixedWindowResolution%"
+	Screen, FixedFullscreenResolution, "%FixedFullscreenResolution%"
+	Screen, VSynchWaitWindow, "%VSynchWaitWindow%"
+	Screen, VSynchWaitFullscreen, "%VSynchWaitFullscreen%"
 	Peripheral, SaturnBIOS, "%SaturnBIOS%"
 	Peripheral, CDDrive, "%CDDrive%"
 	Peripheral, Areacode, "%Areacode%"
@@ -129,12 +145,10 @@ If systemName = Sega Saturn
 Run(executable,emuPath,, ssfPID)
 
 If systemName = Sega ST-V
-{
-	Send, {SHIFTDOWN} ; this tells SSF we want to boot in ST-V mode
+{	Send, {SHIFTDOWN} ; this tells SSF we want to boot in ST-V mode
 	WinWait("Select ROM file ahk_class #32770",,8) ; times out after 8 Seconds
 	If ErrorLevel
-	{
-		Send, {SHIFTUP}
+	{	Send, {SHIFTUP}
 		WinClose, SSF
 		ScriptError("Module timed out waiting for Select ROM file window. This probably means you did not set your ST-V bios or have an invalid ST-V bios file.")
 	}
@@ -183,8 +197,7 @@ HaltEmu:
 		WinSet, Transparent, 0, ahk_id %ssfPID%
 		If (mySW != ssfW || mySH != ssfH) { ; if our screen not the same size as SSF uses for it's fullscreen, we can detect when it changes
 			While % ssfH = ssfHn
-			{
-				WinGetPos,,,,ssfHn,ahk_id %ssfPID%
+			{	WinGetPos,,,,ssfHn,ahk_id %ssfPID%
 				Sleep, 100
 			}
 		} Else ; if our screen is the same size as SSF uses for it's fullscreen, use a sleep instead

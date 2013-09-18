@@ -19,10 +19,6 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables Bilinear Filtering. This makes the game textures appear smoother.</DESCRIPTION>
 						</KEY>
-						<KEY name="vSync" required="false" nullable="false">
-							<KEYTYPE>Boolean</KEYTYPE>
-							<DESCRIPTION>If you are getting clipping, set the vSync variable to true</DESCRIPTION>
-						</KEY>
 						<KEY name="WideScreen" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables WideScreen Support</DESCRIPTION>
@@ -30,6 +26,34 @@
 						<KEY name="Stretch" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>If true Stretches game to fill screen losing aspect ratio.</DESCRIPTION>
+						</KEY>
+						<KEY name="AutoFieldSkip" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true prevents the game from running too fast.</DESCRIPTION>
+						</KEY>
+						<KEY name="EnforceAspectRatioWindow" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true forces the correct aspect ratio when using windowed mode.</DESCRIPTION>
+						</KEY>
+						<KEY name="EnforceAspectRatioFullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true forces the correct aspect ratio when using fullscreen mode.</DESCRIPTION>
+						</KEY>
+						<KEY name="FixedWindowResolution" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true forces a set resolution size when using windowed mode.</DESCRIPTION>
+						</KEY>
+						<KEY name="FixedFullscreenResolution" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true forces a set resolution size when using fullscreen mode.</DESCRIPTION>
+						</KEY>
+						<KEY name="VSynchWaitWindow" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If you are getting clipping in windowed mode, set the this to true. True by default.</DESCRIPTION>
+						</KEY>
+						<KEY name="VSynchWaitFullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If you are getting clipping in fullscreen mode, set the this to true. True by default.</DESCRIPTION>
 						</KEY>
 						<KEY name="CDDrive" required="false" nullable="true" minLength="0">
 							<KEYTYPE>Integer</KEYTYPE>
