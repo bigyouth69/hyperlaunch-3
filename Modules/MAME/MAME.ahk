@@ -1,10 +1,10 @@
 MEmu = MAME
-MEmuV =  v0.148
+MEmuV =  v0.150
 MURL = http://www.mame.net/
 MAuthor = djvj
-MVersion = 2.0.9
-MCRC = B7C9ECA7
-iCRC = 83E89D15
+MVersion = 2.1.0
+MCRC = 9C3DCB55
+iCRC = 397D8196
 MID = 635038268903403479
 MSystem = "AAE","Cave","LaserDisc","MAME","Nintendo Arcade Systems","Sega Model 1","Sega ST-V","SNK Neo Geo","SNK Neo Geo AES"
 ;----------------------------------------------------------------------------
@@ -15,6 +15,7 @@ MSystem = "AAE","Cave","LaserDisc","MAME","Nintendo Arcade Systems","Sega Model 
 ; HLSL Documentation: http://mamedev.org/source/docs/hlsl.txt.html
 ; MAME 149 is currently bugged and HyperPause support is broken. Emu does not let you alt-tab out. This is a mamedev issue, not an HL one. See here for bug report: http://mametesters.org/view.php?id=5235
 ; If you use MAME for AAE, create a vector.ini in mame's ini subfolder and paste these HLSL settings in there: http://www.mameworld.info/ubbthreads/showflat.php?Cat=&Number=309968&page=&view=&sb=5&o=&vc=1
+; If you use bezel, it is recommended to set the module bezel mode to normal, and go to your mame.ini file, on your emulator folder, and choose these options: artwork_crop 1, use_backdrops 1, use_overlays 1, use_bezels 0, use_cpanels 0, use_marquees 0 
 ;----------------------------------------------------------------------------
 StartModule()
 BezelGUI()
@@ -24,6 +25,7 @@ settingsFile := CheckFile(modulePath . "\" . moduleName . ".ini")
 
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 Videomode := IniReadCheck(settingsFile, "Settings", "Videomode","d3d",,1)
+hlsl := IniReadCheck(settingsFile, "Settings|" . systemName, "HLSL","false",,1)
 hideConsole := IniReadCheck(settingsFile, "Settings", "HideConsole","true",,1)	; Hides console window from view if it shows up
 pauseMethod := IniReadCheck(settingsFile, "Settings", "PauseMethod",1,,1)	; set the pause method that works better on your machine (preferred methods 1 and 2) 1 = Win7 and Win8 OK - Problems with Win XP, 2 = preferred method for WinXP - Problems in Win7, 3 and 4 = same as 1 and 2, 5 = only use If you have a direct input version of mame, 6 = suspend mame process method, it could crash mame in some computers
 bezelMode := IniReadCheck(settingsFile, "Settings", "BezelMode","layout",,1)	; "layout" or "normal"
@@ -32,36 +34,40 @@ cheatModeKey := IniReadCheck(settingsFile, "Settings", "CheatModeKey",A_Space,,1
 sysParams := IniReadCheck(settingsFile, systemName, "Params", A_Space,,1)
 romParams := IniReadCheck(settingsFile, romName, "Params", A_Space,,1)
 mameRomName := IniReadCheck(settingsFile, romName, "MameRomName", A_Space,,1)
-Use_Bezels := IniReadCheck(settingsFile, systemName, "Use_Bezels", "true",,1)
-Use_Bezels := IniReadCheck(settingsFile, romName, "Use_Bezels", Use_Bezels,,1)	; default is the system's current setting
-Use_Overlays := IniReadCheck(settingsFile, systemName, "Use_Overlays", "true",,1)
-Use_Overlays := IniReadCheck(settingsFile, romName, "Use_Overlays", Use_Overlays,,1)	; default is the system's current setting
-Use_Backdrops := IniReadCheck(settingsFile, systemName, "Use_Backdrops", "true",,1)
-Use_Backdrops := IniReadCheck(settingsFile, romName, "Use_Backdrops", Use_Backdrops,,1)	; default is the system's current setting
-autosave := IniReadCheck(settingsFile, systemName, "Autosave", "false",,1)
-autosave := IniReadCheck(settingsFile, romName, "Autosave", autosave,,1)	; default is the system's current setting
+Artwork_Crop := IniReadCheck(settingsFile, systemName . "|" . romName, "Artwork_Crop", "true",,1)
+Use_Bezels := IniReadCheck(settingsFile, systemName . "|" . romName, "Use_Bezels", "false",,1)
+Use_Overlays := IniReadCheck(settingsFile, systemName . "|" . romName, "Use_Overlays", "true",,1)
+Use_Backdrops := IniReadCheck(settingsFile, systemName . "|" . romName, "Use_Backdrops", "true",,1)
+Use_Cpanels := IniReadCheck(settingsFile, systemName . "|" . romName, "Use_Cpanels", "false",,1)
+Use_Marquees := IniReadCheck(settingsFile, systemName . "|" . romName, "Use_Marquees", "false",,1)
+autosave := IniReadCheck(settingsFile, systemName . "|" . romName, "Autosave", "false",,1)
 
 If bezelEnabled = true
-{	ListXMLtable := []
+{	artworkCrop := If (Artwork_Crop = "true") ? "-artwork_crop" : "-noartwork_crop"
+	useBezels := If (Use_Bezels = "true") ? "-use_bezels" : "-nouse_bezels"
+	useOverlays := If (Use_Overlays = "true") ? "-use_overlays" : "-nouse_overlays"
+	useBackdrops := If (Use_Backdrops = "true") ? "-use_backdrops" : "-nouse_backdrops"
+	UseCpanels := If (Use_Cpanels = "true") ? "-use_cpanels" : "-nouse_cpanels"
+	UseMarquees := If (Use_Marquees = "true") ? "-use_marquees" : "-nouse_marquees"
+	ListXMLtable := []
 	ListXMLtable := ListXMLInfo(romName)
 	If bezelMode = layout
-	{	
-		useBezels := If (Use_Bezels = "true") ? "-use_bezels" : "-nouse_bezels"
-		useOverlays := If (Use_Overlays = "true") ? "-use_overlays" : "-nouse_overlays"
-		useBackdrops := If (Use_Backdrops = "true") ? "-use_backdrops" : "-nouse_backdrops"
 		BezelStart(romName,ListXMLtable[1],ListXMLtable[2],ListXMLtable[3],ListXMLtable[4])
-	} Else {
-		useBezels := "-nouse_bezels"
-		useOverlays := "-nouse_overlays"
-		useBackdrops := "-nouse_backdrops"
+	Else if !(Use_Bezels = "true")
 		BezelStart(,,ListXMLtable[2])
-	}
-	
+} Else {
+	artworkCrop := "-artwork_crop"
+	useBezels := "-nouse_bezels"
+	useOverlays := "-nouse_overlays"
+	useBackdrops := "-nouse_backdrops"
+	UseCpanels := "-nouse_cpanels"
+	UseMarquees := "-nouse_marquees"	
 }
 
 ; -romload part of 147u2 that shows what roms were checked when missing roms
 winstate := If (Fullscreen = "true") ? "Hide UseErrorLevel" : "UseErrorLevel"
 fullscreen := If (Fullscreen = "true") ? "-nowindow" : "-window"
+hlsl := If hlsl = "true" ? "-hlsl_enable" : "-nohlsl_enable"
 videomode := If (Videomode != "" ) ? "-video " . videomode : ""
 sysParams := If sysParams != ""  ? sysParams : ""
 romParams := If romParams != ""  ? romParams : ""
@@ -95,7 +101,9 @@ If cheatMode = true
 If hideConsole = true
 	SetTimer, HideConsole, 10
 
-Run(executable . A_Space . romName . A_Space . fullscreen . A_Space . cheatEnabled . A_Space . videomode . A_Space . useBezels . A_Space . useOverlays . A_Space . useBackdrops . A_Space . mameRomPaths . A_Space . sysParams . A_Space . romParams . A_Space . autosave, emuPath, winstate)
+Run(executable . A_Space . romName . A_Space . fullscreen . A_Space . hlsl . A_Space . cheatEnabled . A_Space . videomode . A_Space . artworkCrop . A_Space . useBezels . A_Space . useOverlays . A_Space . useBackdrops . A_Space . UseCpanels . A_Space . UseMarquees . A_Space . mameRomPaths . A_Space . sysParams . A_Space . romParams . A_Space . autosave, emuPath, winstate)
+
+
 
 If(ErrorLevel != 0){
 	If (ErrorLevel = 1)

@@ -11,6 +11,10 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
 						</KEY>
+						<KEY name="HLSL" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables HLSL filters globally for all systems using this module</DESCRIPTION>
+						</KEY>
 						<KEY name="HideConsole" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables hiding of console window that can appear while in windowed mode or using bezels. Usually this window informs you of missing roms and/or samples but can be annoying if the game still works as it shows up behind the bezel.</DESCRIPTION>
@@ -61,6 +65,14 @@
 							<KEYTYPE>String</KEYTYPE>
 							<DESCRIPTION>System specific option that adds a CLI command to all games of this system at boot</DESCRIPTION>
 						</KEY>
+						<KEY name="HLSL" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables HLSL filters for just this system</DESCRIPTION>
+						</KEY>
+						<KEY name="Artwork_Crop" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables cropping of artwork to the game screen area only for the entire system. Can be overwritten by the per-rom setting of the same name.</DESCRIPTION>
+						</KEY>
 						<KEY name="Use_Bezels" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables Bezel Image for the entire system. Can be overwritten by the per-rom setting of the same name.</DESCRIPTION>
@@ -73,6 +85,14 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables Backdrops for the entire system. Can be overwritten by the per-rom setting of the same name.</DESCRIPTION>
 						</KEY>
+						<KEY name="Use_Cpanels" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables the display of control panels for the entire system. Can be overwritten by the per-rom setting of the same name.</DESCRIPTION>
+						</KEY>
+						<KEY name="Use_Marquees" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables the display of marquees for the entire system. Can be overwritten by the per-rom setting of the same name.</DESCRIPTION>
+						</KEY>						
 						<KEY name="Autosave" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables Auto-Saving and Auto-Loading of game sessions. When enabled, upon exiting mame, your state will be saved and automatically resumed next time you run any game on this system. Overwrites the system setting.</DESCRIPTION>
@@ -90,6 +110,10 @@
 							<KEYTYPE>String</KEYTYPE>
 							<DESCRIPTION>For games that require they be named the original rom's name, set this key to the original rom name. Likewise you also set a "-rompath PATH" in the Params key to the path the rom can be found so mame will look there for the alternate rom.</DESCRIPTION>
 						</KEY>
+						<KEY name="Artwork_Crop" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables cropping of artwork to the game screen area only for just this game. Overwrites the system setting.</DESCRIPTION>
+						</KEY>
 						<KEY name="Use_Bezels" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables Bezel Image for just this game. Overwrites the system setting.</DESCRIPTION>
@@ -102,6 +126,14 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables Backdrops for just this game. Overwrites the system setting.</DESCRIPTION>
 						</KEY>
+						<KEY name="Use_Cpanels" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables the display of control panels for just this game. Overwrites the system setting.</DESCRIPTION>
+						</KEY>
+						<KEY name="Use_Marquees" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables the display of marquees for just this game. Overwrites the system setting.</DESCRIPTION>
+						</KEY>						
 						<KEY name="Autosave" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables Auto-Saving and Auto-Loading of game sessions. When enabled, upon exiting mame, your state will be saved and automatically resumed next time you run this game. Overwrites the system setting.</DESCRIPTION>

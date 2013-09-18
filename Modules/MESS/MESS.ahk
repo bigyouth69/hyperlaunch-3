@@ -2,9 +2,9 @@ MEmu = MESS
 MEmuV =  v0.148
 MURL = http://www.mess.org/
 MAuthor = djvj
-MVersion = 2.1.0
-MCRC = B703B625
-iCRC = D61C6C86
+MVersion = 2.1.1
+MCRC = DE435F04
+iCRC = AA949FDC
 MID = 635038268905515239
 MSystem = "Amstrad GX4000","APF Imagination Machine","Apple IIGS","Atari 2600","Atari 5200","Atari 7800","Bally Astrocade","Casio PV-1000","Casio PV-2000","ColecoVision","Creatronic Mega Duck","Emerson Arcadia 2001","Entex AdventureVision","Epoch Game Pocket Computer","Epoch Super Cassette Vision","Fairchild Channel F","Funtech Super Acan","GCE Vectrex","Interton VC4000","Magnavox Odyssey 2","Mattel Aquarius","Mattel Intellivision","NEC PC Engine","NEC PC Engine-CD","NEC SuperGrafx","NEC TurboGrafx-16","NEC TurboGrafx-CD","Nintendo 64","Nintendo Entertainment System","Nintendo Game Boy","Nintendo Game Boy Advance","Nintendo Game Boy Color","Nintendo Virtual Boy","Philips CD-i","RCA Studio II","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","SNK Neo Geo AES","SNK Neo Geo CD","SNK Neo Geo Pocket","SNK Neo Geo Pocket Color","Sony PlayStation","Super Nintendo Entertainment System","Texas Instruments TI 99-4A","Tiger Game.com","VTech CreatiVision","Watara Supervision"
 ;----------------------------------------------------------------------------
@@ -14,6 +14,7 @@ MSystem = "Amstrad GX4000","APF Imagination Machine","Apple IIGS","Atari 2600","
 ; If MESS has a problem reading the bios zips, try archving them with "no compression"
 ; This site can help a ton with details for the various systems supported: http://www.progettoemma.net/mess/index.html
 ; You may get a black screen or MESS may close w/o notice if you do not have a bios rom for your system when one is needed.
+; If you use bezel, it is recommended to set the module bezel mode to normal, and go to your mess.ini file, on your emulator folder, and choose these options: artwork_crop 1, use_backdrops 1, use_overlays 1, use_bezels 0 
 ;
 ; Following systems require a BIOS zip with their roms inside, placed in the "Mess\Roms\" directory:
 ; Amstrad GX4000 - N/A
@@ -107,40 +108,47 @@ If !ident
 settingsFile := modulePath . "\" . moduleName . ".ini"
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)		; Set fullscreen mode
 Videomode := IniReadCheck(settingsFile, "Settings", "Videomode","d3d",,1)	; Choices are gdi,ddraw,d3d. If left blank, mess uses d3d by default
+hlsl := IniReadCheck(settingsFile, "Settings|" . systemName, "HLSL","false",,1)
 bezelMode := IniReadCheck(settingsFile, "Settings", "BezelMode","layout",,1)	; "layout" or "normal"
 UseSoftwareList := IniReadCheck(settingsFile, SystemName, "UseSoftwareList","false",,1)
 userparams := IniReadCheck(settingsFile, SystemName, "Parameters",A_Space,,1)
+Artwork_Crop := IniReadCheck(settingsFile, systemName . "|" . romName, "Artwork_Crop", "true",,1)
+Use_Bezels := IniReadCheck(settingsFile, systemName . "|" . romName, "Use_Bezels", "true",,1)
+Use_Overlays := IniReadCheck(settingsFile, systemName . "|" . romName, "Use_Overlays", "true",,1)
+Use_Backdrops := IniReadCheck(settingsFile, systemName . "|" . romName, "Use_Backdrops", "true",,1)
 
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 If (bezelEnabled = "true") {
+	artworkCrop := If (Artwork_Crop = "true") ? "-artwork_crop" : "-noartwork_crop"
+	useBezels := If (Use_Bezels = "true") ? "-use_bezels" : "-nouse_bezels"
+	useOverlays := If (Use_Overlays = "true") ? "-use_overlays" : "-nouse_overlays"
+	useBackdrops := If (Use_Backdrops = "true") ? "-use_backdrops" : "-nouse_backdrops"
 	ListXMLtable := []
 	ListXMLtable := ListXMLInfo(ident)
-}
-If (bezelMode = "layout"){
-	useBezels := If (bezelEnabled = "true") ? "-use_bezels" : "-nouse_bezels"
-	useOverlays := If (bezelEnabled = "true") ? "-use_overlays" : "-nouse_overlays"
-	useBackdrops := If (bezelEnabled = "true") ? "-use_backdrops" : "-nouse_backdrops"
-	BezelStart(ident,ListXMLtable[1],ListXMLtable[2],ListXMLtable[3],ListXMLtable[4])
+	If bezelMode = layout
+		BezelStart(ident,ListXMLtable[1],ListXMLtable[2],ListXMLtable[3],ListXMLtable[4])
+	Else if !(Use_Bezels = "true")
+		BezelStart(,,ListXMLtable[2])
 } Else {
+	artworkCrop := "-artwork_crop"
 	useBezels := "-nouse_bezels"
 	useOverlays := "-nouse_overlays"
-	useBackdrops := "-nouse_backdrops"	
-	BezelStart(,,ListXMLtable[2])
+	useBackdrops := "-nouse_backdrops"
 }
 
 winstate := If (Fullscreen = "true") ? "Hide UseErrorLevel" : "UseErrorLevel"
 fullscreen := If (Fullscreen = "true") ? "-nowindow" : "-window"
 videomode := If (Videomode != "" )? "-video " . videomode : ""
+hlsl := If hlsl = "true" ? "-hlsl_enable" : "-nohlsl_enable"
 param1 := "-cart " . """" . romPath . "\" . romName . romExtension . """"	; default param1 used for launching most systems.
 
 If romExtension = .txt	; This can be applied to all systems
 	param1:=
 
 If ident = apfimag	; APF Imagination Machine
-{	If romExtension != .tap
+	If romExtension != .tap
 		ident = apfm1000	; cart games for APF Imagination Machine require a different bios to be loaded
-}
 
 If UseSoftwareList != true
 {	; Now that we know the system we are loading, determine if we use an ini assocated with that system for custom game configs a user might need. Then load the configs associated to that game.
@@ -226,7 +234,7 @@ IfExist, % emuPath . "\cfg\" . ident . "\" . dbName
 ;MsgBox, %param1%
 ;ExitModule()
 
-Run(executable . A_Space . ident . A_Space . param1 . A_Space . param2 . A_Space . param3 . A_Space . param4 . A_Space . param5 . A_Space . param6 . A_Space . userparams . A_Space . fullscreen . A_Space . videomode . A_Space . useBezels . A_Space . useOverlays . A_Space . useBackdrops . " -skip_gameinfo", emuPath, winstate)
+Run(executable . A_Space . ident . A_Space . param1 . A_Space . param2 . A_Space . param3 . A_Space . param4 . A_Space . param5 . A_Space . param6 . A_Space . userparams . A_Space . fullscreen . A_Space . hlsl . A_Space . videomode . A_Space . artworkCrop . A_Space . useBezels . A_Space . useOverlays . A_Space . useBackdrops . " -skip_gameinfo", emuPath, winstate)
 
 If(ErrorLevel != 0){
 	If (ErrorLevel = 1)
