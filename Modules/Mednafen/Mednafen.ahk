@@ -2,8 +2,8 @@ MEmu = Mednafen
 MEmuV =  v0.9.31 WIP
 MURL = http://mednafen.sourceforge.net/
 MAuthor = djvj
-MVersion = 2.0.5
-MCRC = 7ECA1014
+MVersion = 2.0.6
+MCRC = 953F3BB1
 iCRC = 5D855D01
 MID = 635038268903923913
 MSystem = "Atari Lynx","Bandai Wonderswan","Bandai Wonderswan Color","NEC PC Engine","NEC PC Engine-CD","NEC PC-FX","NEC SuperGrafx","NEC TurboGrafx-16","NEC TurboGrafx-CD","Nintendo Entertainment System","Nintendo Famicom","Nintendo Famicom Disk System","Nintendo Game Boy","Nintendo Game Boy Advance","Nintendo Game Boy Color","Nintendo Super Famicom","Nintendo Virtual Boy","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","SNK Neo Geo Pocket","SNK Neo Geo Pocket Color","Sony PlayStation","Super Nintendo Entertainment System"
@@ -185,7 +185,7 @@ If bezelPath ; defining xscale and yscale relative to the bezel windowed mode
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 ; Mount the CD using DaemonTools
-If (romExtension = ".cue" && dtEnabled = "true" && ident = "psx") {	; only Sony PlayStation tested
+If ((romExtension = ".cue" || romExtension = ".ccd") && dtEnabled = "true" && (ident = "psx" || ident = "pce")) {	; only Sony PlayStation tested
 	Log("Module - Mounting rom in Daemon Tools")
 	DaemonTools("get")
 	DaemonTools("mount",romPath . "\" . romName . romExtension)
@@ -205,6 +205,9 @@ errorLvl := Process("Exist", executable)
 If errorLvl != 0
 	Process("WaitClose", executable)
 
+If useDT
+	DaemonTools("unmount")
+
 7zCleanUp()
 BezelExit()
 FadeOutExit()
@@ -212,7 +215,7 @@ ExitModule()
 
 
 MultiGame:
-	If (romExtension = ".cue" && dtEnabled = "true" && ident = "psx") {
+	If (romExtension = ".cue" && dtEnabled = "true" && (ident = "psx" || ident = "pce")) {
 		Send, {F8 down}{F8 up}	; eject disc in mednafen - MIGHT WANT TO TRY DOING A CONTROLSEND
 		DaemonTools("unmount")
 		Sleep, 500	; Required to prevent  DT from bugging
