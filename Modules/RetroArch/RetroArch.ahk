@@ -2,7 +2,7 @@ MEmu = RetroArch
 MEmuV =  v0.9.9
 MURL = http://themaister.net/retroarch.html
 MAuthor = djvj
-MVersion = 2.0.8
+MVersion = 2.0.9
 MCRC = 49E0281
 iCRC = 8693BFB7
 MID = 635038268922229162
@@ -14,8 +14,8 @@ MSystem = "Atari 2600","Bandai Wonderswan","Bandai Wonderswan Color","Final Burn
 ; 
 ; Fullscreen is controlled via the variable below
 ; This module uses the CLI version of RetroArch (retroarch.exe), not the GUI (retroarch-phoenix.exe).
-; srm are stored in a srm dir in the emu folder
-; save states are stored in a save dir in the emu folder
+; srm are stored in a srm dir in the emu folder. Each system ran through retroarch gets its own folder inside srm
+; save states are stored in a save dir in the emu folder. Each system ran through retroarch gets its own folder inside save
 ; The emu may make a mouse cursor appear momentarily during launch, MouseMove and hide_cursor seem to have no effect
 ; Enable 7z support for archived roms
 ; By default this module is set to use per-system cfg files. This allows different settings for each system you use this emulator for. If you want all systems to use the same retroarch.cfg, set SystemConfigs to false below.
@@ -130,13 +130,15 @@ If (ident = "LibRetro_SGB" || If superGB = "true")	; if system or rom is set to 
 BezelStart()
 
 fullscreen := (If fullscreen = "true" ? ("-f") : (""))
+srmPath := emuPath . "\srm\" . systemName	; path for this system's srm files
+saveStatePath := emuPath . "\save\" . systemName	; path for this system's save state files
 
-IfNotExist, %emuPath%\srm
-	FileCreateDir, %emuPath%\srm ; creating srm dir if it doesn't exist
-IfNotExist, %emuPath%\save
-	FileCreateDir, %emuPath%\save ; creating save dir if it doesn't exist
+IfNotExist, %srmPath%
+	FileCreateDir, %srmPath% ; creating srm dir if it doesn't exist
+IfNotExist, %savePath%
+	FileCreateDir, %savePath% ; creating save dir if it doesn't exist
 
-Run(executable . " """ . (If superGB = "true" ? sgbRomPath . """ -g """ : "") . romPath . "\" . romName . romExtension . """ " . fullscreen . " -c """ . retroCFGFile . """ -L """ . libDll . """ -s srm -S save", emuPath, "Hide")
+Run(executable . " """ . (If superGB = "true" ? sgbRomPath . """ -g """ : "") . romPath . "\" . romName . romExtension . """ " . fullscreen . " -c """ . retroCFGFile . """ -L """ . libDll . """ -s """ . srmPath . """ -S """ . saveStatePath . """", emuPath, "Hide")
 
 WinWait("RetroArch ahk_class RetroArch")
 WinWaitActive("RetroArch ahk_class RetroArch")
