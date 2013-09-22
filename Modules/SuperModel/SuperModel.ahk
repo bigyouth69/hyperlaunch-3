@@ -2,8 +2,8 @@ MEmu = SuperModel
 MEmuV = r251
 MURL = http://www.supermodel3.com/
 MAuthor = djvj & chillin
-MVersion = 2.0.2
-MCRC = 14FD908
+MVersion = 2.0.3
+MCRC = 11990B8A
 iCRC = 7677A2C1
 MID = 635038268926572770
 MSystem = "Sega Model 3"
@@ -13,6 +13,7 @@ MSystem = "Sega Model 3"
 ; Set ConfigInputs to true if you want to configure the controls for the emulator. Set to false when you want to play a game
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGui()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
@@ -22,7 +23,9 @@ ConfigInputs := IniReadCheck(settingsFile, "Settings|" . romName, "ConfigInputs"
 screenWidth := IniReadCheck(settingsFile, "Settings|" . romName, "ScreenWidth",A_ScreenWidth,,1)	; Width
 screenHeight := IniReadCheck(settingsFile, "Settings|" . romName, "ScreenHeight",A_ScreenHeight,,1)	; Height
 vertShader := IniReadCheck(settingsFile, "Settings|" . romName, "VertShader",A_Space,,1)					; Filename of the 3D vertex shader
+vertShader := GetFullName(vertShader)	; convert from relative to absolute
 fragShader := IniReadCheck(settingsFile, "Settings|" . romName, "FragShader",A_Space,,1)					; Filename of the 3D fragment shader
+fragShader := GetFullName(fragShader)	; convert from relative to absolute
 inputSystem := IniReadCheck(settingsFile, "Settings|" . romName, "InputSystem","dinput",,1)				; Choices are dinput (default), xinput, & rawinput. Use dinput for most setups. Use xinput if you use XBox 360 controllers. Use rawinput for multiple mice or keyboard support.
 forceFeedback := IniReadCheck(settingsFile, "Settings|" . romName, "ForceFeedback","true",,1)			; Turns on force feedback if you have a controller that supports it. Scud Race' (including 'Scud Race Plus'), 'Daytona USA 2' (both editions), and 'Sega Rally 2' are the only games that support it.
 frequency := IniReadCheck(SettingsFile, "Settings|" . romName, "Frequency","25",,1)
@@ -30,6 +33,13 @@ throttle := IniReadCheck(SettingsFile, "Settings|" . romName, "Throttle","false"
 multiThreading := IniReadCheck(SettingsFile, "Settings|" . romName, "MultiThreading","true",,1)
 musicVolume := IniReadCheck(SettingsFile, "Settings|" . romName, "MusicVolume",,,1)
 soundVolume := IniReadCheck(SettingsFile, "Settings|" . romName, "SoundVolume",,,1)
+
+BezelStart()
+
+If bezelEnabled = true	; If bezels are enabled, the emu's width and height need to be set to the width and height of the bezel. Otherwise the user defined width and height are used.
+{	screenWidth := If bezelEnabled = "true" ? bezelScreenWidth : screenWidth
+	screenHeight := If bezelEnabled = "true" ? bezelScreenHeight : screenHeight
+}
 
 freq := If frequency != "" ? "-ppc-frequency=" . frequency : ""
 throttle := If throttle = "true" ? "" : "-no-throttle"
@@ -61,10 +71,12 @@ If ConfigInputs = true
 } Else {
 	WinWaitActive("Supermodel ahk_class SDL_app")
 	Sleep, 1000
+	BezelDraw()
 }
 
 FadeInExit()
 Process("WaitClose", executable)
+BezelExit()
 FadeOutExit()
 ExitModule()
 
