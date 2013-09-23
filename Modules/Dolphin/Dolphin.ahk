@@ -16,7 +16,7 @@ MSystem = "Nintendo Gamecube","Nintendo Wii"
 ; Dolphin will sometimes crash when connnecting a Wiimote, then going back to the game. After all Wiimotes are connected that you want to use, it shouldn't have anymore issues.
 ; Convert all your games to ciso using Wii Backup Manager to save alot of space by stripping everything but the game partition. http://www.wiibackupmanager.tk/
 ; Render to Main Window needs to be unchecked, otherwise hotkeys to pair wiimotes will not work in fullscreen. This is done for you if you forget.
-; If you want to keep your Dolphin.ini in the emu folder, create a "portable.txt" file in 
+; If you want to keep your Dolphin.ini in the emu folder, create a "portable.txt" file in MyDocuments\Dolphin Emulator\
 ;
 ; Bezels:
 ; If the game does not fit the window, you can try setting stretch to window manually in dolphin.
