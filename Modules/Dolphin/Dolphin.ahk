@@ -1,9 +1,9 @@
 MEmu = Dolphin
-MEmuV =  v3.0 r766
+MEmuV =  v4.0
 MURL = http://www.dolphin-emulator.com/
 MAuthor = djvj
-MVersion = 2.0.2
-MCRC = 11D8FD1E
+MVersion = 2.0.3
+MCRC = 21D30F5
 iCRC = 8197DF4
 MID = 635038268884477733
 MSystem = "Nintendo Gamecube","Nintendo Wii"
@@ -16,6 +16,7 @@ MSystem = "Nintendo Gamecube","Nintendo Wii"
 ; Dolphin will sometimes crash when connnecting a Wiimote, then going back to the game. After all Wiimotes are connected that you want to use, it shouldn't have anymore issues.
 ; Convert all your games to ciso using Wii Backup Manager to save alot of space by stripping everything but the game partition. http://www.wiibackupmanager.tk/
 ; Render to Main Window needs to be unchecked, otherwise hotkeys to pair wiimotes will not work in fullscreen. This is done for you if you forget.
+; If you want to keep your Dolphin.ini in the emu folder, create a "portable.txt" file in 
 ;
 ; Bezels:
 ; If the game does not fit the window, you can try setting stretch to window manually in dolphin.
@@ -47,7 +48,9 @@ Timeout := IniReadCheck(settingsFile, "Settings", "Timeout","5",,1)							; amou
 
 BezelStart()
 
-dolphinINI := CheckFile(emuPath . "\User\Config\Dolphin.ini")
+dolphinINIPath := A_MyDocuments . "\Dolphin Emulator\Config\Dolphin.ini"	; location of Dolphin.ini for v4.0+
+dolphinINIOldPath := emuPath . "\User\Config\Dolphin.ini"	; location of Dolphin.ini prior to v4.0
+dolphinINI := CheckFile(If FileExist(dolphinINIOldPath) ? dolphinINIOldPath : dolphinINIPath, "Could not find your Dolphin.ini in either of these folders. Please run Dolphin manually first to create it.`n" . dolphinINIOldPath . "`n" . dolphinINIPath)
 
 7z(romPath, romName, romExtension, 7zExtractPath)
 
