@@ -2,9 +2,9 @@ MEmu = Fusion
 MEmuV =  v3.64
 MURL = http://www.eidolons-inn.net/tiki-index.php?page=Kega
 MAuthor = djvj
-MVersion = 2.0.4
-MCRC = 2E8D456B
-iCRC = 1CD0BC01
+MVersion = 2.0.5
+MCRC = 38645830
+iCRC = 7A5BD6E2
 MID = 635038268893895568
 MSystem = "Samsung Gam Boy","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","Sega Mega-CD","Sega SC-3000","Sega SG-1000"
 ;----------------------------------------------------------------------------
@@ -13,6 +13,7 @@ MSystem = "Samsung Gam Boy","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis"
 ; Set your fullscreen resolution by going to Video->Full Screen Resolution
 ; Fusion only supports 4 different windowed resolutions. If you don't use fullscreen, set the one you want by going to Video->Window Size
 ; Esc is Fusion's default key to go Fullscreen/Windowed mode. This cannot be changed, but this module will still close if you use Esc to exit. You may see the emu leave fullscreen first though.
+; Esc can also cause Fusion to change its fullscreen mode on exit, causing it to lockup for 5-10 seconds. The only fix for this is to not use Esc as your exit key.
 ; For Sega CD, make sure your cues are correctly pointing to all the tracks or else you will not get sound. Also turn off auto-play for CDs
 ;
 ; Sega CD
@@ -42,6 +43,8 @@ settingsFile := modulePath . "\" . moduleName . ".ini"
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 hideTitleBar := IniReadCheck(settingsFile, "Settings", "hideTitleBar","true",,1)	; Removes the border, titlebar, menubar, and centers the emu on your screen. Only need this if fullscreen is false
 useRamCarts := IniReadCheck(settingsFile, "Settings", "UseRamCarts","true",,1)
+fluxAudioCD := IniReadCheck(settingsFile, "Settings", "FluxAudioCD",,,1)	; audio CD for use when Flux is ran
+fluxAudioCD := GetFullName(fluxAudioCD)	; convert relative path to absolute
 DTWaitTime := IniReadCheck(settingsFile, systemName, "DTWaitTime","0",,1)
 controllerReassigningEnabled := IniReadCheck(settingsFile, systemName, "Controller_Reassigning_Enabled","false",,1)
 defaultGenP1Controller := IniReadCheck(settingsFile, systemName, "Default_Genesis_P1_Controller",2,,1)
@@ -155,7 +158,14 @@ If controllerReassigningEnabled = true
 	Log("Module - Finished reassigning Fusion's ini controls")
 }
 
-scdExtension := InStr(".cue|.bin|.iso",romExtension)	; the sega cd extensions supported by fusion
+fluxRom := InStr(romName, "flux")	; test if this game is Flux, a special case game that requires an Audio CD to be mounted
+If fluxRom {
+	Log("Module - Mounting the Audio CD because """ . romName . """ requires one to function.")
+	ident := "gen"	; change ident to gen because Flux has to be mounted as a Genesis rom
+	DaemonTools("mount", fluxAudioCD)	; mount the Audio CD the user has set in the module settings
+}
+
+scdExtension := InStr(".cue|.bin|.iso", romExtension)	; the sega cd extensions supported by fusion
 
 If (ident = "scd" && dtEnabled = "true" && scdExtension) {
 	If dtUseSCSI = false
@@ -171,6 +181,9 @@ If (ident = "scd" && dtEnabled = "true" && scdExtension) {
 
 WinWait("Fusion ahk_class KegaClass")
 WinWaitActive("Fusion ahk_class KegaClass")
+
+If fluxRom
+	PostMessage, 0x111, 40009,,,ahk_class KegaClass	; Runs the Boot Sega-CD command to load the Audio CD that should be mounted in DT already
 
 If (ident = "scd" && useRamCarts = "true")	; Sega CD or Mega CD only
 {	brmPath := ReadProperty(fusionIni,"BRMFiles")		; read BRM path
@@ -227,28 +240,22 @@ If hideTitleBar = true
 {	WinSet, Style, -0x40000, Fusion ahk_class KegaClass ; Removes the border of the game window
 	WinSet, Style, -0xC00000, Fusion ahk_class KegaClass ; Removes the TitleBar
 	DllCall("SetMenu", uint, WinActive( "A" ), uint, 0) ; Removes the MenuBar
-	Center(Fusion ahk_class KegaClass)
+	If bezelEnabled != true
+		Center(Fusion ahk_class KegaClass)
 }
 
 BezelDraw()
 FadeInExit()
 Process("WaitClose", executable)
+
+If (fluxRom || (ident = "scd" && dtEnabled = "true" && scdExtension))
+	DaemonTools("unmount")
+
 7zCleanUp()
 BezelExit()
 FadeOutExit()
 ExitModule()
 
-
-MultiGame:
-	; msgbox % "selectedRom = " . selectedRom . "`nselected game = " . currentButton . "`nmgRomPath = " . mgRomPath . "`nmgRomExt = " . mgRomExt . "`nmgRomName = "  . mgRomName
-	; Unmount the CD from DaemonTools
-	If ( romExtension = ".cue" && dtEnabled = "true" )
-		DaemonTools("unmount")
-	Sleep, 500	; Required to prevent  DT from bugging
-	; Mount the CD using DaemonTools
-	If ( romExtension = ".cue" && dtEnabled = "true" )
-		DaemonTools("mount",selectedRom)
-Return
 
 Center(title) {
 	WinGetPos, X, Y, width, height, %title%
@@ -257,12 +264,21 @@ Center(title) {
 	WinMove, %title%, , x, y
 }
 
-SaveFile(text,file) {
-	FileDelete, %file%
-	FileAppend, %text%, %file%
-}
+MultiGame:
+	; msgbox % "selectedRom = " . selectedRom . "`nselected game = " . currentButton . "`nmgRomPath = " . mgRomPath . "`nmgRomExt = " . mgRomExt . "`nmgRomName = "  . mgRomName
+	; Unmount the CD from DaemonTools
+	If ( scdExtension && dtEnabled = "true" )
+		DaemonTools("unmount")
+	Sleep, 500	; Required to prevent  DT from bugging
+	; Mount the CD using DaemonTools
+	If ( scdExtension && dtEnabled = "true" )
+		DaemonTools("mount", selectedRom)
+Return
 
 CloseProcess:
 	FadeOutStart()
 	WinClose("Fusion ahk_class KegaClass")
+	; PostMessage, 0x111, 40039,,,ahk_class KegaClass	; Tells Fusion to Power Off
+	; Sleep, 100	; giving time for Fusion to unload rom
+	; PostMessage, 0x111, 40005,,,ahk_class KegaClass	; Tells Fusion to exit
 Return

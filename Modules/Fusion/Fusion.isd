@@ -19,6 +19,10 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>If true, creates and loads a unique 128k Ram Cart for each Sega CD and Mega CD game on launch</DESCRIPTION>
 						</KEY>
+						<KEY name="FluxAudioCD" required="false" nullable="true">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<DESCRIPTION>Path to an Audio CD that will be mounted in Daemon Tools when you run the Sega-CD game "Flux - Audio Visual Experience (Europe)"</DESCRIPTION>
+						</KEY>
 					</KEYS>
 				</SECTION>
 				<SECTION name="%SystemName%" required="false">
