@@ -2,8 +2,8 @@ MEmu = MFME
 MEmuV = v3.2 & v9.4 & v10.1a
 MURL = http://www.fruit-emu.com/
 MAuthor = djvj
-MVersion = 2.0.2 TEST
-MCRC = 6FA84955
+MVersion = 2.0.4
+MCRC = FE9A15DD
 iCRC = BD98DE05
 MID = 635038268906095729
 MSystem = "Fruit Machine","MFME"
@@ -57,9 +57,6 @@ ambientSoundPlayer := IniReadCheck(settingsFile, "Settings", "ambientSoundPlayer
 ambientStopKey := IniReadCheck(settingsFile, "Settings", "ambientStopKey","PAUSE",,1)
 ResetKey := IniReadCheck(settingsFile, "Settings", "ResetKey","F12",,1)								; key to reset the game while playing
 
-currentFloat := A_FormatFloat 	; backup current float
-SetFormat, Float, 6.2
-
 If ambientSound = true
 {	ambientSoundFile := CheckFile(ambientSoundFile)
 	ambientSoundPlayer := CheckFile(ambientSoundPlayer)
@@ -75,13 +72,14 @@ If fadeIn = true
 	WinGet GUI_ID5, ID
 	Gui 5: -AlwaysOnTop -Caption +ToolWindow
 	Gui 5: Color, %loadingColor%
-	backgroundPicHandle := Gdip_CreateBitmapFromFile(fadeInLyr1File)
+	backgroundPicHandle := Gdip_CreateBitmapFromFile(BackgroundPic)
 	Gdip_GetImageDimensions(backgroundPicHandle, backgroundPicW, backgroundPicH)
 	Log("Module - BackgroundPic's dimensions are: " . backgroundPicW . "x" . backgroundPicH,4)
 	backXPos := ( A_ScreenWidth / 2 ) - ( backgroundPicW / 2 )
 	backYPos := ( A_ScreenHeight / 2 ) - ( backgroundPicH / 2 )
 	Gui 5: Add, Picture,x%backXPos% y%backYPos%, %BackgroundPic%
 	Gui 5: Show, x0 y0 h%A_ScreenHeight% w%A_ScreenWidth%
+	Log("Module - Displaying BackgroundPic's dimensions at - x: " . backXPos . " y: " . backYPos,4)
 }
 
 ResetKey := xHotKeyVarEdit(ResetKey,"ResetKey","~","Add")
@@ -92,6 +90,8 @@ If MinimizeWindows = true
 
 If resizeDesktop = true
 {	;Sleep, 1000 ; probably don't need this
+	currentFloat := A_FormatFloat 	; backup current float
+	SetFormat, Float, 6.2
 	originalScreenRes := CurrentDisplaySettings(0) ; reads the current resolution
 	originalScreenRes := CheckForNearestSupportedRes( originalScreenRes ) ;assures that the current resolution is a compatible mode (sometimes the frequency can be wrongly defined on the previous function, this line double check this to avoid any issues).
 	StringSplit, originalScreenResArray, originalScreenRes, |,  
@@ -112,7 +112,7 @@ WinSet, Style, -0xC00000, ahk_class TForm1		;Removes the titlebar of the game wi
 WinSet, Style, -0x40000, ahk_class TForm1		;Removes the border of the game window
 DllCall("SetMenu", uint, WinActive( "A" ), uint, 0) 	;Removes the MenuBar
 ; Control, Hide, , TPanel, AHK_class TForm1		;Removes the TPanel - Doesn't seem to work
-;WinSet, TransColor, F0F0F0, ahk_class TForm1 ; Removes the grey around the machine, but slightly darkens the overall image
+; WinSet, TransColor, F0F0F0, ahk_class TForm1 ; Removes the grey around the machine, but slightly darkens the overall image
 
 WinActivate, ahk_class TForm1
 WinWaitActive("ahk_class TForm1")
@@ -170,7 +170,8 @@ If Magnify = true
 If ambientSound = true
 	Run(ambientSoundPlayerName . " """ . ambientSoundFile . """ " . ambientStopKey, ambientSoundPlayerPath)
 
-SetFormat, Float, %currentFloat%	; restore previous value
+If resizeDesktop = true
+	SetFormat, Float, %currentFloat%	; restore previous value
 
 FadeInExit()
 
