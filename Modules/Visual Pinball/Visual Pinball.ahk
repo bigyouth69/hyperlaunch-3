@@ -3,8 +3,8 @@ MEmuV = v8.1.1 & v9.12
 MURL = http://sourceforge.net/projects/vpinball/
 MAuthor = djvj
 MVersion = 2.0.1
-MCRC = 6D858B90
-iCRC = 123E2B8C
+MCRC = 5F3F7775
+iCRC = 5089D1EC
 MID = 635038268932497719
 MSystem = "Visual Pinball"
 ;----------------------------------------------------------------------------
@@ -31,14 +31,13 @@ FadeInStart()
  
 settingsFile := modulePath . "\" . moduleName . ".ini"
 EscClose := IniReadCheck(settingsFile, "Settings", "EscClose","false",,1) ; This fixes VP from crashing (in WinXP) on exit when using Esc as your exit key.
-showDMD := IniReadCheck(settingsFile, "Settings", "showDMD","true",,1)
-updateDefaultDMD := IniReadCheck(settingsFile, "Settings", "updateDefaultDMD","true",,1) ; Set this to true if you want the script to set the default position of the DMD on next run.
-dmdX := IniReadCheck(settingsFile, "Settings", "dmdX","45",,1) ; Your new default X position of the DMD
-dmdY := IniReadCheck(settingsFile, "Settings", "dmdY","35",,1) ; Your new default Y position of the DMD
-dmdWidth := IniReadCheck(settingsFile, "Settings", "dmdWidth","300",,1) ; Your new default DMD Width
-dmdHeight := IniReadCheck(settingsFile, "Settings", "dmdHeight","75",,1) ; Your new default DMD Height
-validateDMDLaunch := IniReadCheck(settingsFile, "Settings", "validateDMDLaunch", "false",,1)
-validateDMDLaunch := IniReadCheck(settingsFile, romName, "validateDMDLaunch", validateDMDLaunch,,1)     ; default is the system's current setting
+showDMD := IniReadCheck(settingsFile, "Settings", "ShowDMD","true",,1)
+updateDefaultDMD := IniReadCheck(settingsFile, "Settings", "UpdateDefaultDMD","true",,1) ; Set this to true if you want the script to set the default position of the DMD on next run.
+dmdX := IniReadCheck(settingsFile, "Settings", "DMDX","45",,1) ; Your new default X position of the DMD
+dmdY := IniReadCheck(settingsFile, "Settings", "DMDY","35",,1) ; Your new default Y position of the DMD
+dmdWidth := IniReadCheck(settingsFile, "Settings", "DMDWidth","300",,1) ; Your new default DMD Width
+dmdHeight := IniReadCheck(settingsFile, "Settings", "DMDHeight","75",,1) ; Your new default DMD Height
+validateDMDLaunch := IniReadCheck(settingsFile, "Settings|" . romName, "ValidateDMDLaunch", "false",,1)
  
 7z(romPath, romName, romExtension, 7zExtractPath)
  
