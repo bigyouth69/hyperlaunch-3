@@ -15,6 +15,10 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables the DMD (Dot Matrix Display).</DESCRIPTION>
 						</KEY>
+						<KEY name="validateDMDLaunch" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If table has a DMD, make sure it launched.</DESCRIPTION>
+						</KEY>
 						<KEY name="updateDefaultDMD" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Set this to true if you want the script to set the default position of the DMD on next run.</DESCRIPTION>
@@ -34,6 +38,15 @@
 						<KEY name="dmdHeight" required="false" nullable="true" minLength="1">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>Your default DMD HeightHeight</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="validateDMDLaunch" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If table has a DMD, make sure it launched.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>

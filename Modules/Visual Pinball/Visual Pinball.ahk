@@ -2,9 +2,9 @@ MEmu = Visual Pinball
 MEmuV = v8.1.1 & v9.12
 MURL = http://sourceforge.net/projects/vpinball/
 MAuthor = djvj
-MVersion = 2.0
-MCRC = 6B81A939
-iCRC = 80311E26
+MVersion = 2.0.1
+MCRC = 6D858B90
+iCRC = 123E2B8C
 MID = 635038268932497719
 MSystem = "Visual Pinball"
 ;----------------------------------------------------------------------------
@@ -28,7 +28,7 @@ MSystem = "Visual Pinball"
 ;----------------------------------------------------------------------------
 StartModule()
 FadeInStart()
-
+ 
 settingsFile := modulePath . "\" . moduleName . ".ini"
 EscClose := IniReadCheck(settingsFile, "Settings", "EscClose","false",,1) ; This fixes VP from crashing (in WinXP) on exit when using Esc as your exit key.
 showDMD := IniReadCheck(settingsFile, "Settings", "showDMD","true",,1)
@@ -37,9 +37,11 @@ dmdX := IniReadCheck(settingsFile, "Settings", "dmdX","45",,1) ; Your new defaul
 dmdY := IniReadCheck(settingsFile, "Settings", "dmdY","35",,1) ; Your new default Y position of the DMD
 dmdWidth := IniReadCheck(settingsFile, "Settings", "dmdWidth","300",,1) ; Your new default DMD Width
 dmdHeight := IniReadCheck(settingsFile, "Settings", "dmdHeight","75",,1) ; Your new default DMD Height
-
+validateDMDLaunch := IniReadCheck(settingsFile, "Settings", "validateDMDLaunch", "false",,1)
+validateDMDLaunch := IniReadCheck(settingsFile, romName, "validateDMDLaunch", validateDMDLaunch,,1)     ; default is the system's current setting
+ 
 7z(romPath, romName, romExtension, 7zExtractPath)
-
+ 
 ; Update default DMD position & size so when new tables are ran, they use the new defaults
 If ( updateDefaultDMD  = "true" ) {
 	dmdXcur := ReadReg("dmd_pos_x")
@@ -47,19 +49,19 @@ If ( updateDefaultDMD  = "true" ) {
 	dmdWcur := ReadReg("dmd_width")
 	dmdHcur := ReadReg("dmd_height")
 	If ( dmdXcur != dmdX or dmdYcur != dmdY or dmdWcur != dmdWidth or dmdHcur != dmdHeight ) {
-			WriteReg("dmd_pos_x",dmdX)
-			WriteReg("dmd_pos_y",dmdY)
-			WriteReg("dmd_width",dmdWidth)
-			WriteReg("dmd_height",dmdHeight)
-		}
+		WriteReg("dmd_pos_x",dmdX)
+		WriteReg("dmd_pos_y",dmdY)
+		WriteReg("dmd_width",dmdWidth)
+		WriteReg("dmd_height",dmdHeight)
+	}
 }
-
+ 
 Run(executable . " /exit /play -""" . romPath . "\" . romName . romExtension . """",emuPath, "Min") ; hide does not work
-
+ 
 WinWait("Preparing Table AHK_class #32770")
 WinWaitClose("Preparing Table AHK_class #32770",,4)
 Sleep, 500
-
+ 
 ; script to look for Please answer window, selects Yes I am and hits enter to continue loading table
 Loop {
 	Sleep 50
@@ -85,24 +87,24 @@ Loop {
 	} Else ifWinExist, VBScript ; all msg boxes from vp script (like vb/vpm version not high enough...)
 	{	WinActivate, VBScript
 		IfWinActive, VBScript
-			Send {Enter}
-	} ;else ifWinExist, Error ; serious errors - like z buffer too small and so on
-;		{
+		Send {Enter}
+	} ;Else IfWinExist, Error ; serious errors - like z buffer too small and so on
+   ; {
 		; we have some error and we want to see it so we don't send Enter
-		;Send {Enter}
-;			Gui, Destroy
-;			WinActivate, Error
-;			WinWaitActive, Error
-;			WinWaitClose, Error
-;			WinClose, ahk_class VPinball
-;			Process, WaitClose, %executable%
-;			ExitModule()
-;		}
+		; Send {Enter}
+		; Gui, Destroy
+		; WinActivate, Error
+		; WinWaitActive, Error
+		; WinWaitClose, Error
+		; WinClose, ahk_class VPinball
+		; Process, WaitClose, %executable%
+		; ExitModule()
+	; }
 	IfWinExist, Visual Pinball Player,, DMD ;Check if visual pinball is Ready
 		IfWinActive, Visual Pinball Player,, DMD ;Check if visual pinball is Ready
 			Break
 }
-
+ 
 Sleep, 500
 WinWait("ahk_Class VPPlayer")
 Sleep, 500
@@ -114,34 +116,37 @@ Loop {
 }
 WinWaitActive("ahk_class VPPlayer")
 Sleep, 1000
-
+ 
 ; Give focus to the dmd so it appears on top of the playfield
 If showDMD = true
-{	DetectHiddenWindows, off ; don't detect dmd if it is hidden
-	WinActivate, ahk_class MAME
-	WinWaitActive("ahk_class MAME",,2)
-	ControlClick,, ahk_class MAME ; clicking the dmd to set the WS_EX_TOPMOST parameter (AlwaysOnTop)
-	DetectHiddenWindows on
-	WinActivate, ahk_class VPPlayer
-	WinWaitActive("ahk_class VPPlayer")
+{       DetectHiddenWindows, off ; don't detect dmd if it is hidden
+        WinActivate, ahk_class MAME
+        if validateDMDLaunch = true
+        {
+                WinWaitActive("ahk_class MAME",,2)
+        }
+        ControlClick,, ahk_class MAME ; clicking the dmd to set the WS_EX_TOPMOST parameter (AlwaysOnTop)
+        DetectHiddenWindows on
+        WinActivate, ahk_class VPPlayer
+        WinWaitActive("ahk_class VPPlayer")
 }
-
+ 
 FadeInExit()
 Process("WaitClose",executable)
 7zCleanUp()
 FadeOutExit()
 ExitModule()
-
-
+ 
+ 
 ReadReg(var1) {
 	RegRead, regValue, HKEY_CURRENT_USER, Software\Freeware\Visual PinMame\default, %var1%
 	Return %regValue%
 }
-
+ 
 WriteReg(var1, var2) {
 	RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Freeware\Visual PinMame\default, %var1%, %var2%
 }
-
+ 
 CloseProcess:
 	FadeOutStart()
 	If escClose = true
@@ -150,7 +155,7 @@ CloseProcess:
 		;ControlSend, Button1, q, ahk_class #32770
 		ControlSend, Button2, r, ahk_class #32770 ; in case q crashes VP, use this
 	}
-	; If ( exe = vp8tag ) { 
+	; If ( exe = vp8tag ) {
 		; WinClose, ahk_class VPinball
 	; } Else {
 		Sleep, 150
