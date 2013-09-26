@@ -2,8 +2,8 @@ MEmu = Atari800
 MEmuV =  v2.2.1 svn r2186
 MURL = http://atari800.sourceforge.net/
 MAuthor = djvj & brolly
-MVersion = 2.0
-MCRC = 2386B893
+MVersion = 2.0.1
+MCRC = 86D2532D
 iCRC = 4555ACBC
 MID = 635038268874969816
 MSystem = "Atari XEGS","Atari 8-Bit","Atari 5200"
@@ -93,6 +93,7 @@ Else
 Run(executable . " " . fullscreen . " -" . ident . " " . carttype . " " . basic . " " . options . " """ . romPath . "\" . romName . romExtension . """ -mouse " . Mouse, emuPath)
 
 WinWait("Atari 800 Emulator ahk_class SDL_app")
+WinSet, Transparent, On, ahk_class ConsoleWindowClass	; makes the console window transparent so you don't see it on exit
 WinWaitActive("Atari 800 Emulator ahk_class SDL_app")
 
 FadeInExit()
