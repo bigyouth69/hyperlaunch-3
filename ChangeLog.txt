@@ -1,4 +1,99 @@
-v3.0.0.8
+v3.0.1.0
+
+HyperLaunch:
+
+Added - Checks for some required dll files.
+Fixed - Some languages still reporting letter codes, rather than actual language in log.
+Fixed - When Direct launching HyperLaunch.exe, the system selection would not parse out some system names correctly from the main menu.xml and in certain scenarios allowed extra text to sneak in.
+Fixed - Missing HyperLaunch.ini were not being written to the file.
+Fixed - Moved ToggleCursor label to the module thread as it didn't seem to work in the HL thread. You can now toggle your cursor again with your toggleCursorKey if you have it set. This also now is an xHotkey key and can be configured multiple methods like all the rest (needs an HLHQ update to support this change)
+Changed - romPath is always sent to module now even if no rom is found and skipchecks is enabled.
+Changed - Hiding of mouse cursor is now done entirely in the module thread. The method used to hide a cursor is not practical to have both threads control its visibility due to many static variables to keep track of when it's hidden and when not. When HideCursor is enabled, the initial hidden state now gets triggered in StartModule() instead of right before the module is built. Tests show this made no visible difference on launch.
+Changed - Zinc as a System Name has changed and NO LONGER SUPPORTS NUMBERED ROMS IN THE XML. Yes you heard that right. The module now maps the correct short rom names in the updated xml to the numbers which zinc needs to launch each game. This means for anyone running zinc now, they need to get the new xml and module and change all their media to match the updated rom names in the xml.
+
+Bezel.ahk
+
+Added - Support for bezel key change (thanks to Manson and Thooperman for the help and ideas)
+Added - [COLOR="#FF0000"]Full support for Instruction Cards (thanks to Manson and Thooperman for the help and ideas)[/COLOR]. See attached image to see it in action
+Fixed - GUI drawing problems with fade in and fade out (thanks Noshgar for the help)	
+
+HyperPause.ahk
+
+Added - New HyperPause menu to show contents of history.dat. If you have HyperLaunch already installed you will need to change in the Hyperlaunch\Settings\Global HyperPause.ini files, in the section [Main Menu Appearance Options], this key value: Main_Menu_Items=Controller|Change Disc|Save State|Load State|HighScore|Artwork|Guides|Manuals|Videos|Sound|Statistics|Moves List|History|Shutdown (requested by jkonami - [url]http://www.hyperspin-fe.com/forum/showthread.php?26074-HyperPause-Feature-Requests&p=252228&viewfull=1#post252228[/url])
+Fixed - HyperPause Moves List Incorrect Icon Names. Don't forget to update the "HyperLaunch Update Media and data files.zip" contents to your hyperlaunch media folder. (tahnsk brandsizzle - [url]http://www.hyperspin-fe.com/forum/showthread.php?27345-HyperPause-Moves-List-Incorrect-Icon-Names[/url])
+Changed - HyperPause Moves List folder structure to follow HL media structure and support different moves list icons per system or game. Please delete the folder HyperLaunch\Media\Moves List\Icons and copy the contents from the file "HyperLaunch Update Media and data files.zip".
+Fixed - Shutdown bug on DrawSubMenu (added workaround to avoid it - requested by Cruel Moose and HillJackBob - [url]http://www.hyperspin-fe.com/forum/showthread.php?26201-Nintendulator-and-HyperPause&p=251337&viewfull=1#post251337[/url] and [url]http://www.hyperspin-fe.com/forum/showthread.php?26862-Small-High-Score-Issue-Found-in-HyperPause[/url]
+Added - HyperPause videos and music volume control. You need to set the volume level on HLHQ, the default is set to 100%. (requested by windowlicker11 - [url]http://www.hyperspin-fe.com/forum/showthread.php?26074-HyperPause-Feature-Requests&p=249629&viewfull=1#post249629[/url])
+Added - Pause on music playing while in videos menu (reuqested by NEODAN - [url]http://www.hyperspin-fe.com/forum/showthread.php?26074-HyperPause-Feature-Requests&p=259584&viewfull=1#post259584[/url]) 
+Changed - Default screenshot saved to png file instead of bmp files (requested by horseyhorsey - [url]http://www.hyperspin-fe.com/forum/showthread.php?27301-Some-questions-about-saves-amp-their-screen-grabs&p=260296&viewfull=1#post260296[/url])
+Added - Support for call to save and load state scripts from HyperPause menus. If the emulator module have the labels SaveSateSlot1, SaveSateSlot2,.. and LoadSateSlot1, LoadSateSlot2,... HyperPause will call these labels whenever you choose the save or load state buttons instead of trying to use the key send commands defined on the emulators.ini files. (requested by horseyhorsey - [url]http://www.hyperspin-fe.com/forum/showthread.php?27301-Some-questions-about-saves-amp-their-screen-grabs&p=260296&viewfull=1#post260296[/url])
+Added - Option to disable saving screenshots on save state. You need to choose to not save the screenshots on HLHQ, the default is set to save them. (requested by horseyhorsey - [url]http://www.hyperspin-fe.com/forum/showthread.php?27301-Some-questions-about-saves-amp-their-screen-grabs&p=260380&viewfull=1#post260380[/url])
+Fixed - Statistics last time played bug (requested by mameshane - [url]http://www.hyperspin-fe.com/forum/showthread.php?27273-statistics-Error[/url])
+Fixed - Multigame artwork bug (requested by wiggles, jvlk and jbsoum - [url]http://www.hyperspin-fe.com/forum/showthread.php?27514-HyperPause-Freezes-When-Highlighting-Change-Disc[/url] and [url]http://www.hyperspin-fe.com/forum/showthread.php?27514-HyperPause-Freezes-When-Highlighting-Change-Disc[/url])
+Added - Option to set HyperPause own independent resolution. This is not recommended, use it at your own risk. Default is set to not change current resolution. You must provide a monitor compatible resolution in the format width|height|colors|frequency (for example: 1280|1024|32|60 for 1280x1024 pixels with 32 bit colors and 60Hz frequency). (requested by Hi! and alexd74 - [url]http://www.hyperspin-fe.com/forum/showthread.php?26074-HyperPause-Feature-Requests&p=258661&viewfull=1#post258661[/url] and [url]http://www.hyperspin-fe.com/forum/showthread.php?26074-HyperPause-Feature-Requests&p=262490&viewfull=1#post262490[/url])
+Changed - Default context font value to be a fixed width font in order to avoid any misalignment on txt guides. If you have HyperLaunch already installed you will need to change in the HLHQ the Content Text Font at Hyperpause -> Appearance 2 tab to Lucida Console. If you don't change that, it is possible that some contents of the guides txt files would be cropped when useing the Arial font instead.  (requested by LapRocket  and Brolly - fixed by wiggles - [url]http://www.hyperspin-fe.com/forum/showthread.php?27589-Hyperpause-txt-docs-for-guides-question[/url])
+Fixed - Multigame issues on HyperPause (requested by brolly and djvj).
+Fixed - HyperPause gamepad control bugs. (requested by lank.g01 and urbangangsta101 - fixed by windowlicker11 - [url]http://www.hyperspin-fe.com/forum/showthread.php?27394-Weird-glitches-with-Hyperpause-and-xpadder-profiles[/url])
+Added - Changes to support the new bezel features.
+Added - Progress bar support for multigame changes that requires 7z extraction.  
+Added - Support for selecting a control profile different from the default loaded from all available profiles on your folders. You just need to go to the controller banner and press left (or right) to show a list of possible profiles. Pressing select you will choose the profile that you want to be loaded on the hyperpause exit. Many Thanks to ghutch for the implementation of necessary changes both on keymapper.ahk and hyperpause.ahk files. Keymapper must be enabled in order to access the controller config menu. (requested by bob.records - added by ghutch - [url]http://www.hyperspin-fe.com/forum/showthread.php?26074-HyperPause-Feature-Requests&p=258975&viewfull=1#post258975[/url])
+
+Shared.ahk
+
+Added - Changes to support the new bezel features.
+Added - Another scenario with rom mapping when 7z is enabled, and there is no valid rom names or extensions, so you have skipchecks enabled. Previously this would error out in 7z, but now it gets through. The scenario for this would be when you wanted to use alternate archived names for an arcade or scummvm game, where the archive contains no roms or extensions that match the name in your db.
+Added - 7z extractions now check for free space before performing an extraction. Will error out if you run out of space in your 7zExtractPath. This prevents a 7z.exe error that you might of not known the cause.
+Added - IniReadCheck in the module thread now accepts multiple sections separated by |. The function will read each section in the ini and treat each consecutive section checked as the preferred value if it exists. Most commonly used to allow Global/system/rom or Global/rom module settings by only needing one function call in the module.
+Fixed - Log in Shared.ahk StartModule() not showing correct romName.
+Fixed - Log in Shared.ahk CreateRomTable() not showing "*."
+Fixed - When 7z is enabled, yet wasn't needed because rom was either not compressed or already extracted in temp folder, you would get an ahk error about your animation label not found.
+Fixed - When logging command windows, because all applications ran are logged, this would cause an issue with logs already being used. Now command logs are sequential. You may notice multiple command logs in your HL root folder if this is enabled.
+Fixed - When showing command windows and multiples were open, HL would only close the first one. I now keep track of all of them and close each one on exit.
+Changed - Module settings in log now include section name.
+Changed - Rewrote how Fade finds it's Layer 1 and 2 images, shrinking code down by about 50%.
+Changed - GetFadePicPosition() moved from Fade.ahk to Shared.ahk so the MFME module can use it when Fade is disabled.
+Changed - Closing the module thread on ScriptError's now calls ExitModule() instead of ExitApp which has a very small chance to cause multiple errors if you have multiple problems, but no need to duplicate code to clean up on errors. Before, it would close after the first error and that's it. Now it will cleanly exit and restore proper keymaps if enabled.
+Changed - Cancelling a 7z extraction now closes the module thread through ExitModule() instead of ExitApp. This should help prevent any issues with things lingering around after a cancel.
+
+XHotkey.ahk
+
+Fixed - Bug with hold key option.
+
+Multigame.ahk
+
+Changed - MultiGame now behaves exactly like HyperPause menus drawing.
+Changed - Complete rewrite of how MultiGame finds Game Art, removing all duplicate code. In order to properly log everything, this was required. This will also speed up MG launch by a few ms, as less I/O checks are taking place.
+Changed - AHK remaps are now independent from the other keymappers (xpadder and joytokey) and can be used on its own or in conjunction with the others. This means you can now use AHK and xpadder if you wish. See the new key Keymapper_AHK_Enabled. (needs an HLHQ update to configure this new option)
+Added - Changes to support the new bezel features.
+Added - Automatic resize multigame options for different resolutions. Set the image adjust scale to "0" (zero), and all multigame components will be resized to your current screen resolution assuming that the original values were made for a 1920x1080 resolution.
+Added - Progress bar support for multigame changes that requires 7z extraction. This means that when you swap discs, and 7z is used for extraction, you will now see a progress bar.
+Added - MultiGame now logs everywhere it's looking and the images it finds that will be used.
+Fixed - One path where MultiGame scans for Game Art images was not correct.
+
+
+Fade.ahk
+
+Added - A brief window when exiting an emu that runs fullscreen to attempt to prevent your front end or desktop from flashing in before your fadeOut image appears. See the new setting Fade_Out_Extra_Screen.
+
+
+Fade animations.ahk
+
+Fixed - Changes to fix statistics last time played bug
+Fixed - Progress Bar text 1 options using incorrect variable
+Fixed - Statistics extra line jumps bug appearing when launching a game for the first time.	
+
+
+Statistics.ahk
+
+Added - Changes to fix statistics last time played bug	
+
+
+Modules
+
+Added - Bezel gui function to improve fade in and out while using bezel.
+
+
+v3.0.0.9
 
 	Fixed - VJoy profiles, was using a variable that was removed awhile back and no vjoy profiles could be found.
 	Fixed - 7z bug introduced from 3.0.0.8 that would try to extract a rom already found in the 7z temp folder.
@@ -30,6 +125,7 @@ v3.0.0.8
 	Bleasby's changes:
 	Shared.ahk:
 	Added one line change (line 528), to reset the description value when the game is not found on the database.
+	Fixed the statistics reset bug, after passing 24 hours of gameplay.
 
 	Rom Mapping Launch Menu.ahk:
 	Added code to avoid running filters and additional info functions if there is no naming scheme defined on the rom map ini file.
@@ -47,6 +143,7 @@ v3.0.0.8
 	Added option to hide the full screen help text after some time, or disable it completly (requested by Gikachon - http://www.hyperspin-fe.com/forum/showthread.php?26892-Question-about-controls-
 
 	info&p=256065&viewfull=1#post256065) (controlled by Full_Screen_Help_Text_Timer ini option)
+	Added support for restoring HyperPause to exactly the same point were you left it for the last time while in the same game session (requested by lank.g01 - http://www.hyperspin-fe.com/forum/sh...l=1#post258708).
 	Small fixes to menu drawing bugs.
 	Corrected folder path on the error message when the default HyperPause font is not used.
 
