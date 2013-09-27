@@ -1,14 +1,5 @@
-MCRC=608FE832
-MVersion=1.0.2
-
-;Function List
-;
-;LoadPreferredControllers(JoyIDsPreferredControllers)
-;RunKeyMapper(keymapperLoad_Or_Unload,keymapper)
-;GetProfile(ControllerName,keymapper, ProfilePrefixes [,PlayerNumber], keymapperLoad_Or_Unload)
-;GetJoystickArray()
-;GetJoystickGUID(Mid,Pid,JoystickID)
-;ChangeJoystickID(Mid,Pid,GUID,NewJoystickID)
+MCRC=5F0BD2F
+MVersion=1.0.3
 
 RunAHKKeymapper(method) {
 	Global ahkDefaultProfile,ahkFEProfile,ahkRomProfile,ahkEmuProfile,ahkSystemProfile,ahkHyperLaunchProfile,ahkLauncherPath,ahkLauncherExe
@@ -121,7 +112,7 @@ LoadPreferredControllers(JoyIDsPreferredControllers) {
 		MID := JoyIDsSortArray2
 		PID := JoyIDsSortArray3
 		GUID := JoyIDsSortArray4
-		ChangeJoystickID(Mid,Pid,GUID,A_Index)
+		ChangeJoystickID(MID,PID,GUID,A_Index)
 	}
 }
 
@@ -136,6 +127,7 @@ LoadPreferredControllers(JoyIDsPreferredControllers) {
 
 RunKeymapper(keymapperLoad_Or_Unload,Keymapper) {
 	Global blankProfile,defaultProfile,FEProfile,romProfile,emuProfile,xPadderSystemProfile,systemProfile,HyperLaunchProfile
+	Global systemName,dbName,emuName,keymapperFrontEndProfileName
 	Global CustomJoyNameArray
 	Global keymapperFullPath 
 	Global KeymapperHyperLaunchProfileEnabled, keymapperEnabled
@@ -153,11 +145,11 @@ RunKeymapper(keymapperLoad_Or_Unload,Keymapper) {
 		{	ControllerName := joystickArray[A_Index,1]
 			If ControllerName
 			{	If (keymapperLoad_Or_Unload = "load")
-					Profile2Load := GetProfile(ControllerName, keymapper, romProfile . "|" . emuProfile . "|" . xPadderSystemProfile . "|" . defaultProfile . "|" . blankProfile, Player_Number, keymapperLoad_Or_Unload)
+					Profile2Load := GetProfile(keymapper, romProfile . "|" . emuProfile . "|" . xPadderSystemProfile . "|" . defaultProfile . "|" . blankProfile, keymapperLoad_Or_Unload, ControllerName, Player_Number)
 				Else If (keymapperLoad_Or_Unload = "unload")
-					Profile2Load := GetProfile(ControllerName, keymapper, FEProfile . "|" . blankProfile, Player_Number, keymapperLoad_Or_Unload)
+					Profile2Load := GetProfile(keymapper, FEProfile . "|" . blankProfile, keymapperLoad_Or_Unload, ControllerName, Player_Number)
 				Else If (keymapperLoad_Or_Unload = "menu")
-					Profile2Load := GetProfile(ControllerName, keymapper, HyperLaunchProfile . "|" . blankProfile, Player_Number, keymapperLoad_Or_Unload)
+					Profile2Load := GetProfile(keymapper, HyperLaunchProfile . "|" . blankProfile, keymapperLoad_Or_Unload, ControllerName, Player_Number)
 				
 				If !ProfilesInIdOrder
 					ProfilesInIdOrder := Profile2Load 
@@ -167,18 +159,13 @@ RunKeymapper(keymapperLoad_Or_Unload,Keymapper) {
 		}
 		RunXpadder(keymapperPath,keymapperExe,ProfilesInIdOrder,joystickArray)
 	} Else If (keymapper="joy2key") OR (keymapper = "joytokey")
-	{	Loop, 16
-		{	ControllerName := joystickArray[A_Index,1]
-			If ControllerName
-				Break
-		}
-
+	{
 		If (keymapperLoad_Or_Unload = "load")
-			Profile2Load := GetProfile(ControllerName, keymapper, romProfile . "|" . emuProfile . "|" . systemProfile . "|" . defaultProfile . "|" . blankProfile, Player_Number, keymapperLoad_Or_Unload)
+			Profile2Load := GetProfile(keymapper, romProfile . "\" . dbName . "|" . emuProfile . "\" . emuName . "|" . systemProfile . "\" . systemName . "|" . defaultProfile . "\_Default", keymapperLoad_Or_Unload)
 		Else If (keymapperLoad_Or_Unload = "unload")
-			Profile2Load := GetProfile(ControllerName, keymapper, FEProfile . "|" . blankProfile, Player_Number, keymapperLoad_Or_Unload)
+			Profile2Load := GetProfile(keymapper, FEProfile . "\" . keymapperFrontEndProfileName, keymapperLoad_Or_Unload)
 		Else If (keymapperLoad_Or_Unload = "menu")
-			Profile2Load := GetProfile(ControllerName, keymapper, HyperLaunchProfile . "|" . blankProfile, Player_Number, keymapperLoad_Or_Unload)
+			Profile2Load := GetProfile(keymapper, HyperLaunchProfile . "\HyperLaunch", keymapperLoad_Or_Unload)
 	
 		RunJoyToKey(keymapperPath,keymapperExe,Profile2Load)
 	}	
@@ -196,30 +183,37 @@ RunKeymapper(keymapperLoad_Or_Unload,Keymapper) {
 ; this function is menat only for use by the Load keymapper function.
 ;#########################
 
-GetProfile(ControllerName, keymapper, ProfilePrefixes, ByRef PlayerNumber = 1, keymapperLoad_Or_Unload = "load") {
+GetProfile(keymapper, ProfilePrefixes,keymapperLoad_Or_Unload = "load",  ControllerName = "", ByRef PlayerNumber = 1) {
 	Global CustomJoyNameArray, blankProfile, systemName, dbName, emuName, keymapperFrontEndProfileName, keymapperProfilePath
 	Static ExtensionList := {xpadder: ".xpadderprofile",joy2key: ".cfg",joytokey: ".cfg"}	; static associative array that is holds what extension is for what keymapper.
 	;keymapper: "keymapper profile extension". Adding name variations to this array should not slow down the script which means name variations can be accounted for.
 	keymapperExtension := ExtensionList[keymapper]
 	PlayerNumber := (If PlayerNumber = "" ? (1) : (PlayerNumber)) ; perform check for blank PlayerNumber
 	
-	If (keymapperExtension = ".xpadderprofile")
+	If (keymapperExtension = ".xpadderprofile") {
 		PlayerIndicator := "\p" . PlayerNumber
-	Else
-		PlayerIndicator := "" ;joy2key does not need a player number since the numbers are stored in the cfg
-
-	CustomJoyName := CustomJoyNameArray[ControllerName]
-	;If CustomJoyName Exists look for it. If not, don't look for an empty [].
-	If CustomJoyName 
-	{	LoopNumber := 3
-		PossibleJoyNames1 := "\" . ControllerName
-		PossibleJoyNames2 := "\" . CustomJoyName
-		PossibleJoyNames3 := ""
+		
+		CustomJoyName := CustomJoyNameArray[ControllerName]
+		;If CustomJoyName Exists look for it. If not, don't look for an empty [].
+		If CustomJoyName 
+		{	LoopNumber := 3
+			PossibleJoyNames1 := "\" . ControllerName
+			PossibleJoyNames2 := "\" . CustomJoyName
+			PossibleJoyNames3 := ""
+		} Else {
+			LoopNumber := 2
+			PossibleJoyNames1 := "\" . ControllerName
+			PossibleJoyNames2 := ""
+		}
+		
 	} Else {
-		LoopNumber := 2
-		PossibleJoyNames1 := "\" . ControllerName
-		PossibleJoyNames2 := ""
+		PlayerIndicator := "" ;joy2key does not need a player number since the numbers are stored in the cfg
+	
+		;this is so we don't look for controller specific profiles
+		LoopNumber = 1
+		PossibleJoyNames1 := ""
 	}
+	
 
 	;start looking for profiles
 	;profile prefixes for loading should look like %romProfile%|%emuProfile%|%systemProfile%|%defaultProfile%|%blankProfile%
@@ -387,7 +381,7 @@ GetJoystickGUID(Mid,Pid,JoystickID) {
 ;#########################
 
 ChangeJoystickID(Mid,Pid,GUID,NewJoystickID) {
-	If !Mid OR !PID OR !GUID OR !NewJoystickID
+	If !Mid OR !Pid OR !GUID OR !NewJoystickID
 		Return 1
 	If NewJoystickID not between 1 and 16
 		Return 1
@@ -543,40 +537,42 @@ RunJoyToKey(keymapperPath,keymapperExe,Profile) {
 	If startMinimized != 1
 		IniWrite, 1, %keymapperPath%\JoyToKey.ini, LastStatus, StartIconified
 	; finally we start the keymapper with the cfg profile we found
-	Log("Keymapper - Run`, " . keymapperExe .  " """ . Profile . """`, " . keymapperPath)
-	Run, %keymapperExe% "%Profile%", %keymapperPath%
+	If Profile
+	{
+		Log("Keymapper - Run`, " . keymapperExe .  " """ . Profile . """`, " . keymapperPath)
+		Run, %keymapperExe% "%Profile%", %keymapperPath%
+	}
 }
 
 Keymapper_HyperPauseProfileList(ControllerName,PlayerNumber,keymapper) {
 	; [file name (no extension), type (options are default,system,emulator,game),0 or 1 (1 if controller specific), full path to file]
 	Global blankProfile,defaultProfile,romProfile,emuProfile,xPadderSystemProfile,systemProfile
-	Global CustomJoyNameArray
+	Global systemName,dbName,emuName ;for use with joytokey
+	Global CustomJoyNameArray ;for use with xpadder
 	
 	If keymapper = xpadder
 	{	keymapperExtension = .xpadderprofile
 		sProfile := xPadderSystemProfile
+		PlayerIndicator := "\p" . PlayerNumber
+		CustomJoyName := CustomJoyNameArray[ControllerName]
+		If CustomJoyName 
+		{	LoopNumber := 3
+			PossibleJoyNames1 := "\" . ControllerName
+			PossibleJoyNames2 := "\" . CustomJoyName
+			PossibleJoyNames3 := ""
+		} Else {
+			LoopNumber := 2
+			PossibleJoyNames1 := "\" . ControllerName
+			PossibleJoyNames2 := ""
+		}
 	} Else {	; keymapper = joy2key
 		keymapperExtension = .cfg
 		sProfile := systemProfile
+		LoopNumber = 1
+		PossibleJoyNames1 := "" ;joy2key does not use a profile per controller
+		PlayerIndicator := "" ;joy2key and ahk do not need a player number
 	}
 	
-	CustomJoyName := CustomJoyNameArray[ControllerName]
-	If CustomJoyName 
-	{	LoopNumber := 3
-		PossibleJoyNames1 := "\" . ControllerName
-		PossibleJoyNames2 := "\" . CustomJoyName
-		PossibleJoyNames3 := ""
-	} Else {
-		LoopNumber := 2
-		PossibleJoyNames1 := "\" . ControllerName
-		PossibleJoyNames2 := ""
-	}
-
-	If (keymapperExtension = ".xpadderprofile")
-		PlayerIndicator := "\p" . PlayerNumber
-	Else
-		PlayerIndicator := "" ;joy2key and ahk do not need a player number
-
 	; used for finding the normally loaded profile
 	normalProfileFound = 0
 
@@ -586,15 +582,20 @@ Keymapper_HyperPauseProfileList(ControllerName,PlayerNumber,keymapper) {
 
 	ProfileList := []
 	ProfileFolderArray := ["Game","Emulator","System","Default"]
-	String2Parse := romProfile . "|" . emuProfile . "|" . sProfile . "|" . defaultProfile
+	If (keymapper = "xpadder")
+		String2Parse := romProfile . "|" . emuProfile . "|" . sProfile . "|" . defaultProfile
+	Else {	;joytokey 
+		String2Parse := romProfile . "|" . emuProfile . "|" . sProfile . "|" . defaultProfile
+		normProfileName := [dbName,emuName,systemName,"_Default"]
+	}
 	Log(String2Parse)
 	Loop,Parse,String2Parse,|
 	{	j++
-		Log(FolderPath)
 		FolderPath := A_LoopField
 		;If CustomJoyName Exists look for it. If not, don't look for a \\ directory
 		Loop, %LoopNumber%
-		{	Joy_Name := PossibleJoyNames%A_Index%
+		{	
+			Joy_Name := PossibleJoyNames%A_Index%
 			If Joy_Name
 				Controller_Specific_Boolean := 1
 			Else
@@ -604,16 +605,24 @@ Keymapper_HyperPauseProfileList(ControllerName,PlayerNumber,keymapper) {
 				normProfile := FolderPath . Joy_Name . PlayerIndicator . keymapperExtension
 				FilePattern := FolderPath . Joy_Name . "\*" . keymapperExtension
 			} Else {	; keymapper = joy2key
-				normProfile := FolderPath . Joy_Name . keymapperExtension
-				If !Joy_Name AND (FolderPath != defaultProfile) {
-					FilePattern := FolderPath . keymapperExtension
-				} Else
-					FilePattern := FolderPath . "\*" . keymapperExtension
+				normProfile := FolderPath . "\" . normProfileName[j] . keymapperExtension
+				FilePattern := FolderPath . "\*" . keymapperExtension
 			}
-			Log(FilePattern)
 			Loop, %FilePattern%
-			{	SplitPath,A_LoopFileFullPath,,,,FileNameNoExt
-				Log(normProfile . " = " . A_LoopFileFullPath)
+			{	
+				SplitPath,A_LoopFileFullPath,,,,FileNameNoExt
+				
+				If (keymapper = "joytokey") OR (keymapper = "joy2key") {
+					; I find this information to be more useful because it determines if a profile will actually work if you use joytokey.
+					; the boolean value means profile will work, but due to joy2key limitations we don't know if the profile was made for this controller
+					SectionName := "Joystick " . PlayerNumber
+					IniRead, CheckForSection, A_LoopFileFullPath, SectionName, Axis1p ;this key will always exist if the section exists and was properly created by joytokey
+					If CheckForSection != "ERROR"
+						Controller_Specific_Boolean := 1
+					Else
+						Controller_Specific_Boolean := 0
+				}
+				
 				If (normProfile = A_LoopFileFullPath) && !normalProfileFound 
 				{	normalProfileFound = 1
 					Log("Keymapper - Creating Profile List (normal load profile) -> 1`," . FileNameNoExt . "`," . ProfileFolderArray[j] . "`," . Controller_Specific_Boolean . "`," . A_LoopFileFullPath,5)
