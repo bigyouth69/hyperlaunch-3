@@ -2,9 +2,9 @@ MEmu = MUGEN
 MEmuV = N/A
 MURL = http://www.elecbyte.com/
 MAuthor = brolly & djvj
-MVersion = 2.0
+MVersion = 2.0.1
 MCRC = FA399B17
-iCRC = DB922C06
+iCRC = 965C2F5A
 MID = 635038268906726252
 MSystem = "MUGEN"
 ;----------------------------------------------------------------------------

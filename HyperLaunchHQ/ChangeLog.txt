@@ -10,6 +10,20 @@
                                        Release History                                       
 =============================================================================================
 
+v1.0.12 (October 2nd, 2013):
+  * Added support for fully configuring Bezel.ini and Global Bezel.ini files (Bezel and Instruction 
+    Card configurations)
+  * Added support for Bezel and Instruction Card profiles
+  * PCLauncher module editor - SteamID field is now automatically filled when adding a new game as long as 
+    you have the proper SteamAppId attribute filled in for that game in the database file
+  * Fixed bug in module editor form where games were still being launched even if the form was closed 
+    pressed
+  * System Audit Screen - Alt+L now launches the selected game
+  * Fixed bug in ISD/INI validator when validating ISD files with system specific sections
+  * Added support for "use_global" in the Hotkey Editor (required for the new bezel and IC keys)
+  * Added support for JoyToKey custom named profiles
+  * Changed JoyToKey keymapper to support the new profiles folder structure
+
 v1.0.11.0 (September 13th, 2013):
   * Added module file location to the Module Info panel
   * Added new ini keys : Keymapper_AHK_Method and Fade_Out_Extra_Screen

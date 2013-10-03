@@ -21,8 +21,12 @@
 							<DESCRIPTION>If you don't want to use the default romname\exe as described in the module notes, set the gamePath value to be the location of your game's Mugen.exe which should be in your rompath. This is just giving you the ability to rename the folder structure if you don't want to use the romName for your folder's name containing the Mugen.exe. gamePath should and will be treated as starting  from your romPath and ending with the exe to the game. (Examples: Street Fighter Legends\mugen.exe  OR  Bastion\WinBa.exe)</DESCRIPTION>
 						</KEY>
 						<KEY name="exitHack" required="false" nullable="false">
-							<KEYTYPE>Binary</KEYTYPE>
+							<KEYTYPE>String</KEYTYPE>
 							<DESCRIPTION> Sometimes mugen crashes during exit and doesn't close, so we need to do a workaround to detect it, this doesn't seem to happen on MUGEN 1.0. 1 = workaround enabled (this is the default).</DESCRIPTION>
+							<VALUES>
+								<VALUE description="0 - MUGEN v1.0 Games">0</VALUE>
+								<VALUE description="1 - MUGEN pre v1.0 Games">1</VALUE>
+							</VALUES>
 						</KEY>
 					</KEYS>
 				</SECTION>
