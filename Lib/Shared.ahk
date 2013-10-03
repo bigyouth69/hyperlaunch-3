@@ -1,8 +1,8 @@
-MCRC=79CCCEE3
-MVersion=1.1.0
+MCRC=D2C4323B
+MVersion=1.1.1
 
 StartModule(){
-	Global gameSectionStartTime,gameSectionStartHour,dbName,romPath,romName,romExtension,systemName,MEmu,MEmuV,MURL,MAuthor,MVersion,MCRC,iCRC,MSystem,romMapTable,romMappingLaunchMenuEnabled,romMenuRomName,7zEnabled,hideCursor,toggleCursorKey
+	Global gameSectionStartTime,gameSectionStartHour,dbName,romPath,romName,romExtension,systemName,MEmu,MEmuV,MURL,MAuthor,MVersion,MCRC,iCRC,MSystem,romMapTable,romMappingLaunchMenuEnabled,romMenuRomName,7zEnabled,hideCursor,toggleCursorKey,zz
 	Log("StartModule - Started")
 	Log("StartModule - MEmu: " . MEmu . "`r`n`t`t`t`t`tMEmuV: " . MEmuV . "`r`n`t`t`t`t`tMURL: " . MURL . "`r`n`t`t`t`t`tMAuthor: " . MAuthor . "`r`n`t`t`t`t`tMVersion: " . MVersion . "`r`n`t`t`t`t`tMCRC: " . MCRC . "`r`n`t`t`t`t`tiCRC: " . iCRC . "`r`n`t`t`t`t`tMID: " . MID . "`r`n`t`t`t`t`tMSystem: " . MSystem)
 	If InStr(MSystem,systemName)
@@ -10,7 +10,7 @@ StartModule(){
 	Else
 		Log("StartModule - You have an unsupported System Name for this module: """ . systemName . """. Only the following System Names are suppported: """ . MSystem . """",2)
 	If (romMappingLaunchMenuEnabled = "true" && romMapTable.MaxIndex()) ; && romMapMultiRomsFound)
-		CreateRomMappingLaunchMenu(romMapTable)
+		CreateRomMappingLaunchMenu%zz%(romMapTable)
 	If (skipChecks != "false" && romMenuRomName && 7zEnabled = "false")	; this is to support the scenario where Rom Map Launch Menu can send a rom that does not exist on disk or in archive (mame clones)
 	{	Log("StartModule - Setting romName to the game picked from the Launch Menu: " . romMenuRomName,4)
 		romName := romMenuRomName
@@ -58,7 +58,7 @@ WinWait(winTitle,winText="",secondsToWait=30,excludeTitle="",excludeText=""){
 	Global detectFadeErrorEnabled, logLevel
 	If logLevel > 3
 		GetActiveWindowStatus()
-	Log("WinWait - Waiting for " . winTitle)
+	Log("WinWait - Waiting for """ . winTitle . """")
 	WinWait, %winTitle% ,%winText% , %secondsToWait% , %excludeTitle% ,%excludeText%
 	curErr := ErrorLevel	; have to store this because GetActiveWindowStatus will reset it
 	If logLevel > 3
@@ -355,7 +355,7 @@ AlignColumn(txt,pad=9,char=" "){
 IniReadCheck(file,section,key,defaultvalue="",errorMsg="",logType="") {
 	Loop, Parse, section, |
 	{	section%A_Index% := A_LoopField	; keep each parsed section in its own var
-		If iniVar	; if last loop's iniVar has a value, update this loop's default value with it
+		If iniVar != ""	; if last loop's iniVar has a value, update this loop's default value with it
 			defaultValue := If A_Index = 1 ? defaultValue : iniVar	; on first loop, default value will be the one sent to the function, on following loops it gets the value from the previous loop
 		IniRead, iniVar, %file%, % section%A_Index%, %key%, %defaultvalue%
 		If (IniVar = "ERROR" || iniVar = A_Space)	; if key does not exist or is a space, delete ERROR as the value
@@ -367,16 +367,68 @@ IniReadCheck(file,section,key,defaultvalue="",errorMsg="",logType="") {
 				IniWrite, %defaultValue%, %file%, % section%A_Index%, %key%
 			Return defaultValue
 		}
-		If (logType and iniVar) {	; only log if a key exists and logType set
+		If (logType and iniVar != "" ) {	; only log if a key exists and logType set
 			logAr := ["Module","Bezel"]
 			Log(logAr[logType] . " Setting - [" . section%A_Index% . "] - " . key . ": " . iniVar)
 		}
-		If iniVar	; if IniVar contains a value, update the lastIniVar
+		If iniVar != ""	; if IniVar contains a value, update the lastIniVar
 			lastIniVar := iniVar
 	}
 	If defaultValue = %A_Space%	; this prevents the var from existing when it's actually blank
 		defaultValue :=
-	Return If A_Index = 1 ? iniVar : If lastIniVar ? lastIniVar : defaultValue	; if this is the first loop, always return the iniVar. If any other loop, return the lastinivar if it was filled, otherwise send the last updated defaultvalue
+	Return If A_Index = 1 ? iniVar : If lastIniVar != "" ? lastIniVar : defaultValue	; if this is the first loop, always return the iniVar. If any other loop, return the lastinivar if it was filled, otherwise send the last updated defaultvalue
+}
+
+; Rini returns -2 if section does not exist
+; Rini returns -3 if key does not exist
+; Rini returns -10 if an invalid reference var for the ini file was used
+; Rini returns empty value if key exists with no value
+; rIniIndex := Object(1,globalHLFile,2,sysHLFile,3,globalEmuFile,4,sysEmuFile,5,HLFile,6,gamesFile)
+; preferDefault - On rare occasions we may want to set a default value w/o wanting rini to return an error value of -2 or -3. Used for JoyIDs_Preferred_Controllers
+RIniLoadVar(gRIniVar,sRIniVar,section,key,gdefaultvalue="",sdefaultvalue="use_global",preferDefault="") {
+	Global rIniIndex
+	If gRIniVar != 6	; do not create missing sections or keys for games.ini
+	{	gValue := RIni_GetKeyValue(gRIniVar,section,key,If preferDefault ? gdefaultvalue : "")
+		gValue = %gValue%	; trims whitespace
+		If gValue in -2,-3	; if global ini key does not exist, create the key
+		{	RIni_SetKeyValue(gRIniVar,section,key,gdefaultvalue)
+			RIni_Write(gRIniVar,rIniIndex[gRIniVar],"`r`n",1,1,1)
+			gValue := gdefaultvalue	; set to default value because it did not exist
+			Log("RIniLoadVar - Created missing Global ini key: """ . key . """ in section: """ . section . """ in """ . rIniIndex[gRIniVar] . """",2)
+		}
+		If sRIniVar	; != ""	; only create system sections or keys for inis that use them
+		{	sValue := RIni_GetKeyValue(sRIniVar,section,key,If preferDefault ? sdefaultvalue : "")
+			sValue = %sValue%	; trims whitespace
+			If sValue in -2,-3	; if system ini key does not exist, create the key
+			{	RIni_SetKeyValue(sRIniVar,section,key,sdefaultvalue)
+				RIni_Write(sRIniVar,rIniIndex[sRIniVar],"`r`n",1,1,1)
+				sValue := sdefaultvalue	; set to default value because it did not exist
+				Log("RIniLoadVar - Created missing System ini key: """ . key . """ in section: """ . section . """ in """ . rIniIndex[sRIniVar] . """",2)
+			}
+			Return If sValue = "use_global" ? gValue : sValue	; now compare global & system keys to get final value
+		}
+		Return gValue	; return gValue when not using globa/system inis, like HLFile (rIniIndex 5)
+	}
+	iniVar := RIni_GetKeyValue(gRIniVar,section,key,gdefaultvalue)	; lookup key from ini and return it
+	iniVar = %iniVar%	; trims whitespace
+	Return iniVar
+}
+
+RIniReadCheck(rIniVar,section,key,defaultvalue="",errorMsg="") {
+	Global rIniIndex
+	iniVar := RIni_GetKeyValue(rIniVar,section,key)	; lookup key from ini and return it
+	iniVar = %iniVar%	; trims whitespace
+	If (iniVar = -2 or iniVar = -3 or iniVar = "") {
+		If (iniVar != "") {	; with rini, no need write to ini file if value is returned empty, we already know the section\key exists with no value
+			Log("RIniReadCheck - Created missing HyperLaunch ini key: """ . key . """ in section: """ . section . """ in """ . rIniIndex[rIniVar] . """",2)
+			RIni_SetKeyValue(rIniVar,section,key,defaultvalue)
+			RIni_Write(rIniVar,rIniIndex[rIniVar],"`r`n",1,1,1)	; write blank section, blank key, and space between sections
+		}
+		If errorMsg
+			ScriptError(errorMsg)
+		Return defaultValue
+	}
+	Return iniVar
 }
 
 ; Toggles hiding/showing a MenuBar
