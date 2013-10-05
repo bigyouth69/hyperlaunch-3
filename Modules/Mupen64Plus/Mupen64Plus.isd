@@ -9,7 +9,134 @@
 					<KEYS>
 						<KEY name="Fullscreen" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
-							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+							<DESCRIPTION>enable/disable fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="Resolution" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>display resolution (640x480, 800x600, 1024x768, etc)</DESCRIPTION>
+						</KEY>
+						<KEY name="gfx_plugin" required="false" nullable="false">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<DESCRIPTION>use this gfx plugin full path to dll (relative path ok)</DESCRIPTION>
+							<PATHTYPE>Any</PATHTYPE>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>dll</FILEEXTENSION>
+							</FILEEXTENSIONS>
+							<FULLROW>true</FULLROW>
+						</KEY>
+						<KEY name="audio_plugin" required="false" nullable="false">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<DESCRIPTION>use this audio plugin full path to dll (relative path ok)</DESCRIPTION>
+							<PATHTYPE>Any</PATHTYPE>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>dll</FILEEXTENSION>
+							</FILEEXTENSIONS>
+							<FULLROW>true</FULLROW>
+						</KEY>
+						<KEY name="input_plugin" required="false" nullable="false">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<DESCRIPTION>use this input plugin full path to dll (relative path ok)</DESCRIPTION>
+							<PATHTYPE>Any</PATHTYPE>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>dll</FILEEXTENSION>
+							</FILEEXTENSIONS>
+							<FULLROW>true</FULLROW>
+						</KEY>
+						<KEY name="rsp_plugin" required="false" nullable="false">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<DESCRIPTION>use this rsp plugin full path to dll (relative path ok)</DESCRIPTION>
+							<PATHTYPE>Any</PATHTYPE>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>dll</FILEEXTENSION>
+							</FILEEXTENSIONS>
+							<FULLROW>true</FULLROW>
+						</KEY>
+						<KEY name="emu_mode" required="false" nullable="false" minLength="0">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>set emu mode</DESCRIPTION>
+							<VALUES>
+								<VALUE description="0 - Pure Interpreter">0</VALUE>
+								<VALUE description="1 - Interpreter">1</VALUE>
+								<VALUE description="2 - DynaRec">2</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="DisableExtraMemory" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Disable 4MB expansion RAM pack. May be necessary for some games</DESCRIPTION>
+						</KEY>
+						<KEY name="CheatsEnabled" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>enable/disable cheats</DESCRIPTION>
+						</KEY>
+						<KEY name="OtherOptions" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Add other command line options here. To see a list of options open the "README-mupen64plus-ui-console" file you downloaded with your emulator. You can normally find the file in the doc folder in your emulator install location</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="gfx_plugin" required="false" nullable="false">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<DESCRIPTION>use this gfx plugin full path to dll (relative path ok)</DESCRIPTION>
+							<PATHTYPE>Any</PATHTYPE>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>dll</FILEEXTENSION>
+							</FILEEXTENSIONS>
+							<FULLROW>true</FULLROW>
+						</KEY>
+						<KEY name="audio_plugin" required="false" nullable="false">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<DESCRIPTION>use this audio plugin full path to dll (relative path ok)</DESCRIPTION>
+							<PATHTYPE>Any</PATHTYPE>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>dll</FILEEXTENSION>
+							</FILEEXTENSIONS>
+							<FULLROW>true</FULLROW>
+						</KEY>
+						<KEY name="input_plugin" required="false" nullable="false">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<DESCRIPTION>use this input plugin full path to dll (relative path ok)</DESCRIPTION>
+							<PATHTYPE>Any</PATHTYPE>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>dll</FILEEXTENSION>
+							</FILEEXTENSIONS>
+							<FULLROW>true</FULLROW>
+						</KEY>
+						<KEY name="rsp_plugin" required="false" nullable="false">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<DESCRIPTION>use this rsp plugin full path to dll (relative path ok)</DESCRIPTION>
+							<PATHTYPE>Any</PATHTYPE>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>dll</FILEEXTENSION>
+							</FILEEXTENSIONS>
+							<FULLROW>true</FULLROW>
+						</KEY>
+						<KEY name="emu_mode" required="false" nullable="false" minLength="0" maxLength="2">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>set emu mode</DESCRIPTION>
+							<VALUES>
+								<VALUE description="0 - Pure Interpreter">0</VALUE>
+								<VALUE description="1 - Interpreter">1</VALUE>
+								<VALUE description="2 - DynaRec">2</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="DisableExtraMemory" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Disable 4MB expansion RAM pack. May be necessary for some games</DESCRIPTION>
+						</KEY>
+						<KEY name="CheatsEnabled" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>enable/disable cheats</DESCRIPTION>
+						</KEY>
+						<KEY name="Cheats" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>A comma-separated list of cheat code numbers to enable (ex 0,1,2), with dashes to use code variables (ex 1-2 to use cheat 1 option 2). To list the available cheats for the rom in command prompt:   mupen64plus --cheats list &quot;/path/to/my/rom.v64&quot;</DESCRIPTION>
+						</KEY>
+						<KEY name="OtherOptions" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Add other command line options here. To see a list of options open the "README-mupen64plus-ui-console" file you downloaded with your emulator. You can normally find the file in the doc folder in your emulator install location</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>
