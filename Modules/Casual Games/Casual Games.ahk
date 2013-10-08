@@ -2,8 +2,8 @@ MEmu = Casual Games
 MEmuV = N/A
 MURL =
 MAuthor = djvj
-MVersion = 2.0.2
-MCRC = BD9F0726
+MVersion = 2.0.3
+MCRC = A89B06A1
 iCRC = B0DEF839
 MID = 635038268877672071
 MSystem = "PopCap","Big Fish Games"
@@ -48,9 +48,24 @@ forceCursor := IniReadCheck(settingsFile, romName, "ForceCursor", forceCursor,,1
 If romExtension in .zip.7z.rar
 	ScriptError("Compressed games are not supported in this Casual Games Module. Please extract your games to their own folder and correctly configure a gamePath in the module's ini.")
 
-If (!gamePath or gamePath = "ERROR")
-	gamePath := romPath . "\" . romName . "\" . romName . ".exe"
-CheckFile(gamePath,"Could not find " . gamePath . "`nPlease place your game in it's own folder in your Rom_Path or define a custom gamePath in " . SettingsFile)
+If (gamePath != "" || gamePath != "ERROR")
+	gamePath := GetFullName(gamePath)
+
+If !FileExist(gamePath) {
+	Log("Module - GamePath is not set or is not pointing to this game correctly. Attempting to find it for you by using your Rom Path.",2)
+	gamePath := romPath . "\" . romName . ".exe"
+	If FileExist(gamePath)
+		Log("Module - Game was found at: " . gamePath,2)
+	Else {
+		gamePath := romPath . "\" . romName . "\" . romName . ".exe"
+		If FileExist(gamePath)
+			Log("Module - Game was found at: " . gamePath,2)
+		Else
+			ScriptError("Could not locate """ . romName . """ in your Rom Path or in the GamePath for this game. Please fix one or the other.")
+	}
+} Else
+	Log("Module - Game was found in the user set GamePath at: " . gamePath)
+
 SplitPath, gamePath,, gPath, gExt, gName
 
 ; This remaps windows Start keys to Return to prevent accidental leaving of game
