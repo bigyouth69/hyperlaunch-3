@@ -2,8 +2,8 @@ MEmu = SSF
 MEmuV =  v0.12 beta R4
 MURL = http://www7a.biglobe.ne.jp/~phantasy/ssf/
 MAuthor = djvj
-MVersion = 2.0.4
-MCRC = FFC4232D
+MVersion = 2.0.5
+MCRC = 20071FE1
 iCRC = DAC1D75D
 MID = 635038268924991452
 MSystem = "Sega Saturn","Sega ST-V"
@@ -19,11 +19,12 @@ MSystem = "Sega Saturn","Sega ST-V"
 ; If you keep getting the CD Player BIOS screen, you have the CDDrive variable set wrong below
 ; If you keep getting the CD Player screen with the message "Game disc unsuitable for this system", you have the incorrect bios set for the region game you are playing and or region is set wrong in the emu options. Or you can just turn off the BIOS below :)
 ; If your game's region is (USA), you must use a USA bios and set SSF Area Code to "America, Canada Brazil". For (Japan) games, bios must be a Japan one and SSF Area Code set to Japan. Use the same logic for European games. You will only see a black screen if wrong.
-; Set fullscreen mode via the variable below
 ; SSF forces 1024x768 in fullscreen mode if your GPU supports pixel shader 3.0, otherwise it forces 640x480 if it does not. This cannot be changed as far as I can tell.
 ; If you are getting clipping, set the vSync variable to true below
 ; For faster MultiGame switching, keep the BIOS off, otherwise you have to "play" the disc each time you switch discs
 ; Module will attempt to auto-detect the region for your game by using the region tags in parenthesis on your rom file and set SSF to use the appropriate region settings that match.
+;
+; Shining Force III - Scenario 2 & 3 (Japan) (Translated En) games crash at chapter 4 and when you use Marki Proserpina spell or using the Abyss Wand. Fix may be to use a different bios if this occurs, but this is untested. Read more about it here: http://forums.shiningforcecentral.com/viewtopic.php?f=34&t=14858&start=80
 ;
 ; Sega ST-V:
 ; romExtension should be zip
@@ -106,6 +107,16 @@ If systemName = Sega Saturn
 		Areacode := If defaultRegion = "1" ? "4" : If defaultRegion = "2" ? "1" : "c"
 		SaturnBIOS := If defaultRegion = "1" ? usBios : If defaultRegion = "2" ? jpBios : euBios
 	}
+
+	If RegExMatch(romName, "i)ultraman.*hikari") {		; only for the game Ultraman - Hikari no Kyojin Densetsu (Japan). Game's file name must contain "ultraman" and "hikari" to trigger this condition
+		CartridgeID := "21"
+		DataCartridgeEnable := "1"
+		DataCartridge := romPath . "\" . romName . ".rom"
+	} Else {	; all other games
+		CartridgeID := "5c"
+		DataCartridgeEnable := "0"
+		DataCartridge := 
+	}
 }
 
 ; Compare existing settings and if different then desired, write them to the SSF.ini
@@ -125,6 +136,9 @@ iniLookup =
 	Peripheral, SaturnBIOS, "%SaturnBIOS%"
 	Peripheral, CDDrive, "%CDDrive%"
 	Peripheral, Areacode, "%Areacode%"
+	Peripheral, CartridgeID, "%CartridgeID%"
+	Peripheral, DataCartridgeEnable, "%DataCartridgeEnable%"
+	Peripheral, DataCartridge, "%DataCartridge%"
 	Program4, NoBIOS, "%ShowBIOS%"
 	Other, ScreenMode, "%Fullscreen%"
 )
