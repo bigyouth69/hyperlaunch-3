@@ -4,7 +4,7 @@ MURL =
 MAuthor = djvj
 MVersion = 2.0.3
 MCRC = A89B06A1
-iCRC = B0DEF839
+iCRC = B0EA9124
 MID = 635038268877672071
 MSystem = "PopCap","Big Fish Games"
 ;----------------------------------------------------------------------------

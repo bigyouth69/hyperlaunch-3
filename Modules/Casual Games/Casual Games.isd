@@ -23,7 +23,6 @@
 						<KEY name="gamePath" required="false" nullable="true" FULLROW="true">
 							<KEYTYPE>FilePath</KEYTYPE>
 							<DESCRIPTION>Full path to exectable. Example- C:\Program Files\Alchemy Deluxe\Alchemy Deluxe.exe</DESCRIPTION>
-							<PATHTYPE>Absolute</PATHTYPE>
 						</KEY>
 						<KEY name="FadeTitle" required="false" nullable="true">
 							<KEYTYPE>WinTitle</KEYTYPE>
