@@ -2,8 +2,8 @@ MEmu = Mupen64Plus
 MEmuV = v2.0
 MURL = https://code.google.com/p/mupen64plus/
 MAuthor = djvj & ghutch92
-MVersion = 2.0.1
-MCRC = 43DEC6C4
+MVersion = 2.0.2
+MCRC = 16FD4CC
 iCRC = 232C6716
 MID = 635163407878625424
 MSystem = "Nintendo 64"
@@ -15,6 +15,7 @@ StartModule()
 BezelGUI()
 FadeInStart()
 
+settingsFile := modulePath . "\" . moduleName . ".ini"
 fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1) ;enable/disable fullscreen
 resolution := IniReadCheck(settingsFile, "Settings", "Resolution",A_ScreenWidth . "x" . A_ScreenHeight,,1) ;display resolution (640x480, 800x600, 1024x768, etc)
 gfxPlugin := IniReadCheck(settingsFile, "Settings|" . romName, "gfx_plugin",,,1) ;use this gfx plugin full path to dll (relative path ok)
