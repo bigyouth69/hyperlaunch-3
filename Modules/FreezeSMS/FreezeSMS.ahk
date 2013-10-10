@@ -2,7 +2,7 @@ MEmu = FreezeSMS
 MEmuV =  v4.6
 MURL = http://freezesms.emuunlim.com/
 MAuthor = djvj
-MVersion = 2.0
+MVersion = 2.0.1
 MCRC = 64CFCCE5
 iCRC = 1E716C97
 mId = 635115863426031003
@@ -14,6 +14,7 @@ MSystem = "ColecoVision","Nintendo Entertainment System","Sega Game Gear","Sega 
 ; To use this emu, turn on bezel mode.
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
