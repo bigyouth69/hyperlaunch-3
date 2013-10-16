@@ -2,8 +2,8 @@ MEmu = ScummVM
 MEmuV = v1.5.0
 MURL = http://scummvm.org/
 MAuthor = djvj
-MVersion = 2.0.4
-MCRC = 4C08188F
+MVersion = 2.0.5
+MCRC = F6546CEF
 iCRC = B2D94E9B
 MID = 635038268922749586
 MSystem = "ScummVM"
@@ -27,6 +27,7 @@ MSystem = "ScummVM"
 ; Set Skipchecks to Rom Extension, enable 7z, enable Rom Mapping. Make sure a proper mapping ini exists in the appropriate settings Rom Mapping folder and it contains all the correct mapping info.
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGui()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
@@ -39,6 +40,8 @@ Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 SaveKey := IniReadCheck(settingsFile, "Settings", "SaveKey","1",,1)					; hotkey to save state
 LoadKey := IniReadCheck(settingsFile, "Settings", "LoadKey","2",,1)						; hotkey to load state
 MenuKey := IniReadCheck(settingsFile, "Settings", "MenuKey","p",,1)					; hotkey to access the ScummVM menu
+
+BezelStart()
 
 If 7zEnabled != true
 	If romExtension in %7zFormats%
@@ -59,6 +62,10 @@ romNameChanged := RegExReplace(romNameChanged, "\(|\)", "_")	; replaces all pare
 If (romName != romNameChanged)
 	Log("Module - Removed all unsupported characters from """ . romName . """ and using this to search for a section in ScummVM's ini: """ . romNameChanged . """")
 scummRomPath := IniReadCheck(configFile, romNameChanged, "path",,,1)	; Grab the path in ScummVM's config
+; msgbox % scummRomPath
+If (SubStr(scummRomPath, 0, 1) = "\")	; scummvm doesn't like sending it paths with a \ as the last character. If it exists, remove it.
+	StringTrimRight, scummRomPath, scummRomPath, 1
+; msgbox % scummRomPath
 If !scummRomPath {
 	Log("Module - Could not locate a path in ScummVM's ini for section """ . romNameChanged . """. Checking if a path exists for the dbName instead: """ . dbName . """")
 	scummRomPath := IniReadCheck(configFile, dbName, "path",,,1)	; If the romName, after removing all unsupporting characters to meet ScummVM's section name requirements, could not be found, try looking up the dbName instead
@@ -84,10 +91,12 @@ Run(executable . " " . fullscreen . " " . configFile . " " . scummRomPath . " " 
 WinWait("ahk_class SDL_app")
 WinWaitActive("ahk_class SDL_app")
 Sleep, 700 ; Necessary otherwise the HyperSpin window flashes back into view
+BezelDraw()
 
 FadeInExit()
 Process("WaitClose", executable)
 7zCleanUp()
+BezelExit()
 FadeOutExit()
 ExitModule()
 
