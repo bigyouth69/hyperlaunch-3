@@ -3,7 +3,7 @@ MEmuV = v1.0
 MURL = http://nebula.emulatronia.com/
 MAuthor = djvj & ghutch92
 MVersion = 2.0.4
-MCRC = A49D7940
+MCRC = 682AB395
 iCRC = AD80243A
 mId = 635175648125374429
 MSystem = "Sega Model 2"
@@ -43,8 +43,10 @@ SplitScreen2PlayersMode := IniReadCheck(settingsFile, "Settings", "SplitScreen_2
 SplitScreen3PlayersMode := IniReadCheck(settingsFile, "Settings", "SplitScreen_3_Players","P1top",,1) ; For Player1 screen to be on left: P1left. For Player1 screen to be on top: P1top. For Player1 screen to be on bottom: P1bottom. For Player1 screen to be on right: P1right.
 
 linkGames := "daytona","daytonagtx","daytonam","daytonas","daytonat","indy500","indy500d","manxtt","motoraid","skisuprg","srallyc","srallycb","srallyp","stcc","stcce","von","vonj","waverunr"
-If (linkEnabled = "true" && InStr(linkGames, romName))
+If (linkEnabled = "true" && InStr(linkGames, romName)) {
+	Log("Module - Link mode enabled")
 	linkEnabledGame := 1
+}
 
 If linkEnabledGame
 	If (romName = "von") or (romName = "vonj")
