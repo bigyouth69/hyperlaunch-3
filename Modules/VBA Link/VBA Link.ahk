@@ -2,8 +2,8 @@ MEmu = VBA Link
 MEmuV =  1.80b0
 MURL = http://www.vbalink.info/
 MAuthor = ghutch92 & bleasby
-MVersion = 2.0.2
-MCRC = 9C75BB65
+MVersion = 2.0.3
+MCRC = AB69497
 iCRC = 389D415A
 mId = 635148768577074672
 MSystem = "Nintendo Game Boy","Nintendo Game Boy Color","Nintendo Game Boy Advance"
@@ -244,6 +244,7 @@ EnablePlayersMenuKeys:
 	XHotKeywrapper(navP2SelectKey,"PlayersMenuSelect","ON") 
 	XHotKeywrapper(navP2UpKey,"PlayersMenuUP","ON")
 	XHotKeywrapper(navP2DownKey,"PlayersMenuDown","ON")
+	XHotKeywrapper(exitEmulatorKey,"CloseProcess","OFF")
 	XHotKeywrapper(exitEmulatorKey,"ClosePlayersMenu","ON")
 Return
 
@@ -255,6 +256,7 @@ DisablePlayersMenuKeys:
 	XHotKeywrapper(navP2UpKey,"PlayersMenuUP","OFF")
 	XHotKeywrapper(navP2DownKey,"PlayersMenuDown","OFF")
 	XHotKeywrapper(exitEmulatorKey,"ClosePlayersMenu","OFF")
+	XHotKeywrapper(exitEmulatorKey,"CloseProcess","ON")
 Return
 
 PlayersMenuUP:
@@ -271,10 +273,12 @@ PlayersMenuDown:
 	DrawPlayersSelectionMenu(NumberofPlayersonMenu)
 Return
 
-
 PlayersMenuSelect:
-	Log("Number of Players Selected: " . SelectedNumberofPlayers)
-	gosub, DisablePlayersMenuKeys
+	If ClosedPlayerMenu = true
+		Log("User cancelled the launch at the Player Select Menu")
+	Else
+		Log("Number of Players Selected: " . SelectedNumberofPlayers)
+	Gosub, DisablePlayersMenuKeys
 	Gdip_DeleteBrush(playersMenuBackgroundBrush)
 	Loop, 2 {
 		SelectObject(playersMenu_hdc%A_Index%, playersMenu_obm%A_Index%)
@@ -284,13 +288,14 @@ PlayersMenuSelect:
 		Gui, playersMenu_GUI%A_Index%: Destroy
 	}
 	If (keymapperEnabled = "true") and (keymapperHyperLaunchProfileEnabled = "true")
-		RunKeymapper%zz%("load",keymapper)
+		RunKeymapper%zz%("load", keymapper)
 	If keymapperAHKMethod = External
 		RunAHKKeymapper%zz%("load")
 	PlayersMenuExit := true
 Return
 
 ClosePlayersMenu:
+	ClosedPlayerMenu := true
 	Gosub, PlayersMenuSelect
 	ExitModule()
 Return

@@ -19,6 +19,61 @@
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>Set the emulator's height. Default is your desktop's height.</DESCRIPTION>
 						</KEY>
+						<KEY name="Link_Enabled" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, enables linking for all games that support a link. Read module notes on how to link a game.</DESCRIPTION>
+						</KEY>
+						<KEY name="SplitScreen_2_Players" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>horizontal = p1 in top, vertical = p1 on the left</DESCRIPTION>
+							<VALUES>
+								<VALUE>horizontal</VALUE>
+								<VALUE>vertical</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="SplitScreen_3_Players" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>For Player1 screen to be on left: P1left. For Player1 screen to be on top: P1top. For Player1 screen to be on bottom: P1bottom. For Player1 screen to be on right: P1right.</DESCRIPTION>
+							<VALUES>
+								<VALUE>P1top</VALUE>
+								<VALUE>P1left</VALUE>
+								<VALUE>P1bottom</VALUE>
+								<VALUE>P1right</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Player2_EmulatorPath" required="false" nullable="true">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<DESCRIPTION>This path cannot be the same path as the emulators for players 1, 3, and 4. The emulator versions must be the same. Default location is %emupath%\Player 2\%executable%</DESCRIPTION>
+							<FULLROW>true</FULLROW>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>exe</FILEEXTENSION>
+							</FILEEXTENSIONS>
+						</KEY>
+						<KEY name="Player3_EmulatorPath" required="false" nullable="true">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<DESCRIPTION>This path cannot be the same path as the emulators for players 1, 2, and 4. The emulator versions must be the same. Default location is %emupath%\Player 3\%executable%</DESCRIPTION>
+							<FULLROW>true</FULLROW>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>exe</FILEEXTENSION>
+							</FILEEXTENSIONS>
+						</KEY>
+						<KEY name="Player4_EmulatorPath" required="false" nullable="true">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<DESCRIPTION>This path cannot be the same path as the emulators for players 1, 2, and 3. The emulator versions must be the same. Default location is %emupath%\Player 4\%executable%</DESCRIPTION>
+							<FULLROW>true</FULLROW>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>exe</FILEEXTENSION>
+							</FILEEXTENSIONS>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Link_Enabled" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, enables linking for just this game. Read module notes on how to link a game.</DESCRIPTION>
+						</KEY>
 					</KEYS>
 				</SECTION>
 			</SECTIONS>
