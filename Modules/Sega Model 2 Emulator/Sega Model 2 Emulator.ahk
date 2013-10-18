@@ -2,8 +2,8 @@ MEmu = Sega Model 2 Emulator
 MEmuV = v1.0
 MURL = http://nebula.emulatronia.com/
 MAuthor = djvj & ghutch92
-MVersion = 2.0.4
-MCRC = 682AB395
+MVersion = 2.0.5
+MCRC = DE4FC457
 iCRC = AD80243A
 mId = 635175648125374429
 MSystem = "Sega Model 2"
@@ -30,9 +30,9 @@ MSystem = "Sega Model 2"
 ;Games that have a working link: 
 ; daytona,daytonagtx,daytonam,daytonas,daytonat,indy500,indy500d,manxtt,motoraid,skisuprg,srallyc,srallycb,srallyp,stcc,stcce,von,vonj,waverunr
 ;
-;overrev and sgt24h both look like they can support link but I couldn't get it working, because I think m2emulator uses a linking hack to get these games to work in stand alone mode.
-;Still need to see if waverunr, stcc, stcce, von, and vonj can link, I couldn't get these working, I think my processor is the issue here. Saw video of stcc & waverunr link working though.
-;von and vonj can only do a 2 player link
+; overrev and sgt24h both look like they can support link but I couldn't get it working, because I think m2emulator uses a linking hack to get these games to work in stand alone mode.
+; Still need to see if waverunr, stcc, stcce, von, and vonj can link, I couldn't get these working, I think my processor is the issue here. Saw video of stcc & waverunr link working though.
+; von and vonj can only do a 2 player link
 ;----------------------------------------------------------------------------
 StartModule()
 BezelGUI()
@@ -42,11 +42,11 @@ linkEnabled := IniReadCheck(settingsFile, "Settings|" . romName, "Link_Enabled",
 SplitScreen2PlayersMode := IniReadCheck(settingsFile, "Settings", "SplitScreen_2_Players","Vertical",,1) ;horizontal or vertical
 SplitScreen3PlayersMode := IniReadCheck(settingsFile, "Settings", "SplitScreen_3_Players","P1top",,1) ; For Player1 screen to be on left: P1left. For Player1 screen to be on top: P1top. For Player1 screen to be on bottom: P1bottom. For Player1 screen to be on right: P1right.
 
-linkGames := "daytona","daytonagtx","daytonam","daytonas","daytonat","indy500","indy500d","manxtt","motoraid","skisuprg","srallyc","srallycb","srallyp","stcc","stcce","von","vonj","waverunr"
-If (linkEnabled = "true" && InStr(linkGames, romName)) {
-	Log("Module - Link mode enabled")
-	linkEnabledGame := 1
-}
+If romName in daytona,daytonagtx,daytonam,daytonas,daytonat,indy500,indy500d,manxtt,motoraid,skisuprg,srallyc,srallycb,srallyp,stcc,stcce,von,vonj,waverunr
+	If (linkEnabled = "true") {
+		Log("Module - Link mode enabled")
+		linkEnabledGame := 1
+	}
 
 If linkEnabledGame
 	If (romName = "von") or (romName = "vonj")
@@ -66,8 +66,8 @@ emupath4 := IniReadCheck(settingsFile, "Settings", "Player4_EmulatorPath",emupat
 CheckFile(romPath . "\model2.zip","Could not locate ""model2.zip"" which contains the bios files for this emulator. Please make sure it exists in the same folder as your roms.")
 
 m2Ini := CheckFile(emuPath . "\EMULATOR.INI")
-romDir1 := IniReadCheck(m2Ini, "RomDirs", "Dir1",,,1)
-If (romDir1 != romPath)
+m2RomDir1 := IniReadCheck(m2Ini, "RomDirs", "Dir1",,,1)
+If (m2RomDir1 != romPath)
 	IniWrite, %romPath%, %m2Ini%, RomDirs, Dir1	; write the correct romPath to the emu's ini so the user does not need to define this
 
 If SelectedNumberofPlayers > 1
@@ -127,14 +127,14 @@ If (SelectedNumberofPlayers = 1 || !linkEnabledGame) {
 	If FileExist(emupath . "\NVDATA\Multi\" . romName . ".DAT") {
 		Log("Overwriting " . emupath . "\NVDATA\" . romName . ".DAT with " . emupath . "\NVDATA\Multi\" . romName . ".DAT")
 		FileCopy,%emupath%\NVDATA\Multi\%romName%.DAT,%emupath%\NVDATA,1
-		}
+	}
 		
 	Loop, %SelectedNumberofPlayers%
 	{
 		LinkedEmuPath := (A_Index = 1) ? (emupath) : (emupath%A_Index%)
 		m2ini := LinkedEmuPath . "\EMULATOR.INI"		;no need to checkfile it here since it's already been done
-		romDir1 := IniReadCheck(m2Ini, "RomDirs", "Dir1",,,1)
-		If (romDir1 != romPath)
+		m2RomDir1 := IniReadCheck(m2Ini, "RomDirs", "Dir1",,,1)
+		If (m2RomDir1 != romPath)
 			IniWrite, %romPath%, %m2Ini%, RomDirs, Dir1	; write the correct romPath to the emu's ini so the user does not need to define this
 		; Removing Fullscreen
 		IniWrite, 0, %m2Ini%, Renderer, AutoFull
@@ -203,7 +203,7 @@ Return
 
 ;_______________Players Selection Menu Code__________________________
 
-StartPlayersSelectionMenu(maxPlayers=4){
+StartPlayersSelectionMenu(maxPlayers=4) {
 	Global
 	NumberofPlayersonMenu := maxPlayers
 	If !pToken
@@ -258,7 +258,7 @@ StartPlayersSelectionMenu(maxPlayers=4){
 	Return
 }
 	
-DrawPlayersSelectionMenu(NumberofPlayersonMenu){
+DrawPlayersSelectionMenu(NumberofPlayersonMenu) {
 	Global
 	currentY := 0
 	Gdip_GraphicsClear(playersMenu_G2)
