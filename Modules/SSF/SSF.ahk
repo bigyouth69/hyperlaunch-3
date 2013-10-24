@@ -2,8 +2,8 @@ MEmu = SSF
 MEmuV =  v0.12 beta R4
 MURL = http://www7a.biglobe.ne.jp/~phantasy/ssf/
 MAuthor = djvj
-MVersion = 2.0.5
-MCRC = 20071FE1
+MVersion = 2.0.6
+MCRC = FA27C5CA
 iCRC = DAC1D75D
 MID = 635038268924991452
 MSystem = "Sega Saturn","Sega ST-V"
@@ -19,7 +19,7 @@ MSystem = "Sega Saturn","Sega ST-V"
 ; If you keep getting the CD Player BIOS screen, you have the CDDrive variable set wrong below
 ; If you keep getting the CD Player screen with the message "Game disc unsuitable for this system", you have the incorrect bios set for the region game you are playing and or region is set wrong in the emu options. Or you can just turn off the BIOS below :)
 ; If your game's region is (USA), you must use a USA bios and set SSF Area Code to "America, Canada Brazil". For (Japan) games, bios must be a Japan one and SSF Area Code set to Japan. Use the same logic for European games. You will only see a black screen if wrong.
-; SSF forces 1024x768 in fullscreen mode if your GPU supports pixel shader 3.0, otherwise it forces 640x480 if it does not. This cannot be changed as far as I can tell.
+; SSF will use your desktop res as the emu's res if Stretch and EnforceAspectRatioFullscreen are both true when in fullscreen mode. If you turn Stretch off, it forces 1024x768 in fullscreen mode if your GPU supports pixel shader 3.0, otherwise it forces 640x480 if it does not.
 ; If you are getting clipping, set the vSync variable to true below
 ; For faster MultiGame switching, keep the BIOS off, otherwise you have to "play" the disc each time you switch discs
 ; Module will attempt to auto-detect the region for your game by using the region tags in parenthesis on your rom file and set SSF to use the appropriate region settings that match.
@@ -43,10 +43,10 @@ Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 ShowBIOS := IniReadCheck(settingsFile, "Settings", "ShowBIOS","false",,1)
 BilinearFiltering := IniReadCheck(settingsFile, "Settings", "BilinearFiltering","true",,1)
 WideScreen := IniReadCheck(settingsFile, "Settings", "WideScreen","false",,1)
-Stretch := IniReadCheck(settingsFile, "Settings", "Stretch","false",,1)
+Stretch := IniReadCheck(settingsFile, "Settings", "Stretch","true",,1)	; default true because SSF will use your desktop res in fullscreen mode as long as EnforceAspectRatioFullscreen is also true
 AutoFieldSkip := IniReadCheck(settingsFile, "Settings", "AutoFieldSkip","true",,1)
-EnforceAspectRatioWindow := IniReadCheck(settingsFile, "Settings", "EnforceAspectRatioWindow","true",,1)
-EnforceAspectRatioFullscreen := IniReadCheck(settingsFile, "Settings", "EnforceAspectRatioFullscreen","true",,1)
+EnforceAspectRatioWindow := IniReadCheck(settingsFile, "Settings", "EnforceAspectRatioWindow","true",,1)	; enforces aspect even when stretch is true
+EnforceAspectRatioFullscreen := IniReadCheck(settingsFile, "Settings", "EnforceAspectRatioFullscreen","true",,1)	; enforces aspect even when stretch is true
 FixedWindowResolution := IniReadCheck(settingsFile, "Settings", "FixedWindowResolution","false",,1)
 FixedFullscreenResolution := IniReadCheck(settingsFile, "Settings", "FixedFullscreenResolution","false",,1)
 VSynchWaitWindow := IniReadCheck(settingsFile, "Settings", "VSynchWaitWindow","true",,1)
