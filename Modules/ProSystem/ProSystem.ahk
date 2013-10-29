@@ -2,8 +2,8 @@ MEmu = ProSystem
 MEmuV =  v1.3
 MURL = http://home.comcast.net/~gscottstanton/
 MAuthor = djvj & brolly
-MVersion = 2.0
-MCRC = 820B91D9
+MVersion = 2.0.1
+MCRC = 2B04B9AD
 iCRC = 215426C3
 MID = 635038268919086546
 MSystem = "Atari 7800"
@@ -11,6 +11,7 @@ MSystem = "Atari 7800"
 ; Notes:
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
@@ -22,11 +23,13 @@ proSysINI := CheckFile(emuPath . "\ProSystem.ini")
 IniRead, currentFullScreen, %proSysINI%, Display, Fullscreen
 IniRead, Menu, %proSysINI%, Display, MenuEnabled
 
+BezelStart()
+
 ; Setting Fullscreen setting in ini if it doesn't match what user wants above
 If ( Fullscreen = "true" And currentFullScreen = "false" And StartWindowed != "true")
 	IniWrite, true, %proSysINI%, Display, Fullscreen
 Else If ( StartWindowed = "true" Or (Fullscreen != "true" And currentFullScreen = "true") )
-	IniWrite, false, %proSysINI%, Display, Fullscreen
+	IniWrite, false, %proSysINI%, Display, Fullscreen	
 
 ; Disable the emu's menu if it's active
 If Menu != false
@@ -39,6 +42,8 @@ Run(executable . " """ . romPath . "\" . romName . romExtension . """", emuPath)
 WinWait("ahk_class ProSystem Emulator")
 WinWaitActive("ahk_class ProSystem Emulator")
 
+BezelDraw()
+
 If ( Fullscreen = "true" And StartWindowed = "true")
 {	;Make it fullscreen
 	Sleep, 200
@@ -48,8 +53,10 @@ If ( Fullscreen = "true" And StartWindowed = "true")
 FadeInExit()
 Process("WaitClose", executable)
 7zCleanUp()
+BezelExit()
 FadeOutExit()
 ExitModule()
+
 
 CloseProcess:
 	FadeOutStart()
