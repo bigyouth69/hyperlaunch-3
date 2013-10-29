@@ -2,9 +2,9 @@ MEmu = SSF
 MEmuV =  v0.12 beta R4
 MURL = http://www7a.biglobe.ne.jp/~phantasy/ssf/
 MAuthor = djvj
-MVersion = 2.0.6
-MCRC = FA27C5CA
-iCRC = DAC1D75D
+MVersion = 2.0.7
+MCRC = 1F460E0
+iCRC = 5066E402
 MID = 635038268924991452
 MSystem = "Sega Saturn","Sega ST-V"
 ;------------------------------------------------------------------------
@@ -53,6 +53,8 @@ VSynchWaitWindow := IniReadCheck(settingsFile, "Settings", "VSynchWaitWindow","t
 VSynchWaitFullscreen := IniReadCheck(settingsFile, "Settings", "VSynchWaitFullscreen","true",,1)
 CDDrive := IniReadCheck(settingsFile, "Settings", "CDDrive","1",,1)
 defaultRegion := IniReadCheck(settingsFile, "Settings", "DefaultRegion","America, Canada, Brazil",,1)
+WindowSize := IniReadCheck(settingsFile, "Settings", "WindowSize",2,,1)
+bezelBottomOffset := IniReadCheck(settingsFile, "Settings", "bezelBottomOffset",24,,1)
 usBios := IniReadCheck(settingsFile, "Settings", "USBios","",,1)
 euBios := IniReadCheck(settingsFile, "Settings", "EUBios","",,1)
 jpBios := IniReadCheck(settingsFile, "Settings", "JPBios","",,1)
@@ -60,7 +62,7 @@ usBios := GetFullName(usBios)	; convert relative to absolute path
 euBios := GetFullName(euBios)
 jpBios := GetFullName(jpBios)
 
-BezelStart()
+BezelStart("fixResMode")
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 If romExtension not in .ccd,.mds,.cue,.iso,.cdi,.nrg
@@ -141,6 +143,7 @@ iniLookup =
 	Peripheral, DataCartridge, "%DataCartridge%"
 	Program4, NoBIOS, "%ShowBIOS%"
 	Other, ScreenMode, "%Fullscreen%"
+	Other, WindowSize, "%WindowSize%"
 )
 Loop, Parse, iniLookup, `n
 {
@@ -182,8 +185,20 @@ If systemName = Sega ST-V
 
 WinWait("SSF")
 WinWaitActive("SSF")
-BezelDraw()
-Sleep, 1000 ; SSF flashes in real fast before going fullscreen if this is not here
+
+If bezelEnabled = true
+{	timeout := A_TickCount
+	Loop
+	{	Sleep, 20
+		WinGetPos, , , , H, SSF
+		If (H>400)
+			Break
+		If (timeout < A_TickCount - 5000)
+			Break
+	}
+	BezelDraw()
+} Else
+	Sleep, 1000 ; SSF flashes in real fast before going fullscreen if this is not here
 
 FadeInExit()
 
@@ -255,9 +270,8 @@ RestoreEmu:
 	Send, !{Enter}
 Return
 
-CloseProcess:
-	FadeOutStart()
-	WinClose("SSF")
+BezelLabel:
+	disableHideToggleMenuScreen = true
 Return
 
 tempgui(){
@@ -265,3 +279,8 @@ tempgui(){
 	Gui, 69:-Caption +ToolWindow 
 	Gui, 69:Show, x0 y0 W%A_ScreenWidth% H%A_ScreenHeight%, BlackScreen
 }
+
+CloseProcess:
+	FadeOutStart()
+	WinClose("SSF")
+Return

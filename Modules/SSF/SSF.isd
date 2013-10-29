@@ -59,6 +59,19 @@
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>Make sure you have your CDDrive set to whatever number you use for your games. 0 may be your hardware drive, while 1 may be your virtual drive (depending on how many you have). If you get a black screen, try different numbers starting from 0. If you keep getting the CD Player BIOS screen, you have the CDDrive variable set wrong.</DESCRIPTION>
 						</KEY>
+						<KEY name="WindowSize" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Determines the gameplay window size in windowed mode. It can be 0, 1 or 2.</DESCRIPTION>
+							<VALUES>
+								<VALUE>0</VALUE>
+								<VALUE>1</VALUE>
+								<VALUE>2</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="bezelBottomOffset" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the bottom of your playing screen increase this value. If your playing screen is hidden at the bottom decrease it.</DESCRIPTION>
+						</KEY>
 						<KEY name="defaultRegion" required="false" nullable="false">
 							<KEYTYPE>String</KEYTYPE>
 							<DESCRIPTION>If any of your roms do not have a region tag, the module will use this region as it's default. If you still get a black screen for this rom, add a correct region tag to the rom's file name.</DESCRIPTION>
