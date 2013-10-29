@@ -1,5 +1,5 @@
-MCRC=E085876C
-MVersion=1.0.4
+MCRC=289CBD18
+MVersion=1.0.5
 
 BezelGUI(){
 	Log("BezelGUI - Started")
@@ -49,11 +49,11 @@ BezelStart(Mode="",parent="",angle="",width="",height=""){
 	if (RIni_Read("BezelRomRini",Bezel_RomFile) = -11)
         RIni_Create("BezelRomRini")
 	;[Bezel Change]
-	bezelChangeDur := RIniBezelLoadVar("bezelGlobalRini","bezelSystemRini", "BezelRomRini", "Bezel Change", "Bezel_Transistion_Duration","500")
+	bezelChangeDur := RIniBezelLoadVar("bezelGlobalRini","bezelSystemRini", "BezelRomRini", "Bezel Change", "Bezel_Transition_Duration","500")
 	;[Background]
 	bezelBackgroundChangeDur := RIniBezelLoadVar("bezelGlobalRini","bezelSystemRini", "BezelRomRini", "Background", "Background_Change_Timer","0") ; 0 if disabled, number if you want the bezel background to change automatically at each x miliseconds
-	bezelBackgroundTransition := RIniBezelLoadVar("bezelGlobalRini","bezelSystemRini", "BezelRomRini", "Background", "Background_Transistion_Animation","fade") ; none or fade
-	bezelBackgroundTransitionDur := RIniBezelLoadVar("bezelGlobalRini","bezelSystemRini", "BezelRomRini", "Background", "Background_Transistion_Duration","500") ; determines the duration of fade bezel background transition
+	bezelBackgroundTransition := RIniBezelLoadVar("bezelGlobalRini","bezelSystemRini", "BezelRomRini", "Background", "Background_Transition_Animation","fade") ; none or fade
+	bezelBackgroundTransitionDur := RIniBezelLoadVar("bezelGlobalRini","bezelSystemRini", "BezelRomRini", "Background", "Background_Transition_Duration","500") ; determines the duration of fade bezel background transition
 	;[Bezel Change Keys]
 	nextBezelKey := RIniBezelLoadVar("bezelGlobalRini","bezelSystemRini", "BezelRomRini", "Bezel Change Keys", "Next_Bezel_Key", "") 
 	previousBezelKey := RIniBezelLoadVar("bezelGlobalRini","bezelSystemRini", "BezelRomRini", "Bezel Change Keys", "Previous_Bezel_Key","")
@@ -64,9 +64,9 @@ BezelStart(Mode="",parent="",angle="",width="",height=""){
 	enableICChangeSound := RIniBezelLoadVar("bezelGlobalRini","bezelSystemRini", "BezelRomRini", "Instruction Cards General Settings", "IC_Enable_Transition_Sound","true") ; It searches for sound files named ICslideIn.mp3, ICslideOut.mp3, ICFadeOut.mp3, ICFadeIn.mp3 or ICChange.mp3 on the default global, default system and rom bezel folders to be played while changing the ICs
 	ICScaleFactor := RIniBezelLoadVar("bezelGlobalRini","bezelSystemRini", "BezelRomRini", "Instruction Cards General Settings", "IC_Scale_Factor","ScreenHeight") ;you can choose between a number (1 to keep the original image size), or the words: ScreenHeight, ScreenWidth, HalfScreenHeight, HalfScreenWidth, OneThirdScreenHeight and OneThirdScreenWidth in order to resize the image in relation to the screen size. The default value is ScreenHeight that will work better in any resolution with a two ICs option (also the default one). 
 	;[Instruction Cards Menu]
-	leftMenuPositionsIC := RIniBezelLoadVar("bezelGlobalRini","bezelSystemRini", "BezelRomRini", "Instruction Cards Menu", "IC_Left_Menu_Positions","topLeft,leftCenter,bottomLeft,bottomCenter") ; (1-8 positions) can be topLeft|topRight|bottomLeft|bottomRight|topCenter|leftCenter|rightCenter|bottomCenter
+	leftMenuPositionsIC := RIniBezelLoadVar("bezelGlobalRini","bezelSystemRini", "BezelRomRini", "Instruction Cards Menu", "IC_Left_Menu_Positions","topLeft|leftCenter|bottomLeft|bottomCenter") ; (1-8 positions) can be topLeft|topRight|bottomLeft|bottomRight|topCenter|leftCenter|rightCenter|bottomCenter
 	ICleftMenuListItems := RIniBezelLoadVar("bezelGlobalRini","bezelSystemRini", "BezelRomRini", "Instruction Cards Menu", "IC_Left_Menu_Number_of_List_Items","7")
-	rightMenuPositionsIC := RIniBezelLoadVar("bezelGlobalRini","bezelSystemRini", "BezelRomRini", "Instruction Cards Menu", "IC_Right_Menu_Positions","topRight,rightCenter,bottomRight,topCenter") ; (1-8 positions) can be topLeft|topRight|bottomLeft|bottomRight|topCenter|leftCenter|rightCenter|bottomCenter 
+	rightMenuPositionsIC := RIniBezelLoadVar("bezelGlobalRini","bezelSystemRini", "BezelRomRini", "Instruction Cards Menu", "IC_Right_Menu_Positions","topRight|rightCenter|bottomRight|topCenter") ; (1-8 positions) can be topLeft|topRight|bottomLeft|bottomRight|topCenter|leftCenter|rightCenter|bottomCenter 
 	ICrightMenuListItems := RIniBezelLoadVar("bezelGlobalRini","bezelSystemRini", "BezelRomRini", "Instruction Cards Menu", "IC_Right_Menu_Number_of_List_Items","7")
 	;[Instruction Cards Visibility]
 	toogleICVisibilityKey := RIniBezelLoadVar("bezelGlobalRini","bezelSystemRini", "BezelRomRini", "Instruction Cards Visibility", "IC_Toggle_Visibility_Key","") 
@@ -255,6 +255,8 @@ BezelStart(Mode="",parent="",angle="",width="",height=""){
 				changeICSound := currentPath . "\ICChange.mp3"
 		}
 		;initializing IC menus
+		StringReplace, leftMenuPositionsIC, leftMenuPositionsIC,|,`,, all
+		StringReplace, rightMenuPositionsIC, rightMenuPositionsIC,|,`,, all
 		loop, 8
 			{
 			if positionICArray%a_index% in %leftMenuPositionsIC%
@@ -542,21 +544,21 @@ BezelDraw(){
 			;Moving emulator Window to predefined bezel window 
 			If !disableWinMove
 				{
-				bezelScreenX := round(bezelScreenX) , bezelScreenY := round(bezelScreenY), bezelScreenWidth := round(bezelScreenWidth) , bezelScreenHeight := round(bezelScreenHeight)
-				WinMove, ahk_id %emulatorID%, , %bezelScreenX%, %bezelScreenY%, %bezelScreenWidth%, %bezelScreenHeight%
+				bezelScreenX := round(bezelScreenX) , bezelScreenY := round(bezelScreenY)
+				WinMove, ahk_id %emulatorID%, , %bezelScreenX%, %bezelScreenY%
 				; check if window moved
-				X:="" , Y:="" , W:="" , H:=""
+				X:="" , Y:="" 
 				timeout := A_TickCount
 				loop
 					{
 					sleep, 50
-					WinGetPos, X, Y, W, H, ahk_id %emulatorID%
-					if (X=bezelScreenX) and (Y=bezelScreenY) and (W=bezelScreenWidth) and (H=bezelScreenHeight)
+					WinGetPos, X, Y, , , ahk_id %emulatorID%
+					if (X=bezelScreenX) and (Y=bezelScreenY) 
 						break
 					if(timeout < A_TickCount - bezelCheckPosTimeout)
 						break
 					sleep, 50
-					WinMove, ahk_id %emulatorID%, , %bezelScreenX%, %bezelScreenY%, %bezelScreenWidth%, %bezelScreenHeight%
+					WinMove, ahk_id %emulatorID%, , %bezelScreenX%, %bezelScreenY%
 				}
 			}
 		}
@@ -719,8 +721,8 @@ BezelCoordinates(CoordinatesMode){
 		yScaleFactor := (bezelScreenHeight)/(bezelScreenY2-bezelScreenY1)
 		bezelImageW := Round(bezelImageW * xScaleFactor)
 		bezelImageH := Round(bezelImageH * yScaleFactor) 
-		bezelImageX := Round(A_ScreenWidth/2-(bezelScreenX2-bezelScreenX1)*xScaleFactor/2-bezelScreenX1*xScaleFactor)
-		bezelImageY := Round(A_ScreenHeight/2-(bezelScreenY2-bezelScreenY1)*yScaleFactor/2-bezelScreenY1*yScaleFactor)
+		bezelImageX := Round( (A_ScreenWidth-(bezelScreenX2-bezelScreenX1)*xScaleFactor)//2-bezelScreenX1*xScaleFactor )
+		bezelImageY := Round( (A_ScreenHeight-(bezelScreenY2-bezelScreenY1)*yScaleFactor)//2-bezelScreenY1*yScaleFactor )		
 	} else if (CoordinatesMode = "bezelLayoutFile") {
 		scalefactor := if (bezelImageH * round((A_ScreenWidth/bezelImageW),10)>A_ScreenHeight) ? round((A_ScreenHeight/bezelImageH),10) : round((A_ScreenWidth/bezelImageW),10)
 		bezelImageW := bezelImageW*scalefactor
