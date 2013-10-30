@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="AutoResume" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, will automatically save your game's state on exit and reload it on the next launch of the same game.</DESCRIPTION>
+						</KEY>
+						<KEY name="FullscreenResolution" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set resolution of FS-UAE when in fullscreen mode. Default is your desktop resolution when not set.</DESCRIPTION>
+							<VALUES>
+								<VALUE>640x480</VALUE>
+								<VALUE>720x480</VALUE>
+								<VALUE>720x576</VALUE>
+								<VALUE>800x600</VALUE>
+								<VALUE>1024x768</VALUE>
+								<VALUE>1152x864</VALUE>
+								<VALUE>1280x720</VALUE>
+								<VALUE>1280x756</VALUE>
+								<VALUE>1280x800</VALUE>
+								<VALUE>1280x960</VALUE>
+								<VALUE>1280x1024</VALUE>
+								<VALUE>1360x768</VALUE>
+								<VALUE>1366x768</VALUE>
+								<VALUE>1600x900</VALUE>
+								<VALUE>1600x1024</VALUE>
+								<VALUE>1600x1200</VALUE>
+								<VALUE>1680x1050</VALUE>
+								<VALUE>1900x1080</VALUE>
+								<VALUE>1920x1200</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="WindowedResolution" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set resolution of FS-UAE when in windowed mode.</DESCRIPTION>
+							<VALUES>
+								<VALUE>640x480</VALUE>
+								<VALUE>720x480</VALUE>
+								<VALUE>720x576</VALUE>
+								<VALUE>800x600</VALUE>
+								<VALUE>1024x768</VALUE>
+								<VALUE>1152x864</VALUE>
+								<VALUE>1280x720</VALUE>
+								<VALUE>1280x756</VALUE>
+								<VALUE>1280x800</VALUE>
+								<VALUE>1280x960</VALUE>
+								<VALUE>1280x1024</VALUE>
+								<VALUE>1360x768</VALUE>
+								<VALUE>1366x768</VALUE>
+								<VALUE>1600x900</VALUE>
+								<VALUE>1600x1024</VALUE>
+								<VALUE>1600x1200</VALUE>
+								<VALUE>1680x1050</VALUE>
+								<VALUE>1900x1080</VALUE>
+								<VALUE>1920x1200</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="A1200_Rom" required="false" nullable="true">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Path to the BIOS rom you want to use for Commodore Amiga. File must be a ".rom" or ".zip" with the rom inside. Suggested rom is "Kickstart v3.0 r39.106 (1992)(Commodore)(A1200)[!]".</DESCRIPTION>
+							<PATHTYPE>Any</PATHTYPE>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>rom</FILEEXTENSION>
+								<FILEEXTENSION>zip</FILEEXTENSION>
+							</FILEEXTENSIONS>
+						</KEY>
+						<KEY name="CD32_Rom" required="false" nullable="true">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Path to the BIOS rom you want to use for Commodore CD32. File must be a ".rom" or ".zip" with the rom inside. Suggested rom is "Kickstart v3.1 r40.60 (1993)(Commodore)(CD32)".</DESCRIPTION>
+							<PATHTYPE>Any</PATHTYPE>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>rom</FILEEXTENSION>
+								<FILEEXTENSION>zip</FILEEXTENSION>
+							</FILEEXTENSIONS>
+						</KEY>
+						<KEY name="CD32_Ext_Rom" required="false" nullable="true">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Path to the Extended BIOS rom you want to use for Commodore CD32. File must be a ".rom" or ".zip" with the rom inside. Suggested rom is "CD32 Extended-ROM r40.60 (1993)(Commodore)(CD32)".</DESCRIPTION>
+							<PATHTYPE>Any</PATHTYPE>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>rom</FILEEXTENSION>
+								<FILEEXTENSION>zip</FILEEXTENSION>
+							</FILEEXTENSIONS>
+						</KEY>
+						<KEY name="CDTV_Rom" required="false" nullable="true">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Path to the BIOS rom you want to use for Commodore CDTV. File must be a ".rom" or ".zip" with the rom inside. Suggested rom is "Kickstart v1.3 r34.5 (1987)(Commodore)(A500-A1000-A2000-CDTV)[!]".</DESCRIPTION>
+							<PATHTYPE>Any</PATHTYPE>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>rom</FILEEXTENSION>
+								<FILEEXTENSION>zip</FILEEXTENSION>
+							</FILEEXTENSIONS>
+						</KEY>
+						<KEY name="CDTV_Ext_Rom" required="false" nullable="true">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Path to the Extended BIOS rom you want to use for Commodore CDTV. File must be a ".rom" or ".zip" with the rom inside. Suggested rom is "CDTV Extended-ROM v2.7 (1992)(Commodore)(CDTV)".</DESCRIPTION>
+							<PATHTYPE>Any</PATHTYPE>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>rom</FILEEXTENSION>
+								<FILEEXTENSION>zip</FILEEXTENSION>
+							</FILEEXTENSIONS>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>
