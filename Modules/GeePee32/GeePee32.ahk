@@ -2,8 +2,8 @@ MEmu = GeePee32
 MEmuV = v0.43
 MURL = http://users.skynet.be/firefly/gp32/
 MAuthor = djvj
-MVersion = 2.0
-MCRC = 8E599D48
+MVersion = 2.0.1
+MCRC = FFF214E8
 iCRC = 93050FEB
 MID = 635038268896027346
 MSystem = "GamePark 32"
@@ -14,6 +14,9 @@ MSystem = "GamePark 32"
 ; Turn the splash screen off by setting splash=0 in the geepee32.ini
 ; CLI is broken in the latest v.043. Script launches games manually instead
 ; There is no maximize or fullscreen option, so the script handles it manually
+; If you have GeePee32 controls set up to use the keyboard with QWERTY keyboard type, the A button is *always* assigned to the Q key on your keyboard no matter what you do.
+; Even if you make the change in the emulator's ini file, the emulator will always set it to Q due to a bug in it. If you use Q for anything else in your usual setup, you will need to make a custom xpadder profile to handle this properly.
+
 ;----------------------------------------------------------------------------
 StartModule()
 FadeInStart()
@@ -25,7 +28,6 @@ SelectGameMode := IniReadCheck(settingsFile, "Settings", "SelectGameMode","1",,1
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 SetKeyDelay, 50
-StringTrimLeft, ext, romExtension, 1
 Run(executable, emuPath)
 WinWait("AHK_class TFormMain")
 WinWaitActive("AHK_class TFormMain")
