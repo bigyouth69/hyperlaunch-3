@@ -36,6 +36,18 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>If true, the module will update fusion's settings to enable per-rom controller settings and when no settings are defined, will use the default controller defined below.</DESCRIPTION>
 						</KEY>
+                        <KEY name="Default_MultiTapType" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If a MultiTap Type is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.  0=None, 1=Temaplayer Port 1, 2=Temaplayer Port 2, 3=Temaplayer Ports 1 and 2, 4=4 Way play, 8=JCART</DESCRIPTION>
+							<VALUES>
+								<VALUE>0</VALUE>
+								<VALUE>1</VALUE>
+								<VALUE>2</VALUE>
+								<VALUE>3</VALUE>
+								<VALUE>4</VALUE>
+								<VALUE>8</VALUE>
+							</VALUES>
+                        </KEY>
 						<KEY name="Default_Genesis_P1_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.  0=None, 1=3 Button Pad, 2=6 Button Pad, 3=Mouse, 4=Menacer, 5=Justifier</DESCRIPTION>
@@ -241,6 +253,18 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Some games will not boot or play correctly without turning on Perfect Sync in Fusion. Set this to true for this game to enable it.</DESCRIPTION>
 						</KEY>
+                         <KEY name="MultiTapType" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>MultiTap Type to use whit Rom in Genesis, 32x, and Sega CD.  0=None, 1=Temaplayer Port 1, 2=Temaplayer Port 2, 3=Temaplayer Ports 1 and 2, 4=4 Way play, 8=JCART</DESCRIPTION>
+							<VALUES>
+								<VALUE>0</VALUE>
+								<VALUE>1</VALUE>
+								<VALUE>2</VALUE>
+								<VALUE>3</VALUE>
+								<VALUE>4</VALUE>
+								<VALUE>8</VALUE>
+							</VALUES>
+                        </KEY>
 						<KEY name="Genesis_P1_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>The controller type plugged into this port, it will use this setting for Genesis, 32x, and Sega CD. 0=None, 1=3 Button Pad, 2=6 Button Pad, 3=Mouse, 4=Menacer, 5=Justifier</DESCRIPTION>

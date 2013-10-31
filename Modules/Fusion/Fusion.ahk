@@ -2,9 +2,9 @@ MEmu = Fusion
 MEmuV =  v3.64
 MURL = http://www.eidolons-inn.net/tiki-index.php?page=Kega
 MAuthor = djvj
-MVersion = 2.0.5
-MCRC = 38645830
-iCRC = 7A5BD6E2
+MVersion = 2.0.6
+MCRC = 3204AB13
+iCRC = C2D6BD3C
 MID = 635038268893895568
 MSystem = "Samsung Gam Boy","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","Sega Mega-CD","Sega SC-3000","Sega SG-1000"
 ;----------------------------------------------------------------------------
@@ -47,47 +47,28 @@ fluxAudioCD := IniReadCheck(settingsFile, "Settings", "FluxAudioCD",,,1)	; audio
 fluxAudioCD := GetFullName(fluxAudioCD)	; convert relative path to absolute
 DTWaitTime := IniReadCheck(settingsFile, systemName, "DTWaitTime","0",,1)
 controllerReassigningEnabled := IniReadCheck(settingsFile, systemName, "Controller_Reassigning_Enabled","false",,1)
-defaultGenP1Controller := IniReadCheck(settingsFile, systemName, "Default_Genesis_P1_Controller",2,,1)
-defaultGenP1bController := IniReadCheck(settingsFile, systemName, "Default_Genesis_P1b_Controller",2,,1)
-defaultGenP1cController := IniReadCheck(settingsFile, systemName, "Default_Genesis_P1c_Controller",2,,1)
-defaultGenP1dController := IniReadCheck(settingsFile, systemName, "Default_Genesis_P1d_Controller",2,,1)
-defaultGenP2Controller := IniReadCheck(settingsFile, systemName, "Default_Genesis_P2_Controller",2,,1)
-defaultGenP2bController := IniReadCheck(settingsFile, systemName, "Default_Genesis_P2b_Controller",2,,1)
-defaultGenP2cController := IniReadCheck(settingsFile, systemName, "Default_Genesis_P2c_Controller",2,,1)
-defaultGenP2dController := IniReadCheck(settingsFile, systemName, "Default_Genesis_P2d_Controller",2,,1)
-defaultSMSP1Controller := IniReadCheck(settingsFile, systemName, "Default_SMS_P1_Controller",1,,1)
-defaultSMSP2Controller := IniReadCheck(settingsFile, systemName, "Default_SMS_P2_Controller",1,,1)
-defaultGenP1Use := IniReadCheck(settingsFile, systemName, "Default_Genesis_P1_Use",1,,1)
-defaultGenP1bUse := IniReadCheck(settingsFile, systemName, "Default_Genesis_P1b_Use",1,,1)
-defaultGenP1cUse := IniReadCheck(settingsFile, systemName, "Default_Genesis_P1c_Use",1,,1)
-defaultGenP1dUse := IniReadCheck(settingsFile, systemName, "Default_Genesis_P1d_Use",1,,1)
-defaultGenP2Use := IniReadCheck(settingsFile, systemName, "Default_Genesis_P2_Use",1,,1)
-defaultGenP2bUse := IniReadCheck(settingsFile, systemName, "Default_Genesis_P2b_Use",1,,1)
-defaultGenP2cUse := IniReadCheck(settingsFile, systemName, "Default_Genesis_P2c_Use",1,,1)
-defaultGenP2dUse := IniReadCheck(settingsFile, systemName, "Default_Genesis_P2d_Use",1,,1)
-defaultSMSP1Use := IniReadCheck(settingsFile, systemName, "Default_SMS_P1_Use",1,,1)
-defaultSMSP2Use := IniReadCheck(settingsFile, systemName, "Default_SMS_P2_Use",1,,1)
 perfectSync := IniReadCheck(settingsFile, romName, "PerfectSync","false",,1)
-genP1Controller := IniReadCheck(settingsFile, romName, "Genesis_P1_Controller",,,1)
-genP1bController := IniReadCheck(settingsFile, romName, "Genesis_P1b_Controller",,,1)
-genP1cController := IniReadCheck(settingsFile, romName, "Genesis_P1c_Controller",,,1)
-genP1dController := IniReadCheck(settingsFile, romName, "Genesis_P1d_Controller",,,1)
-genP2Controller := IniReadCheck(settingsFile, romName, "Genesis_P2_Controller",,,1)
-genP2bController := IniReadCheck(settingsFile, romName, "Genesis_P2b_Controller",,,1)
-genP2cController := IniReadCheck(settingsFile, romName, "Genesis_P2c_Controller",,,1)
-genP2dController := IniReadCheck(settingsFile, romName, "Genesis_P2d_Controller",,,1)
-smsP1Controller := IniReadCheck(settingsFile, romName, "SMS_P1_Controller",,,1)
-smsP2Controller := IniReadCheck(settingsFile, romName, "SMS_P2_Controller",,,1)
-genP1Use := IniReadCheck(settingsFile, romName, "Genesis_P1_Use",,,1)
-genP1bUse := IniReadCheck(settingsFile, romName, "Genesis_P1b_Use",,,1)
-genP1cUse := IniReadCheck(settingsFile, romName, "Genesis_P1c_Use",,,1)
-genP1dUse := IniReadCheck(settingsFile, romName, "Genesis_P1d_Use",,,1)
-genP2Use := IniReadCheck(settingsFile, romName, "Genesis_P2_Use",,,1)
-genP2bUse := IniReadCheck(settingsFile, romName, "Genesis_P2b_Use",,,1)
-genP2cUse := IniReadCheck(settingsFile, romName, "Genesis_P2c_Use",,,1)
-genP2dUse := IniReadCheck(settingsFile, romName, "Genesis_P2d_Use",,,1)
-smsP1Use := IniReadCheck(settingsFile, romName, "SMS_P1_Use",,,1)
-smsP2Use := IniReadCheck(settingsFile, romName, "SMS_P2_Use",,,1)
+multiTapType := IniReadCheck(settingsFile, systemName . "|" . romName, "MultiTapType",0,,1)
+genP1Controller := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P1_Controller",2,,1)
+genP1bController := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P1b_Controller",2,,1)
+genP1cController := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P1c_Controller",2,,1)
+genP1dController := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P1d_Controller",2,,1)
+genP2Controller := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P2_Controller",2,,1)
+genP2bController := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P2b_Controller",2,,1)
+genP2cController := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P2c_Controller",2,,1)
+genP2dController := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P2d_Controller",2,,1)
+smsP1Controller := IniReadCheck(settingsFile, systemName . "|" . romName, "SMS_P1_Controller",1,,1)
+smsP2Controller := IniReadCheck(settingsFile, systemName . "|" . romName, "SMS_P2_Controller",1,,1)
+genP1Use := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P1_Use",1,,1)
+genP1bUse := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P1b_Use",1,,1)
+genP1cUse := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P1c_Use",1,,1)
+genP1dUse := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P1d_Use",1,,1)
+genP2Use := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P2_Use",1,,1)
+genP2bUse := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P2b_Use",1,,1)
+genP2cUse := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P2c_Use",1,,1)
+genP2dUse := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P2d_Use",1,,1)
+smsP1Use := IniReadCheck(settingsFile, systemName . "|" . romName, "SMS_P1_Use",1,,1)
+smsP2Use := IniReadCheck(settingsFile, systemName . "|" . romName, "SMS_P2_Use",1,,1)
 Log("Module - Finished reading module ini")
 
 BezelStart()
@@ -134,26 +115,27 @@ If bezelPath ; Setting windowed mode resolution
  ; Allows you to set on a per-rom basis the controller type plugged into controller ports 1 and 2
 If controllerReassigningEnabled = true
 {	Log("Module - Started reassigning Fusion's ini controls")
-	WriteProperty(fusionIni,"Joystick1Type", If genP1Controller ? genP1Controller : defaultGenP1Controller)	; sets controls for P1 to rom's P1 control type if exists, else sets to default P1 control type
-	WriteProperty(fusionIni,"Joystick1bType", If genP1bController ? genP1bController : defaultGenP1bController)	; sets controls for P1b to rom's P1b control type if exists, else sets to default P1b control type
-	WriteProperty(fusionIni,"Joystick1cType", If genP1cController ? genP1cController : defaultGenP1cController)	; sets controls for P1c to rom's P1c control type if exists, else sets to default P1c control type
-	WriteProperty(fusionIni,"Joystick1dType", If genP1dController ? genP1dController : defaultGenP1dController)	; sets controls for P1d to rom's P1d control type if exists, else sets to default P1d control type
-	WriteProperty(fusionIni,"Joystick2Type", If genP2Controller ? genP2Controller : defaultGenP2Controller)	; sets controls for P2 to rom's P2 control type if exists, else sets to default P2 control type
-	WriteProperty(fusionIni,"Joystick2bType", If genP2bController ? genP2bController : defaultGenP2bController)	; sets controls for P2b to rom's P2b control type if exists, else sets to default P2b control type
-	WriteProperty(fusionIni,"Joystick2cType", If genP2cController ? genP2cController : defaultGenP2cController)	; sets controls for P2c to rom's P2c control type if exists, else sets to default P2c control type
-	WriteProperty(fusionIni,"Joystick2dType", If genP2dController ? genP2dController : defaultGenP2dController)	; sets controls for P2d to rom's P2d control type if exists, else sets to default P2d control type
-	WriteProperty(fusionIni,"Joystick1MSType", If smsP1Controller ? smsP1Controller : defaultSMSP1Controller)	; sets controls for sms P1 to rom's sms P1 control type if exists, else sets to default sms P1 control type
-	WriteProperty(fusionIni,"Joystick2MSType", If smsP2Controller ? smsP2Controller : defaultSMSP2Controller)	; sets controls for sms P2 to rom's sms P2 control type if exists, else sets to default sms P2 control type
-	WriteProperty(fusionIni,"Joystick1Using", If genP1Use ? genP1Use : defaultGenP1Use)	; sets controls for P1 to rom's P1 control using if exists, else sets to default P1 control using
-	WriteProperty(fusionIni,"Joystick1bUsing", If genP1bUse ? genP1bUse : defaultGenP1bUse)	; sets controls for P1b to rom's P1b control using if exists, else sets to default P1b control using
-	WriteProperty(fusionIni,"Joystick1cUsing", If genP1cUse ? genP1cUse : defaultGenP1cUse)	; sets controls for P1c to rom's P1c control using if exists, else sets to default P1c control using
-	WriteProperty(fusionIni,"Joystick1dUsing", If genP1dUse ? genP1dUse : defaultGenP1dUse)	; sets controls for P1d to rom's P1d control using if exists, else sets to default P1d control using
-	WriteProperty(fusionIni,"Joystick2Using", If genP2Use ? genP2Use : defaultGenP2Use)	; sets controls for P2 to rom's P2 control using if exists, else sets to default P2 control using
-	WriteProperty(fusionIni,"Joystick2bUsing", If genP2bUse ? genP2bUse : defaultGenP2bUse)	; sets controls for P2b to rom's P2b control using if exists, else sets to default P2b control using
-	WriteProperty(fusionIni,"Joystick2cUsing", If genP2cUse ? genP2cUse : defaultGenP2cUse)	; sets controls for P2c to rom's P2c control using if exists, else sets to default P2c control using
-	WriteProperty(fusionIni,"Joystick2dUsing", If genP2dUse ? genP2dUse : defaultGenP2dUse)	; sets controls for P2d to rom's P2d control using if exists, else sets to default P2d control using
-	WriteProperty(fusionIni,"Joystick1MSUsing", If smsP1Use ? smsP1Use : defaultSMSP1Use)	; sets controls for sms P1 to rom's sms P1 control using if exists, else sets to default sms P1 control using
-	WriteProperty(fusionIni,"Joystick2MSUsing", If smsP2Use ? smsP2Use : defaultSMSP2Use)	; sets controls for sms P2 to rom's sms P2 control using if exists, else sets to default sms P2 control using
+	WriteProperty(fusionIni,"MultiTapType", multiTapType)	; sets MultiTap
+	WriteProperty(fusionIni,"Joystick1Type", genP1Controller)	; sets controls for P1
+	WriteProperty(fusionIni,"Joystick1bType", genP1bController)	; sets controls for P1b
+	WriteProperty(fusionIni,"Joystick1cType", genP1cController)	; sets controls for P1c
+	WriteProperty(fusionIni,"Joystick1dType", genP1dController)	; sets controls for P1d
+	WriteProperty(fusionIni,"Joystick2Type", genP2Controller)	; sets controls for P2
+	WriteProperty(fusionIni,"Joystick2bType", genP2bController)	; sets controls for P2b
+	WriteProperty(fusionIni,"Joystick2cType", genP2cController)	; sets controls for P2c
+	WriteProperty(fusionIni,"Joystick2dType", genP2dController)	; sets controls for P2d
+	WriteProperty(fusionIni,"Joystick1MSType", smsP1Controller)	; sets controls for sms P1
+	WriteProperty(fusionIni,"Joystick2MSType", smsP2Controller)	; sets controls for sms P2
+	WriteProperty(fusionIni,"Joystick1Using", genP1Use)	; sets controls for P1
+	WriteProperty(fusionIni,"Joystick1bUsing", genP1bUse)	; sets controls for P1b
+	WriteProperty(fusionIni,"Joystick1cUsing", genP1cUse)	; sets controls for P1c
+	WriteProperty(fusionIni,"Joystick1dUsing", genP1dUse)	; sets controls for P1d
+	WriteProperty(fusionIni,"Joystick2Using", genP2Use)	; sets controls for P2
+	WriteProperty(fusionIni,"Joystick2bUsing", genP2bUse)	; sets controls for P2b
+	WriteProperty(fusionIni,"Joystick2cUsing", genP2cUse)	; sets controls for P2c
+	WriteProperty(fusionIni,"Joystick2dUsing", genP2dUse)	; sets controls for P2d
+	WriteProperty(fusionIni,"Joystick1MSUsing", smsP1Use)	; sets controls for sms P1
+	WriteProperty(fusionIni,"Joystick2MSUsing", smsP2Use)	; sets controls for sms P2
 	SaveProperties(fusionFile,fusionIni)	; save fusionFile to disk
 	Log("Module - Finished reassigning Fusion's ini controls")
 }
