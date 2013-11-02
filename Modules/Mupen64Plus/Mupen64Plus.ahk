@@ -2,8 +2,8 @@ MEmu = Mupen64Plus
 MEmuV = v2.0
 MURL = https://code.google.com/p/mupen64plus/
 MAuthor = djvj & ghutch92
-MVersion = 2.0.2
-MCRC = 16FD4CC
+MVersion = 2.0.3
+MCRC = 228B60D8
 iCRC = 232C6716
 MID = 635163407878625424
 MSystem = "Nintendo 64"
@@ -41,8 +41,8 @@ fullscreen := If (fullscreen = "true") ? " --fullscreen" : " --windowed"
 resolution := " --resolution " . resolution
 gfxPlugin := If gfxPlugin ? " --gfx " . gfxPlugin : ""
 audioPlugin := If audioPlugin ? " --audio " . audioPlugin : ""
-inputPlugin := If inputPlugin ? " --input " . rspPlugin : ""
-rspPlugin := If rspPlugin ? " --rsp " . gfxPlugin : ""
+inputPlugin := If inputPlugin ? " --input " . inputPlugin : ""
+rspPlugin := If rspPlugin ? " --rsp " . rspPlugin : ""
 emuMode := If emuMode ? " --emumode " . emuMode : ""
 disableExtraMemory := If disableExtraMemory ? " --set Core[DisableExtraMem]=" . disableExtraMemory : ""
 cheats := If cheatsEnabled ? " --cheats all"  : ""
