@@ -2,8 +2,8 @@ MEmu = DeSmuME
 MEmuV =  v0.9.9
 MURL = http://www.desmume.com/
 MAuthor = djvj
-MVersion = 2.0.1
-MCRC = D6D7EC4F
+MVersion = 2.0.2
+MCRC = 2186DE30
 iCRC = A5A00A8F
 MID = 635038268882946453
 MSystem = "Nintendo DS"
@@ -20,7 +20,7 @@ StartModule()
 BezelGUI()
 FadeInStart()
 
-settingsFile := CheckFile(modulePath . "\" . moduleName . ".ini")
+settingsFile := modulePath . "\" . moduleName . ".ini"
 bezelTopOffset := IniReadCheck(settingsFile, "Settings", "Bezel_Top_Offset","29",,1)
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 vertical := IniReadCheck(settingsFile, romName, "vertical","false",,1)
