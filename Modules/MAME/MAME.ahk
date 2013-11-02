@@ -2,8 +2,8 @@ MEmu = MAME
 MEmuV =  v0.150
 MURL = http://www.mame.net/
 MAuthor = djvj
-MVersion = 2.1.0
-MCRC = 9C3DCB55
+MVersion = 2.1.1
+MCRC = D390B7BC
 iCRC = 397D8196
 MID = 635038268903403479
 MSystem = "AAE","Cave","LaserDisc","MAME","Nintendo Arcade Systems","Sega Model 1","Sega ST-V","SNK Neo Geo","SNK Neo Geo AES"
@@ -20,7 +20,7 @@ StartModule()
 BezelGUI()
 FadeInStart()
 
-settingsFile := CheckFile(modulePath . "\" . moduleName . ".ini")
+settingsFile := modulePath . "\" . moduleName . ".ini"
 
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 Videomode := IniReadCheck(settingsFile, "Settings", "Videomode","d3d",,1)
