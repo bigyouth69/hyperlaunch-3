@@ -2,8 +2,8 @@ MEmu = Daphne
 MEmuV =  v1.0.12
 MURL = http://www.daphne-emu.com/
 MAuthor = djvj
-MVersion = 2.0.3
-MCRC = D9E57F19
+MVersion = 2.0.4
+MCRC = F34E1CB
 iCRC = C777A9D
 MID = 635038268879753802
 MSystem = "Daphne","LaserDisc"
@@ -21,12 +21,12 @@ MSystem = "Daphne","LaserDisc"
 StartModule()
 FadeInStart()
 
-settingsFile := CheckFile(modulePath . "\" . moduleName . ".ini")
-globalParams := IniReadCheck(settingsFile,"settings","globalParams",,,1)
+settingsFile := modulePath . "\" . moduleName . ".ini"
+globalParams := IniReadCheck(settingsFile,"settings","globalParams","vldp -blank_searches -prefer_samples -noissues -opengl -fastboot",,1)
 fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 screenWidth := IniReadCheck(settingsFile, "Settings", "ScreenWidth",A_ScreenWidth,,1)
 screenHeight := IniReadCheck(settingsFile, "Settings", "ScreenHeight",A_ScreenHeight,,1)
-pauseOnExit := IniReadCheck(settingsFile,"settings","pauseOnExit",,,1)
+pauseOnExit := IniReadCheck(settingsFile,"settings","pauseOnExit","false",,1)
 min_seek_delay := IniReadCheck(settingsFile,romName,"min_seek_delay",A_Space,,1)
 seek_frames_per_ms := IniReadCheck(settingsFile,romName,"seek_frames_per_ms",A_Space,,1)
 homedir := IniReadCheck(settingsFile,romName,"homedir",".",,1)
