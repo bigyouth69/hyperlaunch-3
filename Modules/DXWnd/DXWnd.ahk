@@ -2,8 +2,8 @@ MEmu = DXWnd
 MEmuV = v2.01.90
 MURL = http://sourceforge.net/projects/dxwnd/
 MAuthor = djvj
-MVersion = 2.0.2
-MCRC = B9F17C2D
+MVersion = 2.0.3
+MCRC = CF8E1D06
 iCRC = 5D806D1F
 MID = 635038268886599500
 MSystem = "PC Games","Taito Type X"
@@ -14,7 +14,7 @@ MSystem = "PC Games","Taito Type X"
 ; Extract it to your "Module Extensions" folder
 ; Read the notes in the ini for further settings to help with rotating your monitor for vertical games
 ; Vertical games are windowed, rotated, windows hidden (taskbar/start button/desktop), then the correct resolution is calculated and the game's window is maximized. This gives the look of a fullscreen game, but it's actually in a window.
-; You may have to set Skipchecks to true in your HyperLaunch.ini, otherwise HyperLaunch will error looking for a rom if your exe/bat/lnk is not the same name as you have in your xml.
+; You may have to set Skipchecks to "Rom Only" or "Rom and Emu", otherwise HyperLaunch will error looking for a rom if your exe/bat/lnk is not the same name as you have in your xml.
 ;
 ; Taito Type X Instructions:
 ; 1. Backup your game.exe and typex_bindings.bin for each game (only if you want to have a backup)
@@ -49,8 +49,7 @@ StartModule()
 FadeInStart()
 
  ; check for and load into memory the Settings.ini
-settingsFile := CheckFile(modulePath . "\" . moduleName . ".ini")
-
+settingsFile := CheckFile(modulePath . "\" . moduleName . ".ini", "Could not find """ . modulePath . "\" . moduleName . ".ini"". HyperLaunchHQ will create this file when you configure your first game to be used with this " . MEmu . " module.")
 verticalMethod := IniReadCheck(settingsFile, "settings", "VerticalMethod", "Display",,1)
 system := IniReadCheck(settingsFile, romName, "System","Standard",,1)
 titleClass := IniReadCheck(settingsFile, romName, "TitleClass",A_Space,,1)
