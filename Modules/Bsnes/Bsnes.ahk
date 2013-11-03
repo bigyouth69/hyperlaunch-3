@@ -2,8 +2,8 @@ MEmu = Bsnes
 MEmuV =  v0.87
 MURL = http://byuu.org/bsnes/
 MAuthor = djvj
-MVersion = 2.0.1
-MCRC = F4D39A7E
+MVersion = 2.0.2
+MCRC = A8675C53
 iCRC = 77DA7529
 MID = 635038268877141627
 MSystem = "Nintendo Entertainment System","Nintendo Famicom""Nintendo Game Boy","Nintendo Game Boy Color","Nintendo Satellaview","Nintendo Super Famicom","Super Nintendo Entertainment System"
@@ -29,7 +29,7 @@ StartModule()
 BezelGUI()
 FadeInStart()
 
-settingsFile := CheckFile(modulePath . "\" . moduleName . ".ini")
+settingsFile := modulePath . "\" . moduleName . ".ini"
 
 7z(romPath, romName, romExtension, 7zExtractPath)
 
