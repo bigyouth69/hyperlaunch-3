@@ -1,5 +1,5 @@
 MEmu = DCVG5K
-MEmuV = v1.5
+MEmuV = v2012.04.13
 MURL = http://dcvg5k.free.fr/
 MAuthor = djvj
 MVersion = 2.0.1
@@ -9,6 +9,7 @@ MID = 635038268880784660
 MSystem = "Philips VG 5000"
 ;------------------------------------------------------------------------
 ; Notes:
+; The emu will be in french until you click Options -> Parametres -> Langue -> Anglais, then hit OK.
 ; Roms must be unzipped
 ; US Rally game looks frozen, but it's a side effect of going fullscreen and the emu not redrawing the game select screen. Just press 1 or 2 and it will launch
 ; Emu doesnt work right and is very slow in Win8. Also sometimes takes awhile to close.
