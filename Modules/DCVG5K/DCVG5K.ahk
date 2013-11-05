@@ -3,7 +3,7 @@ MEmuV = v1.5
 MURL = http://dcvg5k.free.fr/
 MAuthor = djvj
 MVersion = 2.0.1
-MCRC = B31C8D72
+MCRC = F01E031C
 iCRC = 800B124B
 MID = 635038268880784660
 MSystem = "Philips VG 5000"
@@ -67,7 +67,7 @@ Sleep, 1000 ; increase if you see the blue emu screen while you are in fullscree
 HideEmuEnd()
 
 If Fullscreen = true
-	Send, !{ENTER}
+	Send, {PGUP}
 
 FadeInExit()
 Process("WaitClose", executable)
@@ -86,7 +86,8 @@ Return
 RestoreEmu:
 	WinRestore, ahk_class VG5000
 	WinActivate, ahk_class VG5000
-	Send, !{ENTER}
+	If Fullscreen = true
+		Send, {PGUP}
 Return
 
 CloseProcess:
