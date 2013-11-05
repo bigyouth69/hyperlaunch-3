@@ -2,9 +2,9 @@ MEmu = Sega Model 2 Emulator
 MEmuV = v1.0
 MURL = http://nebula.emulatronia.com/
 MAuthor = djvj & ghutch92
-MVersion = 2.0.5
+MVersion = 2.0.6
 MCRC = DE4FC457
-iCRC = AD80243A
+iCRC = C842B2DD
 mId = 635175648125374429
 MSystem = "Sega Model 2"
 ;----------------------------------------------------------------------------
