@@ -23,6 +23,14 @@
 								<VALUE>2</VALUE>
 							</VALUES>
 						</KEY>
+						<KEY name="MLanguage" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>If English, dialog boxes look for the word "Open" and if Spanish/Portuguese, looks for "Abrir"</DESCRIPTION>
+							<VALUES>
+								<VALUE>English</VALUE>
+								<VALUE>Spanish/Portuguese</VALUE>
+							</VALUES>
+						</KEY>
 					</KEYS>
 				</SECTION>
 			</SECTIONS>

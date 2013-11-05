@@ -2,9 +2,9 @@ MEmu = DCVG5K
 MEmuV = v1.5
 MURL = http://dcvg5k.free.fr/
 MAuthor = djvj
-MVersion = 2.0
-MCRC = FFA88C52
-iCRC = 96341D95
+MVersion = 2.0.1
+MCRC = B31C8D72
+iCRC = 800B124B
 MID = 635038268880784660
 MSystem = "Philips VG 5000"
 ;------------------------------------------------------------------------
@@ -20,6 +20,12 @@ settingsFile := modulePath . "\" . moduleName . ".ini"
 Fullscreen := IniReadCheck(settingsFile, "settings", "Fullscreen","true",,1)
 RestoreTaskbar := IniReadCheck(settingsFile, "settings", "RestoreTaskbar","true",,1)
 SelectGameMode := IniReadCheck(settingsFile, "settings", "SelectGameMode","1",,1)
+MLanguage := IniReadCheck(settingsFile, "Settings", "MLanguage","English",,1)		; If English, dialog boxes look for the word "Open" and if Spanish/Portuguese, looks for "Abrir"
+
+mLang := Object("English","Open","Spanish/Portuguese","Abrir")
+winLang := mLang[MLanguage]	; search object for the MLanguage associated to the user's language
+If !winLang
+	ScriptError("Your chosen language is: """ . MLanguage . """. It is not one of the known supported languages for this module: " . moduleName)
 
 hideEmuObj := Object("Open ahk_class #32770",0,"ahk_class VG5000",1)	;Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
@@ -33,19 +39,19 @@ WinActivate, ahk_class VG5000
 Send, {ALT}{DOWN}{ENTER}
 
 Sleep, 50
-WinWait("Open ahk_class #32770")
-WinWaitActive("Open ahk_class #32770")
+WinWait(winLang . " ahk_class #32770")
+WinWaitActive(winLang . " ahk_class #32770")
 Sleep, 100
 
 If ( SelectGameMode = 1 ) {
 	Loop {
-		ControlGetText, edit1Text, Edit1, Open ahk_class #32770
+		ControlGetText, edit1Text, Edit1, %winLang% ahk_class #32770
 		If ( edit1Text = romPath . "\" . romName . romExtension )
 			Break
 		Sleep, 100
-		ControlSetText, Edit1, %romPath%\%romName%%romExtension%, Open ahk_class #32770
+		ControlSetText, Edit1, %romPath%\%romName%%romExtension%, %winLang% ahk_class #32770
 	}
-	ControlSend, Button1, {Enter}, Open ahk_class #32770 ; Select Open
+	ControlSend, Button1, {Enter}, %winLang% ahk_class #32770 ; Select Open
 } Else If ( SelectGameMode = 2 ) {
 	Clipboard := romPath . "\" . romName . romExtension
 	Send, ^v{Enter}
