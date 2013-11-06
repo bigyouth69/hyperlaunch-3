@@ -2,9 +2,9 @@ MEmu = ZSNESw
 MEmuV =  v1.51
 MURL = http://www.zsnes.com/
 MAuthor = djvj
-MVersion = 2.0.2
+MVersion = 2.0.3
 MCRC = 61907E62
-iCRC = 3B0E8F48
+iCRC = FF33BDC8
 MID = 635038268938832977
 MSystem = "Super Nintendo Entertainment System"
 ;----------------------------------------------------------------------------

@@ -8,7 +8,7 @@
 					<SECTIONTYPE>Global</SECTIONTYPE>
 					<KEYS>
 						<KEY name="FullScreen" required="false" nullable="false">
-							<KEYTYPE>Binary</KEYTYPE>
+							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>If true ZSNES will run fullscreen.</DESCRIPTION>
 						</KEY>
 						<KEY name="Stretch" required="false" nullable="false">
