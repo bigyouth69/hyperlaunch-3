@@ -21,6 +21,15 @@
 						</KEY>
 					</KEYS>
 				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="force4players" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Some games will not be automatically recognaiced as 4 players games, set this to true to force 4 pads.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
 			</SECTIONS>
 		</INIFILE>
 	</INIFILES>

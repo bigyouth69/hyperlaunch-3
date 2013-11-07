@@ -1,10 +1,10 @@
 MEmu = Nestopia
 MEmuV =  v1.42
 MURL = http://www.emucr.com/2011/09/nestopia-unofficial-v1420.html
-MAuthor = djvj & BBB
-MVersion = 2.0
-MCRC = 5D376759
-iCRC = 656EE1DF
+MAuthor = djvj
+MVersion = 2.0.1
+MCRC = 472F9F52
+iCRC = 7BA5F4F9
 MID = 635038268908287546
 MSystem = "Nintendo Entertainment System","Nintendo Famicom","Nintendo Famicom Disk System"
 ;----------------------------------------------------------------------------
@@ -19,8 +19,10 @@ settingsFile := modulePath . "\" . moduleName . ".ini"
 Fullscreen := IniReadCheck(settingsFile, "settings", "Fullscreen","true",,1)
 ExitKey := IniReadCheck(settingsFile, "settings", "ExitKey","Esc",,1)
 ToggleMenuKey := IniReadCheck(settingsFile, "settings", "ToggleMenuKey","Alt+M",,1)
+force4players := IniReadCheck(settingsFile, romName, "force4players","False",,1)
 
 emuSettingsFile := emuPath . "\" . "nestopia.xml"
+
 FileRead, nesXML, %emuSettingsFile%
 
 IfInString, nesXML, % "<confirm-exit>yes</confirm-exit>"	; find if this setting is not the desired value
@@ -34,6 +36,15 @@ IfNotInString, nesXML, % "<toggle-menu>" . ToggleMenuKey . "</toggle-menu>"	; fi
 	StringReplace, nesXML, nesXML, % currentMenuKey, % "<toggle-menu>" . ToggleMenuKey . "</toggle-menu>"	; replacing the current toggle-menu key to the desired one from above
 }
 
+If force4players = true
+{	IfInString, nesXML, % "<auto-select-controllers>yes</auto-select-controllers>"	; find if this setting is not the desired value
+		StringReplace, nesXML, nesXML, % "<auto-select-controllers>yes</auto-select-controllers>", % "<auto-select-controllers>no</auto-select-controllers>"	; replacing the current toggle-menu key to the desired one from above
+	StringReplace, nesXML, nesXML, % "<port-3>unconnected</port-3>", % "<port-3>pad3</port-3>"
+	StringReplace, nesXML, nesXML, % "<port-4>unconnected</port-4", % "<port-4>pad4</port-4>"
+} Else
+	IfInString, nesXML, % "<auto-select-controllers>no</auto-select-controllers>"	; find if this setting is not the desired value
+		StringReplace, nesXML, nesXML, % "<auto-select-controllers>no</auto-select-controllers>", % "<auto-select-controllers>yes</auto-select-controllers>"	; replacing the current toggle-menu key to the desired one from above
+
 ; Enable Fullscreen
 currentFS := StrX(nesXML,"<start-fullscreen>" ,0,0,"</start-fullscreen>",0,0)	; trim start-fullscreen to what it's current setting is
 StringReplace, nesXML, nesXML, % currentFS, % "<start-fullscreen>" . ((If Fullscreen = "true")?"yes":"no") . "</start-fullscreen>"	; setting start-fullscreen to the desired setting from above
@@ -46,19 +57,19 @@ Run(executable . " """ . romPath . "\" . romName . romExtension . """", emuPath)
 
 WinActivate, ahk_class Nestopia
 WinWaitActive("ahk_class Nestopia")
-
 FadeInExit()
+
 Process("WaitClose", executable)
 7zCleanUp()
 FadeOutExit()
 ExitModule()
 
 
-SaveFile(){
+SaveFile() {
 	Global emuSettingsFile
 	Global nesXML
 	FileDelete, %emuSettingsFile%
-	FileAppend, %nesXML%, %emuSettingsFile%
+	FileAppend, %nesXML%, %emuSettingsFile%, UTF-8
 }
 
 HaltEmu:
