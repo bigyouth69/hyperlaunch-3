@@ -1,9 +1,9 @@
 MEmu = MESS
-MEmuV =  v0.150
+MEmuV =  v0.151
 MURL = http://www.mess.org/
 MAuthor = djvj
-MVersion = 2.1.5
-MCRC = DDB18118
+MVersion = 2.1.6
+MCRC = 75057D4D
 iCRC = AA949FDC
 MID = 635038268905515239
 MSystem = "Amstrad GX4000","APF Imagination Machine","Apple IIGS","Atari 2600","Atari 5200","Atari 7800","Atari Jaguar","Atari Lynx","Bally Astrocade","Bandai WonderSwan","Bandai WonderSwan Color","Casio PV-1000","Casio PV-2000","Coleco ADAM","ColecoVision","Creatronic Mega Duck","Emerson Arcadia 2001","Entex AdventureVision","Epoch Game Pocket Computer","Epoch Super Cassette Vision","Fairchild Channel F","Funtech Super Acan","GCE Vectrex","Interton VC4000","Magnavox Odyssey 2","Mattel Aquarius","Mattel Intellivision","NEC PC Engine","NEC PC Engine-CD","NEC SuperGrafx","NEC TurboGrafx-16","NEC TurboGrafx-CD","Nintendo 64","Nintendo Entertainment System","Nintendo Game Boy","Nintendo Game Boy Advance","Nintendo Game Boy Color","Nintendo Virtual Boy","Philips CD-i","RCA Studio II","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","SNK Neo Geo AES","SNK Neo Geo CD","SNK Neo Geo Pocket","SNK Neo Geo Pocket Color","Sony PlayStation","Super Nintendo Entertainment System","Texas Instruments TI 99-4A","Tiger Game.com","VTech CreatiVision","Watara Supervision"
@@ -227,9 +227,7 @@ If UseSoftwareList != true
 	{	If romName = Mine Storm (World)	; Mess dumps an error if you try to launch Mine Storm using a rom instead of just booting vectrex w/o a game in it (Mine Storm is built into vectrex)
 			param1:=
 	}Else If ident = adam		; Coleco ADAM
-	{	If romExtension = .ddp	;  Decide if disk or ddp game
-			param1 := (If romExtension = ".ddp" ? "-cass1" : "-net4 fdc,bios=160ta -floppydisk") . " """ . romPath . "\" . romName . romExtension . """"
-	}
+		param1 := (If romExtension = ".ddp" ? "-cass1" : "-floppydisk") . " """ . romPath . "\" . romName . romExtension . """"	;  Decide if disk or ddp game
 }Else{	; Use Software List
 	hashname := ident
 	param1 := "-rompath " . """" . "roms;" . romPath . """" . A_Space . romName	; param1 used for launching from software lists
