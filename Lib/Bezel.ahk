@@ -1,5 +1,5 @@
-MCRC=289CBD18
-MVersion=1.0.5
+MCRC=D44AA7AE
+MVersion=1.0.6
 
 BezelGUI(){
 	Log("BezelGUI - Started")
@@ -753,15 +753,15 @@ Return
 
 BezelFilesPath(filename,fileextension,excludeScreens=false)
 {
-	Global HLMediaPath, SystemName, dbName
-	bezelpath1 := HLMediaPath . "\Bezels\" . SystemName . "\" . dbName
+	Global HLMediaPath, systemName, dbName, vertical
+	bezelpath1 := HLMediaPath . "\Bezels\" . systemName . "\" . dbName
 	if (vertical = "true")
-		bezelpath2 := HLMediaPath . "\Bezels\" . SystemName . "\_Default\Vertical"
+		bezelpath2 := HLMediaPath . "\Bezels\" . systemName . "\_Default\Vertical"
 	else
-		bezelpath2 := HLMediaPath . "\Bezels\" . SystemName . "\_Default\Horizontal"
-	bezelpath3 := HLMediaPath . "\Bezels\" . SystemName . "\_Default"
+		bezelpath2 := HLMediaPath . "\Bezels\" . systemName . "\_Default\Horizontal"
+	bezelpath3 := HLMediaPath . "\Bezels\" . systemName . "\_Default"
 	bezelpath4 := HLMediaPath . "\Bezels\_Default"
-	bezelpath5 := HLMediaPath . "\Bezels\" . SystemName . "\" . dbName
+	bezelpath5 := HLMediaPath . "\Bezels\" . systemName . "\" . dbName
 	Loop, 5 {
 		Log("Bezel - Looking for " . filename . " in: " . bezelpath%A_Index%,4)
 		currentbezelpathNumber := a_index
@@ -785,7 +785,7 @@ BezelFilesPath(filename,fileextension,excludeScreens=false)
 			break
 	}
 	if !bezelPathFound
-		log("Bezel - Bezel is enabled, however none of the bellow valid " . filename . " files exist: " . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . SystemName . "\" . dbName . "\" . filename  . "*." . fileextension . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . SystemName . "\_Default\Vertical\" . filename  . "*." . fileextension . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . SystemName . "\_Default\Horizontal\" . filename  . "*." . fileextension . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . SystemName . "\_Default\" . filename  . "*." . fileextension . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\_Default\" . filename  . "*." . fileextension,3)
+		log("Bezel - Bezel is enabled, however none of the bellow valid " . filename . " files exist: " . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . systemName . "\" . dbName . "\" . filename  . "*." . fileextension . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . systemName . "\_Default\Vertical\" . filename  . "*." . fileextension . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . systemName . "\_Default\Horizontal\" . filename  . "*." . fileextension . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . systemName . "\_Default\" . filename  . "*." . fileextension . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\_Default\" . filename  . "*." . fileextension,3)
 	Return bezelPathFound
 }		
 
