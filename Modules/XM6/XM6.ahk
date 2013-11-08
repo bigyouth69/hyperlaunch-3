@@ -1,28 +1,27 @@
 MEmu = XM6 type G
-MEmuV = v20111220
+MEmuV = v3.10 20131107
 MURL = http://www.geocities.jp/kugimoto0715/
 MAuthor = djvj
-MVersion = 2.0
-MCRC = 71B2CA01
+MVersion = 2.0.1
+MCRC = B3C4D4D2
 iCRC = 264C221C
 MID = 635038268937221635
 MSystem = "Sharp X68000"
 ;----------------------------------------------------------------------------
 ; Notes:
 ; Make sure the cgrom.dat & iplrom.dat roms exist in the emu dir or else you will get an error "Initializing the Virtual Machine is failed"
-; Extensions should 7z,dim,hdf
+; Extensions should at least include 7z|dim|hdf
 ; Set your resolution by going to Tools->Options->Display->Full screen resolution
-; For some reason Stretch doesn't save in the ini.
 ;----------------------------------------------------------------------------
 StartModule()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
-Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
+fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 
 xm6gINI := CheckFile(emuPath . "\XM6g.ini")
 
-Fullscreen := (If Fullscreen = "true" ? ("1") : ("0"))
+fullscreen := (If fullscreen = "true" ? ("1") : ("0"))
 
 ; Setting Fast Floppy mode because it speeds up loading floppy games a bit.
 ; Setting Resume Window mode, it is needed to so we can launch fullscreen
@@ -31,7 +30,7 @@ Fullscreen := (If Fullscreen = "true" ? ("1") : ("0"))
 ; Now let's update all our keys if they differ in the ini
 iniLookup =
 ( ltrim c
-   Window, Full, %Fullscreen%
+   Window, Full, %fullscreen%
    Misc, FloppySpeed, 1
    Resume, Screen, 1
    Window, StatusBar, 0
@@ -52,8 +51,10 @@ If romExtension = .hdf
 
 Run(executable . " """ . romPath . "\" . romName . romExtension . """", emuPath)
 
-WinWait("XM6 TypeG ahk_class AfxFrameOrView80")
-WinWaitActive("XM6 TypeG ahk_class AfxFrameOrView80")
+; WinWait("XM6 TypeG ahk_class AfxFrameOrView80")
+; WinWaitActive("XM6 TypeG ahk_class AfxFrameOrView80")
+WinWait("XM6 TypeG ahk_class AfxFrameOrView110")
+WinWaitActive("XM6 TypeG ahk_class AfxFrameOrView110")
 
 ; Works in windowed mode only
 ;WinMenuSelectItem, XM6 TypeG ahk_class AfxFrameOrView80,, View, Stretch, 2.0
@@ -67,5 +68,6 @@ ExitModule()
 
 CloseProcess:
 	FadeOutStart()
-	WinClose("XM6 TypeG ahk_class AfxFrameOrView80")
+	; WinClose("XM6 TypeG ahk_class AfxFrameOrView80")
+	WinClose("XM6 TypeG ahk_class AfxFrameOrView110")
 Return
