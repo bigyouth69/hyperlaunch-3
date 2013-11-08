@@ -2,8 +2,8 @@ MEmu = PCSX2
 MEmuV =  1.1.0.r5695
 MURL = http://pcsx2.net/
 MAuthor = djvj
-MVersion = 2.0.4
-MCRC = 53105D6E
+MVersion = 2.0.5
+MCRC = F518251E
 iCRC = 87DB5AB2
 MID = 635038268913291718
 MSystem = "Sony PlayStation 2"
@@ -98,7 +98,7 @@ pcsx2Ini := LoadProperties(pcsx2IniFile)	; load the config into memory
 dvdSource := ReadProperty(pcsx2Ini,"CdvdSource")	; read value
 
 ; Mount the CD using DaemonTools
-If ( dtEnabled = "true" ) { ; romExtension = ".cue" && 
+If (dtEnabled = "true" && InStr(".mds|.mdx|.b5t|.b6t|.bwt|.ccd|.cue|.isz|.nrg|.cdi|.iso|.ape|.flac", romExtension)) {	; if DT enabled and using an image type DT can load
 	If dvdSource != Plugin
 	{	Log("Module - CdvdSource was not set to ""Plugin"", changing it so PCSX2 can read from Daemon Tools.")
 		WriteProperty(pcsx2Ini,"CdvdSource","Plugin")	; write a new value to the pcsx2IniFile
