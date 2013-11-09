@@ -1,4 +1,4 @@
-MEmu = PokeMini SDL
+MEmu = PokeMini
 MEmuV =  v0.5.2
 MURL = https://code.google.com/p/pokemini/
 MAuthor = djvj
