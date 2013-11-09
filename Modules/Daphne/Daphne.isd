@@ -12,6 +12,18 @@
 							<DESCRIPTION># -noissues is for Esh's Aurunmilla. It stops daphne's warning about issues at launch.
 # -fastboot is for Dragon's Lair and Space Ace, It skips the self test in the beginning.</DESCRIPTION>
 						</KEY>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="ScreenWidth" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Set the width of the emu. Default is your desktop width.</DESCRIPTION>
+						</KEY>
+						<KEY name="ScreenHeight" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Set the height of the emu. Default is your desktop height.</DESCRIPTION>
+						</KEY>
 						<KEY name="pauseOnExit" required="true" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>If true, will pause Daphne before exiting by sending "P". If your monitor is not the same resolution as daphne, Fade_Out will not display correctly. Pausing Daphne tries to prevent this.</DESCRIPTION>
