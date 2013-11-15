@@ -2,11 +2,11 @@ MEmu = MESS
 MEmuV =  v0.151
 MURL = http://www.mess.org/
 MAuthor = djvj
-MVersion = 2.1.6
+MVersion = 2.1.7
 MCRC = 75057D4D
 iCRC = AA949FDC
 MID = 635038268905515239
-MSystem = "Amstrad GX4000","APF Imagination Machine","Apple IIGS","Atari 2600","Atari 5200","Atari 7800","Atari Jaguar","Atari Lynx","Bally Astrocade","Bandai WonderSwan","Bandai WonderSwan Color","Casio PV-1000","Casio PV-2000","Coleco ADAM","ColecoVision","Creatronic Mega Duck","Emerson Arcadia 2001","Entex AdventureVision","Epoch Game Pocket Computer","Epoch Super Cassette Vision","Fairchild Channel F","Funtech Super Acan","GCE Vectrex","Interton VC4000","Magnavox Odyssey 2","Mattel Aquarius","Mattel Intellivision","NEC PC Engine","NEC PC Engine-CD","NEC SuperGrafx","NEC TurboGrafx-16","NEC TurboGrafx-CD","Nintendo 64","Nintendo Entertainment System","Nintendo Game Boy","Nintendo Game Boy Advance","Nintendo Game Boy Color","Nintendo Virtual Boy","Philips CD-i","RCA Studio II","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","SNK Neo Geo AES","SNK Neo Geo CD","SNK Neo Geo Pocket","SNK Neo Geo Pocket Color","Sony PlayStation","Super Nintendo Entertainment System","Texas Instruments TI 99-4A","Tiger Game.com","VTech CreatiVision","Watara Supervision"
+MSystem = "Amstrad GX4000","APF Imagination Machine","Apple IIGS","Atari 2600","Atari 5200","Atari 7800","Atari Jaguar","Atari Lynx","Bally Astrocade","Bandai WonderSwan","Bandai WonderSwan Color","Casio PV-1000","Casio PV-2000","Coleco ADAM","ColecoVision","Creatronic Mega Duck","Emerson Arcadia 2001","Entex Adventure Vision","Epoch Game Pocket Computer","Epoch Super Cassette Vision","Fairchild Channel F","Funtech Super Acan","GCE Vectrex","Interton VC4000","Magnavox Odyssey 2","Mattel Aquarius","Mattel Intellivision","NEC PC Engine","NEC PC Engine-CD","NEC SuperGrafx","NEC TurboGrafx-16","NEC TurboGrafx-CD","Nintendo 64","Nintendo Entertainment System","Nintendo Game Boy","Nintendo Game Boy Advance","Nintendo Game Boy Color","Nintendo Virtual Boy","Philips CD-i","RCA Studio II","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","SNK Neo Geo AES","SNK Neo Geo CD","SNK Neo Geo Pocket","SNK Neo Geo Pocket Color","Sony PlayStation","Super Nintendo Entertainment System","Texas Instruments TI 99-4A","Tiger Game.com","VTech CreatiVision","Watara Supervision"
 ;----------------------------------------------------------------------------
 ; Notes:
 ; Exit fade will only work correctly if you don't have Esc, the default MESS exit key,  as your exit key. If you use Esc, turn off the ExitScreen
