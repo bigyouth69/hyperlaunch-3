@@ -11,6 +11,10 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
 						</KEY>
+						<KEY name="ForceFullScreen32" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, when Fusion goes fullscreen, it will force 32-bit mode. This will help prevent flickering and your monitor changing modes. Default is true.</DESCRIPTION>
+						</KEY>
 						<KEY name="hideTitleBar" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Removes the border, titlebar, menubar, and centers the emu on your screen. Only need this if fullscreen is false</DESCRIPTION>

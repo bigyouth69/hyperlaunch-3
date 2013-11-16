@@ -2,9 +2,9 @@ MEmu = Fusion
 MEmuV =  v3.64
 MURL = http://www.eidolons-inn.net/tiki-index.php?page=Kega
 MAuthor = djvj
-MVersion = 2.0.6
-MCRC = 3204AB13
-iCRC = C2D6BD3C
+MVersion = 2.0.7
+MCRC = 1F536E69
+iCRC = 97B84990
 MID = 635038268893895568
 MSystem = "Samsung Gam Boy","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","Sega Mega-CD","Sega SC-3000","Sega SG-1000"
 ;----------------------------------------------------------------------------
@@ -43,6 +43,7 @@ If !ident
 Log("Module - Started reading module ini")
 settingsFile := modulePath . "\" . moduleName . ".ini"
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
+forceFullScreen32 := IniReadCheck(settingsFile, "Settings", "ForceFullScreen32","true",,1)
 hideTitleBar := IniReadCheck(settingsFile, "Settings", "hideTitleBar","true",,1)	; Removes the border, titlebar, menubar, and centers the emu on your screen. Only need this if fullscreen is false
 useRamCarts := IniReadCheck(settingsFile, "Settings", "UseRamCarts","true",,1)
 fluxAudioCD := IniReadCheck(settingsFile, "Settings", "FluxAudioCD",,,1)	; audio CD for use when Flux is ran
@@ -78,6 +79,7 @@ BezelStart()
 fusionFile := CheckFile(emuPath . "\fusion.ini")
 fusionIni := LoadProperties(fusionFile)	; load the config into memory
 currentFullScreen := ReadProperty(fusionIni,"FullScreen")	; read current fullscreen state
+currentForceFullScreen32 := ReadProperty(fusionIni,"forceFullScreen32")	; read current ForceFullScreen32 state
 currentPerfectSync := ReadProperty(fusionIni,"PerfectSync")	; read current PerfectSync state
 
 7z(romPath, romName, romExtension, 7zExtractPath)
@@ -91,6 +93,16 @@ If ( Fullscreen != "true" And currentFullScreen = "1" ) {
 		SaveProperties(fusionFile,fusionIni)	; save fusionFile to disk
 } Else If ( Fullscreen = "true" And currentFullScreen = "0" ) {
 	WriteProperty(fusionIni,"FullScreen", 1)
+	If controllerReassigningEnabled != true	; no need to save file if it's going to be written later
+		SaveProperties(fusionFile,fusionIni)	; save fusionFile to disk
+}
+
+If ( forceFullScreen32 != "true" And currentForceFullScreen32 = "1" ) {
+	WriteProperty(fusionIni,"ForceFullScreen32", 0)
+	If controllerReassigningEnabled != true	; no need to save file if it's going to be written later
+		SaveProperties(fusionFile,fusionIni)	; save fusionFile to disk
+} Else If ( forceFullScreen32 = "true" And currentForceFullScreen32 = "0" ) {
+	WriteProperty(fusionIni,"ForceFullScreen32", 1)
 	If controllerReassigningEnabled != true	; no need to save file if it's going to be written later
 		SaveProperties(fusionFile,fusionIni)	; save fusionFile to disk
 }
@@ -149,7 +161,7 @@ If fluxRom {
 	DaemonTools("mount", fluxAudioCD)	; mount the Audio CD the user has set in the module settings
 }
 
-scdExtension := InStr(".cue|.bin|.iso", romExtension)	; the sega cd extensions supported by fusion
+scdExtension := InStr(".ccd|.cue|.bin|.iso", romExtension)	; the sega cd extensions supported by fusion
 
 If (ident = "scd" && dtEnabled = "true" && scdExtension) {
 	If dtUseSCSI = false
