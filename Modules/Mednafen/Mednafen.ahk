@@ -2,9 +2,9 @@ MEmu = Mednafen
 MEmuV =  v0.9.31 WIP
 MURL = http://mednafen.sourceforge.net/
 MAuthor = djvj
-MVersion = 2.0.7
+MVersion = 2.0.8
 MCRC = 9898326C
-iCRC = 5D855D01
+iCRC = 1ECCF5E8
 MID = 635038268903923913
 MSystem = "Atari Lynx","Bandai Wonderswan","Bandai Wonderswan Color","NEC PC Engine","NEC PC Engine-CD","NEC PC-FX","NEC SuperGrafx","NEC TurboGrafx-16","NEC TurboGrafx-CD","Nintendo Entertainment System","Nintendo Famicom","Nintendo Famicom Disk System","Nintendo Game Boy","Nintendo Game Boy Advance","Nintendo Game Boy Color","Nintendo Super Famicom","Nintendo Virtual Boy","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","SNK Neo Geo Pocket","SNK Neo Geo Pocket Color","Sony PlayStation","Super Nintendo Entertainment System"
 ;----------------------------------------------------------------------------

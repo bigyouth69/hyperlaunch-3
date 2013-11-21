@@ -377,15 +377,15 @@
 					<KEYS>
 						<KEY name="NA_Bios" required="false" nullable="true">
 							<KEYTYPE>FileName</KEYTYPE>
-							<DESCRIPTION>Sony PlayStation only - this is the bios you want to use for North American games - place this in a "bios" subfolder where Mednafen is. (filename.extension)</DESCRIPTION>
+							<DESCRIPTION>Sony PlayStation only - this is the bios you want to use for North American games - place this in a "firmware" subfolder where Mednafen is. (filename.extension)</DESCRIPTION>
 						</KEY>
 						<KEY name="EU_Bios" required="false" nullable="true">
 							<KEYTYPE>FileName</KEYTYPE>
-							<DESCRIPTION>Sony PlayStation only - this is the bios you want to use for European games - place this in a "bios" subfolder where Mednafen is. (filename.extension)</DESCRIPTION>
+							<DESCRIPTION>Sony PlayStation only - this is the bios you want to use for European games - place this in a "firmware" subfolder where Mednafen is. (filename.extension)</DESCRIPTION>
 						</KEY>
 						<KEY name="JP_Bios" required="false" nullable="true">
 							<KEYTYPE>FileName</KEYTYPE>
-							<DESCRIPTION>Sony PlayStation only - this is the bios you want to use for Japanese games - place this in a "bios" subfolder where Mednafen is. (filename.extension)</DESCRIPTION>
+							<DESCRIPTION>Sony PlayStation only - this is the bios you want to use for Japanese games - place this in a "firmware" subfolder where Mednafen is. (filename.extension)</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>
