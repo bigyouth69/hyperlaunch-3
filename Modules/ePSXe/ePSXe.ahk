@@ -3,7 +3,7 @@ MEmuV =  v1.8.0
 MURL = http://www.epsxe.com/
 MAuthor = djvj & Shateredsoul & brolly
 MVersion = 2.0.5
-MCRC = B1A0DCEB
+MCRC = 37565DFC
 iCRC = C7853B0E
 MID = 635038268888210842
 MSystem = "Sony PlayStation"
@@ -59,13 +59,12 @@ If (Fullscreen = "true") {
 	WriteReg("Vision Thing\PSEmu Pro\GPU\DFXVideo", "WindowMode", 1)
 	If (bezelEnabled = "true") {
 		winSize := bezelScreenHeight * 65536 + bezelScreenWidth	; convert desired windowed resolution to Decimal
-		; msgbox bezelScreenWidth: %bezelScreenWidth%`nbezelScreenHeight: %bezelScreenHeight%
 		WriteReg("Vision Thing\PSEmu Pro\GPU\PeteOpenGL2", "WinSize", winSize)
 		WriteReg("Vision Thing\PSEmu Pro\GPU\PeteTNT", "WinSize", winSize)
 		WriteReg("Vision Thing\PSEmu Pro\GPU\DFXVideo", "WinSize", winSize)
 	}
 }
-; exitapp
+
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 epsxeExtension := InStr(".ccd|.cue|.img|.iso|.mdf",romExtension)	; the psx extensions supported by the emu
