@@ -2,8 +2,8 @@ MEmu = PCSXR
 MEmuV =  r87054
 MURL = http://pcsxr.codeplex.com/
 MAuthor = djvj
-MVersion = 2.0.3
-MCRC = 2B3C8180
+MVersion = 2.0.4
+MCRC = 2DD108F9
 iCRC = 60E37EB3
 MID = 635038268913822158
 MSystem = "Sony PlayStation"
@@ -31,6 +31,7 @@ MSystem = "Sony PlayStation"
 ; GPU settings are stored in the registry @ HKEY_CURRENT_USER\Software\Vision Thing\PSEmu Pro\GPU\
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
@@ -39,10 +40,30 @@ NoEmuGUI := IniReadCheck(settingsFile, "Settings", "NoEmuGUI","true",,1)			; Rem
 sysParams := IniReadCheck(settingsFile, "Settings", "Params", A_Space,,1)
 romParams := IniReadCheck(settingsFile, romName, "Params", A_Space,,1)
 
-If Fullscreen = true
-	WriteReg("WindowMode", 0)	; changes fullscreen setting for all 3 gpu plugins
-Else
-	WriteReg("WindowMode", 1)
+BezelStart()
+
+If (Fullscreen = "true") {
+	WriteReg("Vision Thing\PSEmu Pro\GPU\PeteOpenGL2", "WindowMode", 0)	; changes fullscreen setting for all 3 gpu plugins
+	WriteReg("Vision Thing\PSEmu Pro\GPU\PeteTNT", "WindowMode", 0)
+	WriteReg("Vision Thing\PSEmu Pro\GPU\DFXVideo", "WindowMode", 0)
+} Else {
+	WriteReg("Vision Thing\PSEmu Pro\GPU\PeteOpenGL2", "WindowMode", 1)
+	WriteReg("Vision Thing\PSEmu Pro\GPU\PeteTNT", "WindowMode", 1)
+	WriteReg("Vision Thing\PSEmu Pro\GPU\DFXVideo", "WindowMode", 1)
+	If (bezelEnabled = "true") {
+		winSize := bezelScreenHeight * 65536 + bezelScreenWidth	; convert desired windowed resolution to Decimal
+		; msgbox bezelScreenWidth: %bezelScreenWidth%`nbezelScreenHeight: %bezelScreenHeight%
+		WriteReg("Vision Thing\PSEmu Pro\GPU\PeteOpenGL2", "WinSize", winSize)
+		WriteReg("Vision Thing\PSEmu Pro\GPU\PeteTNT", "WinSize", winSize)
+		WriteReg("Vision Thing\PSEmu Pro\GPU\DFXVideo", "WinSize", winSize)
+	}
+}
+
+If (dtEnabled != "true" && (mgEnabled = "true" || ChangeDisc_Menu_Enabled = "true")) {
+	Log("Module - Turning off MultiGame and HyperPause Change Disc Menu support as the module only supports swapping discs with Daemon Tools and it is disabled",2)
+	mgEnabled = false	; turn off MultiGame
+	ChangeDisc_Menu_Enabled = false	; turn off change disc menu in HyperPause
+}
 
 7z(romPath, romName, romExtension, 7zExtractPath)
 
@@ -61,6 +82,7 @@ Run(executable . A_Space .  noEmuGUI . A_Space . sysParams . A_Space . romParams
 WinWait("ahk_class PCSXR Main")
 WinWaitActive("ahk_class PCSXR Main")
 
+BezelDraw()
 FadeInExit()
 Process("WaitClose", executable)
 
@@ -68,19 +90,18 @@ If dtEnabled = true
 	DaemonTools("unmount")
 
 7zCleanUp()
+BezelExit()
 FadeOutExit()
 ExitModule()
 
 
-; ReadReg(var1) {
-	; RegRead, regValue, HKEY_CURRENT_USER, Software\Vision Thing\PSEmu Pro\GPU\PeteOpenGL2, %var1%
-	; Return %regValue%
-; }
+ReadReg(var1, var2) {
+	RegRead, regValue, HKEY_CURRENT_USER, Software\%var1%, %var2%
+	Return %regValue%
+}
 
-WriteReg(var1, var2) {
-	RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Vision Thing\PSEmu Pro\GPU\PeteOpenGL2, %var1%, %var2%
-	RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Vision Thing\PSEmu Pro\GPU\PeteTNT, %var1%, %var2%
-	RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\Vision Thing\PSEmu Pro\GPU\DFXVideo, %var1%, %var2%
+WriteReg(var1, var2, var3) {
+	RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\%var1%, %var2%, %var3%
 }
 
 MultiGame:
