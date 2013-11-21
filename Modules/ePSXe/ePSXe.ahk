@@ -3,8 +3,8 @@ MEmuV =  v1.8.0
 MURL = http://www.epsxe.com/
 MAuthor = djvj & Shateredsoul & brolly
 MVersion = 2.0.5
-MCRC = 37565DFC
-iCRC = C7853B0E
+MCRC = 657DFC8B
+iCRC = AFD664B0
 MID = 635038268888210842
 MSystem = "Sony PlayStation"
 ;----------------------------------------------------------------------------
@@ -12,6 +12,7 @@ MSystem = "Sony PlayStation"
 ; epsxe can't deal with bin/cue dumps with more than one audio track if you load the cue file directly.
 ; For these to work you must mount the cue on daemon tools and let epsxe boot the game from there.
 ; You need to make sure you have a SCSI virtual drive on Daemon Tools, NOT a DT one.
+; On first time use, 2 default memory card files will be created called _default_001.mcr and _default_002.mcr in emuPath\memcards
 ;
 ; Extract all your BIOS files to the bios subfolder. Then goto Config->Bios and select the bios you wish to use.
 ;
@@ -39,6 +40,7 @@ slowBoot := IniReadCheck(settingsFile, "Settings", "slowBoot","false",,1)			; If
 enableAnalog := IniReadCheck(settingsFile, "Settings", "enableAnalog","true",,1)	; If true, enables analog controls at start of game for you, so you don't have to press F5
 hideEpsxeGUIs := IniReadCheck(settingsFile, "Settings", "HideePSXeGUIs","true",,1)
 MLanguage := IniReadCheck(settingsFile, "Settings", "MLanguage","English",,1)		; If English, dialog boxes look for the word "Open" and if Spanish/Portuguese, looks for "Abrir"
+perGameMemCards := IniReadCheck(settingsFile, "Settings", "PerGameMemoryCards","true",,1)
 disableMemoryCard1 := IniReadCheck(settingsFile, romName, "DisableMemoryCard1","false",,1)	; If true, disables memory card 1 for this game. Some games may not boot if both memory cards are inserted.
 disableMemoryCard2 := IniReadCheck(settingsFile, romName, "DisableMemoryCard2","false",,1)	; If true, disables memory card 2 for this game. Some games may not boot if both memory cards are inserted.
 
@@ -50,33 +52,48 @@ If !winLang
 BezelStart()
 
 If (Fullscreen = "true") {
-	WriteReg("Vision Thing\PSEmu Pro\GPU\PeteOpenGL2", "WindowMode", 0)	; changes fullscreen setting for all 3 gpu plugins
-	WriteReg("Vision Thing\PSEmu Pro\GPU\PeteTNT", "WindowMode", 0)
-	WriteReg("Vision Thing\PSEmu Pro\GPU\DFXVideo", "WindowMode", 0)
+	WriteReg("DWORD", "Vision Thing\PSEmu Pro\GPU\PeteOpenGL2", "WindowMode", 0)	; changes fullscreen setting for all 3 gpu plugins
+	WriteReg("DWORD", "Vision Thing\PSEmu Pro\GPU\PeteTNT", "WindowMode", 0)
+	WriteReg("DWORD", "Vision Thing\PSEmu Pro\GPU\DFXVideo", "WindowMode", 0)
 } Else {
-	WriteReg("Vision Thing\PSEmu Pro\GPU\PeteOpenGL2", "WindowMode", 1)
-	WriteReg("Vision Thing\PSEmu Pro\GPU\PeteTNT", "WindowMode", 1)
-	WriteReg("Vision Thing\PSEmu Pro\GPU\DFXVideo", "WindowMode", 1)
+	WriteReg("DWORD", "Vision Thing\PSEmu Pro\GPU\PeteOpenGL2", "WindowMode", 1)
+	WriteReg("DWORD", "Vision Thing\PSEmu Pro\GPU\PeteTNT", "WindowMode", 1)
+	WriteReg("DWORD", "Vision Thing\PSEmu Pro\GPU\DFXVideo", "WindowMode", 1)
 	If (bezelEnabled = "true") {
 		winSize := bezelScreenHeight * 65536 + bezelScreenWidth	; convert desired windowed resolution to Decimal
-		WriteReg("Vision Thing\PSEmu Pro\GPU\PeteOpenGL2", "WinSize", winSize)
-		WriteReg("Vision Thing\PSEmu Pro\GPU\PeteTNT", "WinSize", winSize)
-		WriteReg("Vision Thing\PSEmu Pro\GPU\DFXVideo", "WinSize", winSize)
+		WriteReg("DWORD", "Vision Thing\PSEmu Pro\GPU\PeteOpenGL2", "WinSize", winSize)
+		WriteReg("DWORD", "Vision Thing\PSEmu Pro\GPU\PeteTNT", "WinSize", winSize)
+		WriteReg("DWORD", "Vision Thing\PSEmu Pro\GPU\DFXVideo", "WinSize", winSize)
 	}
+}
+
+; Memory Cards
+memCardPath := emuPath . "\memcards"
+defaultMemCard1 := memCardPath . "\_default_001.mcr"	; defining default blank memory card for slot 1
+defaultMemCard2 := memCardPath . "\_default_002.mcr"	; defining default blank memory card for slot 2
+romMemCard1 := memCardPath . "\" . romName . "_001.mcr"		; defining name for rom's memory card for slot 1
+romMemCard2 := memCardPath . "\" . romName . "_002.mcr"		; defining name for rom's memory card for slot 2
+memcardType := If perGameMemCards = "true" ? "rom" : "default"	; define the type of memory card we will create in the below loop
+IfNotExist, %memCardPath%
+	FileCreateDir, %memCardPath%	; create memcard folder if it doesn't exist
+Loop 2
+{	IfNotExist, % %memcardType%MemCard%A_Index%
+	{	FileAppend,, % %memcardType%MemCard%A_Index%		; create a new blank memory card if one does not exist
+		Log("Module - Created a new blank memory card in Slot " . A_Index . ":" . %memcardType%MemCard%A_Index%)
+	}
+	WriteReg("SZ", "epsxe\config", "Memcard" . A_Index, %memcardType%MemCard%A_Index%)
+
+	; Now disable a memory card if required for the game to boot properly
+	memcard%A_Index%Enable := ReadReg("epsxe\config", "Memcard" . A_Index . "Enable")
+	If (disableMemoryCard%A_Index% = "true")
+		WriteReg("SZ", "epsxe\config", "Memcard" . A_Index . "Enable", 0)
+	Else
+		WriteReg("SZ", "epsxe\config", "Memcard" . A_Index . "Enable", 1)
 }
 
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 epsxeExtension := InStr(".ccd|.cue|.img|.iso|.mdf",romExtension)	; the psx extensions supported by the emu
-
-Loop, 2
-{
-	memcard%A_Index%Enable := ReadReg("epsxe\config", "Memcard" . A_Index . "Enable")
-	If (disableMemoryCard%A_Index% = "true")
-		WriteReg("epsxe\config", "Memcard" . A_Index . "Enable", 0)
-	Else
-		WriteReg("epsxe\config", "Memcard" . A_Index . "Enable", 1)
-}
 
 SetKeyDelay, 50
 ; turboButton := xHotKeyVarEdit(turboButton,"turboButton","~","Add")
@@ -156,8 +173,8 @@ ReadReg(var1, var2) {
 	Return %regValue%
 }
 
-WriteReg(var1, var2, var3) {
-	RegWrite, REG_DWORD, HKEY_CURRENT_USER, Software\%var1%, %var2%, %var3%
+WriteReg(type, var1, var2, var3) {
+	RegWrite, REG_%type%, HKEY_CURRENT_USER, Software\%var1%, %var2%, %var3%
 }
 
 TurboProcess:

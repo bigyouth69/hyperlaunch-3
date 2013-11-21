@@ -35,6 +35,10 @@
 								<VALUE>Spanish/Portuguese</VALUE>
 							</VALUES>
 						</KEY>
+						<KEY name="PerGameMemoryCards" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Support for Per-Game Memory Card support. Make sure the first time you run with this option enabled, your current memory cards are formatted and blank.</DESCRIPTION>
+						</KEY>
 					</KEYS>
 				</SECTION>
 				<SECTION name="%RomName%" required="false">
