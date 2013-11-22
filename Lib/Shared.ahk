@@ -1,5 +1,5 @@
-MCRC=D2C4323B
-MVersion=1.1.1
+MCRC=194E55D3
+MVersion=1.1.2
 
 StartModule(){
 	Global gameSectionStartTime,gameSectionStartHour,dbName,romPath,romName,romExtension,systemName,MEmu,MEmuV,MURL,MAuthor,MVersion,MCRC,iCRC,MSystem,romMapTable,romMappingLaunchMenuEnabled,romMenuRomName,7zEnabled,hideCursor,toggleCursorKey,zz
@@ -603,7 +603,7 @@ CreateRomTable(table) {
 	romCount := 0	; initialize the var and reset it, needed in case GUI is used more then once in a session
 	table := []	; initialize and empty the table
 	typeArray := ["(Disc","(Disk","(Cart","(Tape","(Cassette","(Part","(Side"]
-	regExCheck = i)\s\(Disc\s[^/]*|\s\(Disk\s[^/]*|\s\(Cart\s[^/]*|\s\(Tape\s[^/]*\s\(Cassette\s[^/]*\s\(Part\s[^/]*\s\(Side\s[^/]*
+	regExCheck = i)\s\(Disc\s[^/]*|\s\(Disk\s[^/]*|\s\(Cart\s[^/]*|\s\(Tape\s[^/]*|\s\(Cassette\s[^/]*|\s\(Part\s[^/]*|\s\(Side\s[^/]*
 	dbNamePre := RegExReplace(dbName, regExCheck)	; removes the last set of parentheses if Disc,Tape, etc is in them. A Space must exist before the "(" and after the word Disc or Tape, followed by the number. This is the HS2 standard
 	Loop % typeArray.MaxIndex() ; loop each item in our array
 	{	If matchedRom	; Once we matched our game to the typeArray, no need to search for another. This allows the loop to break out.
