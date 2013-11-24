@@ -24,18 +24,22 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>If true, will auto-backup your XEBRA.INI to the GameINIPath and rename it to match your game. This aids in creating per-game modules quickly. WARNING, this WILL overwrite existing backed-up game INIs.</DESCRIPTION>
 						</KEY>
+						<KEY name="PerGameMemoryCards" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Support for Per-Game Memory Card support. Make sure the first time you run with this option enabled, your current memory cards are formatted and blank.</DESCRIPTION>
+						</KEY>
 					</KEYS>
 				</SECTION>
 				<SECTION name="%RomName%" required="false">
 					<SECTIONTYPE>Rom</SECTIONTYPE>
 					<KEYS>
-						<KEY name="run" required="false" nullable="false" minLength="1" maxLength="3">
+						<KEY name="Run" required="false" nullable="false" minLength="1" maxLength="1">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>run - This is what Xebra will use to run this game. The 3 options are 1,2, and 3 as can be seen when you run the emu manually and select Run. 1 is default and will be used when the game is not listed here</DESCRIPTION>
 							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-								<VALUE>3</VALUE>
+								<VALUE description="Run 1 (Interprete)">1</VALUE>
+								<VALUE description="Run 2 (1-pass)">2</VALUE>
+								<VALUE description="Run 3 (2-pass)">3</VALUE>
 							</VALUES>
 						</KEY>
 					</KEYS>
