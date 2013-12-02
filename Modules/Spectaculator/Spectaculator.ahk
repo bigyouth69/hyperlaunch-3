@@ -2,8 +2,8 @@ MEmu = Spectaculator
 MEmuV = v7.51
 MURL = http://www.spectaculator.com/
 MAuthor = djvj & brolly
-MVersion = 2.0
-MCRC = 362CCA69
+MVersion = 2.0.1
+MCRC = 4A71802A
 iCRC = 68AADBE
 MID = 635038268924350920
 MSystem = "Sinclair ZX Spectrum"
@@ -28,6 +28,7 @@ MSystem = "Sinclair ZX Spectrum"
 ; Spectaculator stores its settings in the registry @ HKEY_CURRENT_USER\Software\spectaculator.com\Spectaculator\Settings
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
@@ -50,6 +51,8 @@ If ( currentModel != iniModel ) {
 		WriteReg("Model v6+", 1) ; model 48k
 }
 
+BezelStart()
+
 ; Setting Fullscreen setting in registry if it doesn't match what user wants above
 If ( Fullscreen != "true" And currentFullScreen = 1 )
 	WriteReg("Full Screen", 0)
@@ -70,11 +73,20 @@ If Fullscreen = true
 		Sleep, 50
 	}
 
-DllCall("SetMenu", uint, WinActive( "A" ), uint, 0) ; Removes the MenuBar
+If bezelEnabled = true
+{
+	WriteReg("StatusBar", 0)
+	WriteReg("Toolbar", 0)
+} Else {
+	WriteReg("StatusBar", 1)
+	WriteReg("Toolbar", 1)
+}
 
+BezelDraw()
 FadeInExit()
 Process("WaitClose", executable)
 7zCleanUp()
+BezelExit()
 FadeOutExit()
 ExitModule()
 
