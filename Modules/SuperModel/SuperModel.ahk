@@ -2,8 +2,8 @@ MEmu = SuperModel
 MEmuV = r251
 MURL = http://www.supermodel3.com/
 MAuthor = djvj & chillin
-MVersion = 2.0.3
-MCRC = 11990B8A
+MVersion = 2.0.4
+MCRC = D3345339
 iCRC = 7677A2C1
 MID = 635038268926572770
 MSystem = "Sega Model 3"
@@ -28,7 +28,7 @@ fragShader := IniReadCheck(settingsFile, "Settings|" . romName, "FragShader",A_S
 fragShader := GetFullName(fragShader)	; convert from relative to absolute
 inputSystem := IniReadCheck(settingsFile, "Settings|" . romName, "InputSystem","dinput",,1)				; Choices are dinput (default), xinput, & rawinput. Use dinput for most setups. Use xinput if you use XBox 360 controllers. Use rawinput for multiple mice or keyboard support.
 forceFeedback := IniReadCheck(settingsFile, "Settings|" . romName, "ForceFeedback","true",,1)			; Turns on force feedback if you have a controller that supports it. Scud Race' (including 'Scud Race Plus'), 'Daytona USA 2' (both editions), and 'Sega Rally 2' are the only games that support it.
-frequency := IniReadCheck(SettingsFile, "Settings|" . romName, "Frequency","25",,1)
+frequency := IniReadCheck(SettingsFile, "Settings|" . romName, "Frequency","50",,1)
 throttle := IniReadCheck(SettingsFile, "Settings|" . romName, "Throttle","false",,1)
 multiThreading := IniReadCheck(SettingsFile, "Settings|" . romName, "MultiThreading","true",,1)
 musicVolume := IniReadCheck(SettingsFile, "Settings|" . romName, "MusicVolume",,,1)
@@ -50,7 +50,7 @@ vertShader := If vertShader != "" ? "-vert-shader=""" . vertShader . """" : ""
 fragShader := If fragShader != "" ? "-frag-shader=""" . fragShader . """" : ""
 inputSystem := If inputSystem != "" ? "-input-system=" . inputSystem : ""
 forceFeedback := If forceFeedback = "true" ? "-force-feedback" : ""
-multiThreading := If multiThreading = "true" ? "-gpu-multi-threaded" : "-no-threads"
+multiThreading := If multiThreading = "true" ? "" : "-no-threads"
 musicVolume := If musicVolume != "" ? "-music-volume=" . musicVolume : ""
 soundVolume := If soundVolume != "" ? "-sound-volume=" . soundVolume : ""
 
