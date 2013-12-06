@@ -1,15 +1,16 @@
 MEmu = SuperModel
-MEmuV = r251
+MEmuV = r271
 MURL = http://www.supermodel3.com/
 MAuthor = djvj & chillin
-MVersion = 2.0.4
+MVersion = 2.0.5
 MCRC = D3345339
-iCRC = 7677A2C1
+iCRC = A8F43E35
 MID = 635038268926572770
 MSystem = "Sega Model 3"
 ;----------------------------------------------------------------------------
 ; Notes:
-; Required settings.ini file found on the ftp @ /Upload Here/djvj/Sega Model 3/ goes in the folder with this module
+; You can find r271 on emucr: http://www.emucr.com/2013/12/supermodel-svn-r271.html
+; Required module ini file found on git with this module (rename it to remove the Example part so it matches the ahk name). It contains a few settings to get some games to work. It goes in the folder with this module.
 ; Set ConfigInputs to true if you want to configure the controls for the emulator. Set to false when you want to play a game
 ;----------------------------------------------------------------------------
 StartModule()

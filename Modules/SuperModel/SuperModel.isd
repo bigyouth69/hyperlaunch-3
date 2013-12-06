@@ -54,7 +54,7 @@
 						</KEY>
 						<KEY name="Throttle" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
-							<DESCRIPTION>By default, Supermodel limits the frame rate to 60 Hz.  This has no impact on performance except when the frame rate exceeds 60 FPS on fast systems. This can be disabled with the '-no-throttle' option. (true) otherwise leave blank.</DESCRIPTION>
+							<DESCRIPTION>By default, Supermodel limits the frame rate to 60 Hz. This has no impact on performance except when the frame rate exceeds 60 FPS on fast systems. This can be disabled with the '-no-throttle' option. (false) otherwise leave blank.</DESCRIPTION>
 						</KEY>
 						<KEY name="MultiThreading" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
