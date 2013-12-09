@@ -2,8 +2,8 @@ MEmu = PCLauncher
 MEmuV =  N/A
 MURL = https://sites.google.com/site/hyperlaunch2/additional-features/pclauncher
 MAuthor = djvj
-MVersion = 2.0.6
-MCRC = 6B6F5A7B
+MVersion = 2.0.7
+MCRC = 9A8E9A78
 iCRC = 75BD398A
 MID = 635038268912701232
 MSystem = "Games for Windows","Microsoft Windows","PCLauncher","PC Games","Steam","Steam Big Picture","Taito Type X","Touhou"
@@ -15,32 +15,36 @@ MSystem = "Games for Windows","Microsoft Windows","PCLauncher","PC Games","Steam
 ; For informaion on how to use this module and what all the settings do, please see https://sites.google.com/site/hyperlaunch2/additional-features/pclauncher
 ;----------------------------------------------------------------------------
 StartModule()
+
+If (romExtensions != "")
+	ScriptError("PCLauncher does not use extensions, but you have them set to: """ . romExtensions . """. Please remove all extensions from the PCLauncher emulator in HyperLaunchHQ to continue using it.")
+
 FadeInStart()
 
 IfExist, % modulePath . "\" . systemName . ".ini"	; use a custom systemName ini if it exists
 	settingsFile := modulePath . "\" . systemName . ".ini"
 Else
-	settingsFile := CheckFile(modulePath . "\" . moduleName . ".ini")
+	settingsFile := CheckFile(modulePath . "\" . moduleName . ".ini", "Could not find """ . modulePath . "\" . moduleName . ".ini"". HyperLaunchHQ will create this file when you configure your first game to be used with this " . MEmu . " module.")
 
 iniLookup = PathToSteam|SteamID|Application|AppWaitExe|DiscImage|Parameters|OriginGame|WorkingFolder|PreLaunch|PreLaunchParameters|PreLaunchSleep|PostLaunch|PostLaunchParameters|PostLaunchSleep|PostExit|PostExitParameters|PostExitSleep|ExitMethod|FadeTitle|FadeInExitSleep|HideCursor
 Loop, Parse, iniLookup, |
-{	%A_LoopField% := IniReadCheck(settingsFile, If A_Index=1?"Settings":romName, A_LoopField, A_Space,,1)
+{	%A_LoopField% := IniReadCheck(settingsFile, If A_Index=1?"Settings":dbName, A_LoopField, A_Space,,1)
 	If A_LoopField in Application
 		If (!Application && !SteamID) { ; Create keys if they do not exist in the ini and this is not a steam game
-			IniWrite, %A_Space%, %SettingsFile%, %romName%, %A_LoopField%
+			IniWrite, %A_Space%, %SettingsFile%, %dbName%, %A_LoopField%
 			missingKeys = 1
 		}
 }
 
 If (missingKeys && !SteamID)
-	ScriptError("Created missing keys for " . romName . " Fill in your desired values in """ . SettingsFile . """ and try again.")
+	ScriptError("You have not set up " . dbName . " in HLHQ yet, so PCLauncher does not know what exe, FadeTitle, and/or SteamID to watch for.")
 
 ; If Application needs a cd/dvd image in the drive, mount it in DT first
 If DiscImage {
 	Log("PCLauncher - Application is a Disc Image, mounting it in DT")
 	appIsImage=1
 	DiscImage := GetFullName(DiscImage)	; convert a relative path defined in the PCLauncher ini to absolute
-	CheckFile(DiscImage,"Cannot find this DiscImage for " . romName . ":`n" . DiscImage)
+	CheckFile(DiscImage,"Cannot find this DiscImage for " . dbName . ":`n" . DiscImage)
 	SplitPath,DiscImage,,ImagePath,ImageExt,ImageName
 	If ImageExt in ccd,cdi,cue,iso,isz,nrg
 	{	DaemonTools("get")	; get the dtDriveLetter
@@ -112,12 +116,12 @@ If FadeTitle {
 	Log("PCLauncher - FadeTitle not set by user, but AppWaitExe is. Waiting for AppWaitExe: " . AppWaitExe)
 	AppWaitPID := Process("Wait", AppWaitExe, 15)
 	If AppWaitPID = 0
-		ScriptError("PCLauncher - There was an error getting the Process ID from your AppWaitExe for """ . romName . """. Please try setting a FadeTitle instead.")
+		ScriptError("PCLauncher - There was an error getting the Process ID from your AppWaitExe for """ . dbName . """. Please try setting a FadeTitle instead.")
 } Else If SteamIDExe {
 	Log("PCLauncher - FadeTitle and AppWaitExe not set by user, but SteamIDExe was found. Waiting for SteamIDExe: " . SteamIDExe)
 	SteamIDPID := Process("Wait", SteamIDExe, 15)
 	If SteamIDPID = 0
-		ScriptError("PCLauncher - There was an error getting the Process ID from your SteamIDExe for """ . romName . """. Please try setting a FadeTitle instead.")
+		ScriptError("PCLauncher - There was an error getting the Process ID from your SteamIDExe for """ . dbName . """. Please try setting a FadeTitle instead.")
 } Else If AppPID {
 	Log("PCLauncher - FadeTitle and AppWaitExe not set by user, but an AppPID was found. Waiting for AppPID: " . AppPID)
 	WinWait("ahk_pid " . AppPID)
@@ -197,7 +201,7 @@ CheckSettings() {
 		StringRight, ApplicationBackSlash, Application, 1
 		Log("PCLauncher - Setting mode to: """ . mode . """")
 	} Else	; error if no modes are used
-		ScriptError("Please set an Application, SteamID, Steam Browser Protocol, or URL in " moduleName . ".ini for """ . romName . """")
+		ScriptError("Please set an Application, SteamID, Steam Browser Protocol, or URL in " moduleName . ".ini for """ . dbName . """")
 
 	If (SteamID && Application)	; do not allow 2 launching methods
 		ScriptError("You are trying to use Steam and Application, you must choose one or the other.")
