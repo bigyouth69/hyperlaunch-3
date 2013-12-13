@@ -6,7 +6,7 @@ MVersion = 2.0.1
 MCRC = E2FBD8F1
 iCRC = 6FD26605
 mId = 635224813748790881
-MSystem = "Atari Jaguar"
+MSystem = "Atari Jaguar","Atari Jaguar CD"
 ;----------------------------------------------------------------------------
 ; Notes:
 ; Fullscreen mode controlled in HQ
