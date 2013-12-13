@@ -1,11 +1,11 @@
 MEmu = Project Tempest
 MEmuV =  v0.95
 MURL = http://pt.emuunlim.com/
-MAuthor = djvj
-MVersion = 2.0
-MCRC = F7CD0D
+MAuthor = djvj/faahrev
+MVersion = 2.0.1
+MCRC = E2FBD8F1
 iCRC = 6FD26605
-MID = 635038268916964773
+mId = 635224813748790881
 MSystem = "Atari Jaguar"
 ;----------------------------------------------------------------------------
 ; Notes:
@@ -37,19 +37,24 @@ Run(executable,emuPath)
 WinWait("Project Tempest ahk_class PT")
 WinWaitActive("Project Tempest ahk_class PT")
 
-WinMenuSelectItem, Project Tempest ahk_class PT,, File, Open ROM
-
-HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
-
-WinWaitActive("Open ROM File ahk_class #32770")
-
+If ( romExtension = ".cdi" ) {
+	WinMenuSelectItem, Project Tempest ahk_class PT,, File, Open CD Image
+	HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
+	WindowText := "Open CD Image"
+	WinWaitActive("Open CD Image ahk_class #32770")
+} Else {
+	WinMenuSelectItem, Project Tempest ahk_class PT,, File, Open ROM
+	HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
+	WindowText := "Open ROM File"
+	WinWaitActive("Open ROM File ahk_class #32770")
+}
 ;Sleep just to ensure controls are accessible                      
 Sleep,1000
 
 If ( SelectGameMode = 1 ) {
 	Loop {
-		ControlGetText, edit1Text, Edit1, Open ROM File ahk_class #32770
-		; ControlGet, Txt, Line, 1, Edit1, Open ROM File ahk_class #32770
+		ControlGetText, edit1Text, Edit1, %WindowText% ahk_class #32770
+		; ControlGet, Txt, Line, 1, Edit1, %WindowText% ahk_class #32770
 		If ( edit1Text = romPath . "\" . romName . romExtension )
 			Break
 		Sleep, 100
