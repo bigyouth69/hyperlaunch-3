@@ -1,5 +1,5 @@
-MCRC = 914F592
-MVersion=1.0.2
+MCRC = 99D52E2F
+MVersion=1.0.3
 
 StartMulti:
 	Log("StartMulti - Started",4)
@@ -419,9 +419,9 @@ SelectGame:
 			Log("SelectGame - Stored """ . mgRomPath . """ for deletion in 7zCleanup.",4)
 		} Else
 			Log("SelectGame - This game does not need 7z. Sending it directly to the emu or to Daemon Tools If required.",4)
-		mgSelectedGame = 1	; filling var so we know user selected a game
-		Log("SelectGame - Ended")
 	}
+	mgSelectedGame = 1	; filling var so we know user selected a game
+	Log("SelectGame - Ended")
 	Goto, MGExit
 Return
 
