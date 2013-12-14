@@ -2,8 +2,8 @@ MEmu = SuperModel
 MEmuV = r271
 MURL = http://www.supermodel3.com/
 MAuthor = djvj & chillin
-MVersion = 2.0.5
-MCRC = D3345339
+MVersion = 2.0.6
+MCRC = DC765B83
 iCRC = A8F43E35
 MID = 635038268926572770
 MSystem = "Sega Model 3"
@@ -67,7 +67,7 @@ If ConfigInputs = true
 	WinGetPos,,, width,, ahk_class ConsoleWindowClass
 	x := ( A_ScreenWidth / 2 ) - ( width / 2 )
 	WinMove, ahk_class ConsoleWindowClass,, %x%, 0,, %A_ScreenHeight%
-	WinHide, Supermodel
+	WinHide, ahk_class SDL_app	; hides the small emu window that pops up as it is not needed when configuring controls
 	WinActivate, ahk_class ConsoleWindowClass
 } Else {
 	WinWaitActive("Supermodel ahk_class SDL_app")
