@@ -1,12 +1,12 @@
 MEmu = MESS
 MEmuV =  v0.151
 MURL = http://www.mess.org/
-MAuthor = djvj
-MVersion = 2.1.8
-MCRC = 2E826101
+MAuthor = djvj & faahrev
+MVersion = 2.1.9
+MCRC = 1CE60923
 iCRC = AA949FDC
 MID = 635038268905515239
-MSystem = "Amstrad GX4000","APF Imagination Machine","Apple IIGS","Atari 2600","Atari 5200","Atari 7800","Atari Jaguar","Atari Lynx","Bally Astrocade","Bandai WonderSwan","Bandai WonderSwan Color","Casio PV-1000","Casio PV-2000","Coleco ADAM","ColecoVision","Creatronic Mega Duck","Emerson Arcadia 2001","Entex Adventure Vision","Epoch Game Pocket Computer","Epoch Super Cassette Vision","Fairchild Channel F","Funtech Super Acan","GCE Vectrex","Interton VC4000","Magnavox Odyssey 2","Mattel Aquarius","Mattel Intellivision","NEC PC Engine","NEC PC Engine-CD","NEC SuperGrafx","NEC TurboGrafx-16","NEC TurboGrafx-CD","Nintendo 64","Nintendo Entertainment System","Nintendo Game Boy","Nintendo Game Boy Advance","Nintendo Game Boy Color","Nintendo Virtual Boy","Philips CD-i","RCA Studio II","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","SNK Neo Geo AES","SNK Neo Geo CD","SNK Neo Geo Pocket","SNK Neo Geo Pocket Color","Sony PlayStation","Super Nintendo Entertainment System","Texas Instruments TI 99-4A","Tiger Game.com","VTech CreatiVision","Watara Supervision"
+MSystem = "Amstrad GX4000","APF Imagination Machine","Apple IIGS","Atari 8-bit","Atari 2600","Atari 5200","Atari 7800","Atari Jaguar","Atari Lynx","Bally Astrocade","Bandai WonderSwan","Bandai WonderSwan Color","Casio PV-1000","Casio PV-2000","Coleco ADAM","ColecoVision","Creatronic Mega Duck","Emerson Arcadia 2001","Entex Adventure Vision","Epoch Game Pocket Computer","Epoch Super Cassette Vision","Fairchild Channel F","Funtech Super Acan","GCE Vectrex","Interton VC4000","Magnavox Odyssey 2","Mattel Aquarius","Mattel Intellivision","NEC PC Engine","NEC PC Engine-CD","NEC SuperGrafx","NEC TurboGrafx-16","NEC TurboGrafx-CD","Nintendo 64","Nintendo Entertainment System","Nintendo Game Boy","Nintendo Game Boy Advance","Nintendo Game Boy Color","Nintendo Virtual Boy","Philips CD-i","RCA Studio II","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","SNK Neo Geo AES","SNK Neo Geo CD","SNK Neo Geo Pocket","SNK Neo Geo Pocket Color","Sony PlayStation","Super Nintendo Entertainment System","Texas Instruments TI 99-4A","Tiger Game.com","VTech CreatiVision","Watara Supervision"
 ;----------------------------------------------------------------------------
 ; Notes:
 ; Exit fade will only work correctly if you don't have Esc, the default MESS exit key,  as your exit key. If you use Esc, turn off the ExitScreen
@@ -20,6 +20,7 @@ MSystem = "Amstrad GX4000","APF Imagination Machine","Apple IIGS","Atari 2600","
 ; Amstrad GX4000 - N/A
 ; APF Imagination Machine - apfimag (tape games), apfm1000 (cart games)
 ; Apple IIGS - apple2gs
+; Atari 800 - a800
 ; Atari 5200 - a5200
 ; Atari 7800 - a7800
 ; Atari Jaguar - jaguar
@@ -109,7 +110,7 @@ BezelGUI()
 FadeInStart()
 
 ; This object controls how the module reacts to different systems. MESS can play a lot of systems, but needs to know what system you want to run, so this module has to adapt.
-mType := Object("Amstrad GX4000","gx4000","APF Imagination Machine","apfimag","Apple IIGS","apple2gs","Atari 2600","a2600","Atari 5200","a5200","Atari 7800","a7800","Atari Jaguar","jaguar","Atari Lynx","lynx","Bally Astrocade","astrocde","Bandai WonderSwan","wswan","Bandai WonderSwan Color","wscolor","Casio PV-1000","pv1000","Casio PV-2000","pv2000","Coleco ADAM","adam","ColecoVision","coleco","Creatronic Mega Duck","megaduck","Emerson Arcadia 2001","arcadia","Entex Adventure Vision","advision","Epoch Game Pocket Computer","gamepock","Epoch Super Cassette Vision","scv","Fairchild Channel F","channelf","Funtech Super Acan","supracan","GCE Vectrex","vectrex","Interton VC 4000","vc4000","Magnavox Odyssey 2","odyssey2","Mattel Aquarius","aquarius","Mattel Intellivision","intv","NEC PC Engine","pce","NEC PC Engine-CD","pce","NEC SuperGrafx","sgx","NEC TurboGrafx-16","tg16","NEC TurboGrafx-CD","tg16","Nintendo 64","n64","Nintendo Entertainment System","nes","Nintendo Game Boy","gameboy","Nintendo Game Boy Advance","gba","Nintendo Game Boy Color","gbcolor","Nintendo Virtual Boy","vboy","Philips CD-i","cdimono1","RCA Studio II","studio2","Sega 32X","32x","Sega CD","segacd","Sega Game Gear","gamegear","Sega Genesis","genesis","Sega Master System","sms","Sega Mega Drive","genesis","SNK Neo Geo AES","aes","SNK Neo Geo CD","neocdz","SNK Neo Geo Pocket","ngp","SNK Neo Geo Pocket Color","ngpc","Sony PlayStation","psx","Super Nintendo Entertainment System","snes","Texas Instruments TI 99-4A","ti99_4a","Tiger Game.com","gamecom","VTech CreatiVision","crvision","Watara Supervision","svision")
+mType := Object("Amstrad GX4000","gx4000","APF Imagination Machine","apfimag","Apple IIGS","apple2gs","Atari 8-bit","a800","Atari 2600","a2600","Atari 5200","a5200","Atari 7800","a7800","Atari Jaguar","jaguar","Atari Lynx","lynx","Bally Astrocade","astrocde","Bandai WonderSwan","wswan","Bandai WonderSwan Color","wscolor","Casio PV-1000","pv1000","Casio PV-2000","pv2000","Coleco ADAM","adam","ColecoVision","coleco","Creatronic Mega Duck","megaduck","Emerson Arcadia 2001","arcadia","Entex Adventure Vision","advision","Epoch Game Pocket Computer","gamepock","Epoch Super Cassette Vision","scv","Fairchild Channel F","channelf","Funtech Super Acan","supracan","GCE Vectrex","vectrex","Interton VC 4000","vc4000","Magnavox Odyssey 2","odyssey2","Mattel Aquarius","aquarius","Mattel Intellivision","intv","NEC PC Engine","pce","NEC PC Engine-CD","pce","NEC SuperGrafx","sgx","NEC TurboGrafx-16","tg16","NEC TurboGrafx-CD","tg16","Nintendo 64","n64","Nintendo Entertainment System","nes","Nintendo Game Boy","gameboy","Nintendo Game Boy Advance","gba","Nintendo Game Boy Color","gbcolor","Nintendo Virtual Boy","vboy","Philips CD-i","cdimono1","RCA Studio II","studio2","Sega 32X","32x","Sega CD","segacd","Sega Game Gear","gamegear","Sega Genesis","genesis","Sega Master System","sms","Sega Mega Drive","genesis","SNK Neo Geo AES","aes","SNK Neo Geo CD","neocdz","SNK Neo Geo Pocket","ngp","SNK Neo Geo Pocket Color","ngpc","Sony PlayStation","psx","Super Nintendo Entertainment System","snes","Texas Instruments TI 99-4A","ti99_4a","Tiger Game.com","gamecom","VTech CreatiVision","crvision","Watara Supervision","svision")
 ident := mType[systemName]	; search object for the systemName identifier MESS uses
 If !ident
 	ScriptError("Your systemName is: " . systemName . "`nIt is not one of the known supported systems for this MESS module: " . moduleName)
@@ -223,6 +224,9 @@ If UseSoftwareList != true
 	}Else If ident = gamecom	; Tiger Game.com
 	{	If romExtension != .txt
 			param1 := "-cart1 " . """" . romPath . "\" . romName . romExtension . """"
+	}Else If ident = a800	; Atari 8-bit
+	{	If romExtension != .txt
+			param1 := "-flop1 " . """" . romPath . "\" . romName . romExtension . """"
 	}Else If ident = vectrex	; GCE Vectrex
 	{	If romName = Mine Storm (World)	; Mess dumps an error if you try to launch Mine Storm using a rom instead of just booting vectrex w/o a game in it (Mine Storm is built into vectrex)
 			param1:=
@@ -324,11 +328,11 @@ ListXMLInfo(rom){ ; returns MAME/MESS info about parent rom, orientation angle, 
 	Return ListXMLtable	
 }
 
+BezelLabel:
+	WinSet, Transparent, 0, ahk_class ConsoleWindowClass
+Return
+
 CloseProcess:
 	FadeOutStart()
 	WinClose("ahk_class MAME")
-Return
-
-BezelLabel:
-	WinSet, Transparent, 0, ahk_class ConsoleWindowClass
 Return
