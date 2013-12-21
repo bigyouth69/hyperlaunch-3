@@ -1,5 +1,5 @@
-MCRC = 99D52E2F
-MVersion=1.0.3
+MCRC = C84DB5ED
+MVersion=1.0.4
 
 StartMulti:
 	Log("StartMulti - Started",4)
@@ -152,6 +152,7 @@ StartMulti:
 		mgDefaultArtPath1 := HLMediaPath . "\MultiGame\" . systemName . "\_Default\" . romTable[A_Index,6] . "_image_" . A_Index . ".png"
 		mgDefaultArtPath2 := HLMediaPath . "\MultiGame\_Default\" . romTable[A_Index,6] . "_image_" . A_Index . ".png"
 		mgDefaultArtIndex := A_Index	; so it can be used in the next loop
+		mgArtSizeCheck :=
 		Loop, 2 {
 			Log("MultiGame - Looking for Default " . romTable[A_Index,6] . " Art in: " . mgDefaultArtPath%A_Index%,4)
 			If FileExist(mgDefaultArtPath%A_Index%) {
@@ -166,11 +167,14 @@ StartMulti:
 			ToolTip, Downloading Image %A_Index%,0,0
 			IfNotExist, %  HLMediaPath . "\MultiGame\_Default\"
 				FileCreateDir, %  HLMediaPath . "\MultiGame\_Default\" ; Need to create the folder first otherwise urldownload will fail
-			UrlDownloadToFile, % "http://www.hyperspin-fe.com/HL2/" . romTable[A_Index,6] . "_image_" . A_Index . ".png", % mgDefaultArtPath2
+			UrlDownloadToFile, % "https://code.google.com/p/hyperlaunch-3/source/browse/#git%2FMedia%2FMultiGame%2F_Default/" . romTable[A_Index,6] . "_image_" . A_Index . ".png", % mgDefaultArtPath2
 			If ErrorLevel
 				ScriptError("Error connecting to www.hyperspin-fe.com to download images. Please try again later or report the problem If it persists.")
 			Else
 				Image_%A_Index% := mgDefaultArtPath4
+			FileGetSize, mgArtSizeCheck, %mgDefaultArtPath2%, K
+			If (mgArtSizeCheck <= 1)	; if the download failed, it could possibly be an html 404 msg as the png file which is usually less then 1KB.
+				ScriptError("Error connecting to GIT to download default MultiGame images. Please try again later and report the problem If it persists or copy default images to: " . HLMediaPath . "\MultiGame\_Default\")
 		}
 		foundDefaultMGArt:=	; empty for next loop
 	}

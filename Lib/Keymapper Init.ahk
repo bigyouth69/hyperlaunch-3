@@ -1,5 +1,5 @@
-MCRC=80E6EACA
-MVersion=1.0.1
+MCRC=FC606FDC
+MVersion=1.0.2
 
 If CustomJoyNamesEnabled = true
 {	If CustomJoyNames
@@ -30,8 +30,18 @@ If JoyIDsEnabled = true
 If keymapperEnabled = true
 {	If keymapper = xpadder
 		keymapperFullPath := CheckFile(xpadderFullPath) ; No need to continue if path set wrong
-	Else If ( keymapper = "joytokey" || keymapper = "joy2key" )
+	Else If ( keymapper = "joytokey" || keymapper = "joy2key" ) {
 		keymapperFullPath := CheckFile(joyToKeyFullPath)
+		;write location of joytokey.ini to registry because v5.4.2 requires this if profiles are not in same directory as joytokey.exe
+		SplitPath, keymapperFullPath,,jtkPath,,jtkName
+		jtkIniPath := jtkPath . "\" . jtkName . ".ini"
+		RegRead, jtkIniRegPath, HKCU, Software\JoyToKey, IniFilePath
+		If ErrorLevel OR (jtkIniRegPath != jtkIniPath) {
+			Log("Keymapper - Creating JoyToKey ini registry key for the ini path: " . jtkIniPath)
+			RegWrite, REG_SZ, HKCU, Software\JoyToKey, IniFilePath, %jtkIniPath%
+		}
+		jtkPath := "", jtkName := "", jtkIniPath := "", jtkIniRegPath :=""
+	}
 
 	Log("Keymapper - Loading " . keymapper)
 	RunKeymapper("load",keymapper)

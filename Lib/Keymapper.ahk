@@ -1,8 +1,8 @@
-MCRC=5F0BD2F
-MVersion=1.0.3
+MCRC=E38615EF
+MVersion=1.0.4
 
 RunAHKKeymapper(method) {
-	Global ahkDefaultProfile,ahkFEProfile,ahkRomProfile,ahkEmuProfile,ahkSystemProfile,ahkHyperLaunchProfile,ahkLauncherPath,ahkLauncherExe
+	Global ahkDefaultProfile,ahkFEProfile,ahkRomProfile,ahkEmuProfile,ahkSystemProfile,ahkHyperLaunchProfile,ahkLauncherPath,ahkLauncherExe,keymapperFrontEndProfile
 	Global systemName,dbName,emuName
 	Log("RunAHKKeymapper - Started")
 
@@ -10,7 +10,7 @@ RunAHKKeymapper(method) {
 	{	Log("RunAHKKeymapper - Loading " . dbName . ", " . emuName . ", " . systemName . ", or _Default AHK Keymapper profile",4)
 		profile := GetAHKProfile(ahkRomProfile . "|" . ahkEmuProfile . "|" . ahkSystemProfile . "|" . ahkDefaultProfile)
 		unloadAHK = 1	; this method we don't want to run any ahk profile if none were found
-	} Else If method = unload
+	} Else If (method = "unload" && keymapperFrontEndProfile = "ahk")	; user must have ahk selected to load an ahk FE profile
 	{	Log("RunAHKKeymapper - Loading Front End AHK Keymapper profile",4)
 		profile := GetAHKProfile(ahkFEProfile)
 		unloadAHK = 1	; this method we don't want to run any ahk profile if none were found
@@ -127,7 +127,7 @@ LoadPreferredControllers(JoyIDsPreferredControllers) {
 
 RunKeymapper(keymapperLoad_Or_Unload,Keymapper) {
 	Global blankProfile,defaultProfile,FEProfile,romProfile,emuProfile,xPadderSystemProfile,systemProfile,HyperLaunchProfile
-	Global systemName,dbName,emuName,keymapperFrontEndProfileName
+	Global systemName,dbName,emuName,keymapperFrontEndProfileName,keymapperFrontEndProfile
 	Global CustomJoyNameArray
 	Global keymapperFullPath 
 	Global KeymapperHyperLaunchProfileEnabled, keymapperEnabled
@@ -147,7 +147,7 @@ RunKeymapper(keymapperLoad_Or_Unload,Keymapper) {
 			{	If (keymapperLoad_Or_Unload = "load")
 					Profile2Load := GetProfile(keymapper, romProfile . "|" . emuProfile . "|" . xPadderSystemProfile . "|" . defaultProfile . "|" . blankProfile, keymapperLoad_Or_Unload, ControllerName, Player_Number)
 				Else If (keymapperLoad_Or_Unload = "unload")
-					Profile2Load := GetProfile(keymapper, FEProfile . "|" . blankProfile, keymapperLoad_Or_Unload, ControllerName, Player_Number)
+					Profile2Load := GetProfile(keymapper, (If keymapperFrontEndProfile = "xpadder" ? FEProfile . "|"  : "") . blankProfile, keymapperLoad_Or_Unload, ControllerName, Player_Number)
 				Else If (keymapperLoad_Or_Unload = "menu")
 					Profile2Load := GetProfile(keymapper, HyperLaunchProfile . "|" . blankProfile, keymapperLoad_Or_Unload, ControllerName, Player_Number)
 				
@@ -162,8 +162,10 @@ RunKeymapper(keymapperLoad_Or_Unload,Keymapper) {
 	{
 		If (keymapperLoad_Or_Unload = "load")
 			Profile2Load := GetProfile(keymapper, romProfile . "\" . dbName . "|" . emuProfile . "\" . emuName . "|" . systemProfile . "\" . systemName . "|" . defaultProfile . "\_Default", keymapperLoad_Or_Unload)
-		Else If (keymapperLoad_Or_Unload = "unload")
+		Else If (keymapperLoad_Or_Unload = "unload" && keymapperFrontEndProfile = "joytokey")
 			Profile2Load := GetProfile(keymapper, FEProfile . "\" . keymapperFrontEndProfileName, keymapperLoad_Or_Unload)
+		Else If (keymapperLoad_Or_Unload = "unload" && keymapperFrontEndProfile != "joytokey")
+			Profile2Load :=	; user does not have joytokey set as their FE profile choice, keeping this blank will unload joytokey
 		Else If (keymapperLoad_Or_Unload = "menu")
 			Profile2Load := GetProfile(keymapper, HyperLaunchProfile . "\HyperLaunch", keymapperLoad_Or_Unload)
 	
@@ -183,7 +185,7 @@ RunKeymapper(keymapperLoad_Or_Unload,Keymapper) {
 ; this function is menat only for use by the Load keymapper function.
 ;#########################
 
-GetProfile(keymapper, ProfilePrefixes,keymapperLoad_Or_Unload = "load",  ControllerName = "", ByRef PlayerNumber = 1) {
+GetProfile(keymapper, ProfilePrefixes, keymapperLoad_Or_Unload = "load",  ControllerName = "", ByRef PlayerNumber = 1) {
 	Global CustomJoyNameArray, blankProfile, systemName, dbName, emuName, keymapperFrontEndProfileName, keymapperProfilePath
 	Static ExtensionList := {xpadder: ".xpadderprofile",joy2key: ".cfg",joytokey: ".cfg"}	; static associative array that is holds what extension is for what keymapper.
 	;keymapper: "keymapper profile extension". Adding name variations to this array should not slow down the script which means name variations can be accounted for.
@@ -317,10 +319,11 @@ GetJoystickArray() {
 					RegRead, joy_name, HKEY_LOCAL_MACHINE, SYSTEM\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\%regFolder%, OEMName
 			}
 		}
-		joyArray[A_Index,1] := joy_name
-		joyArray[A_Index,2] := Mid
-		joyArray[A_Index,3] := Pid
-		joyArray[A_Index,4] := GetJoystickGUID(Mid,Pid,A_Index)
+		;append empty string to avoid ahk's auto converting string type containing integers to integer type because we want the leading zeros
+		joyArray[A_Index,1] := joy_name . ""
+		joyArray[A_Index,2] := Mid . ""
+		joyArray[A_Index,3] := Pid . ""
+		joyArray[A_Index,4] := GetJoystickGUID(Mid,Pid,A_Index) . ""
 		joyArray[A_Index,5] := ""
 	}
 	Return %joyArray%
@@ -352,18 +355,17 @@ GetJoystickGUID(Mid,Pid,JoystickID) {
 	Else
 		RootKey = HKEY_CURRENT_USER
 
-	Loop
+	Loop, %RootKey%, System\CurrentControlSet\Control\MediaProperties\PrivateProperties\DirectInput\VID_%Mid%&PID_%Pid%\Calibration,1,1
 	{
-		NumIndex := A_Index-1
-		RegRead, regValue, %RootKey%, System\CurrentControlSet\Control\MediaProperties\PrivateProperties\DirectInput\VID_%Mid%&PID_%Pid%\Calibration\%NumIndex%, Joystick Id
-		If ErrorLevel
-			Break
-		If (regValue = REG_JOY_ID)
-		{
-			RegRead, GUID, %RootKey%, System\CurrentControlSet\Control\MediaProperties\PrivateProperties\DirectInput\VID_%Mid%&PID_%Pid%\Calibration\%NumIndex%, GUID
-			Break
+		If (A_LoopRegName = "Joystick Id") {
+			RegRead, regvar
+			If (regvar = REG_JOY_ID) {
+				RegSubKey := A_LoopRegSubKey
+				break
+			}
 		}
 	}
+	RegRead, GUID, %RootKey%, %RegSubKey%, GUID
 	Return %GUID%
 }
 
@@ -397,23 +399,30 @@ ChangeJoystickID(Mid,Pid,GUID,NewJoystickID) {
 	Else
 		RootKey = HKEY_CURRENT_USER
 
-	Loop {
-		NumIndex := A_Index-1
-		RegTempVar := "System\CurrentControlSet\Control\MediaProperties\PrivateProperties\DirectInput\VID_" . Mid . "&PID_" . Pid . "\Calibration\" . NumIndex	 ;ahk removes leading zeros when using the %% variable notation
-		RegRead, regValue, %RootKey%, %RegTempVar%, GUID
-		RegRead, jid, %RootKey%, %RegTempVar%, Joystick Id
-		If ErrorLevel
-			Break
-		If (regValue = GUID) {
-			RegWrite, REG_BINARY, %RootKey%, %RegTempVar%, Joystick Id, %NewJoystickID%
-			Log("Keymapper - Swapping Joystick ID: " . jid . " to the New Joystick ID: " . NewJoystickID . ", for the Joystick VID_" . Mid . "&PID_" . Pid . "&GUID_" . GUID,5)
-			Break
+	Loop, %RootKey%, System\CurrentControlSet\Control\MediaProperties\PrivateProperties\DirectInput\VID_%Mid%&PID_%Pid%\Calibration,1,1
+	{
+		If (A_LoopRegName = "GUID") {
+			RegRead, regvar
+			If (regvar = GUID) {
+				RegSubKey := A_LoopRegSubKey
+				break
+			}
 		}
 	}
+	RegRead, jid, %RootKey%, %RegSubKey%, Joystick Id
+	RegWrite, REG_BINARY, %RootKey%, %RegSubKey%, Joystick Id, %NewJoystickID%
+	Log("Keymapper - Swapping Joystick ID: " . jid . " to the New Joystick ID: " . NewJoystickID . ", for the Joystick VID_" . Mid . "&PID_" . Pid . "&GUID_" . GUID,5)
 	Return %ErrorLevel%
 }
 
 RunXpadder(keymapperPath,keymapperExe,ProfilesInIdOrder,joystickArray) {
+	Global joyToKeyFullPath
+	;closing joytokey to avoid dual keymapper conflict.
+	If FileExist(joyToKeyFullPath) {
+		SplitPath, joyToKeyFullPath, j2kexe, j2kdir
+		Process, Close, %j2kexe%
+	}
+	
 	;close xpadder to refresh controllers
 	Log("Keymapper - Closing xpadder to refresh controllers seen by xpadder",5)
 	Run, %keymapperExe% /C, %keymapperPath%
@@ -517,7 +526,21 @@ RunXpadder(keymapperPath,keymapperExe,ProfilesInIdOrder,joystickArray) {
 	}
 }	
 
-RunJoyToKey(keymapperPath,keymapperExe,Profile) {
+RunJoyToKey(keymapperPath,keymapperExe,Profile="") {
+	Global xpadderFullPath
+	;closing xpadder to avoid dual keymapper conflict.
+	If FileExist(xpadderFullPath) {
+		SplitPath, xpadderFullPath, xpadderexe, xpadderdir
+		Process, Exist, %xpadderexe%
+		If ErrorLevel
+		{
+			Run, %xpadderexe% /C, %xpadderdir%
+			Process, Exist, %xpadderexe%
+			If ErrorLevel
+				Process, Close, %xpadderexe%
+		}
+	}
+	
 	IniRead, exitMeansMinimize, %keymapperPath%\JoyToKey.ini, LastStatus, ExitMeansMinimize
 	If exitMeansMinimize = ERROR
 		ScriptError("You are using KeyMapper support but are not up-to-date with JoyToKey or cannot find JoyToKey.ini in " . keymapperPath . "`nPlease make sure you are running JoyToKey v5.1.0 or later",10)
