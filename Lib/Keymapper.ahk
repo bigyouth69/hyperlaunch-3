@@ -1,4 +1,4 @@
-MCRC=E38615EF
+MCRC=F9DF22CB
 MVersion=1.0.4
 
 RunAHKKeymapper(method) {
