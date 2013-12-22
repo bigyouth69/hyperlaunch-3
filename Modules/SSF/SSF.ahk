@@ -2,8 +2,8 @@ MEmu = SSF
 MEmuV =  v0.12 beta R4
 MURL = http://www7a.biglobe.ne.jp/~phantasy/ssf/
 MAuthor = djvj
-MVersion = 2.0.7
-MCRC = 1F460E0
+MVersion = 2.0.8
+MCRC = D55365A1
 iCRC = 5066E402
 MID = 635038268924991452
 MSystem = "Sega Saturn","Sega ST-V"
@@ -65,8 +65,9 @@ jpBios := GetFullName(jpBios)
 BezelStart("fixResMode")
 7z(romPath, romName, romExtension, 7zExtractPath)
 
-If romExtension not in .ccd,.mds,.cue,.iso,.cdi,.nrg
-	ScriptError("SSF only supports extensions ""mds|cue|iso|cdi|nrg"" and you are trying to use """ . romExtension . """")
+If InStr(systemName, "Saturn")
+	If romExtension not in .ccd,.mds,.cue,.iso,.cdi,.nrg
+		ScriptError("For Sega Saturn, SSF only supports extensions ""mds|cue|iso|cdi|nrg"" and you are trying to use """ . romExtension . """")
 
 SSFINI := CheckFile(emuPath . "\SSF.ini")
 mySW := A_ScreenWidth
