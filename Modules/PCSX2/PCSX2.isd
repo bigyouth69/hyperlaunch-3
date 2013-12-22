@@ -15,17 +15,22 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables Support for Per-Game Memory Card support. Make sure you first create a "default.ps2" memory card in the folder you store your memory cards in.</DESCRIPTION>
 						</KEY>
-						<KEY name="noGUI" required="false">
+						<KEY name="noGUI" required="false" nullable="false">>
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>If true, the GUI window will not show, DO NOT SET THIS AS TRUE, currently pcsx2 doesn't close properly when you exit in this mode. Make sure this option is set to default or false for normal usage, it is only for testing purposes.</DESCRIPTION>
 						</KEY>
-						<KEY name="fullboot" required="false">
+						<KEY name="fullboot" required="false" nullable="false">>
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Disables fast booting and shows the bios screen.</DESCRIPTION>
 						</KEY>
 						<KEY name="HideConsole" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables hiding of console window that can appear while in windowed mode or using bezels.</DESCRIPTION>
+						</KEY>
+						<KEY name="cfgpath" required="false" nullable="true">
+							<KEYTYPE>FolderPath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Specifies the base config folder. Applies to pcsx2 + plugins. Default will be a subfolder inside your emuPath called "Game Configs". In this folder should reside more folders named after each game and contain any custom dll plugin inis.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>
@@ -38,43 +43,79 @@
 						</KEY>
 						<KEY name="gamefixes" required="false" nullable="true">
 							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>use the specified comma or pipe-delimited list of gamefixes.</DESCRIPTION>
+							<DESCRIPTION>Use the specified comma or pipe-delimited list of gamefixes: "VuAddSub | VuClipFlag | FpuCompare | FpuMul | FpuNeg | EETiming | SkipMpeg | OPHFlag | DMABusy | VIFFIFO | VI | FMVinSoftware"</DESCRIPTION>
 						</KEY>
 						<KEY name="cfg" required="false" nullable="true">
-							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>specifies the PCSX2 configuration file to use</DESCRIPTION>
-						</KEY>
-						<KEY name="cfgpath" required="false" nullable="true">
-							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>changes the configuration file path</DESCRIPTION>
+							<KEYTYPE>FilePath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Override the default PCSX2 configuration ini file to use, only for this rom, by setting one here. Does not affect plugins.</DESCRIPTION>
+							<PATHTYPE>Any</PATHTYPE>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>ini</FILEEXTENSION>
+							</FILEEXTENSIONS>
 						</KEY>
 						<KEY name="gs" required="false" nullable="true">
-							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>specify the file to use as the GS plugin</DESCRIPTION>
+							<KEYTYPE>FilePath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Override the default GS plugin, only for this rom, by setting one here.</DESCRIPTION>
+							<PATHTYPE>Any</PATHTYPE>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>dll</FILEEXTENSION>
+							</FILEEXTENSIONS>
 						</KEY>
 						<KEY name="pad" required="false" nullable="true">
-							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>specify the file to use as the PAD plugin</DESCRIPTION>
+							<KEYTYPE>FilePath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Override the default PAD plugin, only for this rom, by setting one here.</DESCRIPTION>
+							<PATHTYPE>Any</PATHTYPE>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>dll</FILEEXTENSION>
+							</FILEEXTENSIONS>
 						</KEY>
 						<KEY name="spu2" required="false" nullable="true">
-							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>specify the file to use as the SPU2 plugin</DESCRIPTION>
+							<KEYTYPE>FilePath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Override the default SPU2 plugin, only for this rom, by setting one here.</DESCRIPTION>
+							<PATHTYPE>Any</PATHTYPE>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>dll</FILEEXTENSION>
+							</FILEEXTENSIONS>
 						</KEY>
 						<KEY name="cdvd" required="false" nullable="true">
-							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>specify the file to use as the CDVD plugin</DESCRIPTION>
+							<KEYTYPE>FilePath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Override the default CDVD plugin, only for this rom, by setting one here.</DESCRIPTION>
+							<PATHTYPE>Any</PATHTYPE>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>dll</FILEEXTENSION>
+							</FILEEXTENSIONS>
 						</KEY>
 						<KEY name="usb" required="false" nullable="true">
-							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>specify the file to use as the USB plugin</DESCRIPTION>
+							<KEYTYPE>FilePath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Override the default USB plugin, only for this rom, by setting one here.</DESCRIPTION>
+							<PATHTYPE>Any</PATHTYPE>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>dll</FILEEXTENSION>
+							</FILEEXTENSIONS>
 						</KEY>
 						<KEY name="fw" required="false" nullable="true">
-							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>specify the file to use as the FW plugin</DESCRIPTION>
+							<KEYTYPE>FilePath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Override the default FW plugin, only for this rom, by setting one here.</DESCRIPTION>
+							<PATHTYPE>Any</PATHTYPE>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>dll</FILEEXTENSION>
+							</FILEEXTENSIONS>
 						</KEY>
 						<KEY name="dev9" required="false" nullable="true">
-							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>specify the file to use as the DEV9 plugin</DESCRIPTION>
+							<KEYTYPE>FilePath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Override the default DEV9 plugin, only for this rom, by setting one here.</DESCRIPTION>
+							<PATHTYPE>Any</PATHTYPE>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>dll</FILEEXTENSION>
+							</FILEEXTENSIONS>
 						</KEY>
 					</KEYS>
 				</SECTION>

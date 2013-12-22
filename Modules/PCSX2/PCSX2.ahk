@@ -2,9 +2,9 @@ MEmu = PCSX2
 MEmuV =  1.1.0.r5695
 MURL = http://pcsx2.net/
 MAuthor = djvj
-MVersion = 2.0.5
-MCRC = F518251E
-iCRC = 87DB5AB2
+MVersion = 2.0.6
+MCRC = 9AD0114
+iCRC = E62E9D5B
 MID = 635038268913291718
 MSystem = "Sony PlayStation 2"
 ;----------------------------------------------------------------------------
@@ -22,49 +22,74 @@ MSystem = "Sony PlayStation 2"
 ; You need to create a default blank memory card in the path you have defined in pcsx's ini found in section [Folders], key MemoryCards.
 ; Make sure one of the current memory cards are blank, then copy it in that folder and rename it to "default.ps2". The module will copy this file to a romName.ps2 for each game launched.
 ; The module will only insert memory cards into Slot 1. So save your games there.
+;
+; Run pcsx2 with the --help option to see current CLI parameters
+;
+; Known CLI options not currently supported by this module:
+;  --console        	forces the program log/console to be visible
+;  --portable       	enables portable mode operation (requires admin/root access)
+;  --elf=<str>      	executes an ELF image
+;  --forcewiz       	forces PCSX2 to start the First-time Wizard
 ;----------------------------------------------------------------------------
 StartModule()
 BezelGUI()
 FadeInStart()
 
+pcsx2IniFile := CheckFile(emuPath . "\inis\PCSX2_ui.ini", "Could not find the default PCSX2_ui.ini file. Please manually run and configure PCSX2 first so this file is created with all your default settings.")	; default ini that contains memory card info and general settings
 settingsFile := modulePath . "\" . moduleName . ".ini"
+
+; global settings
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
-noGUI := IniReadCheck(settingsFile, "Settings", "noGUI","false",,1)
-fullboot := IniReadCheck(settingsFile, "Settings", "fullboot","false",,1)
+noGUI := IniReadCheck(settingsFile, "Settings", "noGUI","false",,1)	; disables display of the gui while running games
+fullboot := IniReadCheck(settingsFile, "Settings", "fullboot","false",,1)	; disables the quick boot feature, forcing you to sit through the PS2 startup splash screens
 perGameMemCards := IniReadCheck(settingsFile, "Settings", "PerGameMemoryCards","true",,1)
 hideConsole := IniReadCheck(settingsFile, "Settings", "HideConsole","true",,1)	; Hides console window from view if it shows up
-nohacks := IniReadCheck(settingsFile, romName, "nohacks","false",,1)
-gamefixes := IniReadCheck(settingsFile, romName, "gamefixes",A_Space,,1)
-cfg := IniReadCheck(settingsFile, romName, "cfg",A_Space,,1)
-cfgpath := IniReadCheck(settingsFile, romName, "cfgpath",A_Space,,1)
-gs := IniReadCheck(settingsFile, romName, "gs",A_Space,,1)
-pad := IniReadCheck(settingsFile, romName, "pad",A_Space,,1)
-spu2 := IniReadCheck(settingsFile, romName, "spu2",A_Space,,1)
-cdvd := IniReadCheck(settingsFile, romName, "cdvd",A_Space,,1)
-usb := IniReadCheck(settingsFile, romName, "usb",A_Space,,1)
-fw := IniReadCheck(settingsFile, romName, "fw",A_Space,,1)
-dev9 := IniReadCheck(settingsFile, romName, "dev9",A_Space,,1)
+cfgPath := IniReadCheck(settingsFile, "Settings", "cfgpath", emuPath . "\Game Configs",,1)	; specifies the config folder; applies to pcsx2 + plugins
+IfNotExist % cfgPath
+	FileCreateDir, %cfgPath%	; create the cfg folder if it does not exist
+
+; rom specific settings
+nohacks := IniReadCheck(settingsFile, romName, "nohacks","false",,1)	; disables all speedhacks
+gamefixes := IniReadCheck(settingsFile, romName, "gamefixes",,,1)	; Enable specific gamefixes for this session. Use the specified comma or pipe-delimited list of gamefixes: VuAddSub,VuClipFlag,FpuCompare,FpuMul,FpuNeg,EETiming,SkipMpeg,OPHFlag,DMABusy,VIFFIFO,VI,FMVinSoftware
+; cfg := IniReadCheck(settingsFile, romName, "cfg",,,1)	; specify a custom configuration file to use instead of PCSX2.ini (does not affect plugins)
+; alternate dlls for each rom
+gs := IniReadCheck(settingsFile, romName, "gs",,,1)	; override for the GS plugin
+pad := IniReadCheck(settingsFile, romName, "pad",,,1)	; override for the PAD plugin
+spu2 := IniReadCheck(settingsFile, romName, "spu2",,,1)	; override for the SPU2 plugin
+cdvd := IniReadCheck(settingsFile, romName, "cdvd",,,1)	; override for the CDVD plugin
+usb := IniReadCheck(settingsFile, romName, "usb",,,1)	; override for the USB plugin
+fw := IniReadCheck(settingsFile, romName, "fw",,,1)	; override for the FW plugin
+dev9 := IniReadCheck(settingsFile, romName, "dev9",,,1)	; override for the DEV9 plugin
 
 BezelStart()
 
-Fullscreen := (If Fullscreen = "true" ? ("--fullscreen") : (""))
-noGUI := (If noGUI = "true" ? ("--nogui") : (""))
-If noGUI = true
+Fullscreen := If Fullscreen = "true" ? " --fullscreen" : ""
+noGUI := If noGUI = "true" ? " --nogui" : ""
+If (noGUI != "")
 	Log("Module - noGUI is set to true, THIS MAY PREVENT PCSX2 FROM CLOSING PROPERLY. If you have any issues, set it to false or default in HLHQ.",2)
-fullboot := (fullboot = "true" ? ("--fullboot") : (""))
-nohacks := (nohacks = "true" ? ("--nohacks") : (""))
-gamefixes := (gamefixes ? ("--gamefixes=" . gamefixes) : (""))
-cfg := (cfg ? ("--cfg=""" . cfg . """") : (""))
-cfgpath := (cfgpath ? ("--cfgpath=""" . cfgpath . """") : (""))
-gs := (gs ? ("--gs=""" . gs . """") : (""))
-pad := (pad ? ("--pad=""" . pad . """") : (""))
-spu2 := (spu2 ? ("--spu2=""" . spu2 . """") : (""))
-cdvd := (cdvd ? ("--cdvd=""" . cdvd . """") : (""))
-usb := (usb ? ("--usb=""" . usb . """") : (""))
-fw := (fw ? ("--fw=""" . fw . """") : (""))
-dev9 := (dev9 ? ("--dev9=""" . dev9 . """") : (""))
+fullboot := If fullboot = "true" ? " --fullboot" : ""
+nohacks := If nohacks = "true" ? " --nohacks" : ""
+gamefixes := If gamefixes ? " --gamefixes=" . gamefixes : ""
+; cfg := If cfg ? " --cfg=""" . GetFullName(cfg) . """" : ""
+gs := If gs ? " --gs=""" . GetFullName(gs) . """" : ""
+pad := If pad ? " --pad=""" . GetFullName(pad) . """" : ""
+spu2 := If spu2 ? " --spu2=""" . GetFullName(spu2) . """" : ""
+cdvd := If cdvd ? " --cdvd=""" . GetFullName(cdvd) . """" : ""
+usb := If usb ? " --usb=""" . GetFullName(usb) . """" : ""
+fw := If fw ? " --fw=""" . GetFullName(fw) . """" : ""
+dev9 := If dev9 ? " --dev9=""" . GetFullName(dev9) . """" : ""
 
-pcsx2IniFile := CheckFile(emuPath . "\inis\PCSX2_ui.ini")	; ini that contains memory card info and general settings
+cfgPathCLI := If FileExist(cfgPath . "\" . romName) ? " --cfgpath=""" . GetFullName(cfgPath . "\" . romName) . """" : ""
+Log("Module - " . (If cfgPathCLI != "" ? "Setting PCSX2's config path to """ . cfgPath . "\" . romName . """" : "Using PCSX2's default configuration folder: """ . emuPath . "\inis"""))
+
+; Specify what main ini PCSX2 should use
+If (cfgPathCLI && FileExist(cfgPath . "\" . romName . "\PCSX2_ui.ini")) {
+	pcsx2IniFile := cfgPath . "\" . romName . "\PCSX2_ui.ini"
+	Log("Module - Found a game-specific PCSX2_ui.ini in the cfgPath. Telling PCSX2 to use this one instead: " . pcsx2IniFile)
+	cfg := " --cfg=""" . pcsx2IniFile . """"
+	; cfg := " --cfg=""" . emuPath . "\inis\PCSX2_ui.ini"""
+	; msgbox % cfg
+}
 
 ; Memory Cards
 If perGameMemCards = true
@@ -105,16 +130,17 @@ If (dtEnabled = "true" && InStr(".mds|.mdx|.b5t|.b6t|.bwt|.ccd|.cue|.isz|.nrg|.c
 		SaveProperties(pcsx2IniFile,pcsx2Ini)	; save pcsx2IniFile to disk
 	}
 	DaemonTools("mount",romPath . "\" . romName . romExtension)
-	Err := Run(executable . " --usecd" . " " . noGUI . " " . Fullscreen . " " . fullboot . " " . nohacks . " " . gamefixes . " " . cfg . " " . cfgpath . " " . gs . " " . pad . " " . spu2 . " " . cdvd . " " . usb . " " . fw . " " . dev9, emuPath,  "UseErrorLevel")
+	Err := Run(executable . " --usecd" . noGUI . Fullscreen . fullboot . nohacks . gamefixes . cfg . cfgPathCLI . gs . pad . spu2 . cdvd . usb . fw . dev9, emuPath,  "UseErrorLevel")
+	usedDT = 1	; tell the rest of the script to use DT methods
 } Else If romExtension in .iso,.mdf,.nrg,.bin,.img	; the only formats PCSX2 supports loading directly
 {	If dvdSource != Iso
 	{	Log("Module - CdvdSource was not set to ""Iso"", changing it so PCSX2 can launch Isos directly")
 		WriteProperty(pcsx2Ini,"CdvdSource","Iso")	; write a new value to the pcsx2IniFile
 		SaveProperties(pcsx2IniFile,pcsx2Ini)	; save pcsx2IniFile to disk
 	}
-	Err := Run(executable . " """ . romPath . "\" . romName . romExtension . """ " . noGUI . " " . Fullscreen . " " . fullboot . " " . nohacks . " " . gamefixes . " " . cfg . " " . cfgpath . " " . gs . " " . pad . " " . spu2 . " " . cdvd . " " . usb . " " . fw . " " . dev9, emuPath,  "UseErrorLevel")
+	Err := Run(executable . " """ . romPath . "\" . romName . romExtension . """ " . noGUI . Fullscreen . fullboot . nohacks . gamefixes . cfg . cfgPathCLI . gs . pad . spu2 . cdvd . usb . fw . dev9, emuPath,  "UseErrorLevel")
 } Else
-	ScriptError("You are trying to run a rom type of """ . romExtension . """ but PCSX2 only supports loading iso|mdf|nrg|bin|img directly. Please turn on Daemon Tools and/or 7z support instead.")
+	ScriptError("You are trying to run a rom type of """ . romExtension . """ but PCSX2 only supports loading iso|mdf|nrg|bin|img directly. Please turn on Daemon Tools and/or 7z support or put ""cue"" last in your rom extensions for " . MEmu . " instead.")
 
 If(Err != 0){
 	ScriptError("Error launching emulator, closing script.")
@@ -136,12 +162,14 @@ Loop { ; looping until pcsx2 is done loading game
 	StringSplit, winTextSplit, winTitle, |, %A_Space%
 	If ( winTextSplit10 != "" ) ; 10th position in the array is empty until game actually starts
 		break
+	If A_Index > 150	; after 30 seconds, error out
+		ScriptError("There was an error detecting when PCSX2 finished loading your game. Please report this so the module can be fixed.")
 }
 
 FadeInExit()
 Process("WaitClose", executable)
 
-If ( dtEnabled = "true" )
+If usedDT
 	DaemonTools("unmount")
 
 7zCleanUp()
@@ -153,11 +181,11 @@ ExitModule()
 MultiGame:
 	; msgbox % "selectedRom = " . selectedRom . "`nselected game = " . currentButton . "`nmgRomPath = " . mgRomPath . "`nmgRomExt = " . mgRomExt . "`nmgRomName = "  . mgRomName
 	; Unmount the CD from DaemonTools
-	If dtEnabled = true
+	If usedDT
 		DaemonTools("unmount")
 	Sleep, 500	; Required to prevent  DT from bugging
 	; Mount the CD using DaemonTools
-	If dtEnabled = true
+	If usedDT
 		DaemonTools("mount",selectedRom)
 Return
 
