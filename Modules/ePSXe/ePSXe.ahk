@@ -3,7 +3,7 @@ MEmuV =  v1.8.0
 MURL = http://www.epsxe.com/
 MAuthor = djvj & Shateredsoul & brolly
 MVersion = 2.0.6
-MCRC = 8EDF91FF
+MCRC = 6A79E890
 iCRC = AFD664B0
 MID = 635038268888210842
 MSystem = "Sony PlayStation"
@@ -25,6 +25,8 @@ MSystem = "Sony PlayStation"
 ; ePSXe will ONLY close via Escape, it will bug out with all other forms of closing a normal program. Do not edit CloseProcess!
 ;
 ; TurboButton will only work with DX7 video plugin. Turbo key by Hypnoziz
+;
+; Requires at least Libs\Shared.ahk v1.1.3
 ;
 ; epsxe stores its settings in the registry @ HKEY_CURRENT_USER\Software\epsxe\config
 ; plugins store their settings in the registry @ HKEY_CURRENT_USER\Software\Vision Thing\PSEmu Pro
@@ -135,7 +137,6 @@ If (noGUI = "") {	; for multi disc games only
 		Log("Module - Telling ePSXe to run an ISO")
 		PostMessage, 0x111, 40003,,,ahk_class EPSXGUI	; Run ISO
 	}
-	; WinMenuSelectItem,  ahk_class EPSXGUI,, File, Run %epsxeLaunchType%	; run CDROM or ISO
 } Else
 	Log("Module - " . romName . " is not a multi-disc game, so launching " . MEmu . " with GUI disabled.")
 
@@ -227,7 +228,6 @@ MultiGame:
 		Log("Module - Telling ePSXe to swap to another ISO")
 		PostMessage, 0x111, 40006,,,ahk_class EPSXGUI	; Change Disc ISO
 	}
-	; WinMenuSelectItem,  ahk_class EPSXGUI,, File, Change Disc, %epsxeLaunchType%	; change CDROM or ISO
 
 	If usedDT
 	{	WinWait("Change Disc Option ahk_class #32770")
