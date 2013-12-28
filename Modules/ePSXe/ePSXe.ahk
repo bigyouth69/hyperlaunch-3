@@ -2,8 +2,8 @@ MEmu = ePSXe
 MEmuV =  v1.8.0
 MURL = http://www.epsxe.com/
 MAuthor = djvj & Shateredsoul & brolly
-MVersion = 2.0.5
-MCRC = 657DFC8B
+MVersion = 2.0.6
+MCRC = 8EDF91FF
 iCRC = AFD664B0
 MID = 635038268888210842
 MSystem = "Sony PlayStation"
@@ -100,11 +100,14 @@ SetKeyDelay, 50
 xHotKeywrapper(turboButton,"TurboProcess")
 turboEnabled = 0				; Initialize turbo state
 
-slowBoot := If slowBoot = "true" ? " -slowboot" : ""
+RomTableCheck()	; make sure romTable is created already so the next line can calculate correctly
 noGUI := If romTable.MaxIndex() ? "" : " -nogui" ; multidisc games will not use nogui because we need to select an option in epsxe's gui to swap discs
+slowBoot := If slowBoot = "true" ? " -slowboot" : ""
 
-If (noGUI = "" && hideEpsxeGUIs = "true")	; for multi disc games only
+If (noGUI = "" && hideEpsxeGUIs = "true") {	; for multi disc games only
+	Log("Module - Starting the HideGUIWindow timer to prevent them from showing")
 	SetTimer, HideGUIWindow, 10	; start watching for gui window so it can be completely hidden
+}
 
 ; Mount the CD using DaemonTools
 If (epsxeExtension && dtEnabled = "true" ) {
@@ -125,7 +128,14 @@ epsxeLaunchType := If usedDT ? "CDROM" : "ISO"	; determines which command gets s
 If (noGUI = "") {	; for multi disc games only
 	Log("Module - " . romName . " is a multi-disc game, so launching " . MEmu . " with GUI enabled so swapping can occur.")
 	WinWait("ePSXe ahk_class EPSXGUI")
-	WinMenuSelectItem,  ahk_class EPSXGUI,, File, Run %epsxeLaunchType%	; run CDROM or ISO
+	If (epsxeLaunchType = "CDROM") {
+		Log("Module - Telling ePSXe to run a CDROM")
+		PostMessage, 0x111, 40001,,,ahk_class EPSXGUI	; Run CDROM
+	} Else {
+		Log("Module - Telling ePSXe to run an ISO")
+		PostMessage, 0x111, 40003,,,ahk_class EPSXGUI	; Run ISO
+	}
+	; WinMenuSelectItem,  ahk_class EPSXGUI,, File, Run %epsxeLaunchType%	; run CDROM or ISO
 } Else
 	Log("Module - " . romName . " is not a multi-disc game, so launching " . MEmu . " with GUI disabled.")
 
@@ -146,8 +156,10 @@ If (!usedDT && noGUI = "") {		; for some reason, epsxe still shows an open psx i
 WinWait("ePSXe ahk_class EPSX")
 WinWaitActive("ePSXe ahk_class EPSX")
 
-If (noGUI = "" && hideEpsxeGUIs = "true")	; for multi disc games only
+If (noGUI = "" && hideEpsxeGUIs = "true") {	; for multi disc games only
+	Log("Module - Stopping the HideGUIWindow timer")
 	SetTimer, HideGUIWindow, Off
+}
 
 BezelDraw()
 FadeInExit()
@@ -188,6 +200,7 @@ TurboProcess:
 Return
 
 HaltEmu:
+	SetKeyDelay, 50
 	If Fullscreen = true
 	{	Send, !{Enter}
 		Sleep, 200
@@ -201,10 +214,21 @@ MultiGame:
 		Sleep, 500	; Required to prevent  DT from bugging
 		DaemonTools("mount",selectedRom)	; Mount the CD using DaemonTools
 	}
-	ControlSend,, {ESC down}{ESC Up}, ahk_class EPSX
+	ControlSend,, {ESC down}{ESC Up}, ahk_class EPSX	; this exits the game window and brings back ePSXe's gui menu window
 	If hideEpsxeGUIs = true
+	{	Log("Module - Starting the HideGUIWindow timer to prevent them from showing")
 		SetTimer, HideGUIWindow, 10
-	WinMenuSelectItem,  ahk_class EPSXGUI,, File, Change Disc, %epsxeLaunchType%	; change CDROM or ISO
+	}
+
+	If (epsxeLaunchType = "CDROM") {
+		Log("Module - Telling ePSXe to swap to another CDROM")
+		PostMessage, 0x111, 40005,,,ahk_class EPSXGUI	; Change Disc CDROM
+	} Else {
+		Log("Module - Telling ePSXe to swap to another ISO")
+		PostMessage, 0x111, 40006,,,ahk_class EPSXGUI	; Change Disc ISO
+	}
+	; WinMenuSelectItem,  ahk_class EPSXGUI,, File, Change Disc, %epsxeLaunchType%	; change CDROM or ISO
+
 	If usedDT
 	{	WinWait("Change Disc Option ahk_class #32770")
 		ControlSend,Button1,{Enter},Change Disc Option ahk_class #32770
@@ -220,9 +244,12 @@ MultiGame:
 		ControlSend, Button1, {Enter}, %epsxeOpenWindow% ; Select Open
 	}	
 	If hideEpsxeGUIs = true
+	{	Log("Module - Stopping the HideGUIWindow timer")
 		SetTimer, HideGUIWindow, off
+	}
 Return
 RestoreEmu:
+	SetKeyDelay, 50
 	WinActivate, ahk_id  %emulatorID%
 	If Fullscreen = true
 		Send, !{Enter}
