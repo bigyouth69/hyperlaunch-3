@@ -1,5 +1,5 @@
-MCRC=194E55D3
-MVersion=1.1.2
+MCRC=4C3C652B
+MVersion=1.1.3
 
 StartModule(){
 	Global gameSectionStartTime,gameSectionStartHour,dbName,romPath,romName,romExtension,systemName,MEmu,MEmuV,MURL,MAuthor,MVersion,MCRC,iCRC,MSystem,romMapTable,romMappingLaunchMenuEnabled,romMenuRomName,7zEnabled,hideCursor,toggleCursorKey,zz
@@ -641,6 +641,34 @@ CreateRomTable(table) {
 	}
 	Log("CreateRomTable - Ended`, " . IndexTotal . " Loops to create table.")
 	Return table
+}
+
+; Function that gets called in some modules to wait for romTable creation if the module bases some conditionals off whether this table exists or not
+RomTableCheck() {
+	Log("RomTableCheck - Started")
+	Global systemName,mgEnabled,romTable
+	HPGlobalIni := A_ScriptDir . "\Settings\Global HyperPause.ini"		; HP keys have not been read into memory yet, so they must be read here so HL knows whether to run the below loop or not
+    HPSystemIni := A_ScriptDir . "\Settings\" . systemName . "\HyperPause.ini" 
+	IniRead, changeDiscMenuG, %HPGlobalIni%, General Options, ChangeDisc_Menu_Enabled
+	IniRead, changeDiscMenuS, %HPSystemIni%, General Options, ChangeDisc_Menu_Enabled
+	changeDiscMenu := If changeDiscMenuS = "use_global" ? changeDiscMenuG : changeDiscMenuS	; calculate to use system or global setting
+
+	If (mgEnabled = "true" || changeDiscMenu = "true") {
+		Log("RomTableCheck - MultiGame and/or HyperPause's Change DIsc Menu is enabled so checking if romTable exists yet.",4)
+		If !romTable.MaxIndex()
+			Log("RomTableCheck - romTable does not exist yet, waiting until it does to continue loading the module.",4)
+		Loop {
+			If romTable.MaxIndex()
+			{	Log("RomTableCheck - romTable now exists, waited about " . (If A_Index = 1 ? 0 : (A_Index * 100)) . "ms.",4)
+				Break
+			} Else	If (A_Index > 200) {	; if 20 seconds pass by, log there was an issue and continue w/o romTable
+				Log("RomTableCheck - Creating the romTable took longer than 20 seconds. Continuing with module thread without waiting for the table's creation.",3)
+				Break
+			} Else
+				Sleep, 100
+		}
+	}
+	Log("RomTableCheck - Ended")
 }
 
 ; Label used by HP and Fade animation to read the Hyperspin's XML
