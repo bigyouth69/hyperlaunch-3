@@ -2,9 +2,9 @@ MEmu = Atari800
 MEmuV =  v2.2.1 svn r2186
 MURL = http://atari800.sourceforge.net/
 MAuthor = djvj & brolly
-MVersion = 2.0.1
-MCRC = 86D2532D
-iCRC = 4555ACBC
+MVersion = 2.0.2
+MCRC = DE313CEF
+iCRC = 70DC6577
 MID = 635038268874969816
 MSystem = "Atari XEGS","Atari 8-Bit","Atari 5200"
 ;----------------------------------------------------------------------------
@@ -47,14 +47,14 @@ SystemINI := CheckCreateFile(modulePath . "\" . systemName . ".ini")
 
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 Mouse := IniReadCheck(SystemINI, romName, "Mouse","off",,1)
-CartType := IniReadCheck(SystemINI, romName, "CartType",0,,1) ;0-59 Info found in DOC\cart.txt
+CartType := IniReadCheck(SystemINI, romName, "CartType",0,,1)	; 1-59 Info found in DOC\cart.txt
 
 fullscreen := If (Fullscreen="true") ? "-fullscreen" : "-windowed"
 
 If (SystemName = "Atari 5200" and !CartType)
 {	;Mapping of a5200 cart sizes to types
 	;Note that 16KB carts can be of 2 types One Chip (default and id=16) and Two Chip (id=6), if a game uses a One Chip cart then it should be defined on Atari 5200.ini
-	a5200cartMaps := Object(4,20,8,19,16,16,32,4,40,7)
+	a5200cartMaps := Object(4,20,8,19,16,6,32,4,40,7)
 
 	FileGetSize, fsize, %romPath%\%romName%%romExtension%, K
 	CartType := a5200cartMaps[fsize]	; search object for the systemName identifier Atari800 uses

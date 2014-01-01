@@ -15,23 +15,23 @@
 				</SECTION>
 			</SECTIONS>
 		</INIFILE>
-		<INIFILE name="%SystemName%" required="true">
+		<INIFILE name="%SystemName%" required="false">
 			<INITYPE>System</INITYPE>
 			<SECTIONS>
 				<SECTION name="%RomName%" required="false">
 					<SECTIONTYPE>Rom</SECTIONTYPE>
 					<KEYS>
-						<KEY name="Mouse" required="false" nullable="true">
+						<KEY name="Mouse" required="false" nullable="false">
 							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>turns mouse on and off</DESCRIPTION>
+							<DESCRIPTION>Turns mouse on or off</DESCRIPTION>
 							<VALUES>
 								<VALUE>on</VALUE>
 								<VALUE>off</VALUE>
 							</VALUES>
 						</KEY>
-						<KEY name="CartType" required="false" nullable="true" minLength="0" maxLength="59">
+						<KEY name="CartType" required="false" nullable="false" minLength="1" maxLength="59">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>choices are 0-59 Info on what number is what type can be found in %emupath%\DOC\cart.txt</DESCRIPTION>
+							<DESCRIPTION>Choices are 1-59 Info on what number is what type can be found in %emupath%\DOC\cart.txt</DESCRIPTION>
 						</KEY>
 						<KEY name="Basic" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
@@ -41,7 +41,7 @@
 							<KEYTYPE>String</KEYTYPE>
 							<DESCRIPTION>Only used for Atari 8-Bit. More information can be found in found in %emupath%\DOC\USAGE</DESCRIPTION>
 						</KEY>
-						<KEY name="VideoMode" required="false" nullable="true">
+						<KEY name="VideoMode" required="false" nullable="false">
 							<KEYTYPE>String</KEYTYPE>
 							<DESCRIPTION>Only used for Atari 8-Bit. Choices are pal and ntsc. default is pal.</DESCRIPTION>
 							<VALUES>
@@ -49,7 +49,7 @@
 								<VALUE>ntsc</VALUE>
 							</VALUES>
 						</KEY>
-						<KEY name="MachineType" required="false" nullable="true">
+						<KEY name="MachineType" required="false" nullable="false">
 							<KEYTYPE>String</KEYTYPE>
 							<DESCRIPTION>Only used for Atari 8-Bit. Define what machine you are using. default is xl. Descriptions can be found in module notes.</DESCRIPTION>
 							<VALUES>
@@ -61,6 +61,32 @@
 								<VALUE>rambo</VALUE>
 								<VALUE>xegs</VALUE>
 								<VALUE>5200</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="Atari 5200" required="false">
+			<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Mouse" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Turns mouse on or off</DESCRIPTION>
+							<VALUES>
+								<VALUE>on</VALUE>
+								<VALUE>off</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="CartType" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Options are 6 and 16. 6 = Two chip 16 KB 5200 cartridge. 16 = One chip 16 KB 5200 cartridge. CartType=16 is the default.</DESCRIPTION>
+							<VALUES>
+								<VALUE>6</VALUE>
+								<VALUE>16</VALUE>
 							</VALUES>
 						</KEY>
 					</KEYS>
