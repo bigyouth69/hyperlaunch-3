@@ -1,6 +1,6 @@
 MEmu = Gens
 MEmuV =  v2.14
-MURL = http://segaretro.org/Gens/GS
+MURL = http://segaretro.org/Gens
 MAuthor = djvj
 MVersion = 2.0.1
 MCRC = 7B3AF9E0
