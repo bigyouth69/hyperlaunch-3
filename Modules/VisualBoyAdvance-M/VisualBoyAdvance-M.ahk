@@ -2,11 +2,11 @@ MEmu = VisualBoyAdvance-M
 MEmuV =  r1099
 MURL = http://sourceforge.net/projects/vbam/
 MAuthor = djvj
-MVersion = 2.0.1
-MCRC = 2EC76629
+MVersion = 2.0.2
+MCRC = 48696C61
 iCRC = 9D3A3B7
 MID = 635038268933018136
-MSystem = "Nintendo Game Boy","Nintendo Game Boy Color","Nintendo Game Boy Advance"
+MSystem = "Nintendo Game Boy","Nintendo Game Boy Color","Nintendo Game Boy Advance","Nintendo Super Game Boy"
 ;----------------------------------------------------------------------------
 ; Notes:
 ; On first run, you will be guided to set your fullscreen settings. Follow the instructions in the msgboxes.
@@ -44,6 +44,8 @@ Else If systemName = Nintendo Game Boy Color
 	emuType = 1
 Else If systemName = Nintendo Game Boy Advance
 	emuType = 4
+Else If systemName = Nintendo Super Game Boy
+	emuType = 5
 IniWrite, %emuType%, %vbaINI%, preferences, emulatorType
 
 Run(executable . " """ . romPath . "\" . romName . romExtension,emuPath)
