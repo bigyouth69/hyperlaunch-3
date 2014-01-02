@@ -1,24 +1,38 @@
 MEmu = XM6 type G
-MEmuV = v3.10 20131107
+MEmuV = v3.10 20131123
 MURL = http://www.geocities.jp/kugimoto0715/
-MAuthor = djvj
-MVersion = 2.0.1
-MCRC = B3C4D4D2
-iCRC = 264C221C
-MID = 635038268937221635
+MAuthor = djvj & faahrev
+MVersion = 2.0.2
+MCRC = D330AA2
+iCRC = B03F114C
+mId = 635242714072518055
 MSystem = "Sharp X68000"
 ;----------------------------------------------------------------------------
 ; Notes:
 ; Make sure the cgrom.dat & iplrom.dat roms exist in the emu dir or else you will get an error "Initializing the Virtual Machine is failed"
-; Extensions should at least include 7z|dim|hdf
-; Set your resolution by going to Tools->Options->Display->Full screen resolution
+; Extensions should at least include 7z|dim|hdf|xdf|hdm
+; Set your resolution by going to Tools->Options->Misc->Full screen resolution
+; Set the multiplication by going to View->Stretch
+;
+; Fullscreen, Fade-in/out, Bezel and Multidisc supported
+;
+; Be sure to use the correct format for naming the discs
+; and set MutiGame to "True"
+;
+; Settings in HQ:
+; - Fullscreen
+; per ROM:
+; - Option to load the second disc in floppy station 1 at boot (first disc in station 0 is default)
+; - Option to configure in which floppy station discs should be changed (0 or 1)
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
 fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
-
+DualDiskLoad := IniReadCheck(settingsFile, romName, "DualDiskLoad",,,1)
+MultipleDiskSlot := IniReadCheck(settingsFile, romName, "MultipleDiskSlot",,,1)
 xm6gINI := CheckFile(emuPath . "\XM6g.ini")
 
 fullscreen := (If fullscreen = "true" ? ("1") : ("0"))
@@ -43,6 +57,7 @@ Loop, Parse, iniLookup, `n
 		IniWrite, % split3, %xm6gINI%, %split1%, %split2%
 }
 
+BezelStart()
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 ; If the rom is a SASI HD Image, this updates the emu ini to the path of the image
@@ -50,24 +65,56 @@ If romExtension = .hdf
 	IniWrite, %romPath%\%romName%%romExtension%, %xm6gINI%, SASI, File0
 
 Run(executable . " """ . romPath . "\" . romName . romExtension . """", emuPath)
+WinWait("XM6 TypeG ahk_class AfxFrameOrView110")
 
-; WinWait("XM6 TypeG ahk_class AfxFrameOrView80")
-; WinWaitActive("XM6 TypeG ahk_class AfxFrameOrView80")
+; Opening second disc if needed
+If (DualDiskLoad = "true") {
+	RomTableCheck()	; make sure romTable is created already so the next line works
+	romName2 := romTable[2,2]
+	PostMessage, 0x111, 40050,,, XM6 TypeG ahk_class AfxFrameOrView110	; Open floppy1
+	WinWaitActive("ahk_class #32770")
+	Loop {
+		ControlGetText, edit1Text, Edit1, A
+		If (edit1Text = romPath . "\" . romName2)
+			Break
+		Sleep, 100
+		ControlSetText, Edit1, %romPath%\%romName2%, A
+	}
+	PostMessage, 0x111, 1,,, A	; Select Open
+}
+
 WinWait("XM6 TypeG ahk_class AfxFrameOrView110")
 WinWaitActive("XM6 TypeG ahk_class AfxFrameOrView110")
 
-; Works in windowed mode only
-;WinMenuSelectItem, XM6 TypeG ahk_class AfxFrameOrView80,, View, Stretch, 2.0
-
+BezelDraw()
 FadeInExit()
 Process("WaitClose", executable)
 7zCleanUp()
+BezelExit()
 FadeOutExit()
 ExitModule()
 
+HaltEmu:
+Return
+
+MultiGame:
+Return
+
+RestoreEmu:
+	Control := If MultipleDiskSlot = "1" ? "40050" : "40020"
+	PostMessage, 0x111, %Control%,,, XM6 TypeG ahk_class AfxFrameOrView110	; Open correct floppy
+	WinWaitActive("ahk_class #32770")
+		Loop {
+			ControlGetText, edit1Text, Edit1, A
+			If (edit1Text = selectedRom)
+				Break
+			Sleep, 100
+			ControlSetText, Edit1, %selectedRom%, A
+		}
+	PostMessage, 0x111, 1,,, A	; Select Open
+Return
 
 CloseProcess:
 	FadeOutStart()
-	; WinClose("XM6 TypeG ahk_class AfxFrameOrView80")
 	WinClose("XM6 TypeG ahk_class AfxFrameOrView110")
 Return

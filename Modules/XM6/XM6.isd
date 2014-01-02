@@ -7,9 +7,26 @@
 				<SECTION name="Settings" required="false">
 					<SECTIONTYPE>Global</SECTIONTYPE>
 					<KEYS>
-						<KEY name="Fullscreen" required="true">
+						<KEY name="Fullscreen" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
-							<DESCRIPTION>If true, the game will be launched in fullscreen mode.</DESCRIPTION>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="DualDiskLoad" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Choose Yes if this game requires two disks to be loaded simultaneously.</DESCRIPTION>
+						</KEY>
+						<KEY name="MultipleDiskSlot" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Choose the FDD slot that gets swapped out when multiple disks are used.</DESCRIPTION>
+							<VALUES>
+								<VALUE>0</VALUE>
+								<VALUE>1</VALUE>
+							</VALUES>
 						</KEY>
 					</KEYS>
 				</SECTION>
