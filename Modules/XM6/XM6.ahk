@@ -3,7 +3,7 @@ MEmuV = v3.10 20131123
 MURL = http://www.geocities.jp/kugimoto0715/
 MAuthor = djvj & faahrev
 MVersion = 2.0.2
-MCRC = D330AA2
+MCRC = 1FF7FBB5
 iCRC = B03F114C
 mId = 635242714072518055
 MSystem = "Sharp X68000"
@@ -13,8 +13,6 @@ MSystem = "Sharp X68000"
 ; Extensions should at least include 7z|dim|hdf|xdf|hdm
 ; Set your resolution by going to Tools->Options->Misc->Full screen resolution
 ; Set the multiplication by going to View->Stretch
-;
-; Fullscreen, Fade-in/out, Bezel and Multidisc supported
 ;
 ; Be sure to use the correct format for naming the discs
 ; and set MutiGame to "True"
@@ -26,7 +24,7 @@ MSystem = "Sharp X68000"
 ; - Option to configure in which floppy station discs should be changed (0 or 1)
 ;----------------------------------------------------------------------------
 StartModule()
-BezelGUI()
+; BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
@@ -34,6 +32,8 @@ fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 DualDiskLoad := IniReadCheck(settingsFile, romName, "DualDiskLoad",,,1)
 MultipleDiskSlot := IniReadCheck(settingsFile, romName, "MultipleDiskSlot",,,1)
 xm6gINI := CheckFile(emuPath . "\XM6g.ini")
+
+; BezelStart("FixResMode")
 
 fullscreen := (If fullscreen = "true" ? ("1") : ("0"))
 
@@ -57,7 +57,6 @@ Loop, Parse, iniLookup, `n
 		IniWrite, % split3, %xm6gINI%, %split1%, %split2%
 }
 
-BezelStart()
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 ; If the rom is a SASI HD Image, this updates the emu ini to the path of the image
@@ -86,11 +85,11 @@ If (DualDiskLoad = "true") {
 WinWait("XM6 TypeG ahk_class AfxFrameOrView110")
 WinWaitActive("XM6 TypeG ahk_class AfxFrameOrView110")
 
-BezelDraw()
+; BezelDraw()
 FadeInExit()
 Process("WaitClose", executable)
 7zCleanUp()
-BezelExit()
+; BezelExit()
 FadeOutExit()
 ExitModule()
 
