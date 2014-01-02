@@ -2,8 +2,8 @@ MEmu = MESS
 MEmuV =  v0.151
 MURL = http://www.mess.org/
 MAuthor = djvj & faahrev
-MVersion = 2.2.0
-MCRC = 93D1A622
+MVersion = 2.2.1
+MCRC = 464C9400
 iCRC = AA949FDC
 MID = 635038268905515239
 MSystem = "Amstrad GX4000","APF Imagination Machine","Apple IIGS","Atari 8-bit","Atari 2600","Atari 5200","Atari 7800","Atari Jaguar","Atari Lynx","Bally Astrocade","Bandai WonderSwan","Bandai WonderSwan Color","Casio PV-1000","Casio PV-2000","Coleco ADAM","ColecoVision","Creatronic Mega Duck","Emerson Arcadia 2001","Entex Adventure Vision","Epoch Game Pocket Computer","Epoch Super Cassette Vision","Fairchild Channel F","Funtech Super Acan","GCE Vectrex","Hartung Game Master","Interton VC4000","Magnavox Odyssey 2","Mattel Aquarius","Mattel Intellivision","NEC PC Engine","NEC PC Engine-CD","NEC SuperGrafx","NEC TurboGrafx-16","NEC TurboGrafx-CD","Nintendo 64","Nintendo Entertainment System","Nintendo Game Boy","Nintendo Game Boy Advance","Nintendo Game Boy Color","Nintendo Virtual Boy","Philips CD-i","RCA Studio II","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","SNK Neo Geo AES","SNK Neo Geo CD","SNK Neo Geo Pocket","SNK Neo Geo Pocket Color","Sony PlayStation","Super Nintendo Entertainment System","Texas Instruments TI 99-4A","Tiger Game.com","VTech CreatiVision","Watara Supervision"
@@ -51,11 +51,9 @@ MSystem = "Amstrad GX4000","APF Imagination Machine","Apple IIGS","Atari 8-bit",
 ; NEC TurboGrafx-CD - "Super CD-ROM2 System V3.01 (U).pce" [262,144 bytes] (placed in the roms subfolder in the emuPath)
 ; Nintendo 64 - n64
 ; Nintendo Entertainment System - N/A
-
 ; Nintendo Game Boy - gameboy
 ; Nintendo Game Boy Advance - gba
 ; Nintendo Game Boy Color - gbcolor
-
 ; Nintendo Virtual Boy - N/A
 ; Philips CD-i - the cdimono1
 ; RCA Studio II - studio2
@@ -201,7 +199,7 @@ If UseSoftwareList != true
 
 	; These systems don't use an ini, but do require parameters to be changed from the default method of launching Mess
 	If ident = aes	; SNK Neo Geo AES
-	{	param1 := "-bios asia-aes" ;can also be jap-aes (default), but the asian one has english menus for most games
+	{	param1 := "-bios asia"	; can also be japan, but the asian one has english menus for most games
 		param2 := "-rompath " . """" . "roms;" . romPath . """"
 		param3 := "-cart " . romName
 	}Else If (ident = "neocdz" || ident = "cdimono1" || ident = "segacd" || ident = "psx" || (ident = "tg16" && systemName = "NEC TurboGrafx-CD") || (ident = "pce" && systemName = "NEC PC Engine-CD"))	; SNK Neo Geo CD, Philips CD-i, Sega CD, Sony PlayStation, NEC PC Engine-CD or NEC TurboGrafx-CD
@@ -239,7 +237,7 @@ If UseSoftwareList != true
 
 	If ident = aes	; SNK Neo Geo AES
 	{	hashname := "neogeo"
-		param2 := "-bios asia-aes" ;can also be jap-aes (default), but the asian one has english menus for most games
+		param2 := "-bios asia"	; can also be japan, but the asian one has english menus for most games
 	}
 	CheckFile(emuPath . "\hash\" . hashname . ".xml","Could not find a software list for the system " . ident) ;Check if software list for selected system exists
 }
