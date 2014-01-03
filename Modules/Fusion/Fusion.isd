@@ -42,210 +42,210 @@
 						</KEY>
                         <KEY name="Default_MultiTapType" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>If a MultiTap Type is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.  0=None, 1=Temaplayer Port 1, 2=Temaplayer Port 2, 3=Temaplayer Ports 1 and 2, 4=4 Way play, 8=JCART</DESCRIPTION>
+							<DESCRIPTION>If a MultiTap Type is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>0</VALUE>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-								<VALUE>3</VALUE>
-								<VALUE>4</VALUE>
-								<VALUE>8</VALUE>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="TeamPlayer (Port 1)">1</VALUE>
+								<VALUE description="TeamPlayer (Port 2)">2</VALUE>
+								<VALUE description="TeamPlayer (Ports 1 &amp; 2)">3</VALUE>
+								<VALUE description="4-Way-Play">4</VALUE>
+								<VALUE description="J-Cart">8</VALUE>
 							</VALUES>
                         </KEY>
 						<KEY name="Default_Genesis_P1_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.  0=None, 1=3 Button Pad, 2=6 Button Pad, 3=Mouse, 4=Menacer, 5=Justifier</DESCRIPTION>
+							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>0</VALUE>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-								<VALUE>3</VALUE>
-								<VALUE>4</VALUE>
-								<VALUE>5</VALUE>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="3 Button Pad">1</VALUE>
+								<VALUE description="6 Button Pad">2</VALUE>
+								<VALUE description="Mouse">3</VALUE>
+								<VALUE description="Menacer (Gun)">4</VALUE>
+								<VALUE description="Justifier (Gun)">5</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Default_Genesis_P1b_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.  0=None, 1=3 Button Pad, 2=6 Button Pad, 3=Mouse, 4=Menacer, 5=Justifier</DESCRIPTION>
+							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>0</VALUE>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-								<VALUE>3</VALUE>
-								<VALUE>4</VALUE>
-								<VALUE>5</VALUE>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="3 Button Pad">1</VALUE>
+								<VALUE description="6 Button Pad">2</VALUE>
+								<VALUE description="Mouse">3</VALUE>
+								<VALUE description="Menacer (Gun)">4</VALUE>
+								<VALUE description="Justifier (Gun)">5</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Default_Genesis_P1c_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.  0=None, 1=3 Button Pad, 2=6 Button Pad, 3=Mouse, 4=Menacer, 5=Justifier</DESCRIPTION>
+							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>0</VALUE>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-								<VALUE>3</VALUE>
-								<VALUE>4</VALUE>
-								<VALUE>5</VALUE>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="3 Button Pad">1</VALUE>
+								<VALUE description="6 Button Pad">2</VALUE>
+								<VALUE description="Mouse">3</VALUE>
+								<VALUE description="Menacer (Gun)">4</VALUE>
+								<VALUE description="Justifier (Gun)">5</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Default_Genesis_P1d_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.  0=None, 1=3 Button Pad, 2=6 Button Pad, 3=Mouse, 4=Menacer, 5=Justifier</DESCRIPTION>
+							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>0</VALUE>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-								<VALUE>3</VALUE>
-								<VALUE>4</VALUE>
-								<VALUE>5</VALUE>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="3 Button Pad">1</VALUE>
+								<VALUE description="6 Button Pad">2</VALUE>
+								<VALUE description="Mouse">3</VALUE>
+								<VALUE description="Menacer (Gun)">4</VALUE>
+								<VALUE description="Justifier (Gun)">5</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Default_Genesis_P2_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.  0=None, 1=3 Button Pad, 2=6 Button Pad, 3=Mouse, 4=Menacer, 5=Justifier</DESCRIPTION>
+							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>0</VALUE>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-								<VALUE>3</VALUE>
-								<VALUE>4</VALUE>
-								<VALUE>5</VALUE>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="3 Button Pad">1</VALUE>
+								<VALUE description="6 Button Pad">2</VALUE>
+								<VALUE description="Mouse">3</VALUE>
+								<VALUE description="Menacer (Gun)">4</VALUE>
+								<VALUE description="Justifier (Gun)">5</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Default_Genesis_P2b_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.  0=None, 1=3 Button Pad, 2=6 Button Pad, 3=Mouse, 4=Menacer, 5=Justifier</DESCRIPTION>
+							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>0</VALUE>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-								<VALUE>3</VALUE>
-								<VALUE>4</VALUE>
-								<VALUE>5</VALUE>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="3 Button Pad">1</VALUE>
+								<VALUE description="6 Button Pad">2</VALUE>
+								<VALUE description="Mouse">3</VALUE>
+								<VALUE description="Menacer (Gun)">4</VALUE>
+								<VALUE description="Justifier (Gun)">5</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Default_Genesis_P2c_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.  0=None, 1=3 Button Pad, 2=6 Button Pad, 3=Mouse, 4=Menacer, 5=Justifier</DESCRIPTION>
+							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>0</VALUE>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-								<VALUE>3</VALUE>
-								<VALUE>4</VALUE>
-								<VALUE>5</VALUE>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="3 Button Pad">1</VALUE>
+								<VALUE description="6 Button Pad">2</VALUE>
+								<VALUE description="Mouse">3</VALUE>
+								<VALUE description="Menacer (Gun)">4</VALUE>
+								<VALUE description="Justifier (Gun)">5</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Default_Genesis_P2d_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.  0=None, 1=3 Button Pad, 2=6 Button Pad, 3=Mouse, 4=Menacer, 5=Justifier</DESCRIPTION>
+							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>0</VALUE>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-								<VALUE>3</VALUE>
-								<VALUE>4</VALUE>
-								<VALUE>5</VALUE>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="3 Button Pad">1</VALUE>
+								<VALUE description="6 Button Pad">2</VALUE>
+								<VALUE description="Mouse">3</VALUE>
+								<VALUE description="Menacer (Gun)">4</VALUE>
+								<VALUE description="Justifier (Gun)">5</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Default_SMS_P1_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Sega Master System and Game Gear.  0=None, 1=Control Pad, 2=Paddle, 3=Light Phaser</DESCRIPTION>
+							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Sega Master System and Game Gear.</DESCRIPTION>
 							<VALUES>
-								<VALUE>0</VALUE>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-								<VALUE>3</VALUE>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="Control Pad">1</VALUE>
+								<VALUE description="Paddle">2</VALUE>
+								<VALUE description="Light Phaser (Gun)">3</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Default_SMS_P2_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Sega Master System and Game Gear.  0=None, 1=Control Pad, 2=Paddle, 3=Light Phaser</DESCRIPTION>
+							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Sega Master System and Game Gear.</DESCRIPTION>
 							<VALUES>
-								<VALUE>0</VALUE>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-								<VALUE>3</VALUE>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="Control Pad">1</VALUE>
+								<VALUE description="Paddle">2</VALUE>
+								<VALUE description="Light Phaser (Gun)">3</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Default_Genesis_P1_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.  1=Keyboard, 2=Mouse</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
+								<VALUE description="Keyboard">1</VALUE>
+								<VALUE description="Mouse">2</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Default_Genesis_P1b_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.  1=Keyboard, 2=Mouse</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
+								<VALUE description="Keyboard">1</VALUE>
+								<VALUE description="Mouse">2</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Default_Genesis_P1c_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.  1=Keyboard, 2=Mouse</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
+								<VALUE description="Keyboard">1</VALUE>
+								<VALUE description="Mouse">2</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Default_Genesis_P1d_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.  1=Keyboard, 2=Mouse</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
+								<VALUE description="Keyboard">1</VALUE>
+								<VALUE description="Mouse">2</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Default_Genesis_P2_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.  1=Keyboard, 2=Mouse</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
+								<VALUE description="Keyboard">1</VALUE>
+								<VALUE description="Mouse">2</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Default_Genesis_P2b_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.  1=Keyboard, 2=Mouse</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
+								<VALUE description="Keyboard">1</VALUE>
+								<VALUE description="Mouse">2</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Default_Genesis_P2c_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.  1=Keyboard, 2=Mouse</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
+								<VALUE description="Keyboard">1</VALUE>
+								<VALUE description="Mouse">2</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Default_Genesis_P2d_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.  1=Keyboard, 2=Mouse</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
+								<VALUE description="Keyboard">1</VALUE>
+								<VALUE description="Mouse">2</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Default_SMS_P1_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Sega Master System and Game Gear.  1=Keyboard, 2=Mouse</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Sega Master System and Game Gear.</DESCRIPTION>
 							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
+								<VALUE description="Keyboard">1</VALUE>
+								<VALUE description="Mouse">2</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Default_SMS_P2_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Sega Master System and Game Gear.  1=Keyboard, 2=Mouse</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Sega Master System and Game Gear.</DESCRIPTION>
 							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
+								<VALUE description="Keyboard">1</VALUE>
+								<VALUE description="Mouse">2</VALUE>
 							</VALUES>
 						</KEY>
 					</KEYS>
@@ -259,210 +259,210 @@
 						</KEY>
                          <KEY name="MultiTapType" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>MultiTap Type to use whit Rom in Genesis, 32x, and Sega CD.  0=None, 1=Temaplayer Port 1, 2=Temaplayer Port 2, 3=Temaplayer Ports 1 and 2, 4=4 Way play, 8=JCART</DESCRIPTION>
+							<DESCRIPTION>MultiTap Type to use whit Rom in Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>0</VALUE>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-								<VALUE>3</VALUE>
-								<VALUE>4</VALUE>
-								<VALUE>8</VALUE>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="TeamPlayer (Port 1)">1</VALUE>
+								<VALUE description="TeamPlayer (Port 2)">2</VALUE>
+								<VALUE description="TeamPlayer (Ports 1 &amp; 2)">3</VALUE>
+								<VALUE description="4-Way-Play">4</VALUE>
+								<VALUE description="J-Cart">8</VALUE>
 							</VALUES>
                         </KEY>
 						<KEY name="Genesis_P1_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The controller type plugged into this port, it will use this setting for Genesis, 32x, and Sega CD. 0=None, 1=3 Button Pad, 2=6 Button Pad, 3=Mouse, 4=Menacer, 5=Justifier</DESCRIPTION>
+							<DESCRIPTION>The controller type plugged into this port, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>0</VALUE>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-								<VALUE>3</VALUE>
-								<VALUE>4</VALUE>
-								<VALUE>5</VALUE>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="3 Button Pad">1</VALUE>
+								<VALUE description="6 Button Pad">2</VALUE>
+								<VALUE description="Mouse">3</VALUE>
+								<VALUE description="Menacer (Gun)">4</VALUE>
+								<VALUE description="Justifier (Gun)">5</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Genesis_P1b_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The controller type plugged into this port, it will use this setting for Genesis, 32x, and Sega CD. 0=None, 1=3 Button Pad, 2=6 Button Pad, 3=Mouse, 4=Menacer, 5=Justifier</DESCRIPTION>
+							<DESCRIPTION>The controller type plugged into this port, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>0</VALUE>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-								<VALUE>3</VALUE>
-								<VALUE>4</VALUE>
-								<VALUE>5</VALUE>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="3 Button Pad">1</VALUE>
+								<VALUE description="6 Button Pad">2</VALUE>
+								<VALUE description="Mouse">3</VALUE>
+								<VALUE description="Menacer (Gun)">4</VALUE>
+								<VALUE description="Justifier (Gun)">5</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Genesis_P1c_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The controller type plugged into this port, it will use this setting for Genesis, 32x, and Sega CD. 0=None, 1=3 Button Pad, 2=6 Button Pad, 3=Mouse, 4=Menacer, 5=Justifier</DESCRIPTION>
+							<DESCRIPTION>The controller type plugged into this port, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>0</VALUE>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-								<VALUE>3</VALUE>
-								<VALUE>4</VALUE>
-								<VALUE>5</VALUE>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="3 Button Pad">1</VALUE>
+								<VALUE description="6 Button Pad">2</VALUE>
+								<VALUE description="Mouse">3</VALUE>
+								<VALUE description="Menacer (Gun)">4</VALUE>
+								<VALUE description="Justifier (Gun)">5</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Genesis_P1d_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The controller type plugged into this port, it will use this setting for Genesis, 32x, and Sega CD. 0=None, 1=3 Button Pad, 2=6 Button Pad, 3=Mouse, 4=Menacer, 5=Justifier</DESCRIPTION>
+							<DESCRIPTION>The controller type plugged into this port, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>0</VALUE>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-								<VALUE>3</VALUE>
-								<VALUE>4</VALUE>
-								<VALUE>5</VALUE>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="3 Button Pad">1</VALUE>
+								<VALUE description="6 Button Pad">2</VALUE>
+								<VALUE description="Mouse">3</VALUE>
+								<VALUE description="Menacer (Gun)">4</VALUE>
+								<VALUE description="Justifier (Gun)">5</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Genesis_P2_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The controller type plugged into this port, it will use this setting for Genesis, 32x, and Sega CD. 0=None, 1=3 Button Pad, 2=6 Button Pad, 3=Mouse, 4=Menacer, 5=Justifier</DESCRIPTION>
+							<DESCRIPTION>The controller type plugged into this port, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>0</VALUE>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-								<VALUE>3</VALUE>
-								<VALUE>4</VALUE>
-								<VALUE>5</VALUE>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="3 Button Pad">1</VALUE>
+								<VALUE description="6 Button Pad">2</VALUE>
+								<VALUE description="Mouse">3</VALUE>
+								<VALUE description="Menacer (Gun)">4</VALUE>
+								<VALUE description="Justifier (Gun)">5</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Genesis_P2b_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The controller type plugged into this port, it will use this setting for Genesis, 32x, and Sega CD. 0=None, 1=3 Button Pad, 2=6 Button Pad, 3=Mouse, 4=Menacer, 5=Justifier</DESCRIPTION>
+							<DESCRIPTION>The controller type plugged into this port, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>0</VALUE>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-								<VALUE>3</VALUE>
-								<VALUE>4</VALUE>
-								<VALUE>5</VALUE>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="3 Button Pad">1</VALUE>
+								<VALUE description="6 Button Pad">2</VALUE>
+								<VALUE description="Mouse">3</VALUE>
+								<VALUE description="Menacer (Gun)">4</VALUE>
+								<VALUE description="Justifier (Gun)">5</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Genesis_P2c_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The controller type plugged into this port, it will use this setting for Genesis, 32x, and Sega CD. 0=None, 1=3 Button Pad, 2=6 Button Pad, 3=Mouse, 4=Menacer, 5=Justifier</DESCRIPTION>
+							<DESCRIPTION>The controller type plugged into this port, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>0</VALUE>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-								<VALUE>3</VALUE>
-								<VALUE>4</VALUE>
-								<VALUE>5</VALUE>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="3 Button Pad">1</VALUE>
+								<VALUE description="6 Button Pad">2</VALUE>
+								<VALUE description="Mouse">3</VALUE>
+								<VALUE description="Menacer (Gun)">4</VALUE>
+								<VALUE description="Justifier (Gun)">5</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Genesis_P2d_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The controller type plugged into this port, it will use this setting for Genesis, 32x, and Sega CD. 0=None, 1=3 Button Pad, 2=6 Button Pad, 3=Mouse, 4=Menacer, 5=Justifier</DESCRIPTION>
+							<DESCRIPTION>The controller type plugged into this port, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>0</VALUE>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-								<VALUE>3</VALUE>
-								<VALUE>4</VALUE>
-								<VALUE>5</VALUE>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="3 Button Pad">1</VALUE>
+								<VALUE description="6 Button Pad">2</VALUE>
+								<VALUE description="Mouse">3</VALUE>
+								<VALUE description="Menacer (Gun)">4</VALUE>
+								<VALUE description="Justifier (Gun)">5</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="SMS_P1_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The controller type plugged into this port, it will use this setting for Sega Master System and Game Gear. 0=None, 1=Control Pad, 2=Paddle, 3=Light Phaser</DESCRIPTION>
+							<DESCRIPTION>The controller type plugged into this port, it will use this setting for Sega Master System and Game Gear.</DESCRIPTION>
 							<VALUES>
-								<VALUE>0</VALUE>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-								<VALUE>3</VALUE>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="Control Pad">1</VALUE>
+								<VALUE description="Paddle">2</VALUE>
+								<VALUE description="Light Phaser (Gun)">3</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="SMS_P2_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The controller type plugged into this port, it will use this setting for Sega Master System and Game Gear. 0=None, 1=Control Pad, 2=Paddle, 3=Light Phaser</DESCRIPTION>
+							<DESCRIPTION>The controller type plugged into this port, it will use this setting for Sega Master System and Game Gear.</DESCRIPTION>
 							<VALUES>
-								<VALUE>0</VALUE>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-								<VALUE>3</VALUE>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="Control Pad">1</VALUE>
+								<VALUE description="Paddle">2</VALUE>
+								<VALUE description="Light Phaser (Gun)">3</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Genesis_P1_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use in this port, it will use this setting for Genesis, 32x, and Sega CD. 1=Keyboard, 2=Mouse</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use in this port, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
+								<VALUE description="Keyboard">1</VALUE>
+								<VALUE description="Mouse">2</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Genesis_P1b_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use in this port, it will use this setting for Genesis, 32x, and Sega CD. 1=Keyboard, 2=Mouse</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use in this port, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
+								<VALUE description="Keyboard">1</VALUE>
+								<VALUE description="Mouse">2</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Genesis_P1c_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use in this port, it will use this setting for Genesis, 32x, and Sega CD. 1=Keyboard, 2=Mouse</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use in this port, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
+								<VALUE description="Keyboard">1</VALUE>
+								<VALUE description="Mouse">2</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Genesis_P1d_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use in this port, it will use this setting for Genesis, 32x, and Sega CD. 1=Keyboard, 2=Mouse</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use in this port, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
+								<VALUE description="Keyboard">1</VALUE>
+								<VALUE description="Mouse">2</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Genesis_P2_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use in this port, it will use this setting for Genesis, 32x, and Sega CD. 1=Keyboard, 2=Mouse</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use in this port, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
+								<VALUE description="Keyboard">1</VALUE>
+								<VALUE description="Mouse">2</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Genesis_P2b_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use in this port, it will use this setting for Genesis, 32x, and Sega CD. 1=Keyboard, 2=Mouse</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use in this port, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
+								<VALUE description="Keyboard">1</VALUE>
+								<VALUE description="Mouse">2</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Genesis_P2c_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use in this port, it will use this setting for Genesis, 32x, and Sega CD. 1=Keyboard, 2=Mouse</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use in this port, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
+								<VALUE description="Keyboard">1</VALUE>
+								<VALUE description="Mouse">2</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Genesis_P2d_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use in this port, it will use this setting for Genesis, 32x, and Sega CD. 1=Keyboard, 2=Mouse</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use in this port, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
+								<VALUE description="Keyboard">1</VALUE>
+								<VALUE description="Mouse">2</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="SMS_P1_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use in this port, it will use this setting for Sega Master System and Game Gear. 1=Keyboard, 2=Mouse</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use in this port, it will use this setting for Sega Master System and Game Gear.</DESCRIPTION>
 							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
+								<VALUE description="Keyboard">1</VALUE>
+								<VALUE description="Mouse">2</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="SMS_P2_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use in this port, it will use this setting for Sega Master System and Game Gear. 1=Keyboard, 2=Mouse</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use in this port, it will use this setting for Sega Master System and Game Gear.</DESCRIPTION>
 							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
+								<VALUE description="Keyboard">1</VALUE>
+								<VALUE description="Mouse">2</VALUE>
 							</VALUES>
 						</KEY>
 					</KEYS>

@@ -2,11 +2,11 @@ MEmu = Fusion
 MEmuV =  v3.64
 MURL = http://www.eidolons-inn.net/tiki-index.php?page=Kega
 MAuthor = djvj
-MVersion = 2.0.7
-MCRC = 1F536E69
-iCRC = 97B84990
+MVersion = 2.0.8
+MCRC = 792D6332
+iCRC = 3B62A7B7
 MID = 635038268893895568
-MSystem = "Samsung Gam Boy","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","Sega Mega-CD","Sega SC-3000","Sega SG-1000"
+MSystem = "Samsung Gam Boy","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","Sega Mega-CD","Sega Pico","Sega SC-3000","Sega SG-1000"
 ;----------------------------------------------------------------------------
 ; Notes:
 ; Don't forget to setup your bios or you might just get a black screen.
@@ -29,13 +29,17 @@ MSystem = "Samsung Gam Boy","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis"
 ; For P2_Controller - 0=None, 1=Gamepad, 2=Multitap, 3=Mouse, 4=Super Scope, 5=Justifier, 6=Dual Justifiers, 7=Serial USART
 ;
 ; Some games will not work if you have Teamplayer or 4way play active all the time, so you can set the MultiTapType for those problematic games in the module settings for each of these games.
+;
+; Windows 8 / 8.1 users: There is an issue that some users have reported that locks fullscreen fps to 33.3. This is due to the new way 8 emulates DirectX for older applications.
+; If you are running into this issue, please download the modified ddraw.dll from http://www.blitzbasic.com/Community/post.php?topic=99477&post=1202630 and drop it in your Fusion folder.
+; Please be aware the modified dll may break the fullscreen options menu, so configuring the emulator in windowed mode is recommended if you are running into this issue.
 ;----------------------------------------------------------------------------
 StartModule()
 BezelGUI()
 FadeInStart()
 
 ; The object controls how the module reacts to different systems. Fusion can play a lot of systems, but changes itself slightly so this module has to adapt 
-mType := Object("Samsung Gam Boy","sms","Sega 32X","32X","Sega CD","scd","Sega Mega-CD","scd","Sega Game Gear","gg","Sega Genesis","gen","Sega Mega Drive","gen","Sega Master System","sms","Sega SC-3000","sms","Sega SG-1000","sms")
+mType := Object("Samsung Gam Boy","sms","Sega 32X","32X","Sega CD","scd","Sega Mega-CD","scd","Sega Game Gear","gg","Sega Genesis","gen","Sega Mega Drive","gen","Sega Master System","sms","Sega Pico","gen","Sega SC-3000","sms","Sega SG-1000","sms")
 ident := mType[systemName]	; search 1st array for the systemName identifier mednafen uses
 If !ident
 	ScriptError("Your systemName is: " . systemName . "`nIt is not one of the known supported systems for this Fusion module: " . moduleName)
@@ -242,6 +246,10 @@ If hideTitleBar = true
 
 BezelDraw()
 FadeInExit()
+
+If InStr(systemName, "Pico")
+	PostMessage, 0x111, 40183,,,ahk_class KegaClass	; tell Kega Fusion to capture mouse input
+
 Process("WaitClose", executable)
 
 If (fluxRom || (ident = "scd" && dtEnabled = "true" && scdExtension))
