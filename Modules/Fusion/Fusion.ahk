@@ -30,9 +30,12 @@ MSystem = "Samsung Gam Boy","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis"
 ;
 ; Some games will not work if you have Teamplayer or 4way play active all the time, so you can set the MultiTapType for those problematic games in the module settings for each of these games.
 ;
-; Windows 8 / 8.1 users: There is an issue that some users have reported that locks fullscreen fps to 33.3. This is due to the new way 8 emulates DirectX for older applications.
-; If you are running into this issue, please download the modified ddraw.dll from http://www.blitzbasic.com/Community/post.php?topic=99477&post=1202630 and drop it in your Fusion folder.
-; Please be aware the modified dll may break the fullscreen options menu, so configuring the emulator in windowed mode is recommended if you are running into this issue.
+; Windows 8 and 8.1 users:
+; You may experience an issue with Fusion never getting higher than 33.5fps. Use Ctrl+F to bring up the FPS counter in Fusion to check if you are affected. This is caused by some compatibility changes Microsoft made for DirectDraw applications. There are two ways of fixing this issue:
+; 1) Apply a compatibility patch for the Fusion executable using the Microsoft Application Compatibility Toolkit
+; 2) Copy a prepatched ddraw.dll into the Fusion directory.
+; Using the Microsoft Application Compatibility Toolkit is a cleaner fix but takes a few minutes to go through the steps to apply. Using the prepatched ddraw.dll file is quick and simple but may break the right-click menus when in full-screen mode, requiring you to make all configuration changes with the emulator windowed.
+; Both methods are fully detailed with downloads, instructions and screenshots at http://www.blitzbasic.com/Community/post.php?topic=99477&post=1202630
 ;----------------------------------------------------------------------------
 StartModule()
 BezelGUI()
