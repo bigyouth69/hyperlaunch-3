@@ -2,10 +2,10 @@ MEmu = PCLauncher
 MEmuV =  N/A
 MURL = https://sites.google.com/site/hyperlaunch2/additional-features/pclauncher
 MAuthor = djvj
-MVersion = 2.0.7
-MCRC = 9A8E9A78
-iCRC = 75BD398A
-MID = 635038268912701232
+MVersion = 2.0.8
+MCRC = 93677DCC
+iCRC = 7B7413B5
+mId = 635243126483565041
 MSystem = "Games for Windows","Microsoft Windows","PCLauncher","PC Games","Steam","Steam Big Picture","Taito Type X","Touhou"
 ;----------------------------------------------------------------------------
 ; Notes:
@@ -26,15 +26,16 @@ IfExist, % modulePath . "\" . systemName . ".ini"	; use a custom systemName ini 
 Else
 	settingsFile := CheckFile(modulePath . "\" . moduleName . ".ini", "Could not find """ . modulePath . "\" . moduleName . ".ini"". HyperLaunchHQ will create this file when you configure your first game to be used with this " . MEmu . " module.")
 
-iniLookup = PathToSteam|SteamID|Application|AppWaitExe|DiscImage|Parameters|OriginGame|WorkingFolder|PreLaunch|PreLaunchParameters|PreLaunchSleep|PostLaunch|PostLaunchParameters|PostLaunchSleep|PostExit|PostExitParameters|PostExitSleep|ExitMethod|FadeTitle|FadeInExitSleep|HideCursor
+iniLookup = SteamID|Application|AppWaitExe|DiscImage|Parameters|OriginGame|WorkingFolder|PreLaunch|PreLaunchParameters|PreLaunchSleep|PostLaunch|PostLaunchParameters|PostLaunchSleep|PostExit|PostExitParameters|PostExitSleep|ExitMethod|FadeTitle|FadeInExitSleep|HideCursor
 Loop, Parse, iniLookup, |
-{	%A_LoopField% := IniReadCheck(settingsFile, If A_Index=1?"Settings":dbName, A_LoopField, A_Space,,1)
+{	%A_LoopField% := IniReadCheck(settingsFile, dbName, A_LoopField, A_Space,,1)
 	If A_LoopField in Application
 		If (!Application && !SteamID) { ; Create keys if they do not exist in the ini and this is not a steam game
 			IniWrite, %A_Space%, %SettingsFile%, %dbName%, %A_LoopField%
 			missingKeys = 1
 		}
 }
+hideCursor := IniReadCheck(settingsFile, "Settings|" . dbName, "HideCursor",,,1)
 
 If (missingKeys && !SteamID)
 	ScriptError("You have not set up " . dbName . " in HLHQ yet, so PCLauncher does not know what exe, FadeTitle, and/or SteamID to watch for.")
@@ -70,13 +71,17 @@ If PreLaunch {
 
 If mode in steam,steambp	; steam launch
 {	Log("PCLauncher - Preparing to launch a Steam game.")
-	SteamPID := Process("Exist", "steam.exe")
+	RegRead, steamPath, HKLM, Software\Valve\Steam, InstallPath
+	Log("PCLauncher - Steam install path: " . steamPath)
+	steamExe := "Steam.exe"
+	CheckFile(steamPath . "\" . steamExe)
+	steamPID := Process("Exist", steamExe)
 	curDHW := A_DetectHiddenWindows	; record current setting to be restored later
 	DetectHiddenWindows, OFF	; this has to be off otherwise if steam is running it will falsely detect the Login window
-	If (SteamPID && (WinExist("Steam Login") != "0x0")) {	; if steam is running, but at the login window, we need to close it first, then rerun it with our login info
+	If (steamPID && (WinExist("Steam Login") != "0x0")) {	; if steam is running, but at the login window, we need to close it first, then rerun it with our login info
 		Log("PCLauncher - Steam is already running and at the login window.")
 		Gosub, SteamLogin
-	} Else If !SteamPID {	; if steam is not running at all, start it with our login info
+	} Else If !steamPID {	; if steam is not running at all, start it with our login info
 		Log("PCLauncher - Steam is not running.")
 		Gosub, SteamLaunch
 	} Else {
@@ -84,9 +89,34 @@ If mode in steam,steambp	; steam launch
 		If mode = steam
 			Run("steam://rungameid/" . SteamID .  " " . Parameters)
 		Else
-			Run(Application)
+			Run(Application .  " " . Parameters)
 	}
 	DetectHiddenWindows, %curDHW%	; restoring previous setting
+} Else If mode = origin		; origin launch
+{	Log("PCLauncher - Checking Origin status.")
+	RegRead, originFullPath, HKLM, Software\origin, ClientPath
+	Log("PCLauncher - Origin install path: " . originPath)
+	CheckFile(originFullPath)
+	SplitPath, originFullPath, originExe, originPath
+	originLoginWindow := "Origin ahk_class QWidget"
+	OriginPID := Process("Exist", originExe)
+	If (OriginPID && (WinExist(originLoginWindow) != "0x0")) {	; if Origin is running, but at the login window, we need to close it first, then rerun it with our login info
+		WinGet, orResize, Style, %originLoginWindow%
+		If (orResize & 0x10000)	; testing if the window has WS_MAXIMIZEBOX, the only difference between the Origin Main Window and the Origin Login Window
+			Log("PCLauncher - Origin is already running and logged in. Skipping login scripts and running game.")
+		Else {
+			Log("PCLauncher - Origin is already running and at the login window.")
+			Gosub, OriginLogin
+		}
+	} Else If !OriginPID {	; if Origin is not running at all, start it with our login info
+		Log("PCLauncher - Origin is not running.")
+		Gosub, OriginLaunch
+	} Else {
+		Log("PCLauncher - Origin is already running and looks to be logged in as no login window was detected.")
+	}
+	errLevel := Run(ApplicationName . " " . Parameters, ApplicationPath,, AppPID)
+	If errLevel
+		ScriptError("There was a problem launching your Application. Please check it is a valid executable.")
 } Else {
 	If mode = url
 	{	Log("PCLauncher - Launching URL.")
@@ -177,7 +207,7 @@ CheckSettings() {
 	Global PreLaunch,PreLaunchPath,PreLaunchName,PreLaunchExt
 	Global PostLaunch,PostLaunchPath,PostLaunchName,PostLaunchExt
 	Global PostExit,PostExitPath,PostExitName,PostExitExt
-	Global moduleName,appIsImage,dtDriveLetter,SteamID,mode,preLSkip,postLSkip,postESkip,AppWaitExe,SteamIDExe,FadeTitle
+	Global moduleName,appIsImage,dtDriveLetter,SteamID,OriginGame,mode,preLSkip,postLSkip,postESkip,AppWaitExe,SteamIDExe,FadeTitle
 	Global modulePath,fadeIn,k0,k1,k2,k3
 	Log("CheckSettings - Started")
 
@@ -193,7 +223,10 @@ CheckSettings() {
 		Log("PCLauncher - Application is a URL, setting mode to: """ . mode . """")
 	} Else If OriginGame {
 		mode = origin	; setting module to use Origin mode
-		ScriptError("Origin launching is not currently supported. It is planned as a future feature.")
+		Application := GetFullName(Application)	; convert a relative path defined in the PCLauncher ini to absolute
+		SplitPath,Application,ApplicationName,ApplicationPath,ApplicationExt
+		StringRight, ApplicationBackSlash, Application, 1
+		Log("PCLauncher - Origin mode enabled. Will log in to Origin if required.")
 	} Else If Application {
 		mode = standard	; for standard launching
 		Application := GetFullName(Application)	; convert a relative path defined in the PCLauncher ini to absolute
@@ -355,8 +388,7 @@ SteamLaunch:	; steam is not running
 	sP := Decrypt(ReadReg("sP"),"k")
 	If (!sU || !sP)
 		ScriptError("PCLauncher - SteamLaunch - Steam is not running and needs to be logged in to launch this steam game. PCLauncher can do this, but you need to run ""EncryptPasswords"" application in your PCLauncher module folder first and set your login credentials.")
-	PathToSteam := GetFullName(PathToSteam)
-	Run("Steam.exe " . (If sU && sP ? "-login " . sU . " " . sP:"") . " -applaunch " . SteamID . " " . Parameters, PathToSteam,,SteamPID)
+	Run(SteamExe . " " . (If sU && sP ? "-login " . sU . " " . sP:"") . " -applaunch " . SteamID . " " . Parameters, steamPath,,steamPID)
 	erLvl := WinWait("Steam",,15, "Steam Login")	; wait 15 seconds until the main steam window exists (not the login one)
 	If erLvl	; if we simply timed out, some other problem happened
 		ScriptError("PCLauncher - SteamLaunch - Timed out waiting 15 seconds for Steam's Login window. Please try again.")
@@ -367,8 +399,8 @@ SteamLaunch:	; steam is not running
 Return
 SteamLogin:	; @ steam login window
 	Log("PCLauncher - SteamLogin - Steam is at the login window. Closing Steam to try logging in with your credentials if defined",3)
-	Process("Close", "Steam.exe")
-	Process("WaitClose", "Steam.exe")
+	Process("Close", steamExe)
+	Process("WaitClose", steamExe)
 	Sleep, 200	; give some extra time before launching again
 	Goto, SteamLaunch
 Return
@@ -376,7 +408,7 @@ SteamWarning:	; @ steam warning window (when login fails to connect)
 	Log("PCLauncher - SteamWarning - Steam had a problem logging in, servers may be down or credentials may be wrong",3)
 	steamWarning ++
 	If steamWarning >= 3 
-	{	Process("Close", "Steam.exe")
+	{	Process("Close", steamExe)
 		ScriptError("PCLauncher - SteamWarning - Could not log into steam after 3 tries, exiting back to your Front End.")
 	}
 	WinActivate, Steam - Warning
@@ -385,9 +417,48 @@ SteamWarning:	; @ steam warning window (when login fails to connect)
 Return
 
 OriginLaunch:	; Origin is not running
+	Log("PCLauncher - OriginLaunch - Origin is not running, launching it and then filling credentials if defined.")
 	oU := Decrypt(ReadReg("oU"),"k")
 	oP := Decrypt(ReadReg("oP"),"k")
-	PathToOrigin := GetFullName(PathToOrigin)
+	If (!oU || !oP)
+		ScriptError("PCLauncher - OriginLaunch - Origin is not running and needs to be logged in to launch this Origin game. PCLauncher can do this, but you need to run ""EncryptPasswords"" application in your PCLauncher module folder first and set your login credentials.")
+	Run(originExe . " " . Parameters, originPath,,OriginPID)
+	erLvl := WinWait(originLoginWindow,,15)	; wait 15 seconds until the Origin Login window exists
+	If erLvl	; if we simply timed out, some other problem happened
+		ScriptError("PCLauncher - OriginLaunch - Timed out waiting 15 seconds for Origin's Login window. Please try again.")
+	Else If WinExist(originLoginWindow)	; If Origin Login window exists
+	{	;WinSet, Transparent, On, %originLoginWindow%
+		WinGet, orHwnd, ID, %originLoginWindow%	; get the hwnd of the login window
+		CheckFile(moduleExtensionsPath . "\BlockInput.exe", "Cannot find the module extension ""BlockInput.exe"". It is required to automate the Origin login process: " . moduleExtensionsPath . "\BlockInput.exe")
+		Log("PCLauncher - OriginLaunch - Blocking all Input for 20 seconds while Origin is logged in for you.",4)
+		Run("BlockInput.exe 20", moduleExtensionsPath)	; start the tool that blocks all input so user cannot interrupt the login process for 20 seconds
+		Sleep, 3000	; have to wait some time for origin window to appear and be usable. Unforunately there is no programatic way to detect this so giving extra sleep time to be safe.
+		SetKeyDelay,10,100	; The only delay that worked 100% of the time with pasting shifted keys into Origin's boxes. If there is ever a problem with credentials not correct, this may need to be adjusted
+		Log("PCLauncher - OriginLaunch - Activating the Origin Login window.",4)
+		WinActivate, %originLoginWindow%
+		ControlSend,,{Tab 2}%oU%{Tab}%oP%{Enter}, %originLoginWindow%
+		Log("PCLauncher - OriginLaunch - Finished logging into Origin.",4)
+		Process("Close", "BlockInput.exe")	; end script that blocks all input
+	} Else
+		ScriptError("PCLauncher - OriginLaunch - Unhandled Origin Scenario. Please report this and post the log and what you did to make this happen.")
+	erLvl := WinWaitClose("ahk_id " . orHwnd,,15)	; wait some time for Origin to login and window to disappear
+	If erLvl	; if we simply timed out, some other problem happened
+		ScriptError("PCLauncher - OriginLaunch - Timed out waiting 15 seconds for Origin's Login window to close. There was a problem logging in. Please try again or check your credentials.")
+	SetTimer, OriginHide, 100	; Start a timer to destroy ads that may popup after logging in
+Return
+OriginLogin:	; @ Origin login window
+	Log("PCLauncher - OriginLogin - Origin is at the login window. Trying to login with your credentials if defined")
+	OriginPID := Process("Exist", originExe)
+	If OriginPID {
+		Process("Close", originExe)
+		Process("WaitClose", originExe)
+		Sleep, 200	; give some extra time before launching again
+	}
+	Goto, OriginLaunch
+Return
+OriginHide:
+	If WinExist("Featured ahk_class QWidget")	; Close Origin ads that pop up
+		WinClose("Featured ahk_class QWidget")
 Return
 
 CloseProcess:

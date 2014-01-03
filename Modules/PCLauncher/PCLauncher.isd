@@ -7,10 +7,9 @@
 				<SECTION name="Settings" required="false">
 					<SECTIONTYPE>Global</SECTIONTYPE>
 					<KEYS>
-						<KEY name="PathToSteam" required="false" nullable="true">
-							<KEYTYPE>FolderPath</KEYTYPE>
-							<FULLROW>true</FULLROW>
-							<DESCRIPTION>Put your steam folder in here. Do not need the exe, only the path with no backslash on the end.</DESCRIPTION>
+						<KEY name="HideCursor" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enable/Disable hiding of the mouse cursor globally for all games ran through PCLauncher. Note: HyperLaunch's version of this setting does not affect the cursor for this module, so it must be set here if you want to use it. Default is disabled.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>
@@ -50,12 +49,12 @@
 						</KEY>
 						<KEY name="OriginGame" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
-							<DESCRIPTION>FUTURE FEATURE - NOT CURRENTLY SUPPORTED - Set to true if this is a game using the Origin Service. If true it will allow automatic logging into Origin so you do not get stuck at a login prompt while loading</DESCRIPTION>
+							<DESCRIPTION>Set to true if this game uses the Origin service. If true, it will automatically login to Origin so you do not get stuck at a login prompt while loading.</DESCRIPTION>
 						</KEY>
 						<KEY name="WorkingFolder" required="false" nullable="true">
 							<KEYTYPE>ExeStartIn</KEYTYPE>
 							<FULLROW>true</FULLROW>
-							<DESCRIPTION>Mostly for GoG games, allows you to set a different working directory then the default directory (the one Application exists in)</DESCRIPTION>
+							<DESCRIPTION>Mostly for GoG games, allows you to set a different working directory then the default directory (the one Application exists in).</DESCRIPTION>
 						</KEY>
 						<KEY name="PreLaunch" required="false" nullable="true">
 							<KEYTYPE>URI</KEYTYPE>
@@ -117,7 +116,7 @@
 						</KEY>
 						<KEY name="HideCursor" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
-							<DESCRIPTION>True or False - Same as the HyperLaunch setting, but allows for per-game use.</DESCRIPTION>
+							<DESCRIPTION>Enable/Disable hiding of the mouse cursor just this game ran through PCLauncher. Overides the global setting for this module. Note: HyperLaunch's version of this setting does not affect the cursor for this game, so it must be set here if you want to use it.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>
@@ -133,6 +132,11 @@
 							<KEYTYPE>FolderPath</KEYTYPE>
 							<FULLROW>true</FULLROW>
 							<DESCRIPTION>Put your steam folder in here. Do not need the exe, only the path with no backslash on the end.</DESCRIPTION>
+						</KEY>
+						<KEY name="PathToOrigin" required="false" nullable="true">
+							<KEYTYPE>FolderPath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Put your Origin folder in here. Do not need the exe, only the path with no backslash on the end.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>
@@ -233,7 +237,7 @@
 							</VALUES>
 						</KEY>
 						<KEY name="FadeTitle" required="false" nullable="true">
-							<KEYTYPE>String</KEYTYPE>
+							<KEYTYPE>WinTitle</KEYTYPE>
 							<DESCRIPTION>This is the Window Title &amp; Class of your application. To find the Title/Class, click the button to the right of this field to launch a script that copies the active window's title and class to your clipboard. You can also use the AutoIt3 Window Spy utility installed with AutoHotKey or my utility @ http://www.hyperspin-fe.com/forum/showthread.php?15014-Window-Logger</DESCRIPTION>
 						</KEY>
 						<KEY name="FadeInExitSleep" required="false" nullable="true">

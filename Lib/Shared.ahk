@@ -1,8 +1,8 @@
-MCRC=4C3C652B
-MVersion=1.1.3
+MCRC=C3310641
+MVersion=1.1.4
 
 StartModule(){
-	Global gameSectionStartTime,gameSectionStartHour,dbName,romPath,romName,romExtension,systemName,MEmu,MEmuV,MURL,MAuthor,MVersion,MCRC,iCRC,MSystem,romMapTable,romMappingLaunchMenuEnabled,romMenuRomName,7zEnabled,hideCursor,toggleCursorKey,zz
+	Global gameSectionStartTime,gameSectionStartHour,dbName,romPath,romName,romExtension,systemName,moduleName,MEmu,MEmuV,MURL,MAuthor,MVersion,MCRC,iCRC,MSystem,romMapTable,romMappingLaunchMenuEnabled,romMenuRomName,7zEnabled,hideCursor,toggleCursorKey,zz
 	Log("StartModule - Started")
 	Log("StartModule - MEmu: " . MEmu . "`r`n`t`t`t`t`tMEmuV: " . MEmuV . "`r`n`t`t`t`t`tMURL: " . MURL . "`r`n`t`t`t`t`tMAuthor: " . MAuthor . "`r`n`t`t`t`t`tMVersion: " . MVersion . "`r`n`t`t`t`t`tMCRC: " . MCRC . "`r`n`t`t`t`t`tiCRC: " . iCRC . "`r`n`t`t`t`t`tMID: " . MID . "`r`n`t`t`t`t`tMSystem: " . MSystem)
 	If InStr(MSystem,systemName)
@@ -24,7 +24,7 @@ StartModule(){
 	{	Log("StartModule - Setting romName to the dbName sent to HyperLaunch: " . dbName,4)
 		romName := dbName	; Use dbName if previous checks are false
 	}
-	If hideCursor = true
+	If (hideCursor = "true" && moduleName != "PCLauncher")	; PCLauncher controls its own cursor hiding so HL should never touch this
 		SystemCursor("Off")
 	If toggleCursorKey
 		XHotKeywrapper(toggleCursorKey,"ToggleCursor")
@@ -101,7 +101,7 @@ WinClose(winTitle,winText="",secondsToWait="",excludeTitle="",excludeText=""){
 	Return ErrorLevel
 }
 
-Run(target,workingDir="",useErrorLevel="",ByRef outputVarPID=""){
+Run(target,workingDir="",useErrorLevel=1,ByRef outputVarPID=""){
 	Static targetCount
 	Global logShowCommandWindow,logCommandWindow,cmdWindowTable
 	targetCount++
@@ -131,6 +131,7 @@ Run(target,workingDir="",useErrorLevel="",ByRef outputVarPID=""){
 			SendInput, {Raw}%target%	; send the text to the command window and run it
 		Send, {Enter}
 	} Else {
+		useErrorLevel := If useErrorLevel = 1 ? "useErrorLevel" : ""
 		Run, %target%, %workingDir%, %useErrorLevel%, outputVarPID
 		curErr := ErrorLevel
 	}
@@ -367,8 +368,8 @@ IniReadCheck(file,section,key,defaultvalue="",errorMsg="",logType="") {
 				IniWrite, %defaultValue%, %file%, % section%A_Index%, %key%
 			Return defaultValue
 		}
-		If (logType and iniVar != "" ) {	; only log if a key exists and logType set
-			logAr := ["Module","Bezel"]
+		If logType	; only log if logType set
+		{	logAr := ["Module","Bezel"]
 			Log(logAr[logType] . " Setting - [" . section%A_Index% . "] - " . key . ": " . iniVar)
 		}
 		If iniVar != ""	; if IniVar contains a value, update the lastIniVar
@@ -1113,7 +1114,7 @@ DaemonTools(action,file="",type="",drive=0){
 			}
 		}
 
-		; This section is seperate because I use a couple methods in the above block of code and the below code would be duplicated it it was moved up.
+		; This section is seperate because I use a couple unique conditions in the above block of code, where the below code would be duplicated if it was moved up.
 		; If ((romIn7z = "true" || skipchecks != "false") && !romFound) { ; we found the rom in the archive or we are skipping looking alltogether
 		If ((romIn7z = "true" || (skipchecks != "false" && 7zUsed)) && romFound != "true") {
 			Log("7z - " . (If romIn7z = "true" ? "File found in archive" : "Skipchecks is enabled`, and set to " . skipChecks . " continuing to extract rom."),4)
