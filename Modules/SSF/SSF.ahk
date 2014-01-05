@@ -2,8 +2,8 @@ MEmu = SSF
 MEmuV =  v0.12 beta R4
 MURL = http://www7a.biglobe.ne.jp/~phantasy/ssf/
 MAuthor = djvj
-MVersion = 2.0.8
-MCRC = 1D12ABD0
+MVersion = 2.0.9
+MCRC = D853A040
 iCRC = 76F243DE
 MID = 635038268924991452
 MSystem = "Sega Saturn","Sega ST-V"
@@ -25,7 +25,12 @@ MSystem = "Sega Saturn","Sega ST-V"
 ; Module will attempt to auto-detect the region for your game by using the region tags in parenthesis on your rom file and set SSF to use the appropriate region settings that match.
 ;
 ; Shining Force III - Scenario 2 & 3 (Japan) (Translated En) games crash at chapter 4 and when you use Marki Proserpina spell or using the Abyss Wand. Fix may be to use a different bios if this occurs, but this is untested. Read more about it here: http://forums.shiningforcecentral.com/viewtopic.php?f=34&t=14858&start=80
-;
+; 
+; Data Cartridges:
+; These 2 games used a hardware cart in order to play the games, so the module will mount them if found within the same folder as the cd image and named the same as the xml game name with a "rom" extension.
+; Ultraman - Hikari no Kyojin Densetsu (Japan) and King of Fighters '95, The (Europe)
+; So something like this must exist: "King of Fighters '95, The (Europe).rom"
+
 ; Sega ST-V:
 ; romExtension should be zip
 ; Extract the stv110.bin bios into the BIOS folder. Run SSF.exe and goto Option->Option and point ST-V BIOS to this file.
@@ -114,11 +119,15 @@ If systemName = Sega Saturn
 		SaturnBIOS := If defaultRegion = "1" ? usBios : If defaultRegion = "2" ? jpBios : euBios
 	}
 
-	If RegExMatch(romName, "i)ultraman.*hikari") {		; only for the game Ultraman - Hikari no Kyojin Densetsu (Japan). Game's file name must contain "ultraman" and "hikari" to trigger this condition
+	DataCartridge := romPath . "\" . romName . ".rom"
+	If FileExist(DataCartridge) {		; Only 2 known games need this, Ultraman - Hikari no Kyojin Densetsu (Japan) and King of Fighters '95, The (Europe).
+		Log("Module - This game requires a data cart in order to play. Trying to mount the cart: """ . DataCartridge . """")
+		IfNotExist, %DataCartridge%
+			ScriptError("Could not locate the Data Cart for this game. Please make sure one exists inside the archive of this game or in the folder this game resides and it is called: """ . romName . ".rom""")
 		CartridgeID := "21"
 		DataCartridgeEnable := "1"
-		DataCartridge := romPath . "\" . romName . ".rom"
 	} Else {	; all other games
+		Log("Module - This game does not require a data cart in order to play.")
 		CartridgeID := "5c"
 		DataCartridgeEnable := "0"
 		DataCartridge := 
