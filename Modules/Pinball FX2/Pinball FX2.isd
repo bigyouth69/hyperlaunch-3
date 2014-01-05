@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Sleep_Until_Logo" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>In Milliseconds, the amount of time to sleep until the Pinball FX2 logo starts to appear. If the module does not cancel this immediately upon seeing this logo, decrease this value. Default is 12000, which is 12 seconds.</DESCRIPTION>
+						</KEY>
+						<KEY name="Sleep_Until_Main_Menu" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>In Milliseconds, the amount of time to sleep until the Main Menu appears with all the tables. If the module is not accurate with choosing the table, increase this value. Default is 1500, which is 1.5 seconds.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="X" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The X spot on the map grid this game can be found at. Start at the top left and count right to determine the column this number should be set to. First square counts as 1.</DESCRIPTION>
+							<VALUES>
+								<VALUE>1</VALUE>
+								<VALUE>2</VALUE>
+								<VALUE>3</VALUE>
+								<VALUE>4</VALUE>
+								<VALUE>5</VALUE>
+								<VALUE>6</VALUE>
+								<VALUE>7</VALUE>
+								<VALUE>8</VALUE>
+								<VALUE>9</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Y" required="true" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The Y spot on the map grid this game can be found at. Start at the top left and count right to determine the column this number should be set to. First square counts as 1.</DESCRIPTION>
+							<VALUES>
+								<VALUE>1</VALUE>
+								<VALUE>2</VALUE>
+								<VALUE>3</VALUE>
+								<VALUE>4</VALUE>
+								<VALUE>5</VALUE>
+								<VALUE>6</VALUE>
+								<VALUE>7</VALUE>
+								<VALUE>8</VALUE>
+								<VALUE>9</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>
