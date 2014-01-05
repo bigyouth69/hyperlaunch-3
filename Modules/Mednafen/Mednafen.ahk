@@ -2,8 +2,8 @@ MEmu = Mednafen
 MEmuV =  v0.9.31 WIP
 MURL = http://mednafen.sourceforge.net/
 MAuthor = djvj
-MVersion = 2.0.8
-MCRC = 9898326C
+MVersion = 2.0.9
+MCRC = DAAB2BB2
 iCRC = 1ECCF5E8
 MID = 635038268903923913
 MSystem = "Atari Lynx","Bandai Wonderswan","Bandai Wonderswan Color","NEC PC Engine","NEC PC Engine-CD","NEC PC-FX","NEC SuperGrafx","NEC TurboGrafx-16","NEC TurboGrafx-CD","Nintendo Entertainment System","Nintendo Famicom","Nintendo Famicom Disk System","Nintendo Game Boy","Nintendo Game Boy Advance","Nintendo Game Boy Color","Nintendo Super Famicom","Nintendo Virtual Boy","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","SNK Neo Geo Pocket","SNK Neo Geo Pocket Color","Sony PlayStation","Super Nintendo Entertainment System"
@@ -185,7 +185,7 @@ If bezelPath ; defining xscale and yscale relative to the bezel windowed mode
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 ; Mount the CD using DaemonTools
-If ((romExtension = ".cue" || romExtension = ".ccd") && dtEnabled = "true" && (ident = "psx" || ident = "pce")) {	; only Sony PlayStation tested
+If ((romExtension = ".cue" || romExtension = ".ccd" || romExtension = ".iso") && dtEnabled = "true" && (ident = "psx" || ident = "pce")) {	; only Sony PlayStation tested
 	Log("Module - Mounting rom in Daemon Tools")
 	DaemonTools("get")
 	DaemonTools("mount",romPath . "\" . romName . romExtension)
@@ -215,11 +215,12 @@ ExitModule()
 
 
 MultiGame:
-	If (romExtension = ".cue" && dtEnabled = "true" && (ident = "psx" || ident = "pce")) {
+	If useDT {
+		SetKeyDelay, 50
 		Send, {F8 down}{F8 up}	; eject disc in mednafen - MIGHT WANT TO TRY DOING A CONTROLSEND
 		DaemonTools("unmount")
 		Sleep, 500	; Required to prevent  DT from bugging
-		DaemonTools("mount",selectedRom,"dt")	; forcing dt drive, scsi does not work in mednafen
+		DaemonTools("mount",selectedRom)
 		WinActivate, ahk_class SDL_app
 		Send, {F8 down}{F8 up}	; eject disc in mednafen
 	}
