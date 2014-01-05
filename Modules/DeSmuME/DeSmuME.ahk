@@ -2,9 +2,9 @@ MEmu = DeSmuME
 MEmuV =  v0.9.9
 MURL = http://www.desmume.com/
 MAuthor = djvj
-MVersion = 2.0.2
-MCRC = 2186DE30
-iCRC = A5A00A8F
+MVersion = 2.0.3
+MCRC = F4180869
+iCRC = 105F4BF9
 MID = 635038268882946453
 MSystem = "Nintendo DS"
 ;----------------------------------------------------------------------------
@@ -23,7 +23,7 @@ FadeInStart()
 settingsFile := modulePath . "\" . moduleName . ".ini"
 bezelTopOffset := IniReadCheck(settingsFile, "Settings", "Bezel_Top_Offset","29",,1)
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
-vertical := IniReadCheck(settingsFile, romName, "vertical","false",,1)
+vertical := IniReadCheck(settingsFile, "Settings|" . romName, "vertical","false",,1)
 
 desmumeIni := CheckFile(emuPath . "\desmume.ini")
 rotate := IniReadCheck(desmumeIni, "Video", "Window Rotate","0",,1)

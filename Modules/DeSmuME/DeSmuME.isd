@@ -15,6 +15,10 @@
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>If you see part of the emulator window at the top of your playing screen increase this value. If your playing screen is hidden at the top decrease it.</DESCRIPTION>
 						</KEY>
+						<KEY name="vertical" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, all games will launch in a vertical orientation by default.</DESCRIPTION>
+						</KEY>
 					</KEYS>
 				</SECTION>
 				<SECTION name="%RomName%" required="false">
@@ -22,7 +26,7 @@
 					<KEYS>
 						<KEY name="vertical" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
-							<DESCRIPTION>If true, The game will launch in a vertical orientation.</DESCRIPTION>
+							<DESCRIPTION>If true, just this one game will launch in a vertical orientation.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>
