@@ -2,9 +2,9 @@ MEmu = Dolphin
 MEmuV =  v4.0
 MURL = http://www.dolphin-emulator.com/
 MAuthor = djvj
-MVersion = 2.0.3
-MCRC = 21D30F5
-iCRC = 8197DF4
+MVersion = 2.0.4
+MCRC = 68C4777D
+iCRC = 33A87511
 MID = 635038268884477733
 MSystem = "Nintendo Gamecube","Nintendo Wii"
 ;----------------------------------------------------------------------------
@@ -21,12 +21,16 @@ MSystem = "Nintendo Gamecube","Nintendo Wii"
 ; Bezels:
 ; If the game does not fit the window, you can try setting stretch to window manually in dolphin.
 ;
-; Setting up custom Wiimote profiles:
-; First set UseCustomProfiles to true below
-; Download the example Settings.ini from my user dir on the ftp @ /Upload Here/djvj/Nintendo Wii/ and put it in the folder with this module
-; Launch dolphin and goto Options->Wiimote Settings and configure all your Wiimotes how you want your default setup to look like, this will be used for all games that you don't set a custom profile for. Save that profile, calling it Default.
-; Now create custom profiles for all the games you need non-default button layouts for, and name the profiles whatever you want.
-; Open the example Settings.ini and add each game from your xml like you see from my examples and set its profile to match the one you want that game to load.
+; Setting up custom Wiimote or GCPad profiles:
+; First set UseCustomWiimoteProfiles or UseCustomGCpadProfiles to true in HLHQ for this module
+; Launch Dolphin manually and goto Options->(Wiimote or Gamecube Pad) Settings and configure all your controls how you want your default setup to look like. This will be used for all games that you don't set a custom profile for. No need to save any profiles.
+; All your controls are stored in WiimoteNew.ini or GCPadNew.ini and get copied to a _Default_(WiimoteNew or GCPadNew).ini on first launch. This ini contains all the controls for all 4 controllers.
+; Do not confuse this with Dolphin's built-in profiles as those only contain info for only one controller. The (WiimoteNew or GCPadNew).ini and all the profiles HL uses contain info for all controllers in one file.
+; This new profile now called _Default_(WiimoteNew or GCPadNew).ini will be found in Dolphins settings folder: \Config\Profiles\(Wiimote or GCPad) (HL)\Default.ini
+; For each game or custom control sets you want to use, edit the controls for all the controllers to work for that game and exit Dolphin. Now copy the (WiimoteNew or GCPadNew).ini to the "(Wiimote or GCPad) (HL)" folder and name it whatever you like.
+; In HLHQ's module settings for Dolphin, Click the Rom Settings tab and add each game from your xml you want to use a this custom profile for.
+; Now for all those games you added, make sure the Profile setting it set to the custom profile you want to load when that game is launched.
+; Any game not added will use the "_Default_(WiimoteNew or GCPadNew).ini" profile HL makes on first launch.
 ;
 ; To Pair a Wiimote:
 ; Press 1 + 2 on the wiimote
@@ -40,7 +44,8 @@ FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
-UseCustomProfiles := IniReadCheck(settingsFile, "Settings", "UseCustomProfiles","false",,1)	; set to true if you want to setup custom Wiimote profiles for games
+UseCustomWiimoteProfiles := IniReadCheck(settingsFile, "Settings", "UseCustomWiimoteProfiles","false",,1)	; set to true if you want to setup custom Wiimote profiles for games
+UseCustomGCPadProfiles := IniReadCheck(settingsFile, "Settings", "UseCustomGCPadProfiles","false",,1)	; set to true if you want to setup custom GCPad profiles for games
 HideMouse := IniReadCheck(settingsFile, "Settings", "HideMouse","true",,1)					; hides mouse cursor in the emu options
 PairKey := IniReadCheck(settingsFile, "Settings", "PairKey","",,1)							; hotkey to "Pair Up" Wiimotes, delete the key to disable it
 RefreshKey := IniReadCheck(settingsFile, "Settings", "RefreshKey","",,1)						; hotkey to "Refresh" Wiimotes, delete the key to disable it
@@ -48,9 +53,18 @@ Timeout := IniReadCheck(settingsFile, "Settings", "Timeout","5",,1)							; amou
 
 BezelStart()
 
-dolphinINIPath := A_MyDocuments . "\Dolphin Emulator\Config\Dolphin.ini"	; location of Dolphin.ini for v4.0+
+; Determine where Dolphin is storing its ini, this will act as the base folder for settings and profiles related to this emu
+dolphinININewPath := A_MyDocuments . "\Dolphin Emulator\Config\Dolphin.ini"	; location of Dolphin.ini for v4.0+
 dolphinINIOldPath := emuPath . "\User\Config\Dolphin.ini"	; location of Dolphin.ini prior to v4.0
-dolphinINI := CheckFile(If FileExist(dolphinINIOldPath) ? dolphinINIOldPath : dolphinINIPath, "Could not find your Dolphin.ini in either of these folders. Please run Dolphin manually first to create it.`n" . dolphinINIOldPath . "`n" . dolphinINIPath)
+IfExist % dolphinININewPath
+{	dolphinBasePath := A_MyDocuments . "\Dolphin Emulator"
+	Log("Module - Dolphin's base settings folder is not portable and found in: " . dolphinBasePath)
+} Else IfExist % dolphinINIOldPath
+{	dolphinBasePath := emuPath . "\User"
+	Log("Module - Dolphin's base settings folder is portable and found in: " . dolphinBasePath)
+} Else
+	ScriptError("Could not find your Dolphin.ini in either of these folders. Please run Dolphin manually first to create it.`n" . dolphinINIOldPath . "`n" . dolphinININewPath)
+dolphinINI := dolphinBasePath . "Config\Dolphin.ini"
 
 7z(romPath, romName, romExtension, 7zExtractPath)
 
@@ -83,22 +97,37 @@ Loop, Parse, iniLookup, `n
 		IniWrite, % split3, %dolphinINI%, %split1%, %split2%
 }
 
- ; Load default or user specified wiimote profile for launching
-If UseCustomProfiles = true
-{	profile := IniReadCheck(settingsFile, romName, "profile","default",,1)
-	currentProfile = %emupath%\User\Config\WiimoteNew.ini
-	newProfile =  %emupath%\User\Config\Profiles\Wiimote\%profile%.ini
-	defaultProfile = %emupath%\User\Config\Profiles\Wiimote\Default.ini
-	IfNotExist, %newProfile%
-		ScriptError(romName . " is set to load a custom Wiimote profile`, but it could not be found.`nPlease fix the profile's name or create a profile called " . profile)
-	FileRead, cProfile, %currentProfile%
-	FileRead, nProfile, %newProfile%
-	If ( cProfile != nProfile ) {
-		If profile != default	; loading custom profile
-			FileCopy, %newProfile%, %currentProfile%, 1
-		Else	; loading default profile
-			FileCopy, %defaultProfile%, %currentProfile%, 1
+ ; Load default or user specified Wiimote or GCPad profiles for launching
+If ((InStr(systemName, "wii") && UseCustomWiimoteProfiles = "true") || (InStr(systemName, "cube") && UseCustomGCPadProfiles = "true"))
+{	profileType := If InStr(systemName, "wii") ? "WiimoteNew" : "GCPadNew"
+	profileTypeFolder := If InStr(systemName, "wii") ? "Wiimote" : "GCPad"
+	profile := IniReadCheck(settingsFile, romName, "profile", "Default",,1)
+	HLProfilePath := dolphinBasePath . "\Config\Profiles\" . profileTypeFolder . " (HL)"
+	currentProfile := dolphinBasePath . "\Config\" . profileType . ".ini"
+	defaultProfile := HLProfilePath . "\_Default_" . profileType . ".ini"
+	customProfile := HLProfilePath . "\" . profile . ".ini"
+	If !FileExist(currentProfile)
+		ScriptError("You have custom " . profileTypeFolder . " profiles enabled, but could not locate " . currentProfile . ". This file stores all your current controls in Dolphin. Please setup your controls in Dolphin first.")
+	If !FileExist(defaultProfile) {
+		Log("Module - Creating initial Default " . profileTypeFolder . " profile by copying " . profileType . ".ini to " . defaultProfile, 2)
+		FileCreateDir % HLProfilePath
+		FileCopy, %currentProfile%, %defaultProfile%	; create the initial default profile on first launch
 	}
+	If (profile != "Default" && !FileExist(customProfile))
+		ScriptError(romName . " is set to load a custom " . profileTypeFolder . " profile`, but it could not be found: " . customProfile)
+	FileRead, cProfile, %currentProfile%	; read current profile into memory
+	FileRead, nProfile, %customProfile%	; read custom profile into memory
+	If ( cProfile != nProfile ) {	; if both profiles do not match exactly
+		Log("Module - Current " . profileTypeFolder . " profile does not match the one this game should use.")
+		If (profile != "Default") {	; if user set to use a custom profile
+			Log("Module - Copying this defined " . profileTypeFolder . " profile to replace the current one: " . customProfile)
+			FileCopy, %customProfile%, %currentProfile%, 1
+		} Else {	; load default profile
+			Log("Module - Copying the default " . profileTypeFolder . " profile to replace the current one: " . defaultProfile)
+			FileCopy, %defaultProfile%, %currentProfile%, 1
+		}
+	} Else
+		Log("Module - Current " . profileTypeFolder . " profile is already the correct one for this game, not touching it.")
 }
 
 Run(executable . " /b /e """ . romPath . "\" . romName . romExtension . """", emuPath)
@@ -116,37 +145,37 @@ ExitModule()
 
 
 ConnectWiimote(key) {
-		Global Timeout
-		Timeout := (10*Timeout) ; adjusting timeout to match loop sleep timer
-		IfWinNotExist, Dolphin Wiimote Configuration ahk_class #32770
-		{
-			DetectHiddenWindows, OFF ; this needs to be off otherwise WinMenuSelectItem doesn't work for some odd reason
-			WinActivate, Dolphin ahk_class wxWindowNR,,,FPS
-			WinMenuSelectItem, ahk_class wxWindowNR,, Options, Wiimote Settings,,,,,,FPS
-			WinWait("Dolphin Wiimote Configuration ahk_class #32770")
-			WinWaitActive("Dolphin Wiimote Configuration ahk_class #32770")
-		}
-		;WinActivate, Dolphin Wiimote Configuration ahk_class #32770 ; test if window needs to be active
-		ControlClick, %key%, Dolphin Wiimote Configuration ahk_class #32770
-		SetFormat, float, 0
-		Loop {
-			timeLeft := (50-A_Index)/10
-			ToolTip, Waiting for at least one Wiimote to be connected...`nTiming out in %timeLeft%, 20, 20
-			ControlGetText, connMotes, Static5, Dolphin Wiimote Configuration ahk_class #32770
-			StringLeft, numOfMotes, connMotes, 1
-			If ( numOfMotes > 0 ) or ( A_Index >= Timeout )
-				Break ; exit loop if a wiimote is detected or set Timeout elapsed
-			IfWinNotExist, Dolphin Wiimote Configuration ahk_class #32770
-				Break ; exit loop if user closed the window manually
-			Sleep, 100
-		}
-		ToolTip
-		If ( key = "Pair Up" )
-			ControlClick, Refresh, Dolphin Wiimote Configuration ahk_class #32770 ; clicking refresh once after pairing so the wiimotes get link
-		ControlClick, OK, Dolphin Wiimote Configuration ahk_class #32770
-		; WinActivate, FPS ahk_class wxWindowClassNR ; for older dolphins
-		WinActivate, FPS ahk_class wxWindowNR
+	Global Timeout
+	Timeout := (10*Timeout) ; adjusting timeout to match loop sleep timer
+	IfWinNotExist, Dolphin Wiimote Configuration ahk_class #32770
+	{
+		DetectHiddenWindows, OFF ; this needs to be off otherwise WinMenuSelectItem doesn't work for some odd reason
+		WinActivate, Dolphin ahk_class wxWindowNR,,,FPS
+		WinMenuSelectItem, ahk_class wxWindowNR,, Options, Wiimote Settings,,,,,,FPS
+		WinWait("Dolphin Wiimote Configuration ahk_class #32770")
+		WinWaitActive("Dolphin Wiimote Configuration ahk_class #32770")
 	}
+	;WinActivate, Dolphin Wiimote Configuration ahk_class #32770 ; test if window needs to be active
+	ControlClick, %key%, Dolphin Wiimote Configuration ahk_class #32770
+	SetFormat, float, 0
+	Loop {
+		timeLeft := (50-A_Index)/10
+		ToolTip, Waiting for at least one Wiimote to be connected...`nTiming out in %timeLeft%, 20, 20
+		ControlGetText, connMotes, Static5, Dolphin Wiimote Configuration ahk_class #32770
+		StringLeft, numOfMotes, connMotes, 1
+		If ( numOfMotes > 0 ) or ( A_Index >= Timeout )
+			Break ; exit loop if a wiimote is detected or set Timeout elapsed
+		IfWinNotExist, Dolphin Wiimote Configuration ahk_class #32770
+			Break ; exit loop if user closed the window manually
+		Sleep, 100
+	}
+	ToolTip
+	If ( key = "Pair Up" )
+		ControlClick, Refresh, Dolphin Wiimote Configuration ahk_class #32770 ; clicking refresh once after pairing so the wiimotes get link
+	ControlClick, OK, Dolphin Wiimote Configuration ahk_class #32770
+	; WinActivate, FPS ahk_class wxWindowClassNR ; for older dolphins
+	WinActivate, FPS ahk_class wxWindowNR
+}
 
 PairWiimote:
 	ConnectWiimote("Pair Up")

@@ -11,25 +11,29 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
 						</KEY>
-						<KEY name="UseCustomProfiles" required="false" nullable="false">
+						<KEY name="UseCustomWiimoteProfiles" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
-							<DESCRIPTION>set to true if you want to setup custom Wiimote profiles for games</DESCRIPTION>
+							<DESCRIPTION>Set to true if you want to use custom Wiimote profiles for Wii games</DESCRIPTION>
+						</KEY>
+						<KEY name="UseCustomGCPadProfiles" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you want to use custom Gamecube Pad profiles for Gamecube games</DESCRIPTION>
 						</KEY>
 						<KEY name="HideMouse" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
-							<DESCRIPTION>hides mouse cursor in the emu options</DESCRIPTION>
+							<DESCRIPTION>Hides mouse cursor in the emu options</DESCRIPTION>
 						</KEY>
 						<KEY name="PairKey" required="false" nullable="true">
 							<KEYTYPE>xHotkey</KEYTYPE>
-							<DESCRIPTION>hotkey to "Pair Up" Wiimotes, delete the key to disable it</DESCRIPTION>
+							<DESCRIPTION>Hotkey to "Pair Up" Wiimotes, delete the key to disable it</DESCRIPTION>
 						</KEY>
 						<KEY name="RefreshKey" required="false" nullable="true">
 							<KEYTYPE>xHotkey</KEYTYPE>
-							<DESCRIPTION>hotkey to "Refresh" Wiimotes, delete the key to disable it</DESCRIPTION>
+							<DESCRIPTION>Hotkey to "Refresh" Wiimotes, delete the key to disable it</DESCRIPTION>
 						</KEY>
 						<KEY name="Timeout" required="false" minLength = "1">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>amount in seconds we should wait for the PairKey and Refresh key to timeout</DESCRIPTION>
+							<DESCRIPTION>Amount in seconds we should wait for the PairKey and Refresh key to timeout</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>
