@@ -2,9 +2,9 @@ MEmu = PCSX2
 MEmuV =  1.1.0.r5695
 MURL = http://pcsx2.net/
 MAuthor = djvj
-MVersion = 2.0.6
-MCRC = 9AD0114
-iCRC = E62E9D5B
+MVersion = 2.0.7
+MCRC = 5D0A4933
+iCRC = 5EE13A07
 MID = 635038268913291718
 MSystem = "Sony PlayStation 2"
 ;----------------------------------------------------------------------------
@@ -49,6 +49,7 @@ IfNotExist % cfgPath
 	FileCreateDir, %cfgPath%	; create the cfg folder if it does not exist
 
 ; rom specific settings
+dtOveride := IniReadCheck(settingsFile, romName, "DTOveride",,,1)
 nohacks := IniReadCheck(settingsFile, romName, "nohacks","false",,1)	; disables all speedhacks
 gamefixes := IniReadCheck(settingsFile, romName, "gamefixes",,,1)	; Enable specific gamefixes for this session. Use the specified comma or pipe-delimited list of gamefixes: VuAddSub,VuClipFlag,FpuCompare,FpuMul,FpuNeg,EETiming,SkipMpeg,OPHFlag,DMABusy,VIFFIFO,VI,FMVinSoftware
 ; cfg := IniReadCheck(settingsFile, romName, "cfg",,,1)	; specify a custom configuration file to use instead of PCSX2.ini (does not affect plugins)
@@ -123,6 +124,8 @@ pcsx2Ini := LoadProperties(pcsx2IniFile)	; load the config into memory
 dvdSource := ReadProperty(pcsx2Ini,"CdvdSource")	; read value
 
 ; Mount the CD using DaemonTools
+If dtOveride	; this allows per-game DT support because some games boot to black when DT is enabled
+	dtEnabled := dtOveride
 If (dtEnabled = "true" && InStr(".mds|.mdx|.b5t|.b6t|.bwt|.ccd|.cue|.isz|.nrg|.cdi|.iso|.ape|.flac", romExtension)) {	; if DT enabled and using an image type DT can load
 	If dvdSource != Plugin
 	{	Log("Module - CdvdSource was not set to ""Plugin"", changing it so PCSX2 can read from Daemon Tools.")

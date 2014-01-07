@@ -37,6 +37,10 @@
 				<SECTION name="%RomName%" required="false">
 					<SECTIONTYPE>Rom</SECTIONTYPE>
 					<KEYS>
+						<KEY name="DTOveride" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>This is an override for Daemon Tools support. It allows per-game support for DT. Set to true to force this game to use DT or false to disable it.</DESCRIPTION>
+						</KEY>
 						<KEY name="nohacks" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>disables all speedhacks</DESCRIPTION>
