@@ -11,6 +11,10 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
 						</KEY>
+						<KEY name="HideConsole" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Hiding of the Console Window</DESCRIPTION>
+						</KEY>
 						<KEY name="SystemConfigs" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>If true, RetroArch will use per-system cfg files named to match your System Name. If false, it looks for a retroarch.cfg.</DESCRIPTION>
@@ -47,17 +51,21 @@
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Sega GameGear. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is genesis_plus_gx_libretro_x86_64_20130629</DESCRIPTION>
 						</KEY>
+						<KEY name="LibRetro_N64" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Nintendo 64. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is mupen64plus_libretro</DESCRIPTION>
+						</KEY>
 						<KEY name="LibRetro_NES" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Nintendo Entertaiment System. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is genesis_plus_gx_libretro_x86_64_20130629</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Nintendo Entertaiment System. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is nestopia_libretro_x86_64_20130629</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_NFAM" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Nintendo Famicom. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is genesis_plus_gx_libretro_x86_64_20130629</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Nintendo Famicom. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is nestopia_libretro_x86_64_20130629</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_NFDS" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Nintendo Famicom Disk System. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is genesis_plus_gx_libretro_x86_64_20130629</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Nintendo Famicom Disk System. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is nestopia_libretro_x86_64_20130629</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_NGP" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
