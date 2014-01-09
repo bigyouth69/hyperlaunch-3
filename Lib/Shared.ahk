@@ -1,5 +1,5 @@
-MCRC=C3310641
-MVersion=1.1.4
+MCRC=9780AA7
+MVersion=1.1.5
 
 StartModule(){
 	Global gameSectionStartTime,gameSectionStartHour,dbName,romPath,romName,romExtension,systemName,moduleName,MEmu,MEmuV,MURL,MAuthor,MVersion,MCRC,iCRC,MSystem,romMapTable,romMappingLaunchMenuEnabled,romMenuRomName,7zEnabled,hideCursor,toggleCursorKey,zz
@@ -37,7 +37,7 @@ StartModule(){
 
 ; ExitModule function in case we need to call anything on the module's exit routine, like UpdateStatistics for HyperPause or UnloadKeymapper
 ExitModule(){
-	Global statisticsEnabled,keymapperEnabled,keymapper,keymapperAHKMethod,logShowCommandWindow,pToken,cmdWindowTable,zz
+	Global statisticsEnabled,keymapperEnabled,keymapper,keymapperAHKMethod,logShowCommandWindow,pToken,cmdWindowTable,mouseCursorHidden,zz
 	Log("ExitModule - Started")
 	If statisticsEnabled = true
 		Gosub, UpdateStatistics
@@ -45,6 +45,8 @@ ExitModule(){
 		RunKeyMapper%zz%("unload",keymapper)
 	If keymapperAHKMethod = External
 		RunAHKKeymapper%zz%("unload")
+	If mouseCursorHidden	; just in case
+		SystemCursor("On")
 	If logShowCommandWindow = true
 		for index, element in cmdWindowTable
 			Process("Close", cmdWindowTable[A_Index,1])	; close each opened cmd.exe
@@ -101,16 +103,32 @@ WinClose(winTitle,winText="",secondsToWait="",excludeTitle="",excludeText=""){
 	Return ErrorLevel
 }
 
-Run(target,workingDir="",useErrorLevel=1,ByRef outputVarPID=""){
+; To disable inputBlocker on a specific Run call, set inputBlocker to 0, or to force it a specified amount of seconds (upto 30), set it to that amount.
+Run(target,workingDir="",useErrorLevel=1,ByRef outputVarPID="", inputBlocker=1){
 	Static targetCount
-	Global logShowCommandWindow,logCommandWindow,cmdWindowTable
+	Global logShowCommandWindow,logCommandWindow,cmdWindowTable,blockInputTime,blockInputFile,errorLevelReporting
 	targetCount++
+	useErrorLevel := If useErrorLevel = 1 ? "useErrorLevel" : ""	; enable or disable error level
 	Log("Run - Running: " . workingDir . "\" . target)
+	If (blockInputTime && inputBlocker = 1)	; if user set a block time, use the user set length
+		blockTime := blockInputTime
+	Else If inputBlocker > 1	; if module called for a block, use that amount
+		blockTime := inputBlocker
+	Else	; do not block input
+		blockTime :=
+	If blockTime
+	{	Log("Run - Blocking Input for: " . blockTime . " seconds")
+		Run, %blockInputFile% %blockTime%
+	}
 	If !cmdWindowTable
 		cmdWindowTable := []	; initialize array, this is used so all the windows can be properly closed on exit
 	If logShowCommandWindow = true
-	{	Run, %ComSpec% /k , %workingDir% ,,outputVarPID
-		curErr := ErrorLevel
+	{	Run, %ComSpec% /k, %workingDir%, %useErrorLevel%, outputVarPID
+		curErr := ErrorLevel	; store error level immediately
+		If errorLevelReporting = true
+		{	Log("Run - Error Level for " . ComSpec . " reported as: " . curErr, 4)
+			errLvl := curErr	; allows the module to handle the error level
+		}
 		Log("Run - Showing Command Window to troubleshoot launching. ProcessID: " . outputVarPID)
 		WinWait, ahk_pid %outputVarPID%
 		WinActivate, ahk_pid %outputVarPID%
@@ -131,12 +149,15 @@ Run(target,workingDir="",useErrorLevel=1,ByRef outputVarPID=""){
 			SendInput, {Raw}%target%	; send the text to the command window and run it
 		Send, {Enter}
 	} Else {
-		useErrorLevel := If useErrorLevel = 1 ? "useErrorLevel" : ""
 		Run, %target%, %workingDir%, %useErrorLevel%, outputVarPID
-		curErr := ErrorLevel
+		curErr := ErrorLevel	; store error level immediately
+		If errorLevelReporting = true
+		{	Log("Run - Error Level for " . target . " reported as: " . curErr, 4)
+			errLvl := curErr	; allows the module to handle the error level
+		}
 	}
 	Log("Run - """ . target . """ Process ID: " . outputVarPID, 4)
-	Return curErr
+	Return errLvl
 }
 
 Process(cmd,name,param=""){
@@ -600,7 +621,7 @@ Return
 
 CreateRomTable(table) {
 	Log("CreateRomTable - Started")
-	Global romPathFromIni,dbName,romExtensionOrig,7zEnabled
+	Global romPathFromIni,dbName,romExtensionOrig,7zEnabled,romTableComplete
 	romCount := 0	; initialize the var and reset it, needed in case GUI is used more then once in a session
 	table := []	; initialize and empty the table
 	typeArray := ["(Disc","(Disk","(Cart","(Tape","(Cassette","(Part","(Side"]
@@ -640,6 +661,7 @@ CreateRomTable(table) {
 			}
 		}
 	}
+	romTableComplete := 1	; flag to tell the RomTableCheck the function is complete in case no romTable was created for non-MG games
 	Log("CreateRomTable - Ended`, " . IndexTotal . " Loops to create table.")
 	Return table
 }
@@ -647,7 +669,7 @@ CreateRomTable(table) {
 ; Function that gets called in some modules to wait for romTable creation if the module bases some conditionals off whether this table exists or not
 RomTableCheck() {
 	Log("RomTableCheck - Started")
-	Global systemName,mgEnabled,romTable
+	Global systemName,mgEnabled,romTable,romTableComplete
 	HPGlobalIni := A_ScriptDir . "\Settings\Global HyperPause.ini"		; HP keys have not been read into memory yet, so they must be read here so HL knows whether to run the below loop or not
     HPSystemIni := A_ScriptDir . "\Settings\" . systemName . "\HyperPause.ini" 
 	IniRead, changeDiscMenuG, %HPGlobalIni%, General Options, ChangeDisc_Menu_Enabled
@@ -661,6 +683,9 @@ RomTableCheck() {
 		Loop {
 			If romTable.MaxIndex()
 			{	Log("RomTableCheck - romTable now exists, waited about " . (If A_Index = 1 ? 0 : (A_Index * 100)) . "ms.",4)
+				Break
+			} Else	If romTableComplete {	; this var gets created when CreateRomTable is complete in cse this is not an MG game
+				Log("RomTableCheck - Detected CreateRomTable is finished processing. Continuing with module thread.",4)
 				Break
 			} Else	If (A_Index > 200) {	; if 20 seconds pass by, log there was an issue and continue w/o romTable
 				Log("RomTableCheck - Creating the romTable took longer than 20 seconds. Continuing with module thread without waiting for the table's creation.",3)
@@ -789,7 +814,7 @@ Return
 
 ; Function to hide/unhide the mouse cursor
 SystemCursor(OnOff=1)   ; INIT = "I","Init"; OFF = 0,"Off"; TOGGLE = -1,"T","Toggle"; ON = others
-{
+{	Global mouseCursorHidden
 	Static AndMask, XorMask, $, h_cursor
 		,c0,c1,c2,c3,c4,c5,c6,c7,c8,c9,c10,c11,c12,c13 ; system cursors
 		, b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,b12,b13   ; blank cursors
@@ -815,10 +840,12 @@ SystemCursor(OnOff=1)   ; INIT = "I","Init"; OFF = 0,"Off"; TOGGLE = -1,"T","Tog
 		Log("Hiding mouse cursor")
 		CoordMode, Mouse	; Also lets move it to the side since some emu's flash a cursor real quick even if we hide it.
 		MouseMove, 0, 0, 0
+		mouseCursorHidden := 1	; track current status of mouse cursor
 	}Else{
 		$ = h	; use the saved cursors
 		SPI_SETCURSORS := 0x57	; Emergency restore cursor, just in case something goes wrong
 		DllCall( "SystemParametersInfo", UInt,SPI_SETCURSORS, UInt,0, UInt,0, UInt,0 )
+		mouseCursorHidden :=
 		Log("Restoring mouse cursor")
 	}
 	

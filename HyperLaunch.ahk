@@ -1,5 +1,5 @@
 ;-----------------------------------------------------------------------------------------------------------------------------------------
-; HyperLaunch V3.0.1.0
+; HyperLaunch V3.0.1.1
 ; By djvj
 ; Requires AutoHotkey.dll - Must reside in the HyperLaunch root directory
 ;
@@ -80,7 +80,7 @@ SetTitleMatchMode 2
 CoordMode, ToolTip, Screen ; Place ToolTips at absolute screen coordinates
 DetectHiddenWindows, ON
 SetWorkingDir % A_ScriptDir
-Version = 3.0.1.0
+Version = 3.0.1.1
 
 ;-----------------------------------------------------------------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------------------------------------------------------------
@@ -181,9 +181,53 @@ If logLevel >= 4
 
 Log("[code]",,"start",1)
 Log("Main - HyperLaunch v" . Version,,,,1)
+
+strComputer := "."
+strNamespace := "\root\cimv2"
+statusObj := Object(1,"Other",2,"Unknown",3,"Enabled",4,"Disabled",5,"N/A")	; allows conversion of status codes
+OSSKU := Object(0,"Unknown",1,"Ultimate",2,"Home Basic",3,"Home Premium",4,"Enterprise",5,"Home Basic N",6,"Business",7,"Server Standard",8,"Server Datacenter (full)",9,"Windows Small Business Server",10,"Server Enterprise (full)",11,"Starter",12,"Server Datacenter (core)",13,"Server Standard (core)",14,"Server Enterprise (core)",15,"Server Enterprise for Itanium-based Systems",16,"Business N",17,"Web Server (full)",18,"HPC Edition",19,"Windows Storage Server 2008 R2 Essentials",20,"Storage Server Express",21,"Storage Server Standard",22,"Storage Server Workgroup",23,"Storage Server Enterprise",24,"Windows Server 2008 for Windows Essential Server Solutions",25,"Small Business Server Premium",26,"Home Premium N",27,"Enterprise N",28,"Ultimate N",29,"Web Server (core)",30,"Windows Essential Business Server Management Server",31,"Windows Essential Business Server Security Server",32,"Windows Essential Business Server Messaging Server",33,"Server Foundation",34,"Windows Home Server 2011",35,"Windows Server 2008 without Hyper-V for Windows Essential Server Solutions",36,"Server Standard without Hyper-V",37,"Server Datacenter without Hyper-V (full)",38,"Server Enterprise without Hyper-V (full)",39,"Server Datacenter without Hyper-V (core)",40,"Server Standard without Hyper-V (core)",41,"Server Enterprise without Hyper-V (core)",42,"Microsoft Hyper-V Server",43,"Storage Server Express (core)",44,"Storage Server Standard (core)",45,"Storage Server Workgroup (core)",46,"Storage Server Enterprise (core)",47,"Starter N",48,"Professional",49,"Professional N",50,"Windows Small Business Server 2011 Essentials",51,"Server For SB Solutions",52,"Server Solutions Premium",53,"Server Solutions Premium (core)",54,"Server For SB Solutions EM",55,"Server For SB Solutions EM",56,"Windows MultiPoint Server",59,"Windows Essential Server Solution Management",60,"Windows Essential Server Solution Additional",61,"Windows Essential Server Solution Management SVC",62,"Windows Essential Server Solution Additional SVC",63,"Small Business Server Premium (core)",64,"Server Hyper Core V",66,"Starter E",67,"Home Basic E",68,"Home Premium E",69,"Professional E",70,"Enterprise E",71,"Ultimate E",72,"Server Enterprise (evaluation)",76,"Windows MultiPoint Server Standard (full)",77,"Windows MultiPoint Server Premium (full)",79,"Server Standard (evaluation)",80,"Server Datacenter (evaluation)",84,"Enterprise N (evaluation)",95,"Storage Server Workgroup (evaluation)",96,"Storage Server Standard (evaluation)",98,"Windows 8 N",99,"Windows 8 China",100,"Windows 8 Single Language",101,"Windows 8",103,"Professional with Media Center")
+objWMIService := ComObjGet("winmgmts:{impersonationLevel=impersonate}!\\" . strComputer . strNamespace)	; use the WMI Service to grab the OS Name
+colOSSettings := objWMIService.ExecQuery("Select * from Win32_OperatingSystem")._NewEnum
+While colOSSettings[objOSItem]
+{	windowsName := objOSItem.Caption
+	windowsSKU := objOSItem.OperatingSystemSKU
+	totalMemory := Round((objOSItem.TotalVisibleMemorySize / 1024), 2) . " MB"
+	freeMemory := Round((objOSItem.FreePhysicalMemory / 1024), 2) . " MB"
+	usedMemory := Round(((objOSItem.TotalVisibleMemorySize - objOSItem.FreePhysicalMemory) / 1024), 3) . " MB"
+	OSLog := "`n`t`t`t`t`tOS: " . windowsName . "`n`t`t`t`t`tSKU: " . OSSKU[windowsSKU] . "`n`t`t`t`t`tTotal Memory: " . totalMemory . "`n`t`t`t`t`tFree Memory: " . freeMemory . "`n`t`t`t`t`tUsed Memory: " . usedMemory
+}
+colCSSettings := objWMIService.ExecQuery("Select * from Win32_ComputerSystem")._NewEnum
+While colCSSettings[objCSItem]
+{	sysType := objCSItem.SystemType
+	numCPU := objCSItem.NumberOfProcessors
+	numLogCPU := objCSItem.NumberOfLogicalProcessors
+	CSLog := "`n`t`t`t`t`tSystemType: " . sysType . "`n`t`t`t`t`tPhysical Processors: " . numCPU . "`n`t`t`t`t`tLogical Processors: " . numLogCPU
+}
+colGPUSettings := objWMIService.ExecQuery("Select * from Win32_VideoController")._NewEnum
+While colGPUSettings[objGPUItem]
+{	; gpuStatus := statusObj[objGPUItem.StatusInfo]	; status of the gpu always returns blank
+	gpuName := objGPUItem.Caption	; if more than one value exists, separate with |
+	gpuRAM := Round((objGPUItem.AdapterRAM / (1024 ** 2)), 2) . " MB"
+	gpuDriverVersion := objGPUItem.DriverVersion
+	GPULog .= "`n`t`t`t`t`tGPU " . A_Index . " Name: " . gpuName . "`n`t`t`t`t`tGPU " . A_Index . " RAM: " . gpuRAM . "`n`t`t`t`t`tGPU " . A_Index . " Driver Version: " . gpuDriverVersion
+}
+colSDSettings := objWMIService.ExecQuery("Select * from Win32_SoundDevice")._NewEnum
+While colSDSettings[objSDItem]
+{	soundStatus := statusObj[objSDItem.StatusInfo]
+	soundName := objSDItem.Caption
+	SoundLog .= "`n`t`t`t`t`tSound " . A_Index . " Device: " . soundName . "`n`t`t`t`t`tSound " . A_Index . " Status: " . soundStatus
+}
+; colProcSettings := objWMIService.ExecQuery("Select * from Win32_Processor")._NewEnum	; takes too long to retrieve
+; While colProcSettings[objProcItem]
+; {	cpuName := objProcItem.Caption
+	; maxClock := objProcItem.MaxClockSpeed
+; }
+; msgbox cpuName: %cpuName%
+; exitapp
+
 isAdmin:=(If A_IsAdmin=1 ? ("Yes") : ("No"))
 OSLang := Object(0436,"Afrikaans","041c","Albanian",0401,"Arabic_Saudi_Arabia",0801,"Arabic_Iraq","0c01","Arabic_Egypt",0401,"Arabic_Saudi_Arabia",0801,"Arabic_Iraq","0c01","Arabic_Egypt",1001,"Arabic_Libya",1401,"Arabic_Algeria",1801,"Arabic_Morocco","1c01","Arabic_Tunisia",2001,"Arabic_Oman",2401,"Arabic_Yemen",2801,"Arabic_Syria","2c01","Arabic_Jordan",3001,"Arabic_Lebanon",3401,"Arabic_Kuwait",3801,"Arabic_UAE","3c01","Arabic_Bahrain",4001,"Arabic_Qatar","042b","Armenian","042c","Azeri_Latin","082c","Azeri_Cyrillic","042d","Basque",0423,"Belarusian",0402,"Bulgarian",0403,"Catalan",0404,"Chinese_Taiwan",0804,"Chinese_PRC","0c04","Chinese_Hong_Kong",1004,"Chinese_Singapore",1404,"Chinese_Macau","041a","Croatian",0405,"Czech",0406,"Danish",0413,"Dutch_Standard",0813,"Dutch_Belgian",0409,"English_United_States",0809,"English_United_Kingdom","0c09","English_Australian",1009,"English_Canadian",1409,"English_New_Zealand",1809,"English_Irish","1c09","English_South_Africa",2009,"English_Jamaica",2409,"English_Caribbean",2809,"English_Belize","2c09","English_Trinidad",3009,"English_Zimbabwe",3409,"English_Philippines",0425,"Estonian",0438,"Faeroese",0429,"Farsi","040b","Finnish","040c","French_Standard","080c","French_Belgian","0c0c","French_Canadian","100c","French_Swiss","140c","French_Luxembourg","180c","French_Monaco",0437,"Georgian",0407,"German_Standard",0807,"German_Swiss","0c07","German_Austrian",1007,"German_Luxembourg",1407,"German_Liechtenstein",0408,"Greek","040d","Hebrew",0439,"Hindi","040e","Hungarian","040f","Icelandic",0421,"Indonesian",0410,"Italian_Standard",0810,"Italian_Swiss",0411,"Japanese","043f","Kazakh",0457,"Konkani",0412,"Korean",0426,"Latvian",0427,"Lithuanian","042f","Macedonian","043e","Malay_Malaysia","083e","Malay_Brunei_Darussalam","044e","Marathi",0414,"Norwegian_Bokmal",0814,"Norwegian_Nynorsk",0415,"Polish",0416,"Portuguese_Brazilian",0816,"Portuguese_Standard",0418,"Romanian",0419,"Russian","044f","Sanskrit","081a","Serbian_Latin","0c1a","Serbian_Cyrillic","041b","Slovak",0424,"Slovenian","040a","Spanish_Traditional_Sort","080a","Spanish_Mexican","0c0a","Spanish_Modern_Sort","100a","Spanish_Guatemala","140a","Spanish_Costa_Rica","180a","Spanish_Panama","1c0a","Spanish_Dominican_Republic","200a","Spanish_Venezuela","240a","Spanish_Colombia","280a","Spanish_Peru","2c0a","Spanish_Argentina","300a","Spanish_Ecuador","340a","Spanish_Chile","380a","Spanish_Uruguay","3c0a","Spanish_Paraguay","400a","Spanish_Bolivia","440a","Spanish_El_Salvador","480a","Spanish_Honduras","4c0a","Spanish_Nicaragua","500a","Spanish_Puerto_Rico",0441,"Swahili","041d","Swedish","081d","Swedish_Finland",0449,"Tamil",0444,"Tatar","041e","Thai","041f","Turkish",0422,"Ukrainian",0420,"Urdu","042a","Vietnamese")
-logTxt := "Main - System Specs:`n`t`t`t`t`tHyperLaunch Dir: " . A_ScriptDir . "`n`t`t`t`t`tOS: " . A_OSVersion . "`n`t`t`t`t`tArchitecture: " . (A_Is64bitOS ? "64-bit" : "32-bit") . " (might not be accurate)`n`t`t`t`t`tOS Language: " . (OSLang[A_Language] ? OSLang[A_Language] : A_Language) . "`n`t`t`t`t`tOS Admin Status: " . isAdmin:=(If A_IsAdmin=1 ? ("Yes") : ("No"))
+logTxt := "Main - System Specs:`n`t`t`t`t`tHyperLaunch Dir: " . A_ScriptDir . OSLog . CSLog . GPULog . SoundLog . "`n`t`t`t`t`tOS Language: " . (OSLang[A_Language] ? OSLang[A_Language] : A_Language) . "`n`t`t`t`t`tOS Admin Status: " . isAdmin:=(If A_IsAdmin=1 ? ("Yes") : ("No"))
 SysGet, MonitorCount, MonitorCount, SysGet, MonitorPrimary, MonitorPrimary
 Loop, %MonitorCount% ; get each monitor's stats for the log
 {	
@@ -205,6 +249,8 @@ If logLevel >= 4	; debug level or higher
 	CheckFile(sevenZipSharpFile, "Following file is required for HyperLaunch, but could not be found:`n" . sevenZipSharpFile)
 	gsdll32File := moduleExtensionsPath . "\gsdll32.dll"
 	CheckFile(gsdll32File, "Following file is required for HyperLaunch, but could not be found:`n" . gsdll32File)
+	blockInputFile := moduleExtensionsPath . "\BlockInput.exe"
+	CheckFile(blockInputFile, "Following file is required for Input Blocking, but its file could not be found:`n" . blockInputFile)
 	gdipFile := moduleExtensionsPath . "\gdip.ahk"
 	gdipFullName := CheckFile(gdipFile, "Cannot find " . gdipFile . "`nIf you see this error`, the auto-download function failed or the file is no longer hosted on autohotkey. Please obtain it by other means.",,"1528E024",0)
 	rIniFile := moduleExtensionsPath . "\RIni.ahk"
@@ -411,7 +457,8 @@ Return
 Return
 
 Button2:
-	Run, http://hyperlist.hyperspin-fe.com/?module=browseahk
+
+	Run, https://sites.google.com/site/hyperlaunch2/home/downloads
 Return
 
 Button1:
@@ -641,6 +688,7 @@ joyToKeyFullPath := GetFullName(joyToKeyFullPath)	; converts relative path to ab
 CustomJoyNamesEnabled := RIniReadCheck(5, "Keymapper", "Custom_Joy_Names_Enabled", "false")
 CustomJoyNames := RIniReadCheck(5, "Keymapper", "Custom_Joy_Names")
 keymapperFrontEndProfileName := RIniReadCheck(5, "Keymapper", "Keymapper_FrontEnd_Profile_Name", "HyperSpin")
+keymapperFrontEndProfile := RIniReadCheck(5, "Keymapper", "Keymapper_FrontEnd_Profile", "false")
 keymapperHyperLaunchProfileEnabled := RIniReadCheck(5, "Keymapper", "Keymapper_HyperLaunch_Profile_Enabled", "false")
 
 vJoyPath := RIniReadCheck(5, "VJoy", "VJoy_Path", "..\Utilities\VJoy\VJoy.exe")
@@ -655,8 +703,10 @@ betaBriteParams := RIniReadCheck(5, "BetaBrite", "BetaBrite_Params","usb {AUTO}H
  ; Global and System Settings from "Settings\Global HyperLaunch.ini" and "Settings\%systemName%\HyperLaunch.ini"
 ;-----------------------------------------------------------------------------------------------------------------------------------------
 
-skipChecks := RIniLoadVar(2,"", "Settings", "Skipchecks", "false")
+skipChecks := RIniLoadVar(2,"", "Settings", "Skipchecks", "false")	; key is only created on a system ini, not the global one
 romMatchExt := RIniLoadVar(1,2, "Settings", "Rom_Match_Extension", "false")
+blockInputTime := RIniLoadVar(1,2, "Settings", "Block_Input", 0)
+errorLevelReporting := RIniLoadVar(1,2, "Settings", "Error_Level_Reporting", 0)
 
 hideCursor := RIniLoadVar(1,2, "Desktop", "Hide_Cursor", "false")
 hideDesktop := RIniLoadVar(1,2, "Desktop", "Hide_Desktop", "false")
@@ -932,6 +982,7 @@ If skipChecks != false
 
 romExtension := CheckPaths()
 romExtensionOrig := romExtension ; Storing original romExtension in case 7z support is used, we lose original extension of the rom after processing through the 7z function. This is used when 7z and MultiGame support are used together.
+
 ; Defining keymapper profile path vars so they can be used for ahk remaps in the HL thread and xpadder/joytokey in the module
 keymapperProfilePath := profilePath . "\" . keymapper	; attaching keymapper chosen to the path so different profiles are stored in their own folders
 FEProfile := keymapperProfilePath . "\" . keymapperFrontEndProfileName	; profile while not in an emu and in your Frontend
@@ -1088,7 +1139,7 @@ ExitScript()
 ; Functions
 ;-----------------------------------------------------------------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------------------------------------------------------------
-BuildScript(){
+BuildScript() {
 	Static retStr
 
 	Global 0
@@ -1158,6 +1209,9 @@ BuildScript(){
 	Global libPath
 	Global skipchecks
 	Global romMatchExt
+	Global blockInputTime
+	Global blockInputFile
+	Global errorLevelReporting
 	Global logFile
 	Global logLabel
 	Global logLevel
@@ -1330,6 +1384,7 @@ BuildScript(){
 	Global joyToKeyFullPath
 	Global keymapperProfilePath
 	Global keymapperFrontEndProfileName
+	Global keymapperFrontEndProfile
 	Global keymapperHyperLaunchProfileEnabled
 	Global JoyIDsEnabled
 	Global JoyIDsPreferredControllersSystem
@@ -1422,6 +1477,9 @@ BuildScript(){
 	retStr .= "`nromMappingSingleFilteredRomAutomaticLaunch = " . romMappingSingleFilteredRomAutomaticLaunch
 	retStr .= "`nskipchecks = " . skipchecks
 	retStr .= "`nromMatchExt = " . romMatchExt
+	retStr .= "`nblockInputTime = " . blockInputTime
+	retStr .= "`nblockInputFile = " . blockInputFile
+	retStr .= "`nerrorLevelReporting = " . errorLevelReporting
 	retStr .= "`nlogFile = " . logFile
 	retStr .= "`nlogLabel := [""    INFO""`,"" WARNING""`,""   ERROR""`,""  DEBUG1""`,""  DEBUG2""]"	; can't pass an array as a var into the module, so recreating it here
 	retStr .= "`nlogLevel = " . logLevel
@@ -1600,6 +1658,7 @@ BuildScript(){
 	retStr .= "`njoyToKeyFullPath = " . joyToKeyFullPath
 	retStr .= "`nkeymapperProfilePath = " . keymapperProfilePath
 	retStr .= "`nkeymapperFrontEndProfileName = " . keymapperFrontEndProfileName
+	retStr .= "`nkeymapperFrontEndProfile = " . keymapperFrontEndProfile
 	retStr .= "`nkeymapperHyperLaunchProfileEnabled = " . keymapperHyperLaunchProfileEnabled
 	retStr .= "`nJoyIDsEnabled = " . JoyIDsEnabled
 	retStr .= "`nJoyIDsPreferredControllersSystem = " . JoyIDsPreferredControllersSystem
@@ -1974,7 +2033,7 @@ BuildScript(){
 ; crc = If this is a an AHK library only, provide a crc so it can be validated
 ; crctype = default empty and crc is not checked. Use 0 for AHK libraries and HyperLaunch extension files. Use 1 for module crc checks..
 ; logerror = default empty will give a log error instead of stopping with a scripterror
-CheckFile(file,msg="",timeout=6,crc="",crctype="",logerror=""){
+CheckFile(file,msg="",timeout=6,crc="",crctype="",logerror="") {
 	Global HLObject,logIncludeFileProperties
 	exeFileInfo=
 	( LTrim
@@ -2038,7 +2097,7 @@ CheckFile(file,msg="",timeout=6,crc="",crctype="",logerror=""){
 ; w = width of error box
 ; h = height of error box
 ; txt = font size
-ScriptError(error,timeout=6,w=600,h=150,txt=15){
+ScriptError(error,timeout=6,w=600,h=150,txt=15) {
 	Global HLMediaPath,exitScriptKey,HLFile,HLErrSoundPath
 
 	Hotkey, Esc, CloseError
@@ -2117,7 +2176,7 @@ ScriptError(error,timeout=6,w=600,h=150,txt=15){
 ; notime = only used for 1st and last lines of the log so a time is not inserted when I inset the BBCode [code] tags. Do not use this param, it is reserved for starting/ending the log
 ; dump = tells the function to write the log file at the end. Do not use this param, it is reserved for closing the log out
 ; firstLog = tells the function to not insert a time when the first log is made, instead puts an N/A. Do not use this param
-Log(text,lvl=1,notime="",dump="",firstLog=""){
+Log(text,lvl=1,notime="",dump="",firstLog="") {
 	Static log
 	Static lastLog
 	Global logFile,logLevel,logLabel
@@ -2138,7 +2197,7 @@ Log(text,lvl=1,notime="",dump="",firstLog=""){
 
 ; Inserts extra characters/spaces into sections of the Log file to keep it aligned.
 ; Usage: inserts char x number of times on the end of txt until pad is reached.
-AlignColumn(txt,pad=9,char=" "){
+AlignColumn(txt,pad=9,char=" ") {
 	x := If char=" "?2:1	; if char is a space, let's only insert half as many so it looks slightly more even in notepad++
 	Loop {
 		n := StrLen(txt)
@@ -2213,13 +2272,13 @@ RIniReadCheck(rIniVar,section,key,defaultvalue="",errorMsg="") {
 ; }
 
  ; This creates a default ini file with spacing between sections for easy reading
-CreateDefaultIni(file,ini){
+CreateDefaultIni(file,ini) {
 	Global moduleExtensionsPath,systemName
 	globalEmu:=["[ExampleEmu]","Emu_Path=C:\Hyperspin\Emulators\Emu_Name\emulator.exe","Rom_Extension=7z,bin","HyperPause_Save_State_Keys=Read_Guide_To_Use_These","HyperPause_Load_State_Keys=Read_Guide_To_Use_These","Module=Custom_Module_Name_If_Different_Then_Emu_Name"]
-	HL:=["[Settings]","Modules_Path=.\Modules","HyperLaunch_Media_Path=.\Media","Frontend_Path=..\HyperSpin.exe","Profiles_Path=.\Profiles","Exit_Script_Key=~q & ~s","Exit_Emulator_Key=~Esc","Toggle_Cursor_Key=~e & ~t","Emu_Idle_Shutdown=0","Last_System=","Last_Rom=","Last_Module=","","[Logging]","Logging_Level=3","Logging_Include_Module=true","Logging_Include_File_Properties=true","Logging_Show_Command_Window=false","Logging_Log_Command_Window=false","","[Navigation]","Navigation_Up_Key=Up","Navigation_Down_Key=Down","Navigation_Left_Key=Left","Navigation_Right_Key=Right","Navigation_Select_Key=Enter","Navigation_P2_Up_Key=Numpad8","Navigation_P2_Down_Key=Numpad2","Navigation_P2_Left_Key=Numpad4","Navigation_P2_Right_Key=Numpad6","Navigation_P2_Select_Key=NumpadEnter","","[7z]","7z_Path=" . moduleExtensionsPath . "\7z.exe","","[Fade]","Fade_Interrupt_Key=","Fade_Detect_Error=true","","[MultiGame]","MultiGame_Key=~NumpadSub","","[HyperPause]","HyperPause_Key=~NumpadAdd","HyperPause_Back_to_Menu_Bar_Key=X","HyperPause_Zoom_In_Key=C","HyperPause_Zoom_Out_Key=V","HyperPause_Screenshot_Key=~PrintScreen","HyperPause_HiToText_Path=.\Module Extensions\HiToText.exe","","[DAEMON Tools]","DAEMON_Tools_Path=","DAEMON_Tools_Add_Drive=true","","[CPWizard]","CPWizard_Path=","","[Keymapper]","Xpadder_Path=..\Utilities\Xpadder\xpadder.exe","JoyToKey_Path=..\Utilities\JoyToKey\JoyToKey.exe","Custom_Joy_Names_Enabled=false","Keymapper_FrontEnd_Profile_Name=HyperSpin","Keymapper_HyperLaunch_Profile_Enabled=false","","[VJoy]","VJoy_Path=..\Utilities\VJoy\VJoy.exe","","[BetaBrite]","BetaBrite_Enable=false","BetaBrite_Path=","BetaBrite_Params=usb {AUTO}HYPERSPIN"]
-	globalHL:=["[Settings]","Rom_Match_Extension=false","","[Desktop]","Hide_Cursor=false","Hide_Desktop=false","Hide_Taskbar=false","Hide_Emu=false","Hide_Front_End=false","","[Exit]","Exit_Emulator_Key_Wait=0","Force_Hold_Key=~Esc","Restore_Front_End_On_Exit=false","","[DAEMON Tools]","DAEMON_Tools_Enabled=true","DAEMON_Tools_Use_SCSI=true","","[CPWizard]","CPWizard_Enabled=false","CPWizard_Delay=8000","CPWizard_Params=-minimized -timeout 9000","CPWizard_Close_On_Exit=false","","[Fade]","Fade_In=false","Fade_In_Duration=500","Fade_In_Transition_Animation=DefaultAnimateFadeIn","Fade_In_Delay=0","Fade_In_Exit_Delay=0","Fade_Out=false","Fade_Out_Extra_Screen=false","Fade_Out_Duration=500","Fade_Out_Transition_Animation=DefaultAnimateFadeOut","Fade_Out_Delay=0","Fade_Out_Exit_Delay=0","Fade_Layer_Interpolation=7","Fade_Layer_1_Color=FF000000","Fade_Layer_1_Align_Image=Align to Top Left","Fade_Layer_2_Alignment=Bottom Right Corner","Fade_Layer_2_X=300","Fade_Layer_2_Y=300","Fade_Layer_2_Adjust=1","Fade_Layer_2_Padding=0","Fade_Layer_3_Alignment=Center","Fade_Layer_3_X=300","Fade_Layer_3_Y=300","Fade_Layer_3_Adjust=0.75","Fade_Layer_3_Padding=0","Fade_Layer_3_Speed=750","Fade_Layer_3_Animation=DefaultFadeAnimation","Fade_Layer_3_7z_Animation=DefaultFadeAnimation","Fade_Layer_3_Image_Follow_7z_Progress=true","Fade_Layer_3_Type=imageandbar","Fade_Layer_3_Repeat=1","Fade_Layer_4_Pos=Above Layer 3 - Left","Fade_Layer_4_X=100","Fade_Layer_4_Y=100","Fade_Layer_4_Adjust=0.75","Fade_Layer_4_Padding=0","Fade_Layer_4_FPS=10","Fade_Animated_Gif_Transparent_Color=FFFFFF","Fade_Bar_Window=false","Fade_Bar_Window_X=","Fade_Bar_Window_Y=","Fade_Bar_Window_Width=600","Fade_Bar_Window_Height=120","Fade_Bar_Window_Radius=20","Fade_Bar_Window_Margin=20","Fade_Bar_Window_Hatch_Style=8","Fade_Bar_Back=true","Fade_Bar_Back_Color=FF555555","Fade_Bar_Height=20","Fade_Bar_Radius=5","Fade_Bar_Color=DD00BFFF","Fade_Bar_Hatch_Style=3","Fade_Bar_Percentage_Text=true","Fade_Bar_Info_Text=true","Fade_Bar_X_Offset=0","Fade_Bar_Y_Offset=100","Fade_Rom_Info_Description=text","Fade_Rom_Info_System_Name=text","Fade_Rom_Info_Year=text","Fade_Rom_Info_Manufacturer=text","Fade_Rom_Info_Genre=text","Fade_Rom_Info_Rating=text","Fade_Rom_Info_Order=Description|SystemName|Year|Manufacturer|Genre|Rating","Fade_Rom_Info_Text_Placement=topRight","Fade_Rom_Info_Text_Margin=5","Fade_Rom_Info_Text_1_Options=cFF555555 r4 s20 Bold","Fade_Rom_Info_Text_2_Options=cFF555555 r4 s20 Bold","Fade_Rom_Info_Text_3_Options=cFF555555 r4 s20 Bold","Fade_Rom_Info_Text_4_Options=cFF555555 r4 s20 Bold","Fade_Rom_Info_Text_5_Options=cFF555555 r4 s20 Bold","Fade_Rom_Info_Text_6_Options=cFF555555 r4 s20 Bold","Fade_Stats_Number_of_Times_Played=text with label","Fade_Stats_Last_Time_Played=text with label","Fade_Stats_Average_Time_Played=text with label","Fade_Stats_Total_Time_Played=text with label","Fade_Stats_System_Total_Played_Time=text with label","Fade_Stats_Total_Global_Played_Time=text with label","Fade_Stats_Info_Order=Number_of_Times_Played|Last_Time_Played|Average_Time_Played|Total_Time_Played|System_Total_Played_Time|Total_Global_Played_Time","Fade_Stats_Info_Text_Placement=topLeft","Fade_Stats_Info_Text_Margin=5","Fade_Stats_Info_Text_1_Options=cFF555555 r4 s20 Bold","Fade_Stats_Info_Text_2_Options=cFF555555 r4 s20 Bold","Fade_Stats_Info_Text_3_Options=cFF555555 r4 s20 Bold","Fade_Stats_Info_Text_4_Options=cFF555555 r4 s20 Bold","Fade_Stats_Info_Text_5_Options=cFF555555 r4 s20 Bold","Fade_Stats_Info_Text_6_Options=cFF555555 r4 s20 Bold","Fade_Text_1_X=0","Fade_Text_1_Y=0","Fade_Text_1_Options=cFFFFFFFF r4 s20 Right Bold","Fade_Text_1=Loading Game","Fade_Text_2_X=0","Fade_Text_2_Y=0","Fade_Text_2_Options=cFFFFFFFF r4 s20 Right Bold","Fade_Text_2=Extraction Complete","Fade_Font=Arial","Fade_System_And_Rom_Layers_Only=false","","[7z]","7z_Enabled=false","7z_Extract_Path=" . A_Temp . "\HS","7z_Attach_System_Name=false","7z_Delete_Temp=true","7z_Sounds=true","","[Keymapper]","Keymapper_Enabled=false","Keymapper_AHK_Method=false","Keymapper=xpadder","JoyIDs_Enabled=false","JoyIDs_Preferred_Controllers=","","[VJoy]","VJoy_Enabled=false","","[MultiGame]","MultiGame_Enabled=false","MultiGame_Background_Color=FF000000","MultiGame_Side_Padding=0.2","MultiGame_Y_Offset=500","MultiGame_Image_Adjust=1","MultiGame_Font=Arial","MultiGame_Text_1_Options=x10p y30p w80p Center cBBFFFFFF r4 s100 BoldItalic","MultiGame_Text_1_Text=Please select a game","MultiGame_Text_2_Options=w96p cFFFFFFFF r4 s50 Center BoldItalic","MultiGame_Text_2_Offset=70","MultiGame_Use_Sound=true","MultiGame_Sound_Frequency=300","MultiGame_Exit_Effect=none","MultiGame_Selected_Effect=rotate","MultiGame_Use_Game_Art=false","MultiGame_Art_Folder=Artwork1","","[HyperPause]","HyperPause_Enabled=false","","[Bezel]","","Bezel_Enabled=false","","[Statistics]","","Statistics_Enabled=true","","[Rom Mapping]","Rom_Mapping_Enabled=false","Rom_Mapping_Launch_Menu_Enabled=false","First_Matching_Ext=false","Show_All_Roms_In_Archive=true","Number_of_Games_by_Screen=7","Menu_Width=300","Menu_Margin=50","Text_Font=Bebas Neue","Text_Options=cFFFFFFFF r4 s40 Bold","Disabled_Text_Color=ff888888","Text_Size_Difference=5","Text_Margin=10","Title_Text_Font=Bebas Neue","Title_Text_Options=cFFFFFFFF r4 s60 Bold","Title2_Text_Font=Bebas Neue","Title2_Text_Options=cFFFFFFFF r4 s15 Bold","Game_Info_Text_Font=Bebas Neue","Game_Info_Text_Options=cFFFFFFFF r4 s15 Regular","Background_Brush=aa000000","Column_Brush=33000000","Button_Brush1=6f000000","Button_Brush2=33000000","Background_Align=Stretch and Lose Aspect","Language_Flag_Width=40","Language_Flag_Separation=5","Default_Menu_List=FullList","Single_Filtered_Rom_Automatic_Launch=false"]
+	HL:=["[Settings]","Modules_Path=.\Modules","HyperLaunch_Media_Path=.\Media","Frontend_Path=..\HyperSpin.exe","Profiles_Path=.\Profiles","Exit_Script_Key=~q & ~s","Exit_Emulator_Key=~Esc","Toggle_Cursor_Key=~e & ~t","Emu_Idle_Shutdown=0","Last_System=","Last_Rom=","Last_Module=","","[Logging]","Logging_Level=3","Logging_Include_Module=true","Logging_Include_File_Properties=true","Logging_Show_Command_Window=false","Logging_Log_Command_Window=false","","[Navigation]","Navigation_Up_Key=Up","Navigation_Down_Key=Down","Navigation_Left_Key=Left","Navigation_Right_Key=Right","Navigation_Select_Key=Enter","Navigation_P2_Up_Key=Numpad8","Navigation_P2_Down_Key=Numpad2","Navigation_P2_Left_Key=Numpad4","Navigation_P2_Right_Key=Numpad6","Navigation_P2_Select_Key=NumpadEnter","","[7z]","7z_Path=" . moduleExtensionsPath . "\7z.exe","","[Fade]","Fade_Interrupt_Key=","Fade_Detect_Error=true","","[MultiGame]","MultiGame_Key=~NumpadSub","","[HyperPause]","HyperPause_Key=~NumpadAdd","HyperPause_Back_to_Menu_Bar_Key=X","HyperPause_Zoom_In_Key=C","HyperPause_Zoom_Out_Key=V","HyperPause_Screenshot_Key=~PrintScreen","HyperPause_HiToText_Path=.\Module Extensions\HiToText.exe","","[DAEMON Tools]","DAEMON_Tools_Path=","DAEMON_Tools_Add_Drive=true","","[CPWizard]","CPWizard_Path=","","[Keymapper]","Xpadder_Path=..\Utilities\Xpadder\xpadder.exe","JoyToKey_Path=..\Utilities\JoyToKey\JoyToKey.exe","Custom_Joy_Names_Enabled=false","Keymapper_FrontEnd_Profile_Name=HyperSpin","Keymapper_FrontEnd_Profile=false","Keymapper_HyperLaunch_Profile_Enabled=false","","[VJoy]","VJoy_Path=..\Utilities\VJoy\VJoy.exe","","[BetaBrite]","BetaBrite_Enable=false","BetaBrite_Path=","BetaBrite_Params=usb {AUTO}HYPERSPIN"]
+	globalHL:=["[Settings]","Rom_Match_Extension=false","Block_Input=0","Error_Level_Reporting=false","","[Desktop]","Hide_Cursor=false","Hide_Desktop=false","Hide_Taskbar=false","Hide_Emu=false","Hide_Front_End=false","","[Exit]","Exit_Emulator_Key_Wait=0","Force_Hold_Key=~Esc","Restore_Front_End_On_Exit=false","","[DAEMON Tools]","DAEMON_Tools_Enabled=true","DAEMON_Tools_Use_SCSI=true","","[CPWizard]","CPWizard_Enabled=false","CPWizard_Delay=8000","CPWizard_Params=-minimized -timeout 9000","CPWizard_Close_On_Exit=false","","[Fade]","Fade_In=false","Fade_In_Duration=500","Fade_In_Transition_Animation=DefaultAnimateFadeIn","Fade_In_Delay=0","Fade_In_Exit_Delay=0","Fade_Out=false","Fade_Out_Extra_Screen=false","Fade_Out_Duration=500","Fade_Out_Transition_Animation=DefaultAnimateFadeOut","Fade_Out_Delay=0","Fade_Out_Exit_Delay=0","Fade_Layer_Interpolation=7","Fade_Layer_1_Color=FF000000","Fade_Layer_1_Align_Image=Align to Top Left","Fade_Layer_2_Alignment=Bottom Right Corner","Fade_Layer_2_X=300","Fade_Layer_2_Y=300","Fade_Layer_2_Adjust=1","Fade_Layer_2_Padding=0","Fade_Layer_3_Alignment=Center","Fade_Layer_3_X=300","Fade_Layer_3_Y=300","Fade_Layer_3_Adjust=0.75","Fade_Layer_3_Padding=0","Fade_Layer_3_Speed=750","Fade_Layer_3_Animation=DefaultFadeAnimation","Fade_Layer_3_7z_Animation=DefaultFadeAnimation","Fade_Layer_3_Image_Follow_7z_Progress=true","Fade_Layer_3_Type=imageandbar","Fade_Layer_3_Repeat=1","Fade_Layer_4_Pos=Above Layer 3 - Left","Fade_Layer_4_X=100","Fade_Layer_4_Y=100","Fade_Layer_4_Adjust=0.75","Fade_Layer_4_Padding=0","Fade_Layer_4_FPS=10","Fade_Animated_Gif_Transparent_Color=FFFFFF","Fade_Bar_Window=false","Fade_Bar_Window_X=","Fade_Bar_Window_Y=","Fade_Bar_Window_Width=600","Fade_Bar_Window_Height=120","Fade_Bar_Window_Radius=20","Fade_Bar_Window_Margin=20","Fade_Bar_Window_Hatch_Style=8","Fade_Bar_Back=true","Fade_Bar_Back_Color=FF555555","Fade_Bar_Height=20","Fade_Bar_Radius=5","Fade_Bar_Color=DD00BFFF","Fade_Bar_Hatch_Style=3","Fade_Bar_Percentage_Text=true","Fade_Bar_Info_Text=true","Fade_Bar_X_Offset=0","Fade_Bar_Y_Offset=100","Fade_Rom_Info_Description=text","Fade_Rom_Info_System_Name=text","Fade_Rom_Info_Year=text","Fade_Rom_Info_Manufacturer=text","Fade_Rom_Info_Genre=text","Fade_Rom_Info_Rating=text","Fade_Rom_Info_Order=Description|SystemName|Year|Manufacturer|Genre|Rating","Fade_Rom_Info_Text_Placement=topRight","Fade_Rom_Info_Text_Margin=5","Fade_Rom_Info_Text_1_Options=cFF555555 r4 s20 Bold","Fade_Rom_Info_Text_2_Options=cFF555555 r4 s20 Bold","Fade_Rom_Info_Text_3_Options=cFF555555 r4 s20 Bold","Fade_Rom_Info_Text_4_Options=cFF555555 r4 s20 Bold","Fade_Rom_Info_Text_5_Options=cFF555555 r4 s20 Bold","Fade_Rom_Info_Text_6_Options=cFF555555 r4 s20 Bold","Fade_Stats_Number_of_Times_Played=text with label","Fade_Stats_Last_Time_Played=text with label","Fade_Stats_Average_Time_Played=text with label","Fade_Stats_Total_Time_Played=text with label","Fade_Stats_System_Total_Played_Time=text with label","Fade_Stats_Total_Global_Played_Time=text with label","Fade_Stats_Info_Order=Number_of_Times_Played|Last_Time_Played|Average_Time_Played|Total_Time_Played|System_Total_Played_Time|Total_Global_Played_Time","Fade_Stats_Info_Text_Placement=topLeft","Fade_Stats_Info_Text_Margin=5","Fade_Stats_Info_Text_1_Options=cFF555555 r4 s20 Bold","Fade_Stats_Info_Text_2_Options=cFF555555 r4 s20 Bold","Fade_Stats_Info_Text_3_Options=cFF555555 r4 s20 Bold","Fade_Stats_Info_Text_4_Options=cFF555555 r4 s20 Bold","Fade_Stats_Info_Text_5_Options=cFF555555 r4 s20 Bold","Fade_Stats_Info_Text_6_Options=cFF555555 r4 s20 Bold","Fade_Text_1_X=0","Fade_Text_1_Y=0","Fade_Text_1_Options=cFFFFFFFF r4 s20 Right Bold","Fade_Text_1=Loading Game","Fade_Text_2_X=0","Fade_Text_2_Y=0","Fade_Text_2_Options=cFFFFFFFF r4 s20 Right Bold","Fade_Text_2=Extraction Complete","Fade_Font=Arial","Fade_System_And_Rom_Layers_Only=false","","[7z]","7z_Enabled=false","7z_Extract_Path=" . A_Temp . "\HS","7z_Attach_System_Name=false","7z_Delete_Temp=true","7z_Sounds=true","","[Keymapper]","Keymapper_Enabled=false","Keymapper_AHK_Method=false","Keymapper=xpadder","JoyIDs_Enabled=false","JoyIDs_Preferred_Controllers=","","[VJoy]","VJoy_Enabled=false","","[MultiGame]","MultiGame_Enabled=false","MultiGame_Background_Color=FF000000","MultiGame_Side_Padding=0.2","MultiGame_Y_Offset=500","MultiGame_Image_Adjust=1","MultiGame_Font=Arial","MultiGame_Text_1_Options=x10p y30p w80p Center cBBFFFFFF r4 s100 BoldItalic","MultiGame_Text_1_Text=Please select a game","MultiGame_Text_2_Options=w96p cFFFFFFFF r4 s50 Center BoldItalic","MultiGame_Text_2_Offset=70","MultiGame_Use_Sound=true","MultiGame_Sound_Frequency=300","MultiGame_Exit_Effect=none","MultiGame_Selected_Effect=rotate","MultiGame_Use_Game_Art=false","MultiGame_Art_Folder=Artwork1","","[HyperPause]","HyperPause_Enabled=false","","[Bezel]","","Bezel_Enabled=false","","[Statistics]","","Statistics_Enabled=true","","[Rom Mapping]","Rom_Mapping_Enabled=false","Rom_Mapping_Launch_Menu_Enabled=false","First_Matching_Ext=false","Show_All_Roms_In_Archive=true","Number_of_Games_by_Screen=7","Menu_Width=300","Menu_Margin=50","Text_Font=Bebas Neue","Text_Options=cFFFFFFFF r4 s40 Bold","Disabled_Text_Color=ff888888","Text_Size_Difference=5","Text_Margin=10","Title_Text_Font=Bebas Neue","Title_Text_Options=cFFFFFFFF r4 s60 Bold","Title2_Text_Font=Bebas Neue","Title2_Text_Options=cFFFFFFFF r4 s15 Bold","Game_Info_Text_Font=Bebas Neue","Game_Info_Text_Options=cFFFFFFFF r4 s15 Regular","Background_Brush=aa000000","Column_Brush=33000000","Button_Brush1=6f000000","Button_Brush2=33000000","Background_Align=Stretch and Lose Aspect","Language_Flag_Width=40","Language_Flag_Separation=5","Default_Menu_List=FullList","Single_Filtered_Rom_Automatic_Launch=false"]
 	sysEmu:=["[Roms]","Rom_Path=","Default_Emulator=","","[ExampleEmu]","Emu_Path=C:\Hyperspin\Emulators\Emu_Name\emulator.exe","Rom_Extension=7z|bin","Module=Custom_Module_Name_If_Different_Then_Emu_Name","HyperPause_Save_State_Keys=Read_Guide_To_Use_These","HyperPause_Load_State_Keys=Read_Guide_To_Use_These"]
-	sysHL:=["[Settings]","Skipchecks=false","Rom_Match_Extension=use_global","","[Desktop]","Hide_Cursor=use_global","Hide_Desktop=use_global","Hide_Taskbar=use_global","Hide_Emu=use_global","Hide_Front_End=use_global","","[Exit]","Exit_Emulator_Key_Wait=use_global","Force_Hold_Key=use_global","Restore_Front_End_On_Exit=use_global","","[DAEMON Tools]","DAEMON_Tools_Enabled=use_global","DAEMON_Tools_Use_SCSI=use_global","","[CPWizard]","CPWizard_Enabled=use_global","CPWizard_Delay=use_global","CPWizard_Params=use_global","CPWizard_Close_On_Exit=use_global","","[Fade]","Fade_In=use_global","Fade_In_Duration=use_global","Fade_In_Transition_Animation=use_global","Fade_In_Delay=use_global","Fade_In_Exit_Delay=use_global","Fade_Out=use_global","Fade_Out_Extra_Screen=use_global","Fade_Out_Duration=use_global","Fade_Out_Transition_Animation=use_global","Fade_Out_Delay=use_global","Fade_Out_Exit_Delay=use_global","Fade_Layer_Interpolation=use_global","Fade_Layer_1_Color=use_global","Fade_Layer_1_Align_Image=use_global","Fade_Layer_2_Alignment=use_global","Fade_Layer_2_X=use_global","Fade_Layer_2_Y=use_global","Fade_Layer_2_Adjust=use_global","Fade_Layer_2_Padding=use_global","Fade_Layer_3_Alignment=use_global","Fade_Layer_3_X=use_global","Fade_Layer_3_Y=use_global","Fade_Layer_3_Adjust=use_global","Fade_Layer_3_Padding=use_global","Fade_Layer_3_Speed=use_global","Fade_Layer_3_Animation=use_global","Fade_Layer_3_7z_Animation=use_global","Fade_Layer_3_Image_Follow_7z_Progress=use_global","Fade_Layer_3_Type=use_global","Fade_Layer_3_Repeat=use_global","Fade_Layer_4_Pos=use_global","Fade_Layer_4_X=use_global","Fade_Layer_4_Y=use_global","Fade_Layer_4_Adjust=use_global","Fade_Layer_4_Padding=use_global","Fade_Layer_4_FPS=use_global","Fade_Animated_Gif_Transparent_Color=use_global","Fade_Bar_Window=use_global","Fade_Bar_Window_X=use_global","Fade_Bar_Window_Y=use_global","Fade_Bar_Window_Width=use_global","Fade_Bar_Window_Height=use_global","Fade_Bar_Window_Radius=use_global","Fade_Bar_Window_Margin=use_global","Fade_Bar_Window_Hatch_Style=use_global","Fade_Bar_Back=use_global","Fade_Bar_Back_Color=use_global","Fade_Bar_Height=use_global","Fade_Bar_Radius=use_global","Fade_Bar_Color=use_global","Fade_Bar_Hatch_Style=use_global","Fade_Bar_Percentage_Text=use_global","Fade_Bar_Info_Text=use_global","Fade_Bar_X_Offset=use_global","Fade_Bar_Y_Offset=use_global","Fade_Rom_Info_Description=use_global","Fade_Rom_Info_System_Name=use_global","Fade_Rom_Info_Year=use_global","Fade_Rom_Info_Manufacturer=use_global","Fade_Rom_Info_Genre=use_global","Fade_Rom_Info_Rating=use_global","Fade_Rom_Info_Order=use_global","Fade_Rom_Info_Text_Placement=use_global","Fade_Rom_Info_Text_Margin=use_global","Fade_Rom_Info_Text_1_Options=use_global","Fade_Rom_Info_Text_2_Options=use_global","Fade_Rom_Info_Text_3_Options=use_global","Fade_Rom_Info_Text_4_Options=use_global","Fade_Rom_Info_Text_5_Options=use_global","Fade_Rom_Info_Text_6_Options=use_global","Fade_Stats_Number_of_Times_Played=use_global","Fade_Stats_Last_Time_Played=use_global","Fade_Stats_Average_Time_Played=use_global","Fade_Stats_Total_Time_Played=use_global","Fade_Stats_System_Total_Played_Time=use_global","Fade_Stats_Total_Global_Played_Time=use_global","Fade_Stats_Info_Order=use_global","Fade_Stats_Info_Text_Placement=use_global","Fade_Stats_Info_Text_Margin=use_global","Fade_Stats_Info_Text_1_Options=use_global","Fade_Stats_Info_Text_2_Options=use_global","Fade_Stats_Info_Text_3_Options=use_global","Fade_Stats_Info_Text_4_Options=use_global","Fade_Stats_Info_Text_5_Options=use_global","Fade_Stats_Info_Text_6_Options=use_global","Fade_Text_1_X=use_global","Fade_Text_1_Y=use_global","Fade_Text_1_Options=use_global","Fade_Text_1=use_global","Fade_Text_2_X=use_global","Fade_Text_2_Y=use_global","Fade_Text_2_Options=use_global","Fade_Text_2=use_global","Fade_Font=use_global","Fade_System_And_Rom_Layers_Only=use_global","","[7z]","7z_Enabled=use_global","7z_Extract_Path=use_global","7z_Attach_System_Name=use_global","7z_Delete_Temp=use_global","7z_Sounds=use_global","","[Keymapper]","Keymapper_Enabled=use_global","Keymapper_AHK_Method=use_global","Keymapper=use_global","JoyIDs_Enabled=use_global","JoyIDs_Preferred_Controllers=use_global","","[VJoy]","VJoy_Enabled=use_global","","[MultiGame]","MultiGame_Enabled=use_global","MultiGame_Background_Color=use_global","MultiGame_Side_Padding=use_global","MultiGame_Y_Offset=use_global","MultiGame_Image_Adjust=use_global","MultiGame_Font=use_global","MultiGame_Text_1_Options=use_global","MultiGame_Text_1_Text=use_global","MultiGame_Text_2_Options=use_global","MultiGame_Text_2_Offset=use_global","MultiGame_Use_Sound=use_global","MultiGame_Sound_Frequency=use_global","MultiGame_Exit_Effect=use_global","MultiGame_Selected_Effect=use_global","MultiGame_Use_Game_Art=use_global","MultiGame_Art_Folder=use_global","","[HyperPause]","HyperPause_Enabled=use_global","","[Bezel]","","Bezel_Enabled=use_global","","[Statistics]","","Statistics_Enabled=use_global","","[Rom Mapping]","Rom_Mapping_Enabled=use_global","Rom_Mapping_Launch_Menu_Enabled=use_global","First_Matching_Ext=use_global","Show_All_Roms_In_Archive=use_global","Number_of_Games_by_Screen=use_global","Menu_Width=use_global","Menu_Margin=use_global","Text_Font=use_global","Text_Options=use_global","Disabled_Text_Color=use_global","Text_Size_Difference=use_global","Text_Margin=use_global","Title_Text_Font=use_global","Title_Text_Options=use_global","Title2_Text_Font=use_global","Title2_Text_Options=use_global","Game_Info_Text_Font=use_global","Game_Info_Text_Options=use_global","Background_Brush=use_global","Column_Brush=use_global","Button_Brush1=use_global","Button_Brush2=use_global","Background_Align=use_global","Language_Flag_Width=use_global","Language_Flag_Separation=use_global","Default_Menu_List=use_global","Single_Filtered_Rom_Automatic_Launch=use_global"]
+	sysHL:=["[Settings]","Skipchecks=false","Rom_Match_Extension=use_global","Block_Input=use_global","Error_Level_Reporting=use_global","","[Desktop]","Hide_Cursor=use_global","Hide_Desktop=use_global","Hide_Taskbar=use_global","Hide_Emu=use_global","Hide_Front_End=use_global","","[Exit]","Exit_Emulator_Key_Wait=use_global","Force_Hold_Key=use_global","Restore_Front_End_On_Exit=use_global","","[DAEMON Tools]","DAEMON_Tools_Enabled=use_global","DAEMON_Tools_Use_SCSI=use_global","","[CPWizard]","CPWizard_Enabled=use_global","CPWizard_Delay=use_global","CPWizard_Params=use_global","CPWizard_Close_On_Exit=use_global","","[Fade]","Fade_In=use_global","Fade_In_Duration=use_global","Fade_In_Transition_Animation=use_global","Fade_In_Delay=use_global","Fade_In_Exit_Delay=use_global","Fade_Out=use_global","Fade_Out_Extra_Screen=use_global","Fade_Out_Duration=use_global","Fade_Out_Transition_Animation=use_global","Fade_Out_Delay=use_global","Fade_Out_Exit_Delay=use_global","Fade_Layer_Interpolation=use_global","Fade_Layer_1_Color=use_global","Fade_Layer_1_Align_Image=use_global","Fade_Layer_2_Alignment=use_global","Fade_Layer_2_X=use_global","Fade_Layer_2_Y=use_global","Fade_Layer_2_Adjust=use_global","Fade_Layer_2_Padding=use_global","Fade_Layer_3_Alignment=use_global","Fade_Layer_3_X=use_global","Fade_Layer_3_Y=use_global","Fade_Layer_3_Adjust=use_global","Fade_Layer_3_Padding=use_global","Fade_Layer_3_Speed=use_global","Fade_Layer_3_Animation=use_global","Fade_Layer_3_7z_Animation=use_global","Fade_Layer_3_Image_Follow_7z_Progress=use_global","Fade_Layer_3_Type=use_global","Fade_Layer_3_Repeat=use_global","Fade_Layer_4_Pos=use_global","Fade_Layer_4_X=use_global","Fade_Layer_4_Y=use_global","Fade_Layer_4_Adjust=use_global","Fade_Layer_4_Padding=use_global","Fade_Layer_4_FPS=use_global","Fade_Animated_Gif_Transparent_Color=use_global","Fade_Bar_Window=use_global","Fade_Bar_Window_X=use_global","Fade_Bar_Window_Y=use_global","Fade_Bar_Window_Width=use_global","Fade_Bar_Window_Height=use_global","Fade_Bar_Window_Radius=use_global","Fade_Bar_Window_Margin=use_global","Fade_Bar_Window_Hatch_Style=use_global","Fade_Bar_Back=use_global","Fade_Bar_Back_Color=use_global","Fade_Bar_Height=use_global","Fade_Bar_Radius=use_global","Fade_Bar_Color=use_global","Fade_Bar_Hatch_Style=use_global","Fade_Bar_Percentage_Text=use_global","Fade_Bar_Info_Text=use_global","Fade_Bar_X_Offset=use_global","Fade_Bar_Y_Offset=use_global","Fade_Rom_Info_Description=use_global","Fade_Rom_Info_System_Name=use_global","Fade_Rom_Info_Year=use_global","Fade_Rom_Info_Manufacturer=use_global","Fade_Rom_Info_Genre=use_global","Fade_Rom_Info_Rating=use_global","Fade_Rom_Info_Order=use_global","Fade_Rom_Info_Text_Placement=use_global","Fade_Rom_Info_Text_Margin=use_global","Fade_Rom_Info_Text_1_Options=use_global","Fade_Rom_Info_Text_2_Options=use_global","Fade_Rom_Info_Text_3_Options=use_global","Fade_Rom_Info_Text_4_Options=use_global","Fade_Rom_Info_Text_5_Options=use_global","Fade_Rom_Info_Text_6_Options=use_global","Fade_Stats_Number_of_Times_Played=use_global","Fade_Stats_Last_Time_Played=use_global","Fade_Stats_Average_Time_Played=use_global","Fade_Stats_Total_Time_Played=use_global","Fade_Stats_System_Total_Played_Time=use_global","Fade_Stats_Total_Global_Played_Time=use_global","Fade_Stats_Info_Order=use_global","Fade_Stats_Info_Text_Placement=use_global","Fade_Stats_Info_Text_Margin=use_global","Fade_Stats_Info_Text_1_Options=use_global","Fade_Stats_Info_Text_2_Options=use_global","Fade_Stats_Info_Text_3_Options=use_global","Fade_Stats_Info_Text_4_Options=use_global","Fade_Stats_Info_Text_5_Options=use_global","Fade_Stats_Info_Text_6_Options=use_global","Fade_Text_1_X=use_global","Fade_Text_1_Y=use_global","Fade_Text_1_Options=use_global","Fade_Text_1=use_global","Fade_Text_2_X=use_global","Fade_Text_2_Y=use_global","Fade_Text_2_Options=use_global","Fade_Text_2=use_global","Fade_Font=use_global","Fade_System_And_Rom_Layers_Only=use_global","","[7z]","7z_Enabled=use_global","7z_Extract_Path=use_global","7z_Attach_System_Name=use_global","7z_Delete_Temp=use_global","7z_Sounds=use_global","","[Keymapper]","Keymapper_Enabled=use_global","Keymapper_AHK_Method=use_global","Keymapper=use_global","JoyIDs_Enabled=use_global","JoyIDs_Preferred_Controllers=use_global","","[VJoy]","VJoy_Enabled=use_global","","[MultiGame]","MultiGame_Enabled=use_global","MultiGame_Background_Color=use_global","MultiGame_Side_Padding=use_global","MultiGame_Y_Offset=use_global","MultiGame_Image_Adjust=use_global","MultiGame_Font=use_global","MultiGame_Text_1_Options=use_global","MultiGame_Text_1_Text=use_global","MultiGame_Text_2_Options=use_global","MultiGame_Text_2_Offset=use_global","MultiGame_Use_Sound=use_global","MultiGame_Sound_Frequency=use_global","MultiGame_Exit_Effect=use_global","MultiGame_Selected_Effect=use_global","MultiGame_Use_Game_Art=use_global","MultiGame_Art_Folder=use_global","","[HyperPause]","HyperPause_Enabled=use_global","","[Bezel]","","Bezel_Enabled=use_global","","[Statistics]","","Statistics_Enabled=use_global","","[Rom Mapping]","Rom_Mapping_Enabled=use_global","Rom_Mapping_Launch_Menu_Enabled=use_global","First_Matching_Ext=use_global","Show_All_Roms_In_Archive=use_global","Number_of_Games_by_Screen=use_global","Menu_Width=use_global","Menu_Margin=use_global","Text_Font=use_global","Text_Options=use_global","Disabled_Text_Color=use_global","Text_Size_Difference=use_global","Text_Margin=use_global","Title_Text_Font=use_global","Title_Text_Options=use_global","Title2_Text_Font=use_global","Title2_Text_Options=use_global","Game_Info_Text_Font=use_global","Game_Info_Text_Options=use_global","Background_Brush=use_global","Column_Brush=use_global","Button_Brush1=use_global","Button_Brush2=use_global","Background_Align=use_global","Language_Flag_Width=use_global","Language_Flag_Separation=use_global","Default_Menu_List=use_global","Single_Filtered_Rom_Automatic_Launch=use_global"]
 	sysGames:=["# This file is only used for remapping specific games to other Emulators and/or Systems.","# If you don't want your game to use the Default_Emulator, you would set the Emulator key here.","# This file can also be used when you have Wheels with games from other Systems.","# You would then use the System key to tell HyperLaunch what System to find the emulator settings."]
 	For index, value in %ini%
 		fileVar .= value . "`n" 
@@ -2230,7 +2289,7 @@ CreateDefaultIni(file,ini){
 	Log("CreateDefaultIni - Creating a new file because one was not found: " . file)
 }
 
-EmuCheck(){
+EmuCheck() {
 	Global emuFullPath
 	Global emuPath
 	Global executable
@@ -2244,7 +2303,7 @@ EmuCheck(){
 	Log("EmuCheck - EmuCheck passed, found emulator: " . emuFullPath)
 }
 
-CheckPaths(){
+CheckPaths() {
 	Global executable
 	Global romPath
 	Global romPathFromIni
@@ -2289,7 +2348,7 @@ CheckPaths(){
 	romFound:=
 	If ( !romMapTable.MaxIndex() && !romName )	; do not check for dbName rom if 1-romMapTable contains a found rom, 2-romName does not exist already
 	{	romNameCheck := dbName
-	; {	If skipChecks not in Rom Only,Rom and Emu
+	; {	If skipChecks not in Rom Only,Rom and Emu	; this is removed because we always want to check if a rom exists even when skipchecks is enabled for a few scenarios.
 		{	Loop, Parse,  romPathFromIni, |
 			{	If romFound = true	; break out of 1st loop if rom found
 					Break
@@ -2387,7 +2446,7 @@ CheckPaths(){
 }
 
 ; Parses HS's main menu.xml to find each system and builds the dropdown list for HL's GUI
-GetSystems(){
+GetSystems() {
 	Global lastSystem,frontendPath
 	systemsFile := CheckFile(frontendPath . "\Databases\Main Menu\Main Menu.xml")	; read main menu xml
 	FileRead, sysXML, %systemsFile%
@@ -2553,7 +2612,7 @@ GetFullName( fn ) {
 	Return buf
 }
 
-Milli2HMS(milli, ByRef hours=0, ByRef mins=0, ByRef secs=0, secPercision=0){
+Milli2HMS(milli, ByRef hours=0, ByRef mins=0, ByRef secs=0, secPercision=0) {
 	SetFormat, FLOAT, 0.%secPercision%
 	milli /= 1000.0
 	secs := mod(milli, 60)
@@ -2564,7 +2623,7 @@ Milli2HMS(milli, ByRef hours=0, ByRef mins=0, ByRef secs=0, secPercision=0){
 	Return hours . "hr, " . mins . "mins, " . secs . "secs"
 }
 
-URLDownload(remoteFile,localFile,errorOnFail){
+URLDownload(remoteFile,localFile,errorOnFail) {
 	Log("URLDownload - Started")
 	SplitPath,localFile,,localPath
 	If !FileExist(localFile) {
@@ -2643,7 +2702,7 @@ FileGetVersionInfo_AW( peFile="", StringFileInfo="", Delimiter="|") {
 	Return Info
 }
 
-FadeApp(title,direction,time=0){
+FadeApp(title,direction,time=0) {
 	startTime := A_TickCount
 	Loop{
 		t := ((TimeElapsed := A_TickCount-startTime) < time) ? (If direction="in" ? 255*(timeElapsed/time) : 255*(1-(timeElapsed/time))) : (If direction="in" ? 255 : 0)
@@ -2661,7 +2720,7 @@ CheckForVJoy(ByRef exe) {
 }
 
 RunAHKKeymapper(method) {
-	Global ahkDefaultProfile,ahkFEProfile,ahkRomProfile,ahkEmuProfile,ahkSystemProfile,ahkHyperLaunchProfile,ahkLauncherPath,ahkLauncherExe,moduleExtensionsPath
+	Global ahkDefaultProfile,ahkFEProfile,ahkRomProfile,ahkEmuProfile,ahkSystemProfile,ahkHyperLaunchProfile,ahkLauncherPath,ahkLauncherExe,moduleExtensionsPath,keymapperFrontEndProfile
 	Global systemName,dbName,emuName
 	Log("RunAHKKeymapper - Started")
 
@@ -2671,11 +2730,11 @@ RunAHKKeymapper(method) {
 	{	Log("RunAHKKeymapper - Loading " . dbName . ", " . emuName . ", " . systemName . ", or _Default AHK Keymapper profile",4)
 		profile := GetAHKProfile(ahkRomProfile . "|" . ahkEmuProfile . "|" . ahkSystemProfile . "|" . ahkDefaultProfile)
 		unloadAHK = 1	; this method we don't want to run any ahk profile if none were found
-	} Else If method = unload
+	} Else If (method = "unload" && keymapperFrontEndProfile = "ahk")	; user must have ahk selected to load an ahk FE profile
 	{	Log("RunAHKKeymapper - Loading Front End AHK Keymapper profile",4)
 		profile := GetAHKProfile(ahkFEProfile)
 		unloadAHK = 1	; this method we don't want to run any ahk profile if none were found
-	} Else If method = menu	; this method we do not want to unload AHK if a new profile was not found, existing profile should stay running
+	} Else If (method = "menu")	; this method we do not want to unload AHK if a new profile was not found, existing profile should stay running
 	{	Log("RunAHKKeymapper - Loading HyperLaunch AHK Keymapper profile",4)
 		profile := GetAHKProfile(ahkHyperLaunchProfile)
 	}
@@ -2772,7 +2831,7 @@ ExitScript(error="") {
 		If keymapperAHKMethod = External	; this is here to prevent ahkLauncher from lingering after an error was detected and to make sure the FE profile is loaded when not closing properly
 			RunAHKKeymapper("unload")
 
-	Log("ExitScript - Putting " . frontendExe . " back in focus",4)
+
 	If frontendPID {	; If FE is running
 		SetTimer, WatchForFEDisplacement, Off	; Shut timer if it happens to still be running
 		If restoreFE != false
@@ -2786,21 +2845,27 @@ ExitScript(error="") {
 		WinGet, feTran, Transparent, ahk_pid %frontendPID%	; as a precaution, let's check our FE is opaque
 		If (userForceQuit Or feTran != "")	; if user used the exit_script_key or the FE has some degree of transparency, let's turn it off
 			WinSet, Transparent, Off, ahk_pid %frontendPID%	; just in case any transparency was set, make sure FE has no transparency on force quit
+		Log("ExitScript - Checking what application is currently in focus.",4)
 		IfWinNotActive, ahk_pid %frontendPID%
-			Loop{
+		{	WinGetActiveTitle, currentActiveTitle	; get current active window's title
+			Log("ExitScript - " . currentActiveTitle . " is currently active. Putting focus back on " . frontendExe,4)
+			Loop
+			{	activeCheck++	; keep track of how many times we tried to put the FE back in focus
 				WinActivate, ahk_pid %frontendPID%
 				IfWinActive, ahk_pid %frontendPID%
 					Break
 				Sleep, 100
 			}
-		; WinActivate, ahk_pid %frontendPID%
-		; WinWaitActive, ahk_pid %frontendPID%
+			Log("ExitScript - Took " . activeCheck . " attempts to put " . frontendExe . " back in focus.",4)
+			; WinActivate, ahk_pid %frontendPID%
+			; WinWaitActive, ahk_pid %frontendPID%
+		}
 	}
 	;SendMessage,0x112,0xF170,-1,,Program Manager
 	SystemCursor("On")
-	;Emergency restore cursor, just in case something goes wrong
+
 	SPI_SETCURSORS := 0x57
-	DllCall( "SystemParametersInfo", UInt,SPI_SETCURSORS, UInt,0, UInt,0, UInt,0 )
+	DllCall( "SystemParametersInfo", UInt,SPI_SETCURSORS, UInt,0, UInt,0, UInt,0 )	; Emergency restore cursor, just in case something goes wrong
 	Log("ExitScript - Ended")
 	Log("[/code]",,"end",1)
 	ExitApp
