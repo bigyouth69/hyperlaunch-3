@@ -3,7 +3,7 @@ MEmuV =  r141
 MURL = https://code.google.com/p/nulldc/
 MAuthor = djvj
 MVersion = 2.0.2
-MCRC = E88CD086
+MCRC = 9100D39D
 iCRC = 11A924D4
 MID = 635038268910409317
 MSystem = "Sega Dreamcast"
@@ -27,6 +27,7 @@ MSystem = "Sega Dreamcast"
 ; Cable can be 0 (VGA(0)(RGB)), 1 (VGA(1)(RGB)), 2 (TV(RGB)) or 3 (TV(VBS/Y+S/C)), default is 0.
 ;
 ; For additional setup steps prior to running, see this link: http://www.hyperspin-fe.com/forum/showpost.php?p=99852&postcount=138
+; Not all builds work with swapping discs, it's mostly broken and is a nulldc problem, not HyperLaunch's. See here: http://code.google.com/p/nulldc/issues/detail?id=264
 ;----------------------------------------------------------------------------
 StartModule()
 
@@ -136,7 +137,6 @@ ExitModule()
 Return
 
 MultiGame:
-	; not all builds work with swapping discs: http://code.google.com/p/nulldc/issues/detail?id=264
 	; msgbox % "selectedRom = " . selectedRom . "`nselected game = " . currentButton . "`nmgRomPath = " . mgRomPath . "`nmgRomExt = " . mgRomExt . "`nmgRomName = "  . mgRomName
 	ToggleMenu(ndcID) ; Restore the MenuBar
 	Loop {
