@@ -2,8 +2,8 @@ MEmu = ePSXe
 MEmuV =  v1.8.0
 MURL = http://www.epsxe.com/
 MAuthor = djvj & Shateredsoul & brolly
-MVersion = 2.0.6
-MCRC = 6A79E890
+MVersion = 2.0.7
+MCRC = A47833DF
 iCRC = AFD664B0
 MID = 635038268888210842
 MSystem = "Sony PlayStation"
@@ -121,8 +121,7 @@ If (epsxeExtension && dtEnabled = "true" ) {
 	Log("Module - Sending rom to emu directly as Daemon Tools is not enabled or " . romExtension . " is not a supported DT extension.")
 	errorLvl := Run(executable . noGUI . slowBoot . " -loadiso """ . romPath . "\" . romName . romExtension . """", emuPath)
 }
-
-If errorLvl != 0
+If errorLvl
 	ScriptError("Error launching " . executable . "`, closing module.")
 
 epsxeLaunchType := If usedDT ? "CDROM" : "ISO"	; determines which command gets sent to epsxe
@@ -203,7 +202,7 @@ Return
 HaltEmu:
 	SetKeyDelay, 50
 	If Fullscreen = true
-	{	Send, !{Enter}
+	{	PostMessage, 0x111, 40001,,,ahk_class EPSXGUI	; Go fullscreen, same as alt+enter
 		Sleep, 200
 	}
 Return
@@ -252,7 +251,7 @@ RestoreEmu:
 	SetKeyDelay, 50
 	WinActivate, ahk_id  %emulatorID%
 	If Fullscreen = true
-		Send, !{Enter}
+		PostMessage, 0x111, 40001,,,ahk_class EPSXGUI	; Go fullscreen, same as alt+enter
 Return
 
 HideGUIWindow:
@@ -265,7 +264,8 @@ CloseProcess:
 	FadeOutStart()
 	SetWinDelay, 50
 	Log("Module - Sending Escape to close emulator")
-	ControlSend,, {Esc down}{Esc up}, ePSXe ahk_class EPSX ; DO NOT CHANGE
+	; ControlSend,, {Esc down}{Esc up}, ePSXe ahk_class EPSX ; DO NOT CHANGE
+	PostMessage, 0x111, 40007,,,ahk_class EPSX	; Go fullscreen, same as alt+enter
 	If (noGUI = "") {	; for multi disc games only
 		WinWait("ePSXe ahk_class EPSXGUI")
 		WinClose("ePSXe ahk_class EPSXGUI")
