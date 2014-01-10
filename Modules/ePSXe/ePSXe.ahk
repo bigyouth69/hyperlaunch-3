@@ -1,5 +1,5 @@
 MEmu = ePSXe
-MEmuV =  v1.8.0
+MEmuV =  v1.9.0
 MURL = http://www.epsxe.com/
 MAuthor = djvj & Shateredsoul & brolly
 MVersion = 2.0.7
