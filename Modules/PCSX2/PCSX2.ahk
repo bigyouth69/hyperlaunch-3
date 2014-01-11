@@ -2,8 +2,8 @@ MEmu = PCSX2
 MEmuV =  1.1.0.r5695
 MURL = http://pcsx2.net/
 MAuthor = djvj
-MVersion = 2.0.7
-MCRC = 5D0A4933
+MVersion = 2.0.8
+MCRC = 499BD257
 iCRC = 5EE13A07
 MID = 635038268913291718
 MSystem = "Sony PlayStation 2"
@@ -45,6 +45,7 @@ fullboot := IniReadCheck(settingsFile, "Settings", "fullboot","false",,1)	; disa
 perGameMemCards := IniReadCheck(settingsFile, "Settings", "PerGameMemoryCards","true",,1)
 hideConsole := IniReadCheck(settingsFile, "Settings", "HideConsole","true",,1)	; Hides console window from view if it shows up
 cfgPath := IniReadCheck(settingsFile, "Settings", "cfgpath", emuPath . "\Game Configs",,1)	; specifies the config folder; applies to pcsx2 + plugins
+cfgPath := GetFullName(cfgPath)
 IfNotExist % cfgPath
 	FileCreateDir, %cfgPath%	; create the cfg folder if it does not exist
 
@@ -133,7 +134,7 @@ If (dtEnabled = "true" && InStr(".mds|.mdx|.b5t|.b6t|.bwt|.ccd|.cue|.isz|.nrg|.c
 		SaveProperties(pcsx2IniFile,pcsx2Ini)	; save pcsx2IniFile to disk
 	}
 	DaemonTools("mount",romPath . "\" . romName . romExtension)
-	Err := Run(executable . " --usecd" . noGUI . Fullscreen . fullboot . nohacks . gamefixes . cfg . cfgPathCLI . gs . pad . spu2 . cdvd . usb . fw . dev9, emuPath,  "UseErrorLevel")
+	errLvl := Run(executable . " --usecd" . noGUI . Fullscreen . fullboot . nohacks . gamefixes . cfg . cfgPathCLI . gs . pad . spu2 . cdvd . usb . fw . dev9, emuPath,  "UseErrorLevel")
 	usedDT = 1	; tell the rest of the script to use DT methods
 } Else If romExtension in .iso,.mdf,.nrg,.bin,.img	; the only formats PCSX2 supports loading directly
 {	If dvdSource != Iso
@@ -141,14 +142,12 @@ If (dtEnabled = "true" && InStr(".mds|.mdx|.b5t|.b6t|.bwt|.ccd|.cue|.isz|.nrg|.c
 		WriteProperty(pcsx2Ini,"CdvdSource","Iso")	; write a new value to the pcsx2IniFile
 		SaveProperties(pcsx2IniFile,pcsx2Ini)	; save pcsx2IniFile to disk
 	}
-	Err := Run(executable . " """ . romPath . "\" . romName . romExtension . """ " . noGUI . Fullscreen . fullboot . nohacks . gamefixes . cfg . cfgPathCLI . gs . pad . spu2 . cdvd . usb . fw . dev9, emuPath,  "UseErrorLevel")
+	errLvl := Run(executable . " """ . romPath . "\" . romName . romExtension . """ " . noGUI . Fullscreen . fullboot . nohacks . gamefixes . cfg . cfgPathCLI . gs . pad . spu2 . cdvd . usb . fw . dev9, emuPath,  "UseErrorLevel")
 } Else
 	ScriptError("You are trying to run a rom type of """ . romExtension . """ but PCSX2 only supports loading iso|mdf|nrg|bin|img directly. Please turn on Daemon Tools and/or 7z support or put ""cue"" last in your rom extensions for " . MEmu . " instead.")
 
-If(Err != 0){
+If errLvl
 	ScriptError("Error launching emulator, closing script.")
-	ExitApp
-}
 
 WinWait("ahk_class wxWindowClassNR",,, "PCSX2")
 WinWaitActive("ahk_class wxWindowClassNR",,, "PCSX2")
