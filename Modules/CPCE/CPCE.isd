@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Win32 Video Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="FullScreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Run emulator in Full Screen.</DESCRIPTION>
+						</KEY>
+						<KEY name="Green Screen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Green Screen Monitor</DESCRIPTION>
+						</KEY>
+						<KEY name="Fix Gamma" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Increases the middle palette values. Useful for computers with LCDs or dark screens.</DESCRIPTION>
+						</KEY>
+						<KEY name="Dither" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Toggles the image dithering. F11</DESCRIPTION>
+						</KEY>
+						<KEY name="Scanlines" required="false">
+						<KEYTYPE>Integer</KEYTYPE>
+						<DESCRIPTION>Choose the amount of scanlines you want for all games this module/system uses.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="Simple">1</VALUE>
+								<VALUE description="50% Intensity">2</VALUE>
+								<VALUE description="Dithered">3</VALUE>
+								<VALUE description="Hardware Stretch">4</VALUE>
+								<VALUE description="No stretch (useful for arcade screens)">5</VALUE>
+							</VALUES>
+						</KEY>			
+						<KEY name="Image Double" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Double screen definition. Users need a desktop as big as the chosen image size twofold. High definition enhances image quality but needs more memory and machine power.</DESCRIPTION>
+						</KEY>
+						<KEY name="Image Width" required="false">
+						<KEYTYPE>Integer</KEYTYPE>
+						<DESCRIPTION>Screen width in pixels for all games this module/system uses.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="320 (standard)">0</VALUE>
+								<VALUE description="256">1</VALUE>
+								<VALUE description="336">2</VALUE>
+								<VALUE description="384">3</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Image Height" required="false">
+						<KEYTYPE>Integer</KEYTYPE>
+						<DESCRIPTION>Screen height in pixels for all games this module/system uses.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="200 (standard)">0</VALUE>
+								<VALUE description="224">1</VALUE>
+								<VALUE description="240">2</VALUE>
+								<VALUE description="256">3</VALUE>
+								<VALUE description="272">3</VALUE>
+								<VALUE description="288">3</VALUE>
+							</VALUES>
+						</KEY>			 
+					</KEYS>
+				</SECTION>
+				<SECTION name="Audio Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>					
+						<KEY name="Sound Quality" required="false">
+						<KEYTYPE>Integer</KEYTYPE>
+						<DESCRIPTION>Samplerate quality for all games this module/system uses. Default is 44KHz</DESCRIPTION>
+							<VALUES>
+								<VALUE description="11 KHz">0</VALUE>
+								<VALUE description="22 KHz">1</VALUE>
+								<VALUE description="44 KHz">2</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="16Bit" required="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Only useful if the sound card supports 16-bit playback.</DESCRIPTION>
+						</KEY>
+						<KEY name="Stereo" required="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Only useful if the sound card supports stereo playback.</DESCRIPTION>
+						</KEY>
+						<KEY name="Filter" required="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Sound filtering.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+					<KEY name="FullScreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Run emulator in Full Screen.</DESCRIPTION>
+						</KEY>
+						<KEY name="Green Screen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Green Screen Monitor</DESCRIPTION>
+						</KEY>
+						<KEY name="Fix Gamma" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Increases the middle palette values. Useful for computers with LCDs or dark screens.</DESCRIPTION>
+						</KEY>
+						<KEY name="Scanlines" required="false">
+						<KEYTYPE>Integer</KEYTYPE>
+						<DESCRIPTION>Choose the amount of scanlines you want for just this game.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="Simple">1</VALUE>
+								<VALUE description="50% Intensity">2</VALUE>
+								<VALUE description="Dithered">3</VALUE>
+								<VALUE description="Hardware Stretch">4</VALUE>
+								<VALUE description="No stretch (useful for arcade screens)">5</VALUE>
+							</VALUES>
+						</KEY>			
+						<KEY name="Image Double" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Double screen definition. Users need a desktop as big as the chosen image size twofold. High definition enhances image quality but needs more memory and machine power.</DESCRIPTION>
+						</KEY>
+						<KEY name="Image Width" required="false">
+						<KEYTYPE>Integer</KEYTYPE>
+						<DESCRIPTION>Screen width in pixels for just this game.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="320 (standard)">0</VALUE>
+								<VALUE description="256">1</VALUE>
+								<VALUE description="336">2</VALUE>
+								<VALUE description="384">3</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Image Height" required="false">
+						<KEYTYPE>Integer</KEYTYPE>
+						<DESCRIPTION>Screen height in pixels for just this game.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="200 (standard)">0</VALUE>
+								<VALUE description="224">1</VALUE>
+								<VALUE description="240">2</VALUE>
+								<VALUE description="256">3</VALUE>
+								<VALUE description="272">3</VALUE>
+								<VALUE description="288">3</VALUE>
+							</VALUES>
+						</KEY>			 
+						<KEY name="Sound Quality" required="false">
+						<KEYTYPE>Integer</KEYTYPE>
+						<DESCRIPTION>Samplerate quality for just this game.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="11 KHz">0</VALUE>
+								<VALUE description="22 KHz">1</VALUE>
+								<VALUE description="44 KHz">2</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="16Bit" required="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Only useful if the sound card supports 16-bit playback.</DESCRIPTION>
+						</KEY>
+						<KEY name="Stereo" required="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Only useful if the sound card supports stereo playback.</DESCRIPTION>
+						</KEY>
+						<KEY name="Filter" required="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Sound filtering.</DESCRIPTION>
+						</KEY>
+				</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>
