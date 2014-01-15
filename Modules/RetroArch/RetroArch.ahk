@@ -1,10 +1,10 @@
 MEmu = RetroArch
-MEmuV =  v0.9.9
+MEmuV =  v1.0.0
 MURL = http://themaister.net/retroarch.html
 MAuthor = djvj
-MVersion = 2.1.1
-MCRC = B1B0E6B
-iCRC = 8563652D
+MVersion = 2.1.2
+MCRC = 959DBCB2
+iCRC = 32ED5D7C
 MID = 635038268922229162
 MSystem = "Atari 2600","Bandai Wonderswan","Bandai Wonderswan Color","Final Burn Alpha","NEC PC Engine","NEC PC Engine-CD","NEC TurboGrafx-16","NEC SuperGrafx","NEC TurboGrafx-CD","Nintendo 64","Nintendo Entertainment System","Nintendo Famicom","Nintendo Famicom Disk System","Nintendo Game Boy","Nintendo Game Boy Color","Nintendo Game Boy Advance","Nintendo Super Game Boy","Nintendo Virtual Boy","Nintendo Super Famicom","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","Sega Pico","Sony PlayStation","Sega SG-1000","SNK Neo Geo Pocket","SNK Neo Geo Pocket Color","Super Nintendo Entertainment System"
 ;----------------------------------------------------------------------------
@@ -45,39 +45,41 @@ If !ident
 settingsFile := modulePath . "\" . moduleName . ".ini"
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 hideConsole := IniReadCheck(settingsFile, "Settings", "HideConsole","true",,1)
-SystemConfigs := IniReadCheck(settingsFile, "Settings", "SystemConfigs","true",,1)			; If true, RetroArch will use per-system cfg files named to match your System Name. If false, it looks for a retroarch.cfg.
-LibRetro_2600 := IniReadCheck(settingsFile, "Settings", "LibRetro_2600","stella_libretro_x86_64_20130629",,1)
-LibRetro_32X := IniReadCheck(settingsFile, "Settings", "LibRetro_32X","picodrive_libretro_x86_64_20130813",,1)
-LibRetro_FBA := IniReadCheck(settingsFile, "Settings", "LibRetro_FBA","fb_alpha_libretro_x86_64_20130629",,1)
-LibRetro_GB := IniReadCheck(settingsFile, "Settings", "LibRetro_GB","bsnes_libretro_balanced_x86_64_20130629",,1)
-LibRetro_GBC := IniReadCheck(settingsFile, "Settings", "LibRetro_GBC","gambatte_libretro_x86_64_20130629",,1)
-LibRetro_GBA := IniReadCheck(settingsFile, "Settings", "LibRetro_GBA","vba_next_libretro_x86_64_20130629",,1)
-LibRetro_GEN := IniReadCheck(settingsFile, "Settings", "LibRetro_GEN","genesis_plus_gx_libretro_x86_64_20130629",,1)
-LibRetro_GG := IniReadCheck(settingsFile, "Settings", "LibRetro_GG","genesis_plus_gx_libretro_x86_64_20130629",,1)
+SystemConfigs := IniReadCheck(settingsFile, "Settings", "SystemConfigs","true",,1)			; If true, RetroArch will use per-system cfg files named to match your System Name. If false, it looks for a retroarch.cfg
+libRetroFolder := IniReadCheck(settingsFile, "Settings", "LibRetroFolder", emuPath,,1)
+LibRetro_2600 := IniReadCheck(settingsFile, "Settings", "LibRetro_2600","stella_libretro",,1)
+LibRetro_32X := IniReadCheck(settingsFile, "Settings", "LibRetro_32X","genesis_plus_gx_libretro",,1)
+LibRetro_FBA := IniReadCheck(settingsFile, "Settings", "LibRetro_FBA","fb_alpha_libretro",,1)
+LibRetro_GB := IniReadCheck(settingsFile, "Settings", "LibRetro_GB","bsnes_balanced_libretro",,1)
+LibRetro_GBC := IniReadCheck(settingsFile, "Settings", "LibRetro_GBC","gambatte_libretro",,1)
+LibRetro_GBA := IniReadCheck(settingsFile, "Settings", "LibRetro_GBA","vba_next_libretro",,1)
+LibRetro_GEN := IniReadCheck(settingsFile, "Settings", "LibRetro_GEN","genesis_plus_gx_libretro",,1)
+LibRetro_GG := IniReadCheck(settingsFile, "Settings", "LibRetro_GG","genesis_plus_gx_libretro",,1)
 LibRetro_N64 := IniReadCheck(settingsFile, "Settings", "LibRetro_N64","mupen64plus_libretro",,1)
-LibRetro_NES := IniReadCheck(settingsFile, "Settings", "LibRetro_NES","nestopia_libretro_x86_64_20130629",,1)
-LibRetro_NFAM := IniReadCheck(settingsFile, "Settings", "LibRetro_NFAM","nestopia_libretro_x86_64_20130629",,1)
-LibRetro_NFDS := IniReadCheck(settingsFile, "Settings", "LibRetro_NFDS","nestopia_libretro_x86_64_20130629",,1)
-LibRetro_NSF := IniReadCheck(settingsFile, "Settings", "LibRetro_NSF","bsnes_libretro_balanced_x86_64_20130629",,1)
-LibRetro_NVB := IniReadCheck(settingsFile, "Settings", "LibRetro_NVB","mednafen_vb_libretro_x86_64_20130629",,1)
-LibRetro_NGP := IniReadCheck(settingsFile, "Settings", "LibRetro_NGP","mednafen_ngp_libretro_x86_64_20130629",,1)
-LibRetro_NGPC := IniReadCheck(settingsFile, "Settings", "LibRetro_NGPC","mednafen_ngp_libretro_x86_64_20130629",,1)
-LibRetro_PCE := IniReadCheck(settingsFile, "Settings", "LibRetro_PCE","mednafen_pce_fast_libretro_x86_64_20130629",,1)
-LibRetro_PCECD := IniReadCheck(settingsFile, "Settings", "LibRetro_PCECD","mednafen_pce_fast_libretro_x86_64_20130629",,1)
-LibRetro_PICO := IniReadCheck(settingsFile, "Settings", "LibRetro_PICO","picodrive_libretro_x86_64_20130813",,1)
-LibRetro_PSX := IniReadCheck(settingsFile, "Settings", "LibRetro_PSX","mednafen_psx_libretro_x86_64_20130629",,1)
-LibRetro_SCD := IniReadCheck(settingsFile, "Settings", "LibRetro_SCD","genesis_plus_gx_libretro_x86_64_20130629",,1)
-LibRetro_SG1K := IniReadCheck(settingsFile, "Settings", "LibRetro_SG1K","genesis_plus_gx_libretro_x86_64_20130629",,1)
-LibRetro_SGB := IniReadCheck(settingsFile, "Settings", "LibRetro_SGB","bsnes_libretro_balanced_x86_64_20130629",,1)
-LibRetro_SMS := IniReadCheck(settingsFile, "Settings", "LibRetro_SMS","genesis_plus_gx_libretro_x86_64_20130629",,1)
-LibRetro_SNES := IniReadCheck(settingsFile, "Settings", "LibRetro_SNES","bsnes_libretro_balanced_x86_64_20130629",,1)
-LibRetro_SGFX := IniReadCheck(settingsFile, "Settings", "LibRetro_SGFX","mednafen_pce_fast_libretro_x86_64_20130629",,1)
-LibRetro_TG16 := IniReadCheck(settingsFile, "Settings", "LibRetro_TG16","mednafen_pce_fast_libretro_x86_64_20130629",,1)
-LibRetro_TGCD := IniReadCheck(settingsFile, "Settings", "LibRetro_TGCD","mednafen_pce_fast_libretro_x86_64_20130629",,1)
-LibRetro_WSAN := IniReadCheck(settingsFile, "Settings", "LibRetro_WSAN","mednafen_wswan_libretro_x86_64_20130629",,1)
-LibRetro_WSANC := IniReadCheck(settingsFile, "Settings", "LibRetro_WSANC","mednafen_wswan_libretro_x86_64_20130629",,1)
+LibRetro_NES := IniReadCheck(settingsFile, "Settings", "LibRetro_NES","nestopia_libretro",,1)
+LibRetro_NFAM := IniReadCheck(settingsFile, "Settings", "LibRetro_NFAM","nestopia_libretro",,1)
+LibRetro_NFDS := IniReadCheck(settingsFile, "Settings", "LibRetro_NFDS","nestopia_libretro",,1)
+LibRetro_NSF := IniReadCheck(settingsFile, "Settings", "LibRetro_NSF","bsnes_balanced_libretro",,1)
+LibRetro_NVB := IniReadCheck(settingsFile, "Settings", "LibRetro_NVB","mednafen_vb_libretro",,1)
+LibRetro_NGP := IniReadCheck(settingsFile, "Settings", "LibRetro_NGP","mednafen_ngp_libretro",,1)
+LibRetro_NGPC := IniReadCheck(settingsFile, "Settings", "LibRetro_NGPC","mednafen_ngp_libretro",,1)
+LibRetro_PCE := IniReadCheck(settingsFile, "Settings", "LibRetro_PCE","mednafen_pce_fast_libretro",,1)
+LibRetro_PCECD := IniReadCheck(settingsFile, "Settings", "LibRetro_PCECD","mednafen_pce_fast_libretro",,1)
+LibRetro_PICO := IniReadCheck(settingsFile, "Settings", "LibRetro_PICO","picodrive_libretro",,1)
+LibRetro_PSX := IniReadCheck(settingsFile, "Settings", "LibRetro_PSX","mednafen_psx_libretro",,1)
+LibRetro_SCD := IniReadCheck(settingsFile, "Settings", "LibRetro_SCD","genesis_plus_gx_libretro",,1)
+LibRetro_SG1K := IniReadCheck(settingsFile, "Settings", "LibRetro_SG1K","genesis_plus_gx_libretro",,1)
+LibRetro_SGB := IniReadCheck(settingsFile, "Settings", "LibRetro_SGB","bsnes_balanced_libretro",,1)
+LibRetro_SMS := IniReadCheck(settingsFile, "Settings", "LibRetro_SMS","genesis_plus_gx_libretro",,1)
+LibRetro_SNES := IniReadCheck(settingsFile, "Settings", "LibRetro_SNES","bsnes_balanced_libretro",,1)
+LibRetro_SGFX := IniReadCheck(settingsFile, "Settings", "LibRetro_SGFX","mednafen_pce_fast_libretro",,1)
+LibRetro_TG16 := IniReadCheck(settingsFile, "Settings", "LibRetro_TG16","mednafen_pce_fast_libretro",,1)
+LibRetro_TGCD := IniReadCheck(settingsFile, "Settings", "LibRetro_TGCD","mednafen_pce_fast_libretro",,1)
+LibRetro_WSAN := IniReadCheck(settingsFile, "Settings", "LibRetro_WSAN","mednafen_wswan_libretro",,1)
+LibRetro_WSANC := IniReadCheck(settingsFile, "Settings", "LibRetro_WSANC","mednafen_wswan_libretro",,1)
 superGB := IniReadCheck(settingsFile, systemName, "SuperGameBoy", "false",,1)
 superGB := IniReadCheck(settingsFile, romName, "SuperGameBoy", superGB,,1)	; default is the system's current setting
+libRetroFolder := GetFullName(libRetroFolder)
 
 If (FileExist(emuPath . "\" . systemName . ".cfg") && SystemConfigs = "true" )
 	retroCFGFile := emuPath . "\" . systemName . ".cfg"
@@ -85,13 +87,13 @@ Else
 	retroCFGFile := emuPath . "\retroarch.cfg"
 Log(MEmu . " is using " . retroCFGFile . " as it's config file.")
 
-Loop, %emuPath%\*.dll,,1 ; loop through all folder in emuPath looking for the ident dll
+Loop, %libRetroFolder%\*.dll,,1 ; loop through all folder in emuPath looking for the ident dll
 	If (A_LoopFileName = %ident% . ".dll") {
 		libDll := A_LoopFileLongPath
 		Break
 	}
 If !libDll
-	ScriptError("Your " . ident . " dll is set to " . %ident% . " but could not locate this file in any folder inside your Emu_Path folder:`n" . emuPath)
+	ScriptError("Your " . ident . " dll is set to " . %ident% . " but could not locate this file in any folder inside:`n" . libRetroFolder)
 
 If ident In LibRetro_NFDS,LibRetro_SCD,LibRetro_TGCD,LibRetro_PCECD
 {	retroCFG := LoadProperties(retroCFGFile)	; load the config into memory
