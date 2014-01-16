@@ -15,10 +15,6 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables Hiding of the Console Window</DESCRIPTION>
 						</KEY>
-						<KEY name="SystemConfigs" required="false" nullable="false">
-							<KEYTYPE>Boolean</KEYTYPE>
-							<DESCRIPTION>If true, RetroArch will use per-system cfg files named to match your System Name. If false, it looks for a retroarch.cfg.</DESCRIPTION>
-						</KEY>
 						<KEY name="LibRetroFolder" required="false" nullable="true">
 							<KEYTYPE>FolderPath</KEYTYPE>
 							<DESCRIPTION>By default this points to your EmuPath folder. The module will search all subfolders for the dll you define. Should you need to define a folder for whatever reason, set it here.</DESCRIPTION>

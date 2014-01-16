@@ -2,30 +2,39 @@ MEmu = RetroArch
 MEmuV =  v1.0.0
 MURL = http://themaister.net/retroarch.html
 MAuthor = djvj
-MVersion = 2.1.2
-MCRC = 959DBCB2
-iCRC = 32ED5D7C
+MVersion = 2.1.3
+MCRC = FD0CE11F
+iCRC = 7647718B
 MID = 635038268922229162
 MSystem = "Atari 2600","Bandai Wonderswan","Bandai Wonderswan Color","Final Burn Alpha","NEC PC Engine","NEC PC Engine-CD","NEC TurboGrafx-16","NEC SuperGrafx","NEC TurboGrafx-CD","Nintendo 64","Nintendo Entertainment System","Nintendo Famicom","Nintendo Famicom Disk System","Nintendo Game Boy","Nintendo Game Boy Color","Nintendo Game Boy Advance","Nintendo Super Game Boy","Nintendo Virtual Boy","Nintendo Super Famicom","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","Sega Pico","Sony PlayStation","Sega SG-1000","SNK Neo Geo Pocket","SNK Neo Geo Pocket Color","Super Nintendo Entertainment System"
 ;----------------------------------------------------------------------------
 ; Notes:
 ; If the emu doesn't load and you get no error, usually this means the LibRetro DLL is not working!
-; Look here for the latest LibRetro DLLs: http://forum.themaister.net/
 ; Devs stated they will never add support for mounted images (like via DT)
-; 
-; Fullscreen is controlled via the variable below
+; Fullscreen is controlled via the module setting in HLHQ
 ; This module uses the CLI version of RetroArch (retroarch.exe), not the GUI (retroarch-phoenix.exe).
-; srm are stored in a srm dir in the emu folder. Each system ran through retroarch gets its own folder inside srm
-; save states are stored in a save dir in the emu folder. Each system ran through retroarch gets its own folder inside save
 ; The emu may make a mouse cursor appear momentarily during launch, MouseMove and hide_cursor seem to have no effect
 ; Enable 7z support for archived roms
-; By default this module is set to use per-system cfg files. This allows different settings for each system you use this emulator for. If you want all systems to use the same retroarch.cfg, set SystemConfigs to false below.
-; You can find supported cores that Retroarch supports simply by downloading them from the "retroarch-phoenix.exe" or by visiting here: https://github.com/libretro/libretro.github.com/wiki/Supported-cores
-; Some good discussion on cores and filters: http://forum.themaister.net/viewtopic.php?id=270
-; Whatever cores you decide to use, make sure they are extracted anywhere in your Emu_Path folder (place them in a LibRetros subfolder if you like). The module will find and load the core you choose for each system.
-; The module LibRetro options need to match the name of that core for each system you use this emu.
 ; Available CLI options: https://github.com/PyroFilmsFX/iOS/blob/master/docs/retroarch.1
 ;
+; LibRetro DLLs:
+; LibRetro DLLs come with the emu, but here is another source for them: http://forum.themaister.net/
+; Whatever cores you decide to use, make sure they are extracted anywhere in your Emu_Path folder (place them in a LibRetros subfolder if you like). The module will find and load the core you choose for each system.
+; You can find supported cores that Retroarch supports simply by downloading them from the "retroarch-phoenix.exe" or by visiting here: https://github.com/libretro/libretro.github.com/wiki/Supported-cores
+; Some good discussion on cores and filters: http://forum.themaister.net/viewtopic.php?id=270
+; The module's LibRetro settings in HLHQ need to match the name of that core for each system you use this emu. Read the tooltips to see the default one used when they are not customized by you.
+;
+; SRM files:
+; srm are stored in a "srm" dir in the emu folder. Each system ran through retroarch gets its own folder inside srm
+;
+; Save states:
+; Save states are stored in a "save" dir in the emu folder. Each system ran through retroarch gets its own folder inside save
+;
+; Config files:
+; RetroArch will use per-system cfg files named to match your System Name. The global one is "retroarch.cfg" but the module will search for cfg files in any of the emu's subfolders. If system ones exist, they take precedence over retroarch.cfg.
+; This allows different settings for each system you use this emulator for. If you want all systems to use the same retroarch.cfg, do not have any system named cfg files, or just create ones for the systems you want custom settings.
+;
+; System Specific Notes:
 ; Nintendo Famicom Disk System - Requires disksys.rom be placed in the folder you define as system_directory in the RetroArch's cfg.
 ; Sega CD - Requires "bios_CD_E.bin", "bios_CD_J.bin", "bios_CD_U.bin" all be placed in the folder you define as system_directory in the RetroArch's cfg.
 ; Super Nintendo Entertainment System - requires split all 10 dsp# & st### roms all be placed in the folder you define as system_directory in the RetroArch's cfg. Many games, like Super Mario Kart require these.
@@ -45,7 +54,7 @@ If !ident
 settingsFile := modulePath . "\" . moduleName . ".ini"
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 hideConsole := IniReadCheck(settingsFile, "Settings", "HideConsole","true",,1)
-SystemConfigs := IniReadCheck(settingsFile, "Settings", "SystemConfigs","true",,1)			; If true, RetroArch will use per-system cfg files named to match your System Name. If false, it looks for a retroarch.cfg
+; SystemConfigs := IniReadCheck(settingsFile, "Settings", "SystemConfigs","true",,1)			; If true, 
 libRetroFolder := IniReadCheck(settingsFile, "Settings", "LibRetroFolder", emuPath,,1)
 LibRetro_2600 := IniReadCheck(settingsFile, "Settings", "LibRetro_2600","stella_libretro",,1)
 LibRetro_32X := IniReadCheck(settingsFile, "Settings", "LibRetro_32X","genesis_plus_gx_libretro",,1)
@@ -77,16 +86,20 @@ LibRetro_TG16 := IniReadCheck(settingsFile, "Settings", "LibRetro_TG16","mednafe
 LibRetro_TGCD := IniReadCheck(settingsFile, "Settings", "LibRetro_TGCD","mednafen_pce_fast_libretro",,1)
 LibRetro_WSAN := IniReadCheck(settingsFile, "Settings", "LibRetro_WSAN","mednafen_wswan_libretro",,1)
 LibRetro_WSANC := IniReadCheck(settingsFile, "Settings", "LibRetro_WSANC","mednafen_wswan_libretro",,1)
-superGB := IniReadCheck(settingsFile, systemName, "SuperGameBoy", "false",,1)
-superGB := IniReadCheck(settingsFile, romName, "SuperGameBoy", superGB,,1)	; default is the system's current setting
+superGB := IniReadCheck(settingsFile, systemName . "|" . romName, "SuperGameBoy", "false",,1)
 libRetroFolder := GetFullName(libRetroFolder)
 
-If (FileExist(emuPath . "\" . systemName . ".cfg") && SystemConfigs = "true" )
-	retroCFGFile := emuPath . "\" . systemName . ".cfg"
-Else
-	retroCFGFile := emuPath . "\retroarch.cfg"
+; Find the cfg file to use
+Loop, %emuPath%\*.cfg,,1 ; loop through all folder in emuPath
+	If (A_LoopFileName = systemName . ".cfg") {
+		sysRetroCfg := A_LoopFileLongPath
+		Break	; systemName configs are preferred, so break after one is found
+	} Else If (A_LoopFileName = "retroarch.cfg")
+		globalRetroCfg := A_LoopFileLongPath
+retroCFGFile := If sysRetroCfg ? sysRetroCfg : globalRetroCfg
 Log(MEmu . " is using " . retroCFGFile . " as it's config file.")
 
+; Find the dll for this system
 Loop, %libRetroFolder%\*.dll,,1 ; loop through all folder in emuPath looking for the ident dll
 	If (A_LoopFileName = %ident% . ".dll") {
 		libDll := A_LoopFileLongPath
@@ -127,7 +140,6 @@ If (ident = "LibRetro_SGB" || If superGB = "true")	; if system or rom is set to 
 	IfNotExist, %retroSysDir%syscard3.pce
 		ScriptError("RetroArch requires ""syscard3.pce"" for " . systemName . " but could not find it in your system_directory: """ . retroSysDir . """")
 }
-
 
 ; WriteProperty(retroCFGFile,"system_directory","""D:\test""")	; write a new value to the RetroArch cfg file
 ; SaveProperty()	; save RetroArch cfg file to disk
