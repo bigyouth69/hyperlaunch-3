@@ -1,5 +1,5 @@
-MCRC=F9DF22CB
-MVersion=1.0.4
+MCRC=6158961F
+MVersion=1.0.5
 
 RunAHKKeymapper(method) {
 	Global ahkDefaultProfile,ahkFEProfile,ahkRomProfile,ahkEmuProfile,ahkSystemProfile,ahkHyperLaunchProfile,ahkLauncherPath,ahkLauncherExe,keymapperFrontEndProfile
@@ -14,9 +14,12 @@ RunAHKKeymapper(method) {
 	{	Log("RunAHKKeymapper - Loading Front End AHK Keymapper profile",4)
 		profile := GetAHKProfile(ahkFEProfile)
 		unloadAHK = 1	; this method we don't want to run any ahk profile if none were found
-	} Else If method = menu	; this method we do not want to unload AHK if a new profile was not found, existing profile should stay running
+	} Else If (method = "menu")	; this method we do not want to unload AHK if a new profile was not found, existing profile should stay running
 	{	Log("RunAHKKeymapper - Loading HyperLaunch AHK Keymapper profile",4)
 		profile := GetAHKProfile(ahkHyperLaunchProfile)
+	} Else If (method = "unload"  && keymapperFrontEndProfile = "false")
+	{	Log("RunAHKKeymapper - Unloading AhkLauncher because the Front End profile is disabled.",4)
+		unloadAHK = 1
 	}
 	If (unloadAHK || profile)	; if a profile was found or this method should unload the existing AHK profile
 	{	Log("RunAHKKeymapper - If " . ahkLauncherExe . " is running, need to close it first before a new profile can be loaded",4)
