@@ -19,7 +19,15 @@
 							<KEYTYPE>xHotkey</KEYTYPE>
 							<DESCRIPTION>swap joystick port</DESCRIPTION>
 						</KEY>
-						<KEY name="SelectGameMode" required="false" nullable="false" minLength="1" maxLength="2">
+						<KEY name="StartTapeKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>start tape key</DESCRIPTION>
+						</KEY>
+						<KEY name="StopTapeKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>stop tape key</DESCRIPTION>
+						</KEY>
+						<KEY name="SelectGameMode" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>1 = Uses a loop to detect the Edit Box has the romname and path in it. This doesn't work on all PCs, so if you get stuck at the open rom window, use mode 2. 2 = Uses a simple Ctrl+v to paste the romname and path, then press Enter to load the game.</DESCRIPTION>
 							<VALUES>
@@ -29,6 +37,222 @@
 						</KEY>
 					</KEYS>
 				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="VideoMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Display Format.</DESCRIPTION>
+							<VALUES>
+								<VALUE>NTSC</VALUE>
+								<VALUE>PAL</VALUE>
+							</VALUES>							
+						</KEY>
+						<KEY name="UsePaddles" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if game requires a paddle controller (will be emulated with the mouse).</DESCRIPTION>
+						</KEY>
+						<KEY name="AutostartPrgMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>This is used by WinVICE to tell it how to emulate PRG files.  0-Virtual FS, 1-Inject to RAM, 2-Disk Image
+							</DESCRIPTION>
+							<VALUES>
+								<VALUE>0</VALUE>
+								<VALUE>1</VALUE>
+								<VALUE>2</VALUE>
+							</VALUES>														
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>		
+		<INIFILE name="Commodore VIC-20" required="false">
+		<INITYPE>System</INITYPE>
+			<SECTIONS>
+				 <SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="WarpKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>toggle warp speed</DESCRIPTION>
+						</KEY>
+						<KEY name="JoySwapKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>swap joystick port</DESCRIPTION>
+						</KEY>
+						<KEY name="StartTapeKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>start tape key</DESCRIPTION>
+						</KEY>
+						<KEY name="StopTapeKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>stop tape key</DESCRIPTION>
+						</KEY>
+						<KEY name="SelectGameMode" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>1 = Uses a loop to detect the Edit Box has the romname and path in it. This doesn't work on all PCs, so if you get stuck at the open rom window, use mode 2. 2 = Uses a simple Ctrl+v to paste the romname and path, then press Enter to load the game.</DESCRIPTION>
+							<VALUES>
+								<VALUE>1</VALUE>
+								<VALUE>2</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="SendCommandDelay" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Time in milliseconds to wait until commands are being type for those cart games that have the Command setting filled in</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="VideoMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Display Format.</DESCRIPTION>
+							<VALUES>
+								<VALUE>NTSC</VALUE>
+								<VALUE>PAL</VALUE>
+							</VALUES>							
+						</KEY>
+						<KEY name="CartLoadingAddress" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Address space to load cartridge.</DESCRIPTION>
+							<VALUES>
+								<VALUE>2000</VALUE>
+								<VALUE>4000</VALUE>
+								<VALUE>6000</VALUE>
+								<VALUE>A000</VALUE>
+								<VALUE>B000</VALUE>
+							</VALUES>							
+						</KEY>
+						<KEY name="MemoryExpansion" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Used if rom requires additional memory expansion to execute.</DESCRIPTION>
+							<VALUES>
+								<VALUE>none</VALUE>
+								<VALUE>3k</VALUE>
+								<VALUE>8k</VALUE>
+								<VALUE>16k</VALUE>
+								<VALUE>24k</VALUE>
+								<VALUE>all</VALUE>
+								<VALUE>1,5</VALUE>
+								<VALUE>1,2,5</VALUE>
+								<VALUE>3,5</VALUE>
+								<VALUE>5</VALUE>
+							</VALUES>							
+						</KEY>
+						<KEY name="Command" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Used if rom requires a command after loading is complete to start the game.</DESCRIPTION>
+						</KEY>
+						<KEY name="RequiresReset" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Used if rom requires a reset command after loading is complete to start the game.</DESCRIPTION>
+						</KEY>
+						<KEY name="UsePaddles" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if game requires a paddle controller (will be emulated with the mouse).</DESCRIPTION>
+						</KEY>
+						<KEY name="AutostartPrgMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>This is used by WinVICE to tell it how to emulate PRG files.  0-Virtual FS, 1-Inject to RAM, 2-Disk Image
+							</DESCRIPTION>
+							<VALUES>
+								<VALUE>0</VALUE>
+								<VALUE>1</VALUE>
+								<VALUE>2</VALUE>
+							</VALUES>														
+						</KEY>						
+					</KEYS>
+				</SECTION>		
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="Commodore 16 &amp; Plus4" required="false">
+		<INITYPE>System</INITYPE>
+			<SECTIONS>
+				 <SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="WarpKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>toggle warp speed</DESCRIPTION>
+						</KEY>
+						<KEY name="JoySwapKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>swap joystick port</DESCRIPTION>
+						</KEY>
+						<KEY name="StartTapeKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>start tape key</DESCRIPTION>
+						</KEY>
+						<KEY name="StopTapeKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>stop tape key</DESCRIPTION>
+						</KEY>
+						<KEY name="RunTapeKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>hotkey used for automatically typing the loading command for tapes that require it (the one you set under the Command key. Default is Ctrl+F12). Make sure you disable Warp Mode before you press it!</DESCRIPTION>
+						</KEY>
+						<KEY name="SelectGameMode" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>1 = Uses a loop to detect the Edit Box has the romname and path in it. This doesn't work on all PCs, so if you get stuck at the open rom window, use mode 2. 2 = Uses a simple Ctrl+v to paste the romname and path, then press Enter to load the game.</DESCRIPTION>
+							<VALUES>
+								<VALUE>1</VALUE>
+								<VALUE>2</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="SendCommandDelay" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Time in milliseconds to wait until commands are being type for those games that have the Command setting filled in</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="VideoMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Display Format.</DESCRIPTION>
+							<VALUES>
+								<VALUE>NTSC</VALUE>
+								<VALUE>PAL</VALUE>
+							</VALUES>							
+						</KEY>
+						<KEY name="Model" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select the C16 or Plus/4 computer model you want to emulate. Defaults to Plus/4 which should be compatible with most games.</DESCRIPTION>
+							<VALUES>
+								<VALUE>Commodore Plus/4</VALUE>
+								<VALUE>Commodore 16</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Command" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Used if rom requires a command after loading is complete to start the game.</DESCRIPTION>
+						</KEY>
+						<KEY name="UsePaddles" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if game requires a paddle controller (will be emulated with the mouse).</DESCRIPTION>
+						</KEY>
+						<KEY name="AutostartPrgMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>This is used by WinVICE to tell it how to emulate PRG files.  0-Virtual FS, 1-Inject to RAM, 2-Disk Image
+							</DESCRIPTION>
+							<VALUES>
+								<VALUE>0</VALUE>
+								<VALUE>1</VALUE>
+								<VALUE>2</VALUE>
+							</VALUES>														
+						</KEY>
+					</KEYS>
+				</SECTION>		
 			</SECTIONS>
 		</INIFILE>
 	</INIFILES>

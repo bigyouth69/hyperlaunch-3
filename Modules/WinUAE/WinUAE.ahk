@@ -2,8 +2,8 @@ MEmu = WinUAE
 MEmuV =  v2.6.0
 MURL = http://www.winuae.net/
 MAuthor = brolly
-MVersion = 2.0
-MCRC = 14BF0918
+MVersion = 2.1
+MCRC = CEE67085
 iCRC = 587D7C70
 mId = 635138307631183750
 MSystem = "Commodore Amiga","Commodore Amiga CD32","Commodore CDTV","Commodore Amiga CD"
@@ -48,6 +48,9 @@ MSystem = "Commodore Amiga","Commodore Amiga CD32","Commodore CDTV","Commodore A
 ; Note : If you want to use Send commands to WinUAE for any keys that you configured through Input-Configuration panel make sure you 
 ; set those keys for Null Keyboard! This is a virtual keyboard that collects all input events that don't come from physical 
 ; keyboards. This applies to the exit or windowed/fullscreen keys mentioned above.
+;
+; If you are using WHDLoad games, but want to keep your default user-startup file after exiting then make a copy of it in the 
+; WHDFolder\S (Set in PathToWHDFolder) and name it default-user-startup. This file will then be copied over S\user-startup on exit.
 ;----------------------------------------------------------------------------
 
 StartModule()
@@ -275,6 +278,16 @@ MultiGame:
 return
 
 CloseProcess:
+	If (ident = "a500" or ident = "a1200")
+	{
+		If (SlaveFile)
+		{
+			CheckFile(PathToWHDFolder)
+			;Copy default-user-startup to user-startup if file exists
+			IfExist, %PathToWHDFolder%\S\default-user-startup
+				FileCopy,%PathToWHDFolder%\S\default-user-startup, %PathToWHDFolder%\S\user-startup, 1
+		}
+	}
 	FadeOutStart()
 	WinClose, ahk_class %windowClass%
 return
