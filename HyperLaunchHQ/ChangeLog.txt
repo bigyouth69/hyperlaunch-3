@@ -10,6 +10,28 @@
                                        Release History                                       
 =============================================================================================
 
+v1.0.13 (January 18th, 2014):
+  * Added support for the new Keymapper_FrontEnd_Profile key which has been moved to the main 
+    HyperLaunch.ini file
+  * Removed toolbars from inside the scrollviewers so that they will be always visible even at 
+    lower resolutions
+  * Added new button on each tab that will show an overlay on top of each component showing the 
+    respective current global setting. Press Esc to close it. Only available in the Settings tab 
+    at this point
+  * Fixed problem with large number of rom paths defined for a system. Data is not being truncated
+    anymore
+  * Added support for Long data types in ISD files. Needed for SteamID in PCLauncher
+  * Added support for the new Block_Input ini key
+  * Added support for new ISD keyType : ProcessName
+  * Added support for detecting running processes automatically for keys where key type is ProcessName 
+    (Applicable to AppWaitExe on PCLauncher)
+  * Added the ability to launch the associated emulator from within the modules panel (for emulator 
+    configuration purposes)
+  * Added support for new  Error_Level_Reporting ini key
+  * Made the Grid Splitter for the systems list collapsible with a single click
+  * Added new setting to change the size of the icons in the main tabs (Change it under the HLHQ Settings 
+    tab). These last 2 features should help those users in lower resolution monitors a bit
+
 v1.0.12 (October 2nd, 2013):
   * Added support for fully configuring Bezel.ini and Global Bezel.ini files (Bezel and Instruction 
     Card configurations)
