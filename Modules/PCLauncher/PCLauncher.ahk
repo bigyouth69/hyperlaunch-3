@@ -3,10 +3,10 @@ MEmuV =  N/A
 MURL = https://sites.google.com/site/hyperlaunch2/additional-features/pclauncher
 MAuthor = djvj
 MVersion = 2.0.8
-MCRC = 93677DCC
-iCRC = 7B7413B5
+MCRC = 5171E760
+iCRC = 987FA370
 mId = 635243126483565041
-MSystem = "Games for Windows","Microsoft Windows","PCLauncher","PC Games","Steam","Steam Big Picture","Taito Type X","Touhou"
+MSystem = "Fan Remakes","Games for Windows","Microsoft Windows","PCLauncher","PC Games","Steam","Steam Big Picture","Taito Type X","Touhou"
 ;----------------------------------------------------------------------------
 ; Notes:
 ; Use the examples in the ini, in your Modules\PCLauncher\ folder, to add more applications.
@@ -388,7 +388,7 @@ SteamLaunch:	; steam is not running
 	sP := Decrypt(ReadReg("sP"),"k")
 	If (!sU || !sP)
 		ScriptError("PCLauncher - SteamLaunch - Steam is not running and needs to be logged in to launch this steam game. PCLauncher can do this, but you need to run ""EncryptPasswords"" application in your PCLauncher module folder first and set your login credentials.")
-	Run(SteamExe . " " . (If sU && sP ? "-login " . sU . " " . sP:"") . " -applaunch " . SteamID . " " . Parameters, steamPath,,steamPID)
+	Run(SteamExe . " " . (If sU && sP ? "-login " . sU . " " . sP:"") . " " . (If SteamID ? "-applaunch " . SteamID : Application) . " " . Parameters, steamPath,,steamPID)	; if SteamID is defined, launch that, otherwise use the application in the CLI (Usually this is for BPM mode)
 	erLvl := WinWait("Steam",,15, "Steam Login")	; wait 15 seconds until the main steam window exists (not the login one)
 	If erLvl	; if we simply timed out, some other problem happened
 		ScriptError("PCLauncher - SteamLaunch - Timed out waiting 15 seconds for Steam's Login window. Please try again.")

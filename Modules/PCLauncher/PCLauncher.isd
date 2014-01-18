@@ -22,7 +22,7 @@
 							<DESCRIPTION>The directory and executable, batch, or shortcut (lnk file) to your application. (this must end with the applications 3-letter extension). If an exe on an image is defined here, the image defined below will be mounted with Daemon Tools first then this exe will be ran. If no exact path to the exe is defined, it will assume it is found on the root folder of the mounted image. Can also be a URL or Steam Browser Protocol.</DESCRIPTION>
 						</KEY>
 						<KEY name="AppWaitExe" required="false" nullable="true">
-							<KEYTYPE>FileName</KEYTYPE>
+							<KEYTYPE>ProcessName</KEYTYPE>
 							<DESCRIPTION>This will be the exe, if different then the Application, that you want the script to wait to close. This would be needed if launching a bat file, which in turn launches another exe, where the exe is the game. Leave this blank if the module works fine with the exe from the Application key. Don't forget to include the exe extension.</DESCRIPTION>
 						</KEY>
 						<KEY name="DiscImage" required="false" nullable="true">
@@ -44,7 +44,7 @@
 							<DESCRIPTION>This can be any number of parameters that you want to supply to your application.</DESCRIPTION>
 						</KEY>
 						<KEY name="SteamID" required="false" nullable="true">
-							<KEYTYPE>Integer</KEYTYPE>
+							<KEYTYPE>Long</KEYTYPE>
 							<DESCRIPTION>If you are launching a steam game, provide the ID of the game here. This will turn on steam mode if not blank. Steam only understands AppIDs for games, not rom names. See here for more info on finding a steam ID for your game: https://support.steampowered.com/kb_article.php?ref=3729-WFJZ-4175</DESCRIPTION>
 						</KEY>
 						<KEY name="OriginGame" required="false" nullable="false">
@@ -128,15 +128,9 @@
 				<SECTION name="Settings" required="false">
 					<SECTIONTYPE>Global</SECTIONTYPE>
 					<KEYS>
-						<KEY name="PathToSteam" required="false" nullable="true">
-							<KEYTYPE>FolderPath</KEYTYPE>
-							<FULLROW>true</FULLROW>
-							<DESCRIPTION>Put your steam folder in here. Do not need the exe, only the path with no backslash on the end.</DESCRIPTION>
-						</KEY>
-						<KEY name="PathToOrigin" required="false" nullable="true">
-							<KEYTYPE>FolderPath</KEYTYPE>
-							<FULLROW>true</FULLROW>
-							<DESCRIPTION>Put your Origin folder in here. Do not need the exe, only the path with no backslash on the end.</DESCRIPTION>
+						<KEY name="HideCursor" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enable/Disable hiding of the mouse cursor globally for all games ran through PCLauncher. Note: HyperLaunch's version of this setting does not affect the cursor for this module, so it must be set here if you want to use it. Default is disabled.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>
@@ -149,7 +143,7 @@
 							<DESCRIPTION>The directory and executable, batch, or shortcut (lnk file) to your application. (this must end with the applications 3-letter extension). If an exe on an image is defined here, the image defined below will be mounted with Daemon Tools first then this exe will be ran. If no exact path to the exe is defined, it will assume it is found on the root folder of the mounted image. Can also be a URL or Steam Browser Protocol.</DESCRIPTION>
 						</KEY>
 						<KEY name="AppWaitExe" required="false" nullable="true">
-							<KEYTYPE>FileName</KEYTYPE>
+							<KEYTYPE>ProcessName</KEYTYPE>
 							<DESCRIPTION>This will be the exe, if different then the Application, that you want the script to wait to close. This would be needed if launching a bat file, which in turn launches another exe, where the exe is the game. Leave this blank if the module works fine with the exe from the Application key.</DESCRIPTION>
 							<FILEEXTENSIONS>
 								<FILEEXTENSION>exe</FILEEXTENSION>
@@ -174,7 +168,7 @@
 							<DESCRIPTION>This can be any number of parameters that you want to supply to your application.</DESCRIPTION>
 						</KEY>
 						<KEY name="SteamID" required="false" nullable="true">
-							<KEYTYPE>Integer</KEYTYPE>
+							<KEYTYPE>Long</KEYTYPE>
 							<DESCRIPTION>If you are launching a steam game, provide the ID of the game here. This will turn on steam mode if not blank. Steam only understands AppIDs for games, not rom names. See here for more info on finding a steam ID for your game: https://support.steampowered.com/kb_article.php?ref=3729-WFJZ-4175</DESCRIPTION>
 						</KEY>
 						<KEY name="OriginGame" required="false" nullable="false">
