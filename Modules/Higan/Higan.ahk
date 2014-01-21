@@ -6,7 +6,7 @@ MVersion = 2.0.2
 MCRC = 723A9893
 iCRC = A3607D8A
 MID = 635038268899159961
-MSystem = "Nintendo Entertainment System","Nintendo Famicom""Nintendo Game Boy","Nintendo Game Boy Color","Nintendo Satellaview","Nintendo Super Famicom","Super Nintendo Entertainment System"
+MSystem = "Nintendo Entertainment System","Nintendo Famicom","Nintendo Game Boy","Nintendo Game Boy Color","Nintendo Satellaview","Nintendo Super Famicom","Super Nintendo Entertainment System"
 ;----------------------------------------------------------------------------
 ; Notes:
 ; You can set your Exit key in the emu by going to Settings->Configuration Settings->Input->Hotkeys->Exit Emulator (not needed for this script)
