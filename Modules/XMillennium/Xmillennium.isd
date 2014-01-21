@@ -18,7 +18,7 @@
 					<KEYS>
 						<KEY name="DualDiskLoad" required="false" nullable="true">
 							<KEYTYPE>Boolean</KEYTYPE>
-							<DESCRIPTION>Choose Yes if this game requires two disks to be loaded simultaneously.</DESCRIPTION>
+							<DESCRIPTION>Choose true if this game requires two disks to be loaded simultaneously.</DESCRIPTION>
 						</KEY>
 						<KEY name="MultipleDiskSlot" required="false" nullable="true">
 							<KEYTYPE>Integer</KEYTYPE>
