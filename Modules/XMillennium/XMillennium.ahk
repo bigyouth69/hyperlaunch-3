@@ -19,7 +19,6 @@ MSystem = "Sharp X1"
 ; - Option to load the second disc in floppy station 1 at boot (first disc in station 0 is default)
 ; - Option to configure in which floppy station discs should be changed (0 or 1)
 ;----------------------------------------------------------------------------
-
 StartModule()
 BezelGUI()
 FadeInStart()
@@ -99,6 +98,7 @@ Process("WaitClose", executable)
 BezelExit()
 FadeOutExit()
 ExitModule()
+
 
 HaltEmu:
 Return
