@@ -2,8 +2,8 @@ MEmu = ProSystem
 MEmuV =  v1.3
 MURL = http://home.comcast.net/~gscottstanton/
 MAuthor = djvj & brolly
-MVersion = 2.0.1
-MCRC = 2B04B9AD
+MVersion = 2.0.2
+MCRC = B3B9D3DE
 iCRC = 215426C3
 MID = 635038268919086546
 MSystem = "Atari 7800"
@@ -47,7 +47,7 @@ BezelDraw()
 If ( Fullscreen = "true" And StartWindowed = "true")
 {	;Make it fullscreen
 	Sleep, 200
-	Send, ^f
+	PostMessage, 0x111, 40024,,,ahk_class ProSystem Emulator	; go fullscreen, same as sending ctrl+f
 }
 
 FadeInExit()
@@ -57,6 +57,10 @@ BezelExit()
 FadeOutExit()
 ExitModule()
 
+
+HaltEmu:
+	disableSuspendEmu := true
+Return
 
 CloseProcess:
 	FadeOutStart()

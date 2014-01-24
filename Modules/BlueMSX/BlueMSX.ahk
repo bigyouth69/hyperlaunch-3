@@ -2,8 +2,8 @@ MEmu = BlueMSX
 MEmuV = v2.8.2
 MURL = http://www.bluemsx.com/
 MAuthor = djvj
-MVersion = 2.0
-MCRC = C4C70FB5
+MVersion = 2.0.1
+MCRC = BAB8048F
 iCRC = 6DC9C5DF
 MID = 635038268875990669
 MSystem = "ColecoVision","Microsoft MSX","Microsoft MSX2"
@@ -50,6 +50,14 @@ Process("WaitClose", executable)
 FadeOutExit()
 ExitModule()
 
+
+HaltEmu:
+	disableSuspendEmu := true
+	PostMessage, 0x111, 40025,,,blueMSX ahk_class blueMSX	; Pause
+Return
+RestoreEmu:
+	PostMessage, 0x111, 40025,,,blueMSX ahk_class blueMSX	; Pause
+Return
 
 CloseProcess:
 	FadeOutStart()
