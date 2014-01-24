@@ -2,8 +2,8 @@ MEmu = PCLauncher
 MEmuV =  N/A
 MURL = https://sites.google.com/site/hyperlaunch2/additional-features/pclauncher
 MAuthor = djvj
-MVersion = 2.0.8
-MCRC = 5171E760
+MVersion = 2.1.0
+MCRC = FDD16E
 iCRC = 987FA370
 mId = 635243126483565041
 MSystem = "Fan Remakes","Games for Windows","Microsoft Windows","PCLauncher","PC Games","Steam","Steam Big Picture","Taito Type X","Touhou"
@@ -87,7 +87,7 @@ If mode in steam,steambp	; steam launch
 	} Else {
 		Log("PCLauncher - Steam is already running, using steam browser protocol to launch game.")
 		If mode = steam
-			Run("steam://rungameid/" . SteamID .  " " . Parameters)
+			Run("Start steam://rungameid/" . SteamID .  " " . Parameters)
 		Else
 			Run(Application .  " " . Parameters)
 	}
