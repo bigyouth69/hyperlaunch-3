@@ -2,9 +2,9 @@ MEmu = DeSmuME
 MEmuV =  v0.9.9
 MURL = http://www.desmume.com/
 MAuthor = djvj
-MVersion = 2.0.3
-MCRC = F4180869
-iCRC = 105F4BF9
+MVersion = 2.0.4
+MCRC = DC27633C
+iCRC = A1982EB6
 MID = 635038268882946453
 MSystem = "Nintendo DS"
 ;----------------------------------------------------------------------------
@@ -21,7 +21,6 @@ BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
-bezelTopOffset := IniReadCheck(settingsFile, "Settings", "Bezel_Top_Offset","29",,1)
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 vertical := IniReadCheck(settingsFile, "Settings|" . romName, "vertical","false",,1)
 
@@ -49,6 +48,9 @@ If bezelPath {	; defining xscale and yscale relative to the bezel windowed mode
 		screenGapPixels := (bezelScreenHeight - 2*192*bezelScreenWidth/256 ) // 2
 	IniWrite, %screenGapPixels%, %desmumeIni%, Display, ScreenGap
 }
+
+If bezelEnabled = true
+	IniWrite, 0, %desmumeIni%, Display, Show Toolbar	; turn off the toolbar
 
 Run(executable . " """ . romPath . "\" . romName . romExtension . """", emuPath)
 

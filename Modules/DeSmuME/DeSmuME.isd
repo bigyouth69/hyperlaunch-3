@@ -11,10 +11,6 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>If true, emulator will launch fullscreen.</DESCRIPTION>
 						</KEY>
-						<KEY name="Bezel_Top_Offset" required="false" nullable="true">
-							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>If you see part of the emulator window at the top of your playing screen increase this value. If your playing screen is hidden at the top decrease it.</DESCRIPTION>
-						</KEY>
 						<KEY name="vertical" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>If true, all games will launch in a vertical orientation by default.</DESCRIPTION>
