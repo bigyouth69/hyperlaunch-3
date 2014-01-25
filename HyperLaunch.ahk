@@ -1,5 +1,5 @@
 ;-----------------------------------------------------------------------------------------------------------------------------------------
-; HyperLaunch V3.0.1.1
+; HyperLaunch V3.0.1.1a
 ; By djvj
 ; Requires AutoHotkey.dll - Must reside in the HyperLaunch root directory
 ;
@@ -80,7 +80,7 @@ SetTitleMatchMode 2
 CoordMode, ToolTip, Screen ; Place ToolTips at absolute screen coordinates
 DetectHiddenWindows, ON
 SetWorkingDir % A_ScriptDir
-Version = 3.0.1.1
+Version = 3.0.1.1a
 
 ;-----------------------------------------------------------------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------------------------------------------------------------
@@ -190,7 +190,7 @@ objWMIService := ComObjGet("winmgmts:{impersonationLevel=impersonate}!\\" . strC
 colOSSettings := objWMIService.ExecQuery("Select * from Win32_OperatingSystem")._NewEnum
 While colOSSettings[objOSItem]
 {	windowsName := objOSItem.Caption
-	windowsSKU := objOSItem.OperatingSystemSKU
+	windowsSKU := If A_OSVersion  != "WIN_XP" ? objOSItem.OperatingSystemSKU : "A_OSVersion"	; XP does not support OperatingSystemSKU method
 	totalMemory := Round((objOSItem.TotalVisibleMemorySize / 1024), 2) . " MB"
 	freeMemory := Round((objOSItem.FreePhysicalMemory / 1024), 2) . " MB"
 	usedMemory := Round(((objOSItem.TotalVisibleMemorySize - objOSItem.FreePhysicalMemory) / 1024), 3) . " MB"
@@ -225,9 +225,10 @@ While colSDSettings[objSDItem]
 ; msgbox cpuName: %cpuName%
 ; exitapp
 
-isAdmin:=(If A_IsAdmin=1 ? ("Yes") : ("No"))
+isAdmin := If A_IsAdmin = 1 ? "Yes" : "No"
 OSLang := Object(0436,"Afrikaans","041c","Albanian",0401,"Arabic_Saudi_Arabia",0801,"Arabic_Iraq","0c01","Arabic_Egypt",0401,"Arabic_Saudi_Arabia",0801,"Arabic_Iraq","0c01","Arabic_Egypt",1001,"Arabic_Libya",1401,"Arabic_Algeria",1801,"Arabic_Morocco","1c01","Arabic_Tunisia",2001,"Arabic_Oman",2401,"Arabic_Yemen",2801,"Arabic_Syria","2c01","Arabic_Jordan",3001,"Arabic_Lebanon",3401,"Arabic_Kuwait",3801,"Arabic_UAE","3c01","Arabic_Bahrain",4001,"Arabic_Qatar","042b","Armenian","042c","Azeri_Latin","082c","Azeri_Cyrillic","042d","Basque",0423,"Belarusian",0402,"Bulgarian",0403,"Catalan",0404,"Chinese_Taiwan",0804,"Chinese_PRC","0c04","Chinese_Hong_Kong",1004,"Chinese_Singapore",1404,"Chinese_Macau","041a","Croatian",0405,"Czech",0406,"Danish",0413,"Dutch_Standard",0813,"Dutch_Belgian",0409,"English_United_States",0809,"English_United_Kingdom","0c09","English_Australian",1009,"English_Canadian",1409,"English_New_Zealand",1809,"English_Irish","1c09","English_South_Africa",2009,"English_Jamaica",2409,"English_Caribbean",2809,"English_Belize","2c09","English_Trinidad",3009,"English_Zimbabwe",3409,"English_Philippines",0425,"Estonian",0438,"Faeroese",0429,"Farsi","040b","Finnish","040c","French_Standard","080c","French_Belgian","0c0c","French_Canadian","100c","French_Swiss","140c","French_Luxembourg","180c","French_Monaco",0437,"Georgian",0407,"German_Standard",0807,"German_Swiss","0c07","German_Austrian",1007,"German_Luxembourg",1407,"German_Liechtenstein",0408,"Greek","040d","Hebrew",0439,"Hindi","040e","Hungarian","040f","Icelandic",0421,"Indonesian",0410,"Italian_Standard",0810,"Italian_Swiss",0411,"Japanese","043f","Kazakh",0457,"Konkani",0412,"Korean",0426,"Latvian",0427,"Lithuanian","042f","Macedonian","043e","Malay_Malaysia","083e","Malay_Brunei_Darussalam","044e","Marathi",0414,"Norwegian_Bokmal",0814,"Norwegian_Nynorsk",0415,"Polish",0416,"Portuguese_Brazilian",0816,"Portuguese_Standard",0418,"Romanian",0419,"Russian","044f","Sanskrit","081a","Serbian_Latin","0c1a","Serbian_Cyrillic","041b","Slovak",0424,"Slovenian","040a","Spanish_Traditional_Sort","080a","Spanish_Mexican","0c0a","Spanish_Modern_Sort","100a","Spanish_Guatemala","140a","Spanish_Costa_Rica","180a","Spanish_Panama","1c0a","Spanish_Dominican_Republic","200a","Spanish_Venezuela","240a","Spanish_Colombia","280a","Spanish_Peru","2c0a","Spanish_Argentina","300a","Spanish_Ecuador","340a","Spanish_Chile","380a","Spanish_Uruguay","3c0a","Spanish_Paraguay","400a","Spanish_Bolivia","440a","Spanish_El_Salvador","480a","Spanish_Honduras","4c0a","Spanish_Nicaragua","500a","Spanish_Puerto_Rico",0441,"Swahili","041d","Swedish","081d","Swedish_Finland",0449,"Tamil",0444,"Tatar","041e","Thai","041f","Turkish",0422,"Ukrainian",0420,"Urdu","042a","Vietnamese")
-logTxt := "Main - System Specs:`n`t`t`t`t`tHyperLaunch Dir: " . A_ScriptDir . OSLog . CSLog . GPULog . SoundLog . "`n`t`t`t`t`tOS Language: " . (OSLang[A_Language] ? OSLang[A_Language] : A_Language) . "`n`t`t`t`t`tOS Admin Status: " . isAdmin:=(If A_IsAdmin=1 ? ("Yes") : ("No"))
+sysLang := OSLang[A_Language] ? OSLang[A_Language] : A_Language
+logTxt := "Main - System Specs:`n`t`t`t`t`tHyperLaunch Dir: " . A_ScriptDir . OSLog . CSLog . GPULog . SoundLog . "`n`t`t`t`t`tOS Language: " . sysLang . "`n`t`t`t`t`tOS Admin Status: " . isAdmin
 SysGet, MonitorCount, MonitorCount, SysGet, MonitorPrimary, MonitorPrimary
 Loop, %MonitorCount% ; get each monitor's stats for the log
 {	
@@ -337,6 +338,7 @@ If 0 < 2
 }Else{
 	systemName = %1%
 	dbName = %2%
+	; hlMode = %3%
 	Goto, Start
 	Return
 }
@@ -706,7 +708,7 @@ betaBriteParams := RIniReadCheck(5, "BetaBrite", "BetaBrite_Params","usb {AUTO}H
 skipChecks := RIniLoadVar(2,"", "Settings", "Skipchecks", "false")	; key is only created on a system ini, not the global one
 romMatchExt := RIniLoadVar(1,2, "Settings", "Rom_Match_Extension", "false")
 blockInputTime := RIniLoadVar(1,2, "Settings", "Block_Input", 0)
-errorLevelReporting := RIniLoadVar(1,2, "Settings", "Error_Level_Reporting", 0)
+errorLevelReporting := RIniLoadVar(1,2, "Settings", "Error_Level_Reporting", "false")
 
 hideCursor := RIniLoadVar(1,2, "Desktop", "Hide_Cursor", "false")
 hideDesktop := RIniLoadVar(1,2, "Desktop", "Hide_Desktop", "false")
@@ -904,6 +906,10 @@ romMappingMenuFlagSeparation := RIniLoadVar(1,2, "Rom Mapping", "Language_Flag_S
 ;-----------------------------------------------------------------------------------------------------------------------------------------
 ; Skipping some checks if skipchecks is set to true. Used mostly so users don't need blank txt files to point to PC games
 ;-----------------------------------------------------------------------------------------------------------------------------------------
+If (hlMode != "") {
+	Log("Main - 3rd CLI parameter sent to HyperLaunch: """ . hlMode . """. Enabling SkipChecks method ""Rom and Emu"".")
+	skipChecks := "Rom and Emu"
+}
 If (skipChecks = "Rom and Emu" or emuName = "PCLauncher") {	; skipping rom and emu checks
 	Log("Main - Using SkipChecks method ""Rom and Emu"" or emuName = ""PCLauncher"".")
 	emuFullPath := RIniReadCheck(emuFileRIni, emuName, "Emu_Path")
@@ -1145,6 +1151,8 @@ BuildScript() {
 	Global 0
 	Global 1
 	Global 2
+	Global 3
+	Global hlMode
 	Global debugModule
 	Global frontendPID
 	Global frontendPath
@@ -1219,6 +1227,7 @@ BuildScript() {
 	Global logIncludeFileProperties
 	Global logShowCommandWindow
 	Global logCommandWindow
+	Global sysLang
 	Global navUpKey
 	Global navDownKey
 	Global navLeftKey
@@ -1422,6 +1431,7 @@ BuildScript() {
 	;Common to all modules, inject vars into module
 	temp0 = %0% ; this is a quick fix for not being able to concenate number on the next line
 	retStr .= "`n0 = " . temp0
+	retStr .= "`nhlMode = " . hlMode
 	retStr .= "`nfrontendPID = " . frontendPID
 	retStr .= "`nfrontendPath = " . frontendPath
 	retStr .= "`nfrontendExe = " . frontendExe
@@ -1487,6 +1497,7 @@ BuildScript() {
 	retStr .= "`nlogIncludeFileProperties = " . logIncludeFileProperties
 	retStr .= "`nlogShowCommandWindow = " . logShowCommandWindow
 	retStr .= "`nlogCommandWindow = " . logCommandWindow
+	retStr .= "`nsysLang = " . sysLang
 	retStr .= "`nnavUpKey = " . navUpKey
 	retStr .= "`nnavDownKey = " . navDownKey
 	retStr .= "`nnavLeftKey = " . navLeftKey
@@ -1781,7 +1792,6 @@ BuildScript() {
 		Log("BuildScript - Emu Idle timer enabled, emu will shutdown when idle for " . convertedIdle)
 	}
 
-	StringReplace, tempStr, retStr, `n, , UseErrorLevel
 	Log("BuildScript - Module starts on line: " . ErrorLevel+2,4)	; dumps to log level Debug1
 
 	retStr .= "`n`n;----------------------------------------------------------------------------"
