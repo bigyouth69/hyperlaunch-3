@@ -1,5 +1,5 @@
 ;-----------------------------------------------------------------------------------------------------------------------------------------
-; HyperLaunch V3.0.1.1a
+; HyperLaunch V3.0.1.1b
 ; By djvj
 ; Requires AutoHotkey.dll - Must reside in the HyperLaunch root directory
 ;
@@ -80,7 +80,7 @@ SetTitleMatchMode 2
 CoordMode, ToolTip, Screen ; Place ToolTips at absolute screen coordinates
 DetectHiddenWindows, ON
 SetWorkingDir % A_ScriptDir
-Version = 3.0.1.1a
+Version = 3.0.1.1b
 
 ;-----------------------------------------------------------------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------------------------------------------------------------
@@ -190,7 +190,7 @@ objWMIService := ComObjGet("winmgmts:{impersonationLevel=impersonate}!\\" . strC
 colOSSettings := objWMIService.ExecQuery("Select * from Win32_OperatingSystem")._NewEnum
 While colOSSettings[objOSItem]
 {	windowsName := objOSItem.Caption
-	windowsSKU := If A_OSVersion  != "WIN_XP" ? objOSItem.OperatingSystemSKU : "A_OSVersion"	; XP does not support OperatingSystemSKU method
+	windowsSKU := If (A_OSVersion  != "WIN_XP" && A_OSVersion  != "WIN_2003") ? objOSItem.OperatingSystemSKU : "A_OSVersion"	; XP does not support OperatingSystemSKU method
 	totalMemory := Round((objOSItem.TotalVisibleMemorySize / 1024), 2) . " MB"
 	freeMemory := Round((objOSItem.FreePhysicalMemory / 1024), 2) . " MB"
 	usedMemory := Round(((objOSItem.TotalVisibleMemorySize - objOSItem.FreePhysicalMemory) / 1024), 3) . " MB"
