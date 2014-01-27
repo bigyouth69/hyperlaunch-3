@@ -33,7 +33,7 @@
 						</KEY>
 						<KEY name="LibRetro_GB" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Nintendo Game Boy. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is bsnes_balanced_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Nintendo Game Boy. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is gambatte_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_GBC" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
