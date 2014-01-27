@@ -1,5 +1,5 @@
 ;-----------------------------------------------------------------------------------------------------------------------------------------
-; HyperLaunch V3.0.1.1b
+; HyperLaunch V3.0.1.1c
 ; By djvj
 ; Requires AutoHotkey.dll - Must reside in the HyperLaunch root directory
 ;
@@ -80,7 +80,7 @@ SetTitleMatchMode 2
 CoordMode, ToolTip, Screen ; Place ToolTips at absolute screen coordinates
 DetectHiddenWindows, ON
 SetWorkingDir % A_ScriptDir
-Version = 3.0.1.1b
+Version = 3.0.1.1c
 
 ;-----------------------------------------------------------------------------------------------------------------------------------------
 ;-----------------------------------------------------------------------------------------------------------------------------------------
@@ -190,7 +190,7 @@ objWMIService := ComObjGet("winmgmts:{impersonationLevel=impersonate}!\\" . strC
 colOSSettings := objWMIService.ExecQuery("Select * from Win32_OperatingSystem")._NewEnum
 While colOSSettings[objOSItem]
 {	windowsName := objOSItem.Caption
-	windowsSKU := If (A_OSVersion  != "WIN_XP" && A_OSVersion  != "WIN_2003") ? objOSItem.OperatingSystemSKU : A_OSVersion	; XP does not support OperatingSystemSKU method
+	windowsSKU := If (A_OSVersion  != "WIN_XP" && A_OSVersion  != "WIN_2003") ? objOSItem.OperatingSystemSKU : A_OSVersion	; XP does not support OperatingSystemSKU
 	totalMemory := Round((objOSItem.TotalVisibleMemorySize / 1024), 2) . " MB"
 	freeMemory := Round((objOSItem.FreePhysicalMemory / 1024), 2) . " MB"
 	usedMemory := Round(((objOSItem.TotalVisibleMemorySize - objOSItem.FreePhysicalMemory) / 1024), 3) . " MB"
@@ -199,8 +199,13 @@ While colOSSettings[objOSItem]
 colCSSettings := objWMIService.ExecQuery("Select * from Win32_ComputerSystem")._NewEnum
 While colCSSettings[objCSItem]
 {	sysType := objCSItem.SystemType
-	numCPU := objCSItem.NumberOfProcessors
-	numLogCPU := objCSItem.NumberOfLogicalProcessors
+	If (A_OSVersion  != "WIN_XP" && A_OSVersion  != "WIN_2003") {
+		numCPU := objCSItem.NumberOfProcessors
+		numLogCPU := objCSItem.NumberOfLogicalProcessors
+	} Else {	; XP does not support NumberOfLogicalProcessors
+		numCPU := "See Logical in XP"
+		numLogCPU := objCSItem.NumberOfProcessors
+	}
 	CSLog := "`n`t`t`t`t`tSystemType: " . sysType . "`n`t`t`t`t`tPhysical Processors: " . numCPU . "`n`t`t`t`t`tLogical Processors: " . numLogCPU
 }
 colGPUSettings := objWMIService.ExecQuery("Select * from Win32_VideoController")._NewEnum
