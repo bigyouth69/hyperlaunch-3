@@ -9,7 +9,7 @@ MID = 635038268882946453
 MSystem = "Nintendo DS"
 ;----------------------------------------------------------------------------
 ; Notes:
-; Grab the settings.ini from my user folder on the ftp. It is needed to support vertical games.
+; The example module ini from GIT comes with some of the vertical games already configured for vertical mode.
 ; Uncheck View->Show Toolbar
 ; Set View->Screen seperation to black, also choose your border (I prefer 5px)
 ; Open the desmume.ini and add "Show Console=0" anywhere to stop the console window from showing up
