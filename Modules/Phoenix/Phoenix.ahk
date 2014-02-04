@@ -2,8 +2,8 @@ MEmu = Phoenix
 MEmuV = v1.1
 MURL = http://arts-union.my1.ru/
 MAuthor = djvj
-MVersion = 2.0.1
-MCRC = BC8FC08C
+MVersion = 2.0.2
+MCRC = E217601D
 iCRC = 7C17F75F
 MID = 635038268914342592
 MSystem = "Panasonic 3DO"
@@ -18,6 +18,7 @@ MSystem = "Panasonic 3DO"
 ; Phoenix stores its config in the registry @ HKEY_CURRENT_USER\Software\FreeDO\FreeDO Emulator
 ;------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
@@ -31,6 +32,9 @@ mLang := Object("English","Open","Spanish/Portuguese","Abrir")
 winLang := mLang[MLanguage]	; search object for the MLanguage associated to the user's language
 If !winLang
 	ScriptError("Your chosen language is: """ . MLanguage . """. It is not one of the known supported languages for this module: " . moduleName)
+
+If bezelEnabled
+	BezelStart(If Fullscreen = "true" ? "" : "fixResMode")
 
 7z(romPath, romName, romExtension, 7zExtractPath)
 
@@ -72,9 +76,11 @@ If Fullscreen = true
 
 Sleep, 1000
 
+BezelDraw()
 FadeInExit()
 Process("WaitClose", executable)
 7zCleanUp()
+BezelExit()
 FadeOutExit()
 ExitModule()
 
