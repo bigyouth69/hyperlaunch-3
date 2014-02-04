@@ -2,8 +2,8 @@ MEmu = CPCE
 MEmuV = v1.94
 MURL = http://cngsoft.no-ip.org/cpce/index.htm
 MAuthor = horseyhorsey & djvj
-MVersion = 2.0
-MCRC = DAEAD2EB
+MVersion = 2.0.1
+MCRC = 48461B7
 iCRC = CCC36497
 mId = 635251593387342549
 MSystem = "Amstrad CPC"
@@ -115,7 +115,7 @@ MultiGame:
 	WinWait("ahk_class OS95")
 	If (mgRomExt = ".cdt")
 	   	Send {LAlt Down}{5}{F3 Down}{F3 Up}{LAlt Up}
-	If (mgRomExt = ."dsk")
+	If (mgRomExt = ".dsk")
 		Send {F7}
 	Sleep,750
 	Send, ^v{50}{enter}
