@@ -2,8 +2,8 @@ MEmu = PCLauncher
 MEmuV =  N/A
 MURL = https://sites.google.com/site/hyperlaunch2/additional-features/pclauncher
 MAuthor = djvj
-MVersion = 2.1.0
-MCRC = FDD16E
+MVersion = 2.1.1
+MCRC = E0BD831D
 iCRC = 987FA370
 mId = 635243126483565041
 MSystem = "Fan Remakes","Games for Windows","Microsoft Windows","PCLauncher","PC Games","Steam","Steam Big Picture","Taito Type X","Touhou"
@@ -47,7 +47,7 @@ If DiscImage {
 	DiscImage := GetFullName(DiscImage)	; convert a relative path defined in the PCLauncher ini to absolute
 	CheckFile(DiscImage,"Cannot find this DiscImage for " . dbName . ":`n" . DiscImage)
 	SplitPath,DiscImage,,ImagePath,ImageExt,ImageName
-	If ImageExt in ccd,cdi,cue,iso,isz,nrg
+	If ImageExt in mds,mdx,b5t,b6t,bwt,ccd,cue,isz,nrg,cdi,iso,ape,flac
 	{	DaemonTools("get")	; get the dtDriveLetter
 		DaemonTools("mount",ImagePath . "\" . ImageName . "." . ImageExt)
 	} Else
