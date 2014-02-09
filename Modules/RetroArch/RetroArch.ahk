@@ -2,8 +2,8 @@ MEmu = RetroArch
 MEmuV =  v1.0.0
 MURL = http://themaister.net/retroarch.html
 MAuthor = djvj
-MVersion = 2.1.5
-MCRC = FBDD975
+MVersion = 2.1.6
+MCRC = C30E00B2
 iCRC = 14E7C268
 MID = 635038268922229162
 MSystem = "Atari 2600","Bandai Wonderswan","Bandai Wonderswan Color","Final Burn Alpha","NEC PC Engine","NEC PC Engine-CD","NEC TurboGrafx-16","NEC SuperGrafx","NEC TurboGrafx-CD","Nintendo 64","Nintendo Entertainment System","Nintendo Famicom","Nintendo Famicom Disk System","Nintendo Game Boy","Nintendo Game Boy Color","Nintendo Game Boy Advance","Nintendo Super Game Boy","Nintendo Virtual Boy","Nintendo Super Famicom","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","Sega Pico","Sony PlayStation","Sega SG-1000","SNK Neo Geo Pocket","SNK Neo Geo Pocket Color","Super Nintendo Entertainment System"
@@ -126,8 +126,8 @@ If ident In LibRetro_NFDS,LibRetro_SCD,LibRetro_TGCD,LibRetro_PCECD
 
 If (ident = "LibRetro_SGB" || If superGB = "true")	; if system or rom is set to use Super Game Boy
 {	superGB = true	; setting this just in case it's false and the system is Nintendo Super Game Boy
-	sgbRomPath := CheckFile(emuPath . "\bios\Super Game Boy (World).sfc","Could not find the rom required for Super Game Boy support. Make sure the rom ""Super Game Boy (World).sfc"" is located in: " . emupath . "\bios")
-	CheckFile(emuPath . "\bios\sgb.boot.rom","Could not find the bios required for Super Game Boy support. Make sure the bios ""sgb.boot.rom"" is located in: " . emupath . "\bios")
+	sgbRomPath := CheckFile(emuPath . "\system\Super Game Boy (World).sfc","Could not find the rom required for Super Game Boy support. Make sure the rom ""Super Game Boy (World).sfc"" is located in: " . emupath . "\system")
+	CheckFile(emuPath . "\system\sgb.boot.rom","Could not find the bios required for Super Game Boy support. Make sure the bios ""sgb.boot.rom"" is located in: " . emupath . "\system")
 } Else If ident = LibRetro_NFDS	; Nintendo Famicom Disk System
 {	IfNotExist, %retroSysDir%disksys.rom
 		ScriptError("RetroArch requires ""disksys.rom"" for " . systemName . " but could not find it in your system_directory: """ . retroSysDir . """")
@@ -161,7 +161,7 @@ IfNotExist, %srmPath%
 IfNotExist, %saveStatePath%
 	FileCreateDir, %saveStatePath% ; creating save dir if it doesn't exist
 
-Run(executable . " """ . (If superGB = "true" ? sgbRomPath . """ -g """ : "") . romPath . "\" . romName . romExtension . """ " . fullscreen . " -c """ . retroCFGFile . """ -L """ . libDll . """ -s """ . srmPath . """ -S """ . saveStatePath . """", emuPath, "Hide")
+Run(executable . " """ . (If superGB = "true" ? sgbRomPath . """ -g """ : "") . romPath . "\" . romName . romExtension . """ " . fullscreen . " -c """ . retroCFGFile . """ -L """ . libDll . """ -s """ . srmPath . "\" . romName . ".srm"" -S """ . saveStatePath . "\" . romName . ".state""", emuPath, "Hide")
 
 WinWait("RetroArch ahk_class RetroArch")
 WinWaitActive("RetroArch ahk_class RetroArch")
