@@ -2,8 +2,8 @@ MEmu = RetroArch
 MEmuV =  v1.0.0
 MURL = http://themaister.net/retroarch.html
 MAuthor = djvj
-MVersion = 2.1.4
-MCRC = F3EFC127
+MVersion = 2.1.5
+MCRC = FBDD975
 iCRC = 14E7C268
 MID = 635038268922229162
 MSystem = "Atari 2600","Bandai Wonderswan","Bandai Wonderswan Color","Final Burn Alpha","NEC PC Engine","NEC PC Engine-CD","NEC TurboGrafx-16","NEC SuperGrafx","NEC TurboGrafx-CD","Nintendo 64","Nintendo Entertainment System","Nintendo Famicom","Nintendo Famicom Disk System","Nintendo Game Boy","Nintendo Game Boy Color","Nintendo Game Boy Advance","Nintendo Super Game Boy","Nintendo Virtual Boy","Nintendo Super Famicom","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","Sega Pico","Sony PlayStation","Sega SG-1000","SNK Neo Geo Pocket","SNK Neo Geo Pocket Color","Super Nintendo Entertainment System"
@@ -112,6 +112,12 @@ If ident In LibRetro_NFDS,LibRetro_SCD,LibRetro_TGCD,LibRetro_PCECD
 {	retroCFG := LoadProperties(retroCFGFile)	; load the config into memory
 	retroSysDir := ReadProperty(retroCFG,"system_directory")	; read value
 	retroSysDir := ConvertRetroCFGKey(retroSysDir)	; remove dbl quotes
+	StringLeft, retroSysDirLeft, retroSysDir, 2
+	If (retroSysDirLeft = ":\") {	; if retroarch is set to use a default folder
+		StringTrimLeft, retroSysDir, retroSysDir, 1
+		Log("Module - RetroArch is using a relative system path: """ . retroSysDir . """")
+		retroSysDir := emuPath . retroSysDir
+	}
 	If !retroSysDir
 		ScriptError("RetroArch requires you to set your system_directory and place bios rom(s) in there for """ . systemName . """ to function. Please do this first by running ""retroarch-phoenix.exe"" manually.")
 }
