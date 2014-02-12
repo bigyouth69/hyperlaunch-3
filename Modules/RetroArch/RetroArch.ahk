@@ -2,8 +2,8 @@ MEmu = RetroArch
 MEmuV =  v1.0.0
 MURL = http://themaister.net/retroarch.html
 MAuthor = djvj
-MVersion = 2.1.6
-MCRC = C30E00B2
+MVersion = 2.1.7
+MCRC = 5CE663A8
 iCRC = 14E7C268
 MID = 635038268922229162
 MSystem = "Atari 2600","Bandai Wonderswan","Bandai Wonderswan Color","Final Burn Alpha","NEC PC Engine","NEC PC Engine-CD","NEC TurboGrafx-16","NEC SuperGrafx","NEC TurboGrafx-CD","Nintendo 64","Nintendo Entertainment System","Nintendo Famicom","Nintendo Famicom Disk System","Nintendo Game Boy","Nintendo Game Boy Color","Nintendo Game Boy Advance","Nintendo Super Game Boy","Nintendo Virtual Boy","Nintendo Super Famicom","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","Sega Pico","Sony PlayStation","Sega SG-1000","SNK Neo Geo Pocket","SNK Neo Geo Pocket Color","Super Nintendo Entertainment System"
@@ -89,11 +89,21 @@ LibRetro_WSANC := IniReadCheck(settingsFile, "Settings", "LibRetro_WSANC","medna
 superGB := IniReadCheck(settingsFile, systemName . "|" . romName, "SuperGameBoy", "false",,1)
 libRetroFolder := GetFullName(libRetroFolder)
 
+retroArchSystem := systemName
+
+If (ident = "LibRetro_SGB" || If superGB = "true")	; if system or rom is set to use Super Game Boy
+{	superGB = true	; setting this just in case it's false and the system is Nintendo Super Game Boy
+	sgbRomPath := CheckFile(emuPath . "\system\Super Game Boy (World).sfc","Could not find the rom required for Super Game Boy support. Make sure the rom ""Super Game Boy (World).sfc"" is located in: " . emupath . "\system")
+	CheckFile(emuPath . "\system\sgb.boot.rom","Could not find the bios required for Super Game Boy support. Make sure the bios ""sgb.boot.rom"" is located in: " . emupath . "\system")
+	ident := "LibRetro_SGB"	; switching to Super Game Boy mode
+	retroArchSystem := "Nintendo Super Game Boy"
+}
+
 ; Find the cfg file to use
 Loop, %emuPath%\*.cfg,,1 ; loop through all folder in emuPath
-	If (A_LoopFileName = systemName . ".cfg") {
+	If (A_LoopFileName = retroArchSystem . ".cfg") {
 		sysRetroCfg := A_LoopFileLongPath
-		Break	; systemName configs are preferred, so break after one is found
+		Break	; retroArchSystem configs are preferred, so break after one is found
 	} Else If (A_LoopFileName = "retroarch.cfg")
 		globalRetroCfg := A_LoopFileLongPath
 retroCFGFile := If sysRetroCfg ? sysRetroCfg : globalRetroCfg
@@ -119,32 +129,28 @@ If ident In LibRetro_NFDS,LibRetro_SCD,LibRetro_TGCD,LibRetro_PCECD
 		retroSysDir := emuPath . retroSysDir
 	}
 	If !retroSysDir
-		ScriptError("RetroArch requires you to set your system_directory and place bios rom(s) in there for """ . systemName . """ to function. Please do this first by running ""retroarch-phoenix.exe"" manually.")
+		ScriptError("RetroArch requires you to set your system_directory and place bios rom(s) in there for """ . retroArchSystem . """ to function. Please do this first by running ""retroarch-phoenix.exe"" manually.")
 }
 
 7z(romPath, romName, romExtension, 7zExtractPath)
 
-If (ident = "LibRetro_SGB" || If superGB = "true")	; if system or rom is set to use Super Game Boy
-{	superGB = true	; setting this just in case it's false and the system is Nintendo Super Game Boy
-	sgbRomPath := CheckFile(emuPath . "\system\Super Game Boy (World).sfc","Could not find the rom required for Super Game Boy support. Make sure the rom ""Super Game Boy (World).sfc"" is located in: " . emupath . "\system")
-	CheckFile(emuPath . "\system\sgb.boot.rom","Could not find the bios required for Super Game Boy support. Make sure the bios ""sgb.boot.rom"" is located in: " . emupath . "\system")
-} Else If ident = LibRetro_NFDS	; Nintendo Famicom Disk System
+If ident = LibRetro_NFDS	; Nintendo Famicom Disk System
 {	IfNotExist, %retroSysDir%disksys.rom
-		ScriptError("RetroArch requires ""disksys.rom"" for " . systemName . " but could not find it in your system_directory: """ . retroSysDir . """")
+		ScriptError("RetroArch requires ""disksys.rom"" for " . retroArchSystem . " but could not find it in your system_directory: """ . retroSysDir . """")
 } Else If ident = LibRetro_SCD	; Sega CD
 {	If romExtension Not In .bin,.cue,.iso
 		ScriptError("RetroArch only supports Sega CD games in bin|cue|iso format. It does not support:`n" . romExtension)
 	IfNotExist, %retroSysDir%bios_CD_E.bin
-		ScriptError("RetroArch requires ""bios_CD_E.bin"" for " . systemName . " but could not find it in your system_directory: """ . retroSysDir . """")
+		ScriptError("RetroArch requires ""bios_CD_E.bin"" for " . retroArchSystem . " but could not find it in your system_directory: """ . retroSysDir . """")
 	IfNotExist, %retroSysDir%bios_CD_U.bin
-		ScriptError("RetroArch requires ""bios_CD_U.bin"" for " . systemName . " but could not find it in your system_directory: """ . retroSysDir . """")
+		ScriptError("RetroArch requires ""bios_CD_U.bin"" for " . retroArchSystem . " but could not find it in your system_directory: """ . retroSysDir . """")
 	IfNotExist, %retroSysDir%bios_CD_J.bin
-		ScriptError("RetroArch requires ""bios_CD_J.bin"" for " . systemName . " but could not find it in your system_directory: """ . retroSysDir . """")
+		ScriptError("RetroArch requires ""bios_CD_J.bin"" for " . retroArchSystem . " but could not find it in your system_directory: """ . retroSysDir . """")
 } Else If ident in LibRetro_PCECD,LibRetro_TGCD	; NEC PC Engine-CD and NEC TurboGrafx-CD
 {	If romExtension != .cue
-		ScriptError("RetroArch only supports " . systemName . " games in cue format. It does not support:`n" . romExtension)
+		ScriptError("RetroArch only supports " . retroArchSystem . " games in cue format. It does not support:`n" . romExtension)
 	IfNotExist, %retroSysDir%syscard3.pce
-		ScriptError("RetroArch requires ""syscard3.pce"" for " . systemName . " but could not find it in your system_directory: """ . retroSysDir . """")
+		ScriptError("RetroArch requires ""syscard3.pce"" for " . retroArchSystem . " but could not find it in your system_directory: """ . retroSysDir . """")
 }
 
 ; WriteProperty(retroCFGFile,"system_directory","""D:\test""")	; write a new value to the RetroArch cfg file
@@ -153,8 +159,8 @@ If (ident = "LibRetro_SGB" || If superGB = "true")	; if system or rom is set to 
 BezelStart()
 
 fullscreen := (If fullscreen = "true" ? ("-f") : (""))
-srmPath := emuPath . "\srm\" . systemName	; path for this system's srm files
-saveStatePath := emuPath . "\save\" . systemName	; path for this system's save state files
+srmPath := emuPath . "\srm\" . retroArchSystem	; path for this system's srm files
+saveStatePath := emuPath . "\save\" . retroArchSystem	; path for this system's save state files
 
 IfNotExist, %srmPath%
 	FileCreateDir, %srmPath% ; creating srm dir if it doesn't exist
