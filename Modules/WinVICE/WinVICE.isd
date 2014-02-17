@@ -62,6 +62,10 @@
 								<VALUE>2</VALUE>
 							</VALUES>														
 						</KEY>
+						<KEY name="RequiresReset" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if rom requires a reset command after loading is complete to start the game</DESCRIPTION>
+						</KEY>
 					</KEYS>
 				</SECTION>
 			</SECTIONS>
@@ -150,7 +154,7 @@
 						</KEY>
 						<KEY name="RequiresReset" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
-							<DESCRIPTION>Used if rom requires a reset command after loading is complete to start the game.</DESCRIPTION>
+							<DESCRIPTION>Set to true if rom requires a reset command after loading is complete to start the game</DESCRIPTION>
 						</KEY>
 						<KEY name="UsePaddles" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
@@ -250,6 +254,10 @@
 								<VALUE>1</VALUE>
 								<VALUE>2</VALUE>
 							</VALUES>														
+						</KEY>
+						<KEY name="RequiresReset" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if rom requires a reset command after loading is complete to start the game</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>		

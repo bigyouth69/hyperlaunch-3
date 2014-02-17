@@ -2,9 +2,9 @@ MEmu = WinVICE
 MEmuV = v2.4
 MURL = http://vice-emu.sourceforge.net/
 MAuthor = djvj,wahoobrian,brolly
-MVersion = 2.0.1
-MCRC = 65BCB02B
-iCRC = 623C6A46
+MVersion = 2.0.2
+MCRC = BA37ED39
+iCRC = DAA4D1EA
 MID = 635038268966170754
 MSystem = "Commodore 64","Commodore 16 & Plus4","Commodore VIC-20"
 ;----------------------------------------------------------------------------
@@ -45,6 +45,7 @@ SelectGameMode := IniReadCheck(settingsFile, "Settings", "SelectGameMode","1",,1
 
 UsePaddles := IniReadCheck(settingsFile, romName, "UsePaddles", "false",,1)
 AutostartPrgMode := IniReadCheck(settingsFile, romName, "AutostartPrgMode", "2",,1)
+RequiresReset := IniReadCheck(settingsFile, romName, "RequiresReset", "false",,1)
 
 7z(romPath, romName, romExtension, 7zExtractPath)
 
@@ -114,6 +115,13 @@ If (ident = "C64") {
 		Run(executable . " " . params . " """ . romPath . "\" . romName . romExtension . """", emuPath)
 	Else If romExtension = .crt
 		Run(executable . " " . params . " -cartcrt """ . romPath . "\" . romName . romExtension . """", emuPath)
+
+	if (RequiresReset = "true") 
+	{
+		WinWaitActive("ahk_class VICE")
+		Sleep, 1000 ; increase if command is not appearing in the emu window or some just some letters
+		Send !r
+	}
 }
 Else If (ident = "PLUS4") {
 	If romExtension not in .prg,.d64,.t64,.tap,.crt,.g64
@@ -145,6 +153,13 @@ Else If (ident = "PLUS4") {
 		Run(executable . " " . params . " """ . romPath . "\" . romName . romExtension . """", emuPath)
 	Else If romExtension = .crt
 		Run(executable . " " . params . " -cartcrt """ . romPath . "\" . romName . romExtension . """", emuPath)
+
+	if (RequiresReset = "true") 
+	{
+		WinWaitActive("ahk_class VICE")
+		Sleep, 1000 ; increase if command is not appearing in the emu window or some just some letters
+		Send !r
+	}
 
 	if %Command% 
 	{
@@ -291,6 +306,13 @@ Else If (ident = "VIC20") {
 		Run(executable . " " . params . " """ . romPath . "\" . romName . romExtension . """" , emuPath )
 	}
 
+	if (RequiresReset = "true") 
+	{
+		WinWaitActive("ahk_class VICE")
+		Sleep, 1000 ; increase if command is not appearing in the emu window or some just some letters
+		Send !r
+	}
+
 	if %Command% {
 		WinWaitActive("ahk_class VICE")
 		Sleep, %SendCommandDelay% ; increase if command is not appearing in the emu window or some just some letters
@@ -298,12 +320,6 @@ Else If (ident = "VIC20") {
 		Loop, parse, Command
 			Send, {%A_LoopField% down}{%A_LoopField% up}
 		Send, {ENTER down}{ENTER up}
-	}	
-	
-	if (RequiresReset = "true") {
-		WinWaitActive("ahk_class VICE")
-		Sleep, 1000 ; increase if command is not appearing in the emu window or some just some letters
-		Send !r
 	}	
 }
 

@@ -2,8 +2,8 @@ MEmu = WinUAE
 MEmuV =  v2.6.0
 MURL = http://www.winuae.net/
 MAuthor = brolly
-MVersion = 2.0.1
-MCRC = CEE67085
+MVersion = 2.0.2
+MCRC = 2283EB17
 iCRC = 587D7C70
 mId = 635138307631183750
 MSystem = "Commodore Amiga","Commodore Amiga CD32","Commodore CDTV","Commodore Amiga CD"
@@ -62,14 +62,8 @@ Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 PathToWHDFolder := IniReadCheck(settingsFile, "Settings", "PathToWHDFolder", EmuPath . "\HDD\WHD",,1)
 PathToWorkBenchBase := IniReadCheck(settingsFile, "Settings", "PathToWorkBenchBase", EmuPath . "\HDD\Workbench31_Lite.vhd",,1)
 
-If NOT PathToWHDFolder contains EmuPath
-{
-	PathToWHDFolder := EmuPath . "\" . PathToWHDFolder
-}
-If NOT PathToWorkBenchBase contains EmuPath
-{
-	PathToWorkBenchBase := EmuPath . "\" . PathToWorkBenchBase
-}
+PathToWHDFolder := AbsoluteFromRelative(EmuPath, PathToWHDFolder)
+PathToWorkBenchBase := AbsoluteFromRelative(EmuPath, PathToWorkBenchBase)
 
 ; This object controls how the module reacts to different systems. MESS can play a lot of systems, but needs to know what system you want to run, so this module has to adapt.
 mType := Object("Commodore Amiga","a500","Commodore Amiga CD32","cd32","Commodore CDTV","cdtv","Commodore Amiga CD","amigacd")
@@ -291,3 +285,10 @@ CloseProcess:
 	FadeOutStart()
 	WinClose, ahk_class %windowClass%
 return
+
+AbsoluteFromRelative(MasterPath, RelativePath)
+{
+   VarSetCapacity(AbsP,260,0)
+   DllCall( "shlwapi\PathCombineA", Str,AbsP, Str,MasterPath, Str,RelativePath )
+   Return AbsP
+}
