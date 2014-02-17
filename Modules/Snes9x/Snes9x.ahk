@@ -2,8 +2,8 @@ MEmu = Snes9X
 MEmuV =  v1.53
 MURL = http://www.snes9x.com/
 MAuthor = djvj
-MVersion = 2.0
-MCRC = 35A80127
+MVersion = 2.0.1
+MCRC = 34FD2149
 iCRC = FD5A1CE
 MID = 635038268923820476
 MSystem = "Nintendo Super Famicom","Super Nintendo Entertainment System"
@@ -11,8 +11,10 @@ MSystem = "Nintendo Super Famicom","Super Nintendo Entertainment System"
 ; Notes:
 ; Fullscreen is controlled via the variable below
 ; snes9x adjusts the windowed resolutions in the ini automatically based on the settings you choose below.
+; Bezels work, but if you notice a black bar along the bottom, change this option to false in snes9x.conf: ExtendHeight
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
@@ -26,6 +28,8 @@ FullScreenWidth := IniReadCheck(settingsFile, "Settings", "FullScreenWidth","102
 FullScreenHeight := IniReadCheck(settingsFile, "Settings", "FullScreenHeight","768",,1)
 
 snes9xConf := CheckFile(emuPath . "\snes9x.conf")
+
+BezelStart()
 
 ; Now let's update all our keys if they differ in the ini
 iniLookup =
@@ -53,8 +57,10 @@ Run(executable . " """ . romPath . "\" . romName . romExtension . """", emuPath)
 WinWait("Snes9X ahk_class Snes9X: WndClass")
 WinWaitActive("Snes9X ahk_class Snes9X: WndClass")
 
+BezelDraw()
 FadeInExit()
 Process("WaitClose", executable)
+BezelExit()
 7zCleanUp()
 FadeOutExit()
 ExitModule()
