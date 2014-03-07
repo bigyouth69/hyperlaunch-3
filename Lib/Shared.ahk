@@ -1,5 +1,5 @@
-MCRC=9780AA7
-MVersion=1.1.5
+MCRC=938F903B
+MVersion=1.1.6
 
 StartModule(){
 	Global gameSectionStartTime,gameSectionStartHour,dbName,romPath,romName,romExtension,systemName,moduleName,MEmu,MEmuV,MURL,MAuthor,MVersion,MCRC,iCRC,MSystem,romMapTable,romMappingLaunchMenuEnabled,romMenuRomName,7zEnabled,hideCursor,toggleCursorKey,zz
@@ -888,7 +888,8 @@ SaveProperties(cfgFile,cfgArray) {
 
 ; cfgArray - reference number of array in memory that you want to read
 ; keyName = key whose value you want to read
-ReadProperty(cfgArray,keyName) {
+; Separator = the separator to use, defaults to =
+ReadProperty(cfgArray,keyName,Separator="=") {
 	Log("ReadProperty - Started",4)
 	Loop % cfgArray.MaxIndex()
 	{	element := cfgArray[A_Index]
@@ -899,8 +900,8 @@ ReadProperty(cfgArray,keyName) {
 		If (pos = 0)
 			Break	; Section was found, do not search anymore, global section has ended
 
-		If element contains =
-		{	StringSplit, keyValues, element, =
+		If element contains %Separator%
+		{	StringSplit, keyValues, element, %Separator%
 			CfgValue := Trim(keyValues1)
 			If (CfgValue = keyName)
 				Return Trim(keyValues2)	; Found it & trim any whitespace
@@ -914,7 +915,8 @@ ReadProperty(cfgArray,keyName) {
 ; Value = value that you want to write to the keyName
 ; AddSpaces = If the seperator (=) has spaces on either side, set this parameter to 1 and it will wrap the seperator in spaces
 ; AddQuotes = If the Value needs to be wrapped in double quotes (like in retroarch's config), set this parameter to 1
-WriteProperty(cfgArray,keyName,Value,AddSpaces=0,AddQuotes=0) {
+; Separator = the separator to use, defaults to =
+WriteProperty(cfgArray,keyName,Value,AddSpaces=0,AddQuotes=0,Separator="=") {
 	Log("WriteProperty - Started",4)
 	added = 0
 	Loop % cfgArray.MaxIndex()
@@ -928,18 +930,18 @@ WriteProperty(cfgArray,keyName,Value,AddSpaces=0,AddQuotes=0) {
 			Break
 		}
 
-		If element contains =
-		{	StringSplit, keyValues, element, =
+		If element contains %Separator%
+		{	StringSplit, keyValues, element, %Separator%
 			CfgValue := Trim(keyValues1)
 			If (CfgValue = keyName)
-			{	cfgArray[A_Index] := CfgValue . (If AddSpaces=1 ? " = " : "=") . (If AddQuotes=1 ? ("""" . Value . """") : Value)	; Found it
+			{	cfgArray[A_Index] := CfgValue . (If AddSpaces=1 ? (" " . Separator . " ") : Separator) . (If AddQuotes=1 ? ("""" . Value . """") : Value)	; Found it
 				added = 1
 				Break
 			}
 		}
 	}
 	If added = 0
-		cfgArray.Insert(lastIndex+1, keyName . (If AddSpaces=1 ? " = " : "=") . (If AddQuotes=1 ? ("""" . Value . """") : Value))	; Add the new entry to the file
+		cfgArray.Insert(lastIndex+1, keyName . (If AddSpaces=1 ? (" " . Separator . " ") : Separator) . (If AddQuotes=1 ? ("""" . Value . """") : Value))	; Add the new entry to the file
 	Log("WriteProperty - Ended",4)
 }
 
@@ -1425,6 +1427,31 @@ CheckForNearestSupportedRes(resVar){
 		}
 	}
 Return supportedRes
+}
+
+; Purpose: Handle an emulators Open Rom window when CLI is not an option
+; Returns 1 when successful
+OpenROM(windowName,selectedRomName) {
+	Log("OpenROM - Started")
+	Global MEmu,moduleName
+	WinWait(windowName)
+	WinWaitActive(windowName)
+	state := 0
+	Loop, 150	; 15 seconds
+	{	ControlSetText, Edit1, %selectedRomName%, %windowName%
+		ControlGetText, edit1Text, Edit1, %windowName%
+		If (edit1Text = selectedRomName) {
+			state := 1
+			Log("OpenROM - Successfully set romName into """ . windowName . """ in " . A_Index . " " . (If A_Index = 1 ? "try." : "tries."),4)
+			Break
+		}
+		Sleep, 100
+	}
+	If (state != 1)
+		ScriptError("Tried for 15 seconds to send the romName to " . MEmu . " but was unsuccessful. Please try again with Fade and Bezel disabled and put the " . moduleName . " in windowed mode to see if the problem persists.", 10)
+	PostMessage, 0x111, 1,,, %windowName% ; Select Open
+	Log("OpenROM - Ended")
+	Return state
 }
 
 ;-----------------OPEN AND CLOSE PROCESS FUNCTIONS------------
