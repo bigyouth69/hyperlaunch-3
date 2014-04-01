@@ -6,7 +6,7 @@ MVersion = 2.0.4
 MCRC = 68C4777D
 iCRC = 33A87511
 MID = 635038268884477733
-MSystem = "Nintendo Gamecube","Nintendo Wii"
+MSystem = "Nintendo Gamecube","Nintendo Wii","Nintendo WiiWare"
 ;----------------------------------------------------------------------------
 ; Notes:
 ; Be sure you are running at least Dolphin v3.0-589 or greater.
