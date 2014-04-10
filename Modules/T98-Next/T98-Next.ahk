@@ -1,9 +1,10 @@
+iCRC = 1E716C97
 MEmu = T98-Next
 MEmuV = v13.1th Beta
 MURL = http://www.geocities.jp/t98next/
 MAuthor = djvj
-MVersion = 2.0.1
-MCRC = DDEE49F1
+MVersion = 2.0.2
+MCRC = 34CB9135
 MID = 635038268927083194
 MSystem = "NEC PC-9801","Touhou"
 ;----------------------------------------------------------------------------
@@ -28,11 +29,22 @@ MSystem = "NEC PC-9801","Touhou"
 ;----------------------------------------------------------------------------
 StartModule()
 FadeInStart()
+
+settingsFile := modulePath . "\" . moduleName . ".ini"
+fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
+
 7z(romPath, romName, romExtension, 7zExtractPath)
+
+; Setting Fullscreen setting in ini if it doesn't match what user wants above
+IniRead, currentFullScreen, %t98INI%, CRT, FULLSCREEN
+If (Fullscreen != "true" && currentFullScreen = 1)
+	fullscreen, 0, %t98INI%, CRT, FULLSCREEN
+Else If (fullscreen = "true" && currentFullScreen = 0)
+	IniWrite, 1, %t98INI%, CRT, FULLSCREEN
 
 IniWrite, %romPath%\%romName%%romExtension%, %emuPath%\MAIN.INI, DISK, DISK02
 IniWrite, 1, %emuPath%\MAIN.INI, Control, AutoRun	; required for games to start on emu launch
-Run(executable,emuPath,"Hide")
+Run(executable, emuPath, "Hide")
 
 WinWait("Emulation Window ahk_class T98-Next")
 WinWaitActive("Emulation Window ahk_class T98-Next")
@@ -43,7 +55,6 @@ MouseMove 0,2000,0  ;Move mouse off screen
 	; Run, remap_keys.exe, %modulePath%
 
 FadeInExit()
-
 Process("WaitClose", executable)
 ; Process, Close, remap_keys.exe
 
