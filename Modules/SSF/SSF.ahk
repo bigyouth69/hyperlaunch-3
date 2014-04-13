@@ -1,6 +1,6 @@
 MEmu = SSF
 MEmuV =  v0.12 beta R4
-MURL = http://www7a.biglobe.ne.jp/~phantasy/ssf/
+MURL = http://www.geocities.jp/mj3kj8o5/ssf/index.html
 MAuthor = djvj
 MVersion = 2.0.9
 MCRC = D853A040
