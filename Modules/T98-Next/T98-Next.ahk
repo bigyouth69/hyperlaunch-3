@@ -3,8 +3,8 @@ MEmu = T98-Next
 MEmuV = v13.1th Beta
 MURL = http://www.geocities.jp/t98next/
 MAuthor = djvj
-MVersion = 2.0.2
-MCRC = 34CB9135
+MVersion = 2.0.3
+MCRC = 1A47EF9A
 MID = 635038268927083194
 MSystem = "NEC PC-9801","Touhou"
 ;----------------------------------------------------------------------------
@@ -37,8 +37,8 @@ fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 
 ; Setting Fullscreen setting in ini if it doesn't match what user wants above
 IniRead, currentFullScreen, %t98INI%, CRT, FULLSCREEN
-If (Fullscreen != "true" && currentFullScreen = 1)
-	fullscreen, 0, %t98INI%, CRT, FULLSCREEN
+If (fullscreen != "true" && currentFullScreen = 1)
+	IniWrite, 0, %t98INI%, CRT, FULLSCREEN
 Else If (fullscreen = "true" && currentFullScreen = 0)
 	IniWrite, 1, %t98INI%, CRT, FULLSCREEN
 
