@@ -14,7 +14,7 @@ MSystem = "Nintendo Entertainment System","Nintendo Famicom","Nintendo Game Boy"
 ; Fullscreen is controlled via GUi when running the module directly
 ; Sram Support is controlled via GUi when running the module directly - If true, the module will backup srm files into a backup folder and copy them back to the 7z_Extract_Path so higan can load them upon launch. You really only need this if you use 7z support (and 7z_Delete_Temp is true) or your romPath is read-only.
 ; If you use 7z support, the games that require special roms (dsp/cx4), the roms needs to be inside the 7z with the game. Otherwise you will get an error about the missing rom.
-; You can find the dsp roms needed for some games here: http://www.caitsith2.com/snes/dsp/ and a list of what games use what chip here: http://www.pocketheaven.com/ph/wiki/SNES_games_with_special_chips
+; You can find the dsp roms needed for some games here: http://www.caitsith2.com/snes/dsp/ and a list of what games use what chip here: http://wiki.pocketheaven.com/index.php?title=SNES_games_with_special_chips
 ; higan stores its config @ C:\Users\%USER%\AppData\Roaming\higan
 ;----------------------------------------------------------------------------
 StartModule()
