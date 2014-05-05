@@ -2,8 +2,8 @@ MEmu = PCSX2
 MEmuV =  1.1.0.r5695
 MURL = http://pcsx2.net/
 MAuthor = djvj
-MVersion = 2.0.8
-MCRC = 499BD257
+MVersion = 2.0.9
+MCRC = 68D5E997
 iCRC = 5EE13A07
 MID = 635038268913291718
 MSystem = "Sony PlayStation 2"
@@ -157,10 +157,12 @@ BezelDraw()
 If hideConsole = true
 	SetTimer, HideConsole, 10
 
+SetTitleMatchMode 2 ;Wrong window might be detected in the next loop if we only use the class name for WinGetTitle so we will add fps to it
 Loop { ; looping until pcsx2 is done loading game
 	; tooltip, loop %A_Index%,0,0
 	Sleep, 200
-	WinGetTitle, winTitle, ahk_class wxWindowClassNR,, PCSX2 ; excluding the title of the GUI window so we can read the title of the game window instead
+	WinGetTitle, winTitle, fps ahk_class wxWindowClassNR,, PCSX2 ; excluding the title of the GUI window so we can read the title of the game window instead
+	Log("Detected Window Title is " . winTitle,4)
 	StringSplit, winTextSplit, winTitle, |, %A_Space%
 	If ( winTextSplit10 != "" ) ; 10th position in the array is empty until game actually starts
 		break
