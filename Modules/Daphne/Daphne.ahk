@@ -17,6 +17,8 @@ MSystem = "Daphne","LaserDisc"
 ; 3) Create a folder in your emu directory called "controls" and copy your current dapinput.ini into it. This will be your default controls used for all games that a custom one was not created.
 ; 4) Launch each game you defined controls for through DaphneLoader. DaphneLoader will set your custom controls in the dapinput.ini. Now exit the game.
 ; 5) After each game you launch, copy the dapinput.ini into the controls folder and name it after the rom name you use in your xml: Example: lair.ini
+;
+; First time users, please follow the guide found @ http://www.hyperspin-fe.com/forum/showthread.php?29410-Complete-Guide-for-Daphne-in-HyperSpin-and-HL3
 ;----------------------------------------------------------------------------
 StartModule()
 FadeInStart()
@@ -72,6 +74,7 @@ If FileExist(romControlIni) {	; if a romName control ini exists
 romName = %version%
 
 ; This allows us to send variables, that when empty, are not sent to the Run command
+; msgbox % executable . A_Space . romName . A_Space . params . A_Space . fullscreen . A_Space . screenWidth . A_Space . screenHeight . A_Space . min_seek_delay . A_Space . seek_frames_per_ms . A_Space . homedir . A_Space . bank0 . A_Space . bank1 . A_Space . bank2 . A_Space . bank3 . A_Space . sound_buffer . A_Space . "-framefile """ . romPath . "\" . frameFile . romExtension . """"
 Run(executable . A_Space . romName . A_Space . params . A_Space . fullscreen . A_Space . screenWidth . A_Space . screenHeight . A_Space . min_seek_delay . A_Space . seek_frames_per_ms . A_Space . homedir . A_Space . bank0 . A_Space . bank1 . A_Space . bank2 . A_Space . bank3 . A_Space . sound_buffer . A_Space . "-framefile """ . romPath . "\" . frameFile . romExtension . """", emuPath)
 
 WinWait("ahk_class SDL_app")
