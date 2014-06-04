@@ -1,4 +1,6 @@
-﻿; Author: djvj
+﻿mTest = true
+
+; Author: djvj
 ; Purpose: Handle launcher windows for PC Games. These windows pop up before the game and usually require some type of input or button you have to press to start the game.
 ; Notes: Super Mario Bros X does not respond to removing of the title bar or border with WinSet. It is suggested to leave KeepAspect set to false because the window will have these elements hidden.
 ;----------------------------------------------------------------------------------------------------

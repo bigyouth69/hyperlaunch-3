@@ -1,4 +1,6 @@
-﻿; Author: djvj
+﻿mTest = true
+
+; Author: djvj
 ; Game: Super Mario Bros. Crossover
 ;
 ; Purpose: 	1) Watches the game window and attempts to send the fullscreen hotkey until the game's size or position changes.

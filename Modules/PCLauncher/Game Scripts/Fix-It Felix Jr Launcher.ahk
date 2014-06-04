@@ -1,3 +1,5 @@
+mTest = true
+
 GamePath=D:\PC Games\Fix-It Felix Jr\Game\FixitFelixJr.exe		; the full path and exe of FixitFelixJr.exe
 BezelPath=D:\PC Games\Fix-It Felix Jr\Game\bezel.png		; the full path and extension to bezel file
 zoom=200		; Frame Resolution-Only 33,50,100,200 are supported
