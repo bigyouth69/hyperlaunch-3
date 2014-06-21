@@ -2,8 +2,8 @@ MEmu = MAME
 MEmuV =  v0.150
 MURL = http://www.mame.net/
 MAuthor = djvj
-MVersion = 2.1.1
-MCRC = D390B7BC
+MVersion = 2.1.2
+MCRC = 232140EB
 iCRC = 397D8196
 MID = 635038268903403479
 MSystem = "AAE","Cave","LaserDisc","MAME","Nintendo Arcade Systems","Sega Model 1","Sega ST-V","SNK Neo Geo","SNK Neo Geo AES"
@@ -100,28 +100,26 @@ If cheatMode = true
 If hideConsole = true
 	SetTimer, HideConsole, 10
 
-Run(executable . A_Space . romName . A_Space . fullscreen . A_Space . hlsl . A_Space . cheatEnabled . A_Space . videomode . A_Space . artworkCrop . A_Space . useBezels . A_Space . useOverlays . A_Space . useBackdrops . A_Space . UseCpanels . A_Space . UseMarquees . A_Space . mameRomPaths . A_Space . sysParams . A_Space . romParams . A_Space . autosave, emuPath, winstate)
+errLvl := Run(executable . A_Space . romName . A_Space . fullscreen . A_Space . hlsl . A_Space . cheatEnabled . A_Space . videomode . A_Space . artworkCrop . A_Space . useBezels . A_Space . useOverlays . A_Space . useBackdrops . A_Space . UseCpanels . A_Space . UseMarquees . A_Space . mameRomPaths . A_Space . sysParams . A_Space . romParams . A_Space . autosave, emuPath, winstate)
 
-
-
-If(ErrorLevel != 0){
-	If (ErrorLevel = 1)
+If errLvl {
+	If (errLvl = 1)
 		Error = Failed Validity
-	Else If(ErrorLevel = 2)
+	Else If(errLvl = 2)
 		Error = Missing Files
-	Else If(ErrorLevel = 3)
+	Else If(errLvl = 3)
 		Error = Fatal Error
-	Else If(ErrorLevel = 4)
+	Else If(errLvl = 4)
 		Error = Device Error
-	Else If(ErrorLevel = 5)
+	Else If(errLvl = 5)
 		Error = Game Does Not Exist
-	Else If(ErrorLevel = 6)
+	Else If(errLvl = 6)
 		Error = Invalid Config
-	Else If ErrorLevel in 7,8,9
+	Else If errLvl in 7,8,9
 		Error = Identification Error
 	Else
 		Error = MAME Error
-	ScriptError("MAME Error - " . Error)
+	Log("MAME Error - " . Error,3)
 }
 
 WinWait("ahk_class MAME")
