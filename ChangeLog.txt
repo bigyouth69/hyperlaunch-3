@@ -1,3 +1,597 @@
+v3.1.0.0 Beta
+
+HyperLaunch (updated to v3.1.0.0 BETA):
+Add support for different screen orientations for vertical games, rotating monitors and cocktail cabs. HyperPause, fade, instruction cards, password, multigame and rom mapping launch menu works on 0º, 90º, 180º and 270º.
+HyperLaunchLog shows a warning when User Functions.ahk or User Functions Init.ahk are missing.
+i18n localization support: Non-English users now have certain parts of the modules converted automatically in memory to their language. For example "Open" converts to "Abrir" if you use a Portuguese Windows.
+New file that provides the translation mapping: HyperLaunch\Data\Language\Localization.ini
+HyperLaunch now supports launching the MultiGame feature on launch. This gives you the ability to only have one disc for example, in your database and give a disc selection instead. You must have MG enabled, and also the new setting MultiGame_On_Launch.
+HyperLaunch will error if you set your keymapper to something other than xpadder or joytokey (like if it's blank)
+Log now states if the User Functions.ahk is not found
+Fixed a bug that HL would think a rom was picked from rom mapping when it wasn't
+Fixed a bug when Fade was enabled but Statistics was not, would cause a missing function error.
+Fixed a couple RomTableCheck scenarios that would stall HL when it shouldn't be.
+7z will no longer try to determine if you have enough free space on a network drive to extract to as this number is not visible to windows.
+7z now creates the 7zExtractPath if it does not exist already and reports correctly when the drive does not exist or it couldn't write to that drive.
+When debug or greater logging is enabled, the extraction progress of 7z gets dumped to the log.
+ExitModule now declares when it has started to prevent other functions from starting during the exit routine when they shouldn't be.
+The default font is now automatically installed if it was not installed already. This will also install any fonts residing in the HL Media's Font folder too if they are used.
+PCLauncher uses its own HideCursor setting, so when using this module and you want to control the mouse visibility, it must be set in PCLauncher module settings. The normal HL setting will not apply.
+CreateRomTable will no longer be created on exit. This should speed up exiting in some scenarios when it was unnecessarily being created.
+Fixed a bug when using the Rom Map menu and a valid extension was not found from your defined extensions.
+Player Select Menu GUI now can be called from any module
+HyperLaunch now accepts a system xml when a default (Hyperspin Main Menu.xml) is not found. File should be located in .\Data\Databases\Systems.xml. For convenience, it should be the same format as the Hyperspin Main Menu.xml
+When a Hyperspin Main Menu.xml nor a HyperLaunch Systems.xml can be found and direct launching the HyperLaunch.exe, the system selection drop down list is replaced with an edit box where user can type in a system name manually.
+HideEmu now logs each unique window it finds and hides as a debug log entry.
+HideEmu now hides emus on exit when enabled.
+Replaced all Includes with FileReads. This should eliminate the bug where ahk would randomly try to include a file with the wrong path. No performance hit in this change.
+Only files are allowed by default when a CheckFile() is called.
+HyperLaunch now skips checking for romPaths and a romExtension if a fullpath to your rom was supplied via CLI. This can speed up launching slightly, especially if you have a lot of paths and extensions defined in HLHQ. Some FEs support this.
+HyperLaunch now errors if the rom name contains the characters [ or ]
+Version info for libraries are now reported to the log when troubleshooting mode is enabled.
+New protection in place to prevent users from setting their 7zExtractTemp anywhere inside (above) their romPath. This would cause someone to delete their rom folder.
+New Function - OpenROM - standardizes and replaces the old loop method used to interact with an emulators "Open" rom window. Module authors can call this method instead of recreating the lengthy and confusing loop method.
+New Function - SetKeyDelay - standardizes and logs the use of SetKeyDelay and also allows HL to keep track of the current pressDelay in effect.
+New Function - SendCommand - TBA
+New Function - SplitPath - Supports UNC/SMB paths and multiple periods in the filename.
+New Function - GetHLMediaFiles - Standardizes and logs gathering of all the media files HL uses.
+New Function - Steam - Steam was removed from PCLauncher and made into its own function and able to be called from any module
+New Function - Origin - Origin was removed from PCLauncher and made into its own function and able to be called from any module
+New Function - DxwndIniRW/DxwndRun/DxwndClose - DXWnd can now be called from any module as it is considered an extension and has been provided its own set of functions to control it.
+New Function - Rotate - Allows global support for rotating your screen on any module that calls it.
+New Feature - HyperLaunch now has a Debug Console to show the log in real-time!
+New Feature - HyperLaunch will validate cue and gdi files when using Daemon Tools support. It will also not allow mounting of images with mp3 audio tracks as DT does not support these.
+New Feature - HyperLaunch now accepts proper CLI switches and in any order to better support other FEs simultaneously and multiple methods of launching. -s <System_Name>, -r <Database_Name>, -m <HL_Mode>, -p <Plugin>, -f <FE_Path>
+New Feature - HyperLaunch now accepts a new CLI switch "-e", which will force a game to load via the sent mapped Emulator name or full path to a Emulator you want to load. Usage -e <Emulator_Name> or -e "<Emulator_Full_Path>"
+New Feature - HyperLaunch now accepts a new CLI switch "-d", which will force a game to load via the sent mapped Module name or full path to a module you want to load. Usage -d <Module_Name> or -d "<Module_Full_Path>"
+New Feature - Custom cursors can now be loaded by placing a cursor file into your HL Media Cursor folder. (ex. HyperLaunch\Media\Cursors\Nintendo DS\_Default\stylusred.cur)
+New Feature - Lock Launch - Can be applied globally, per system, or per game.
+Standard (true) lock - Prevent games from launching that you want to keep in your database but do not want to remove. Will simply return to your FE if you launch one of these.
+Password lock - Need to input a password to launch. Password is any combination of directional keys (your HyperLaunch Navigation keys) up to 15 keys in length.
+DirectOnly - Prevented from being launched normally, but can launch HP, MG, or Fade normally to view those features without actually launching the game.
+
+HyperPause (updated to v1.0.6):
+Fix to bug avoiding multigame to use hyperlaunch artwork located at HyperLaunch\Multigame\systemname\gamename folder.
+Support for media\_Default folders on videos, artwork, controllers, guides and manuals (requested by potts43).
+Improved save state overwritten images code (made a list of images to be deleted and try to empty the list at every HyperPause exit).
+Changed screenshot function. (thks horseyhorsey, http://www.hyperspin-fe.com/forum/sh...en-grabs/page3).
+Added support for saving screenshot as BMP,DIB,RLE,JPG,JPEG,JPE,JFIF,GIF,TIF,TIFF and PNG (the default now is jpg because the smaller footprint) (If saving as jpg (JPG,JPEG,JPE,JFIF) then quality can be 1-100 with default at maximum quality). Controlled by the hyperpause ini keys: Screenshot_Extension and Screenshot_JPG_Quality (these should be moved to HyperLaunch ini files on a final release).
+Improved code to make sure that bezel is restored well after HyperPause exit. (thks horseyhorsey, http://www.hyperspin-fe.com/forum/sh...-after-HP-exit).
+Added support for creating a color behind the HyperPause background, for filling the screen if a background image is smaller than the screen resolution. (requested by wiggles http://www.hyperspin-fe.com/forum/sh...kground-images). (controled by hyperpause ini key Background_Color on ini section: [Main Menu Appearance Options].
+Fix to statistics game names overlap.
+Updated. If no HyperSpin game video is found, HyperPause will look for its parent video (http://www.hyperspin-fe.com/forum/showthread.php?34389-HyperPause-Videos)
+Updated. Changed HyperPause mute when start code to only mute the sound coming from the emulator (only supported at Windows Vista and above, on XP the master sound will be muted instead).
+Updated. Added font exist check.
+Small changes in the code for diverse motives.
+Updated. HyperPause now only mutes the emulator sound while loading if this option is selected. It works for vista and above. For XP and bellow it still works like previously mutting the master sound instead of only the emulator sound.
+General description:
+HyperPause is now completly FrontEnd independent.
+In order to do it I had to complete rewrite the code that handles the assets to be shown on the HyperPause Menus. 
+I REALLY NEED A HUGE BETA TESTING EFFORT FOR FINDING ANY ISSUES BECAUSE OF TE HUGE AMOUNT OF CHANGES THAT THIS REQUIRED.
+Added support for using parent media on all HyperPause media assets. Set HyperPause_Use_Parent_Game_Media_Assets to true to enable it. (Requested by Turranius http://www.hyperlaunch.net/forum/showthread.php?187-HyperPause-media-for-clones&p=2143&viewfull=1#post2143 )
+Added support for automatically use any plugin defined FrontEnd Assets on HyperPause (backgrounds, wheels, artwork, controller images, manuals, guides, videos).
+Added support for the Moves List sub menu to enter in full screen mode from the submenu entry directly (Requested by Dogway).
+Added support for the History sub menu to enter in full screen mode from the submenu entry directly (Requested by Dogway).
+Added support for the Video sub menu to enter in full screen mode from the submenu entry directly (Requested by Dogway).
+Added support for render PDF pages only when you are above the respective label. Set HyperPause_Load_PDF_On_Label to true to enable it. (Requested by Dogway).
+Screenshots are now showed for last on the artwork menu. (Requested by Dogway).
+Added changes to create the screenshots folder only when necessary. (Requested by Dogway).
+Changed wheel code on HyperPause to use only game wheels defined by the AssetType
+Changed background on HyperPause to use only game (fe and hp media), and if not found, use system files
+NEW - Added CBR and CBZ support for menus on hyperpause (manuals, guides, artwork, controller).
+NEW - Updated pdf ghoscript call to use the maximumHeight parameter
+FIXED - bug on 7z images compressed not working
+FIXED - HyperPause bug with pdf entire conversion code.
+NEW - Added support for hyperpause disc change to use fe media assets.
+FIXED - HyperPause multidisc multiple entries bug. Thanks rfancella for finding and reporting it.
+NEW - Added pdf page layout support. Now you can define how your pdf files will be displayed on HyperPause. (Requested by Dogway). Brolly did most of the hard work for adding that. Options are:
+1page - Displays 1 page at a time (what we have now)
+2pages - Displays 2 page at a time horizontally
+coverup - Same as 2pages, but the first page will be displayed as a single page
+frompdf - Reads page layout info from the actual PDF file and follows that setting
+Changed the temp hyperpause folders to include the systemName (requested by brolly).
+Added: while loading a new pdf page that is not yet converted, the previous page will remain in the screen and a centered text message will say "Loading New Page" while the page is being loaded (requested by brolly).
+
+
+Fade (updated to v1.0.5):
+Added support for Zero Dreams fade animation. Make sure that you have the required files on your media folder, and just load the hyperlaunchhq fade profile named "Zero Dreams fade.ini" to use this fade screen instead of the default one. To reload the default one you just need to load the profile named "Default fade.ini".
+Added support for showing extraction remaining and elapsed time on fade screen (Requested by Sir Cyrano: http://www.hyperspin-fe.com/forum/showthread.php?33512-Progress-Bar-With-Timer&highlight=remaining)
+Added support for producing the efects introduced by Unknown50862 on the fade loading screen automatically for any system. (Controlled by the option Fade_Layer_3_Shadow_Image_Transparency. http://www.hyperspin-fe.com/forum/showthread.php?33058-Unified-Megatheme-Fade-Loading-Screens&highlight=Unified+Megatheme+Fade%2FLoading+Screens).
+Updated. Added support for mute emulator sounds while fade is active (only supported at Windows Vista and above, on XP the master sound will be muted instead).
+Updated. Complete GUI code and fade animation rewrite to support fade animations to work during the fade in delay and fade in exit delay.
+NEW - Added the possibility to use the background images on the HyperLaunch\Bckgrounds folder as fade layer 1 background. Controlled by ini key named: Fade_Use_Backgrounds, default = false (Allows use of media placed in the Backgrounds folder for Fade backgrounds.).
+NEW - Added support for using plugin defined feMedia background assets.
+
+
+Bezel (updated to v1.0.7):
+Fixed bug with layout mode.
+Fixed multiscreens bug with Pico drive.
+Added support for overlay on multiscreens mode.
+Added screen offset support for multiscreens bezels.
+Fixed bug with games that have numeric names being wrongly considered as multiscreen games.
+A few improvements to avoid running code without need to speed up a little things.
+Fixed bug with instruction card scrolling text showing after exiting instruction card menu.
+Changed the IC menu scale factor to be calculated from the height of the screen because it made more sense than using the screen width.
+Added option to start game with ICs showing, randomly or not. Requested by mmg1design ( the instruction cards maker  ) (http://www.hyperspin-fe.com/forum/showthread.php?29509-Instruction-Card-with-Cheats-Info-Display-question)
+Added option to enable ICs random Slide Show. The default value is 0 (=disable). You can change it for the amount of milliseconds that you between ICs changes. If you press any of the IC change keys the slide sho will stop. Requested by mmg1design. (http://www.hyperspin-fe.com/forum/showthread.php?29509-Instruction-Card-with-Cheats-Info-Display-question)
+Added support for defining ICs scalling through file name.
+Added support for new file name convention
+Updated. Background and overlay files named equal and at the same folder of the currrent selected bezel have priority to be showed. Requested by rfancella.
+Updated. Added support for saving bezel selected (if true, everytime that you open a game the last choosen bezel will be loaded at beginning)
+Updated. Added support for saving ICs selected (if true, everytime that you open a game the last choosen ICs will be showed). You should combine it with enabling the "display on startup" option to take advantage of it.
+Updated. Added support for option Extra_FullScreen_Bezel. If true, it creates automatically a transparent bezel that fills the entire screen. This is useful to simulate a full screen windowed game. (this is very emulator dependable, and it will work better with emus that support normal bezel mode).
+Updated. Added support on clone games for looking for bezel and ICs on parent folders.
+NEW - added the possibility to use the background images on the HyperLaunch\Bckgrounds folder as bezel background. Controlled by the bezel ini key named: Use_Backgrounds, default = false (Allows use of media placed in the Backgrounds folder for Bezel backgrounds.).
+NEW - Bezel now supports more image files: png, gif, tif, bmp and jpg (before it would only support png files). New ini key: Bezel_Supported_Image_Files, limits the image extensions that should be searched on the bezel code.
+NEW - Added a if statement on the beginning of all bezel functions for checking if bezelEnabled = "true". This will allow to change at any time before the bezelDraw function call the bezel state at a game basis. In the future this could be handled either directly by hyperlaunch or through a module code settings (in order to work on a module, it requires that the bezel is enabled on HLHQ, because the bezel files will be only included on hyperlaunch on that case.
+NEW - Added support for using plugin defined feMedia background assets.
+NEW - Added setting to enable/disable IC cards from being used, even if they exist. Default is disabled. So for those who use ICs, be sure to enable this option globally or for just those systems you want to use them on.
+
+PS: All bezels and ICs options can be changed at a global, system or game basis. The first two are changed as usual using HLHQ. The third one need some ini editing.
+For example, if I want to enable the startup randomly showed IC for the sf2 game on MAME, I just need to create the file: C:\HyperSpin\HyperLaunch\Settings\MAME\sf2\bezel.ini and set the option inside it like this:
+[code][Instruction Cards Visibility]
+IC_Toggle_Visibility_Key=true[/code]
+
+Just copy the bezel.ini file from the system folder (C:\HyperSpin\HyperLaunch\Settings\MAME\bezel.ini) to the game folder (C:\HyperSpin\HyperLaunch\Settings\MAME\sf2\bezel.ini) if you have any doubt about the options available.
+
+
+MultiGame (updated to v1.0.5):
+The Multigame menu is now Frontend independent.
+Replaced the hyperspin window class reference for the plugin defined variable.
+Removed the obsolete mgArtworkDir option.
+Added support for using plugin defined feMedia background assets.
+Added support for using plugin defined feMedia disc asset.
+
+
+Keymapper (updated to v1.0.6):
+Updated Keymapper.ahk. Fixed a bug with controller names that have trailing white spaces in their names in the registry. Fixed a dllcall that would prompt the uac when running from a shared drive. (thanks Ghutch)
+All uses of "Process" are now using the HyperLaunch function and now the straight ahk command.
+Fixed unloading of ahk profiles
+
+
+XHotkey (updated to v1.0.2):
+XHotkey library updated to show some basic logs on when it is used and what keys use standard or extended hotkey support.
+
+
+Rom Mapping Launch Menu (updated to v1.0.3):
+Fixed some bugs
+Added support for game info details and HyperSpinXML on rom mapping HyperSpin naming scheme.
+NEW - added support for using plugin defined feMedia background assets.
+
+
+Statistics (updated to v1.0.2):
+Fix for tracking when MultiGame is used
+
+
+
+Statistics Init (updated to v1.0.1):
+Removed all code as it's not necessary anymore
+
+
+
+Fade Init (updated to v1.0.1):
+Removed all includes
+
+
+
+HyperPause Init (updated to v1.0.1):
+Removed all includes
+
+
+
+Plugins
+Added AssetType atribute to feMedia and hpMedia
+Replaced wheel references to use the word logo instead on the plugin file and HyperPause
+Added plugin ini media labels to the HS plugin
+
+
+
+New Settings:
+
+Lock_Launch
+Launch_Password
+Screen_Rotation_Angle
+Fade_Options_Vertical_Scale_Factor
+Fade_Layer_2_Prefix
+Fade_Layer_3_Shadow_Image_Transparency
+Fade_Bar
+Fade_Text_3
+Fade_Text_4
+Fade_Extraction_Time
+Fade_Extraction_Time_Text_X
+Fade_Extraction_Time_Text_Y
+Fade_Extraction_Time_Text_Options
+MultiGame_On_Launch
+Many more...
+
+HyperLaunchHQ Changelog (updated to v1.1.0.0):
+Added Panic hotkey. This will allow you to always be able to kill HyperLaunch if by some reason it blocks you out from task manager and your exit script key won't work. Press Ctrl+Alt+Q to kill it, you can enabled/disable this option in the HLHQ settings tab. Make sure you only enable it when testing
+In the module info panel it's now possible to see if a module has multi-game support implemented or not
+Added support for new bezel/IC ini keys : IC_Display_Random_Card_on_Startup, IC_Random_Slide_Show_Timer
+Fixed bug that was causing the creation of new game keymapper profiles not to work after you have audited a system
+Added new SYSTEMS tag to ISD files. This allows ini files declared as %SystemName% to be valid for certain systems only
+DataGrid listing the emulators is now sortable by any column
+Added new button to run HyperPause directly to a specific game without actually launching it (Games tab)
+Added new buttons to test MultiGame and Fade screens for a specific game without launching them (Games tab)
+Also added new buttons for launching default fade screens at a system level (Settings/Fade - General tab)
+Added support for all new keys added to the current version of HyperLaunch
+New form to configure your launch locking password
+Ability to browse to rompaths from the emulators tab, simply right click on a line in the rom path table and select Browse
+Added support to per game configurations (7zCleanup and Lock Launch) through Game Options.ini file. This can be done through the Games tab
+Automatic database generation based on rom paths and default emulator file extensions. Simply add a system, set the rom paths and the its default emulator and press the generate database button in the emulators tab
+Warning is now issued whenever a duplicate system or game is found in any database
+Use Global checkbox is now hidden on all editors unless you are under the context of a system
+Added global settings overlay support for the HyperPause tabs
+Added support and validators for all fields that support values in the new portrait|landscape format
+Support for multiple frontends with a single HyperLaunch/HyperLaunchHQ install, launch HyperLaunchHQ using HyperLaunchHQ.exe -fp "PATH_TO_FRONTEND_EXE" to override the setting in the HyperLaunch.ini file
+Added plugin for PinballX
+Default database file for HyperLanchHQ is now Databases\Systems.xml (format is still the same)
+Added new form to create and maintain multiple frontends. HL and HLHQ are now completely frontend independent. You can setup multiple frontends within HLHQ and switch between them with a click of a button
+Added new option to minimize HLHQ to the system tray
+Module Info Panel - Support for multiple URLs on the Module's MURL header tag
+Any http links in the module's notes are now clickable from within the Module Notes window
+Added button to launch games directly from the Alternate Emulators tab
+Added support to browse to the different media folders for each game from the audit panel. Access it by right clicking on the selected game
+Added File Size column to the Game Audit grid (you can hide it by right clicking on the table header)
+Added support to launch games on different emulators directly from the Game Audit grid (Right click on selected game)
+Adding new systems directly from HLHQ through a wizard. Plugin must support this feature, right now only HLHQ and HyperSpin plugins support it
+Deletion of systems directly from HLHQ
+Added support for editing Global Plugins.ini and Plugins.ini. New tab named Plugins inside the Settings section, this tab works in context with the currently active plugin in HLHQ
+Removed all frontend related ini keys from the GUI. HyperLaunch and HyperLaunchHQ code is now fully frontend independent
+Added visual notification for when checking for errors in the alternate emulators section
+Added column with line number on the Log Viewer
+Some other minor corrections
+
+
+Modules Changelog:
+
+This part must be changed by djvj as it was my old changelog, before you made all the module changes. Some info may be outdated also. Need to check that. 
+
+1964 (updated to v2.0.1):
+Module now supports i18n translations
+Added Hide_Emu support
+
+ActiveGS (updated to v2.1):
+Added Hide_Emu support
+Added the ability to browse and specify the location and name of your BootableHardDiskImage and changed its location from the Rom directory to the Emulator directory. (Thanks Rfan)
+Now copies over the default.activegsxml config file with a saved original.activegsxml when the game is closed (like the WinUAE module does). (Thanks Rfan)
+Fixed an error in the settingsfile line. (Thanks Rfan)
+
+AppleWin (updated to v1.5):
+Added Hide_Emu support
+Now uses Rotate global function
+
+Arculator (updated to v1.0):
+Added Hide_Emu support
+
+BlueMSX (updated to v2.1.0):
+Added Hide_Emu support
+
+Bsnes (updated to v2.0.3):
+Added Hide_Emu support
+
+CCS64 (updated to v2.0.2):
+Added Hide_Emu support
+Added Bezel support (thanks rfancella)
+Fixed DX9 issue
+Automatically closes Direct3D msgbox if it pops up
+
+CPCE (updated to v2.0.2):
+Several new settings added to support more CPC game specific configurations (thanks wahoobrian)
+Reworked the ISD (thanks wahoobrian)
+Tape support added (thanks wahoobrian)
+MG support added including for CP/M games (thanks wahoobrian)
+Added Hide_Emu support
+
+Daphne (updated to v2.0.5):
+Added Bezel Support (thanks rfancella)
+Added Hide_Emu support
+
+Daphne Singe (updated to v2.0.2):
+Added Bezel Support (thanks rfancella)
+Added Hide_Emu support
+Drastically increased the speed at which the *.singe files are updated with correct paths and added much more logging when they are.
+Old method could take upto 20 seconds and scanned every singe file when only a few actually have paths. New method only updates files that have paths.
+Added missing ForcePathUpdate to the ISD
+
+DCAlice (initial release):
+Added Hide_Emu support
+
+DCVG5K (updated to v2.0.2):
+Module now supports i18n translations
+Added Hide_Emu support
+
+DeSmuMe (updated to v2.0.5):
+Added Hide_Emu support
+
+DICE (updated to v2.0.2):
+Added Hide_Emu support
+Bezel support
+
+Dolphin (updated to v2.0.1):
+Added Hide_Emu support
+Profile support rewritten to a function and removed an error when a custom profile was not found, will log it instead.
+
+DXWnd (updated to v2.0.4):
+Updated to support Dxwnd function calls instead
+Now uses Rotate global function
+
+Emma 02 (updated to v2.0.2):
+Updated SetKeyDelay to use HL's function call instead
+Added Hide_Emu support
+
+Emu7800 (updated to v2.0.1):
+Added Bezel support (Thanks gigapig)
+Added Hide_Emu support
+
+EmuGaki (initial release):
+Added Hide_Emu support
+
+ePSXe (updated to v2.0.8):
+Module now supports i18n translations
+Added Hide_Emu support
+
+ePV-1000 (updated to v2.0.1):
+Added Hide_Emu support
+
+eSC-3000 (initial release):
+Added Hide_Emu support
+
+eSCV (initial release):
+Added Hide_Emu support
+Flash Player Projector (updated to v2.0.1):
+Added Bezel support
+Added Hide_Emu support
+Global and per-game fullscreen support
+All games can be made fullscreen now
+Emu version updated to v14
+
+FourDO (updated to v2.0.2):
+Bezel support
+Added Hide_Emu support
+
+FreeDO (updated to v2.0.2):
+Module now supports i18n translations
+Added Hide_Emu support
+
+Fusion (updated to v2.0.9):
+Sega Pico support
+Added Hide_Emu support
+
+Future Pinball (updated to v2.0.1):
+Bezel support
+Added Hide_Emu support
+
+GameCom (updated to v2.0.2):
+Module now supports i18n translations
+Added Hide_Emu support
+
+GeePee32 (updated to v2.0.2):
+Updated SetKeyDelay to use HL's function call instead
+Added Hide_Emu support
+
+Higan (updated to v2.0.3):
+Added Hide_Emu support
+
+JavaGX4000 (initial release):
+Added Hide_Emu support
+
+JPcsp (updated to v2.0.2):
+Updated SetKeyDelay to use HL's function call instead
+Added Hide_Emu support
+
+Magic Engine (updated to v2.0.1):
+Added Hide_Emu support
+
+Makaron (updated to v2.0.2):
+Now uses Rotate global function
+
+MakaronEX (updated to v2.0.2):
+Module now supports i18n translations
+Removed HideLoading module setting
+Added Hide_Emu support
+
+MAME (updated to v2.1.3):
+Bezel support improved
+Changed script error to log on MAME validity check
+HLSL mode can now be configured on a per-game basis if desired
+Removed HideConsole module setting
+Added Hide_Emu support which also hides the console now when enabled
+
+Mednafen (updated to v2.1.0):
+Better bezel support
+Better vertical games support
+Added Hide_Emu support
+
+MESS (updated to v2.2.4):
+Bezel support improved
+Changed script error to log on MESS validity check.
+Added support for Tomy Tutor, Sord M5, Sinclair ZX81, Sony PocketStation, Tandy TRS-80 Color Computer 3 and JungleTac Sport Vii (thanks zerojay)
+Added support for Nintendo Famicom Disk System, Sega SG-1000
+Renamed Matra Alice 32 to Matra & Hachette Alice
+Added Hide_Emu support
+Sega Mega Drive ident changed to megadriv as genesis is for USA only
+Module now auto-changes the ident if booting Genesis and a Europe rom is booted or if booting Mega Drive and a USA rom is booted
+Fixed PC-Engine CD bios. Now requires Super CD-ROM2 System V3.0 (J).pc to exist in Mess's roms folder.
+Added option to set asia or japan bios for each rom for SNK Neo Geo AES
+
+MFME (updated to v2.0.5):
+Updated notes
+Removed ResizeHeight and Width keys from module and ISD
+Added Hide_Emu support
+
+Nebula (updated to v2.0.1):
+Updated SetKeyDelay to use HL's function call instead
+Added Hide_Emu support
+
+NeoRaine (updated to v2.0.3):
+Added Hide_Emu support
+
+Nestopia (updated to v2.0.2):
+Added Bezel support (Thanks Nosh)
+Added Hide_Emu support
+
+NullDC (updated to v2.0.3):
+Module now uses OpenRom()
+Added Hide_Emu support
+
+OpenMSX (updated to v2.0.2):
+Added Hide_Emu support
+
+ParaJVE (updated to v2.0.2):
+Bezel support (thanks rfancella)
+Disables emu's chassis setting when bezels are enabled automatically (avoids double bezel)
+Added Hide_Emu support
+Loading logo hidden when HL setting Hide Emu is enabled
+
+PCLauncher (updated to v2.1.2):
+Removed Steam and Origin labels
+Added DXWnd support
+
+PCSX2 (updated to v2.1.1):
+Added support for portable and standard installation modes (thanks ghutch)
+Added Hide_Emu support
+Added support for BZ2 images
+New global module settings: DT_CDVD_Plugin, Image_CDVD_Plugin, Linuz_CDVD_Plugin, gs, pad, spu2, usb, fw, dev9
+If you do not have every ps2 game using the same CDVD plugin, it's suggested to set the 3 global CDVD settings for this module.
+
+Phoenix (updated to v2.0.3):
+Module now supports i18n translations
+Added Hide_Emu support
+
+PicoDrive (updated to v2.0.2):
+Storywave Change Pages support
+Bezel support improved
+Added Hide_Emu support
+
+Pinball FX2 (updated to v2.0.2):
+Updated SetKeyDelay to use HL's function call instead
+Added Dxwnd function calls
+Added # of Players GUI at launch
+Added new module option Sleep_Base_Time. This is a Sleep Multiplier which affects all the module sleeps. If you have issues with the game picking up the keys sent from HL.
+
+Project64 v1.6.1 (updated to v2.0.2):
+Module now supports i18n translations
+Removed HideLoading module setting
+Added Hide_Emu support
+
+Project64 v2.x (updated to v2.0.1):
+Renamed Project64 (v2.0.0.14) ahk and isd to Project64 (v2.x). Make sure your Global Emulator.ini file reflects the changed module name.
+Emu version updated to v2.1.0.1
+Added Hide_Emu support
+Added Bezel support
+StatusBar is removed when bezels are enabled
+Halt/Restore from HP now use PostMessages to toggle fullscreen
+CloseProcess now uses PostMessage instead of WinClose because WinClose often left the process running in memory
+
+Project64 v20120726 build 57 (updated to v2.0.2):
+Module now supports i18n translations
+Removed HideLoading module setting
+Added Hide_Emu support
+
+Project Tempest (updated to v2.0.2):
+Updated SetKeyDelay to use HL's function call instead
+Module now supports i18n translations
+Removed SelectGameMode from module and isd and now using OpenRom instead
+Added Hide_Emu support
+Added Bezel support (thanks rfancella!)
+
+PSXFin: (updated to v2.0.2)
+Updated SetKeyDelay to use HL's function call instead
+Added Hide_Emu support
+
+RetroArch (updated to v2.1.8):
+Added support for MAME, Neo Geo, Panasonic 3DO, Atari Jaguar, Atari Lynx, Atari 2600, Atari 5200, Atari 7800, Atari ST, Microsoft MSX, & Sony PSP
+Added support for RetroArch style relative folders in its config file
+Added ccd as a valid extension to PC Engine-CD and TurboGrafx-CD
+Changed default libretro for 32x to picodrive as genesis plus doesn't work with 32x
+Added Hide_Emu support
+RetroArch ahk and isd updated to reflect Nosh's additions that allow fine-tuned control of the mupen64 core
+Included a Nintendo 64.ini which contains the per-rom settings required to get a lot of games to run.
+Fix a bad path when checking for bios files.
+Sega Model 2 Emulator (updated to v2.0.7):
+Updated measure text function call
+Removed # of Players GUI from module because it is global now
+Added Hide_Emu support
+
+SSF (updated to v2.1.0):
+Updated SetKeyDelay to use HL's function call instead
+Added OpenRom() support for ST-V loading
+Added Hide_Emu support
+
+Steem SSE (updated to v2.0.1):
+Previously known as Steem, but that emu is discontinued.
+Added Bezel settings (thanks rfancella)
+Bezel support (thanks rfancella)
+Added Hide_Emu support
+
+Stella (updated to v2.0.2):
+Module rewritten
+Better settings support
+Bezel support
+Added Hide_Emu support
+
+T98-Next (updated to v2.0.5):
+Added Hide_Emu support
+Added Touhou Project to supported systems list
+
+VBALink (updated to v2.0.4):
+Updated measure text function call
+Removed # of Players GUI from module because it is global now
+Added Hide_Emu support
+
+Virtual APF (updated to v2.0.2):
+Updated SetKeyDelay to use HL's function call instead
+Added Hide_Emu support
+
+Virtual Aquarius (updated to v2.0.1):
+Updated SetKeyDelay to use HL's function call instead
+Module now supports i18n translations
+Removed SelectGameMode from module and isd and now using OpenRom instead
+Added Hide_Emu support
+
+Virtual Jaguar (updated to v2.1.0):
+Adapted for more recent version
+Bezel support
+Added Hide_Emu support
+
+WinAPE (updated to v2.0.2):
+Added Bezel Support (thanks rfancella)
+Added Hide_Emu support
+Added i8n support
+Several new settings added to support more CPC game specific configurations (thanks wahoobrian)
+Reworked the ISD (thanks wahoobrian)
+Tape support added (thanks wahoobrian)
+
+WinUAE (updated to v2.1.0):
+Added Bezel Support (thanks rfancella)
+Added Hide_Emu support
+
+WinUAE Loader (updated to v2.0.1):
+Added Bezel Support (thanks rfancella)
+Added Hide_Emu support
+
+WinVice (updated to v2.0.3):
+Added Bezel Support (thanks rfancella)
+Updated SetKeyDelay to use HL's function call instead
+Removed SelectGameMode from module and isd and now using OpenRom instead
+Added Hide_Emu support
+vsf is now a supported extension and should be placed before d64 and tap in your romextensions for this emu
+Commodore 128 now supported (thanks wahoobrian)
+
+XMillennium (updated to v2.0.1):
+Added Hide_Emu support
+
+XMillenniumR (initial release):
+Added Hide_Emu support
+
+Yape (initial release):
+Added Hide_Emu support
+
+ZSNESw (updated to v2.0.4):
+Updated SetKeyDelay to use HL's function call instead
+Added Hide_Emu support
+
 v3.0.1.0
 
 HyperLaunch:
