@@ -1,5 +1,5 @@
-MCRC=B332A4A2
-MVersion=1.0.6
+MCRC=BBE65FBE
+MVersion=1.0.7
 
 RunAHKKeymapper(method) {
 	Global ahkDefaultProfile,ahkFEProfile,ahkRomProfile,ahkEmuProfile,ahkSystemProfile,ahkHyperLaunchProfile,ahkLauncherPath,ahkLauncherExe,keymapperFrontEndProfile
@@ -595,7 +595,7 @@ RunJoyToKey(keymapperPath,keymapperExe,Profile="") {
 		IniWrite, 1, %keymapperPath%\JoyToKey.ini, LastStatus, StartIconified
 	; Finally we start the keymapper with the cfg profile we found
 	If Profile
-		Run(keymapperExe .  """" . Profile . """", keymapperPath)
+		Run(keymapperExe . " """ . Profile . """", keymapperPath)
 	Log("RunJoyToKey - Ended")
 }
 
