@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true emulator will run fullscreen.</DESCRIPTION>
+						</KEY>
+						<KEY name="HideConsole" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Hiding of the Console Window</DESCRIPTION>
+						</KEY>
+						<KEY name="FullSpeedWhenLoading" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Speeds up emulator when loading cassette, disk or laserdisc games. On laserdisc games if you set it to true the intro of these games will also speed up so if you want to watch the intro make sure you set it to false.</DESCRIPTION>
+						</KEY>
+						<KEY name="DefaultMachine" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Default Machine Model to use for this system. You can get the valid machine names from share\machines folder</DESCRIPTION>
+						</KEY>
+						<KEY name="ScalerAlgorithm" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Scale Algorithm to use.</DESCRIPTION>
+							<VALUES>
+								<VALUE>simple</VALUE>
+								<VALUE>ScaleNx</VALUE>
+								<VALUE>SaI</VALUE>
+								<VALUE>hq</VALUE>
+								<VALUE>hqlite</VALUE>
+								<VALUE>RGBTriplet</VALUE>
+								<VALUE>TV</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="ScaleFactor" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Scale Factor to apply to the internal MSX resolution. ScaleFactor=1 means 320x240 pixels.</DESCRIPTION>
+							<VALUES>
+								<VALUE>1</VALUE>
+								<VALUE>2</VALUE>
+								<VALUE>3</VALUE>
+								<VALUE>4</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="SoundDriver" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select the sound output driver to use. If you are getting sound glitches try changing the driver</DESCRIPTION>
+							<VALUES>
+								<VALUE>directx</VALUE>
+								<VALUE>sdl</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="ApplyScalerOnFullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you want the scaler to be applied to both fullscreen and windowed modes</DESCRIPTION>
+						</KEY>
+						<KEY name="Joystick1" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select what type of controller do you have on joystick port 1</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">none</VALUE>
+								<VALUE description="2-button Emulated Joystick">keyjoystick1</VALUE>
+								<VALUE description="2-button Joystick">joystick1</VALUE>
+								<VALUE description="Mouse">mouse</VALUE>
+								<VALUE description="Arkanoid Pad">arkanoidpad</VALUE>
+								<VALUE description="Trackball">trackball</VALUE>
+								<VALUE description="Touchpad">touchpad</VALUE>
+							</VALUES>						
+						</KEY>
+						<KEY name="Joystick2" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select what type of controller do you have on joystick port 2</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">none</VALUE>
+								<VALUE description="2-button Emulated Joystick">keyjoystick2</VALUE>
+								<VALUE description="2-button Joystick">joystick2</VALUE>
+								<VALUE description="Mouse">mouse</VALUE>
+								<VALUE description="Arkanoid Pad">arkanoidpad</VALUE>
+								<VALUE description="Trackball">trackball</VALUE>
+								<VALUE description="Touchpad">touchpad</VALUE>
+							</VALUES>							
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="%SystemName%" required="false">
+		<INITYPE>System</INITYPE>
+		<SYSTEMS>
+			<SYSTEM>Microsoft MSX</SYSTEM>
+			<SYSTEM>Microsoft MSX2</SYSTEM>
+			<SYSTEM>Microsoft MSX2+</SYSTEM>
+			<SYSTEM>Microsoft MSX Turbo-R</SYSTEM>
+		</SYSTEMS>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true emulator will run fullscreen.</DESCRIPTION>
+						</KEY>
+						<KEY name="HideConsole" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Hiding of the Console Window</DESCRIPTION>
+						</KEY>
+						<KEY name="FullSpeedWhenLoading" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Speeds up emulator when loading cassette, disk or laserdisc games. On laserdisc games if you set it to true the intro of these games will also speed up so if you want to watch the intro make sure you set it to false.</DESCRIPTION>
+						</KEY>
+						<KEY name="DefaultMachine" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Default Machine Model to use for this system. You can get the valid machine names from share\machines folder</DESCRIPTION>
+						</KEY>
+						<KEY name="ScalerAlgorithm" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Scale Algorithm to use.</DESCRIPTION>
+							<VALUES>
+								<VALUE>simple</VALUE>
+								<VALUE>ScaleNx</VALUE>
+								<VALUE>SaI</VALUE>
+								<VALUE>hq</VALUE>
+								<VALUE>hqlite</VALUE>
+								<VALUE>RGBTriplet</VALUE>
+								<VALUE>TV</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="ScaleFactor" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Scale Factor to apply to the internal MSX resolution. ScaleFactor=1 means 320x240 pixels.</DESCRIPTION>
+							<VALUES>
+								<VALUE>1</VALUE>
+								<VALUE>2</VALUE>
+								<VALUE>3</VALUE>
+								<VALUE>4</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="ApplyScalerOnFullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you want the scaler to be applied to both fullscreen and windowed modes</DESCRIPTION>
+						</KEY>
+						<KEY name="SoundDriver" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select the sound output driver to use. If you are getting sound glitches try changing the driver</DESCRIPTION>
+							<VALUES>
+								<VALUE>directx</VALUE>
+								<VALUE>sdl</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Joystick1" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select what type of controller do you have on joystick port 1</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">none</VALUE>
+								<VALUE description="2-button Emulated Joystick">keyjoystick1</VALUE>
+								<VALUE description="2-button Joystick">joystick1</VALUE>
+								<VALUE description="Mouse">mouse</VALUE>
+								<VALUE description="Arkanoid Pad">arkanoidpad</VALUE>
+								<VALUE description="Trackball">trackball</VALUE>
+								<VALUE description="Touchpad">touchpad</VALUE>
+							</VALUES>							
+						</KEY>
+						<KEY name="Joystick2" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select what type of controller do you have on joystick port 2</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">none</VALUE>
+								<VALUE description="2-button Emulated Joystick">keyjoystick2</VALUE>
+								<VALUE description="2-button Joystick">joystick2</VALUE>
+								<VALUE description="Mouse">mouse</VALUE>
+								<VALUE description="Arkanoid Pad">arkanoidpad</VALUE>
+								<VALUE description="Trackball">trackball</VALUE>
+								<VALUE description="Touchpad">touchpad</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Machine" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Machine Model to use for this specific game. You can get the valid machine names from share\machines folder</DESCRIPTION>
+						</KEY>
+						<KEY name="RomType" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Mapper type for the rom image inserted on cart A. Only use this if the emulator cannot auto-detect it.</DESCRIPTION>
+							<VALUES>
+								<VALUE>ASCII8</VALUE>
+								<VALUE>ASCII16</VALUE>
+								<VALUE>ASCII16SRAM8</VALUE>
+								<VALUE>GenericKonami</VALUE>
+								<VALUE>Konami</VALUE>
+								<VALUE>KonamiSCC</VALUE>
+								<VALUE>MSXDOS2</VALUE>
+								<VALUE>Normal</VALUE>
+							</VALUES>	
+						</KEY>
+						<KEY name="ExtensionCart" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Special Extension Cartridge that needs to be plugged. If you look in the share/extensions directory, you will see all the extensions known to openMSX</DESCRIPTION>
+							<VALUES>
+								<VALUE description="SCC">scc</VALUE>
+								<VALUE description="SCC+">scc+</VALUE>
+								<VALUE description="PAC">pac</VALUE>
+								<VALUE description="FMPAC">fmpac</VALUE>
+								<VALUE description="RAM Extension 4MB">ram4mb</VALUE>
+								<VALUE description="External RAM 64KB">ram64k</VALUE>
+								<VALUE description="Sony External SSDD 3.5'Drive HBD-50">Sony_HBD-50</VALUE>
+								<VALUE description="Sony External SSDD 3.5'Drive HBD-F1">Sony_HBD-F1</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Joystick1" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select what type of controller do you have on joystick port 1. Overrides the global configuration</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">none</VALUE>
+								<VALUE description="2-button Emulated Joystick">keyjoystick1</VALUE>
+								<VALUE description="2-button Joystick">joystick1</VALUE>
+								<VALUE description="Mouse">mouse</VALUE>
+								<VALUE description="Arkanoid Pad">arkanoidpad</VALUE>
+								<VALUE description="Trackball">trackball</VALUE>
+								<VALUE description="Touchpad">touchpad</VALUE>
+							</VALUES>							
+						</KEY>
+						<KEY name="Joystick2" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select what type of controller do you have on joystick port 2. Overrides the global configuration</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">none</VALUE>
+								<VALUE description="2-button Emulated Joystick">keyjoystick2</VALUE>
+								<VALUE description="2-button Joystick">joystick2</VALUE>
+								<VALUE description="Mouse">mouse</VALUE>
+								<VALUE description="Arkanoid Pad">arkanoidpad</VALUE>
+								<VALUE description="Trackball">trackball</VALUE>
+								<VALUE description="Touchpad">touchpad</VALUE>
+							</VALUES>						
+						</KEY>
+						<KEY name="DualDiskLoad" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true and the game has more than 1 disk, the 2nd disk will be inserted in drive b at startup.</DESCRIPTION>
+						</KEY>
+						<KEY name="DiskSwapDrive" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Disk Drive to use for when inserting new disks in MultiGame.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Drive A">A</VALUE>
+								<VALUE description="Drive B">B</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

@@ -1,10 +1,10 @@
 MEmu = Pinball FX2
 MEmuV = N/A
 MURL = http://www.pinballfx.com/
-MAuthor = djvj
-MVersion = 2.0
-MCRC = AE975C5B
-iCRC = 72934A25
+MAuthor = djvj & bleasby
+MVersion = 2.0.2
+MCRC = DF1AB8F1
+iCRC = E55FC3CA
 mId = 635244873683327779
 MSystem = "Pinball FX2","Pinball"
 ;----------------------------------------------------------------------------
@@ -18,60 +18,202 @@ MSystem = "Pinball FX2","Pinball"
 ; Set Skip Checks to "Rom and Emu" when using this module as roms do not exist.
 ;
 ;This module requires BlockInput.exe to exist in your Module Extensions folder. It is used to prevent users from messing up the table selection routine.
+;
+;Windowed mode:
+; - To hide the game selection behind fade the game needs to be run in Windowed mode. The original game does not support windowed mode, therefore it is necessary to use the dxwnd for forcing this mode. Use this option at your own risk, as this could be eventually considered as an injected code and may end up in a banned licence (I did not had any problem in this subject until now). 
+; - Windowed mode requires to set the dxwnd to run as admin. Go to the folder HyperLaunch\Module Extensions\dxwnd\dxwnd.exe and righht click the executable to set it to run as admin.
+; - If dxwnd is not closing, that is because dxwnd cannot be closed by a script not also running as admin. So make sure HyperLaunch.exe is set to run as admin also by right clicking it and going to Properties -> Compatibility -> Run as Administrator should be checked.
+; - It is also required to set on the modules options the WindowedResolution to match your Pinball FX2 game resolution. If you don't do it, the game will crash as dxwnd will not be able to set the windowed mode.
+;
+; Optional Fade recomended settings:
+; - On Windowed mode you can use these settings: Progress Bar - Enable = true, Progress Bar - Non 7z Progress Bar Time = 21500 (adjust this to the average time that it takes for getting to the table on your computer, mine was 21,5 secds), Fade In - Exit Delay = 3500 (time that the Pinball FX2 takes for loading the selected table. HL will know when Pinball FX2 reaches this screen but if you want to hide it also, you will need to set this option). This will give the user a approximate measure of how much time it takes for the table be ready to be played and the fade screen will only disapears after the Pinball FX2 table is ready to be played.
+;
+; Bezel:
+; Bezel uses the fixResMode and requires the use of windowed mode, therefore you need to set the resolution on the module options to the same resolution that you set in Pinball FX2.
+; By default, the module will use the resolution of your desktop. Your bezel is most likely smaller, so make sure to set the correct windowed resolution in HLHQ for this module.
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
+
+settingsFile := modulePath . "\" . moduleName . ".ini"
+multiplayerMenu := IniReadCheck(settingsFile, "Settings", "Multiplayer_Menu","true",,1)
+if (multiplayerMenu = "true")
+	SelectedNumberofPlayers := NumberOfPlayersSelectionMenu(4)
+
 FadeInStart()
 
 pinballTitleClass := "Pinball FX2 ahk_class PxWindowClass"
-settingsFile := modulePath . "\" . moduleName . ".ini"
+Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
+WindowedResolution := IniReadCheck(settingsFile, "Settings", "Windowed_Resolution",A_ScreenWidth . "x" . A_ScreenHeight,,1)
+initialTableX := IniReadCheck(settingsFile, "Settings", "Initial_Table_X",1,,1)
+initialTableY := IniReadCheck(settingsFile, "Settings", "Initial_Table_Y",1,,1)
 sleepLogo := IniReadCheck(settingsFile, "Settings", "Sleep_Until_Logo",12000,,1)
 sleepMenu := IniReadCheck(settingsFile, "Settings", "Sleep_Until_Main_Menu",1500,,1)
+sleepBaseTime := IniReadCheck(settingsFile, "Settings", "Sleep_Base_Time",1,,1)
 tableNavX := IniReadCheck(settingsFile, romName, "x",,,1)
 tableNavY := IniReadCheck(settingsFile, romName, "y",,,1)
+tableNavX2 := IniReadCheck(settingsFile, romName, "x2",,,1)
+tableNavY2 := IniReadCheck(settingsFile, romName, "y2",,,1)
+
+BezelStart("fixResMode")
 
 CheckFile(moduleExtensionsPath . "\BlockInput.exe")
 
 If (tableNavX = "" || tableNavY = "")
 	ScriptError("This game is not configured in the module ini. Please set the grid coordinates in HyperLaunchHQ so HyperLaunch can launch the game for you")
- 
+
+DXWndGame :=
+If (!Fullscreen || Fullscreen = "false"){
+	StringSplit, WindowedResolution, WindowedResolution, x
+	DxwndIniRW("target", "sizx", WindowedResolution1,, "Pinball FX2")
+	DxwndIniRW("target", "sizy", WindowedResolution2,, "Pinball FX2")
+	If executable
+		DxwndIniRW("target", "path", emuPath . "\" . executable,, "Pinball FX2")
+	If !executable {
+		If !steamPath
+			GetSteamPath()
+		DxwndIniRW("target", "path", steamPath . "\SteamApps\common\Pinball FX2\Pinball FX2.exe",, "Pinball FX2")
+	}
+	DxwndRun()
+	DXWndGame := 1
+}
+
 If executable {
 	Log("Module - Running Pinball FX2 as a stand alone game and not through Steam as an executable was defined.")
 	Run(executable, emuPath)
 } Else {
-	Log("Module - Running Pinball FX2 through Steam applaunch.")
-	RegRead, steamPath, HKLM, Software\Valve\Steam, InstallPath
-	Run("Steam.exe -applaunch 226980", steamPath)
+	Log("Module - Running Pinball FX2 through Steam.")
+	Steam(226980)
 }
+
+; attempt to hide window components of the DMD (unable to prove this works still)
+; DllCall( "RegisterShellHookWindow", UInt,hWnd )
+; MsgNum := DllCall( "RegisterWindowMessage", Str,"SHELLHOOK" )
+; OnMessage( MsgNum, "ShellMessage" )
 
 WinWait(pinballTitleClass)
 WinWaitActive(pinballTitleClass)
 
 Run("BlockInput.exe 30", moduleExtensionsPath)	; start the tool that blocks all input so user cannot interrupt the launch process for 30 seconds
-SetKeyDelay, 50	; required otherwise pinball fx2 does not respond to the keys
+SetKeyDelay(50*sleepBaseTime)	; required otherwise pinball fx2 does not respond to the keys
 Sleep, %sleepLogo%	; sleep till Pinball FX2 logo appears
-ControlSend,, {Esc Down}{Esc Up}200{Enter Down}{Enter Up}, %pinballTitleClass%	; cancel pinball fx2 logo
+ControlSend,, {Esc Down}{Esc Up}, %pinballTitleClass%	
+Sleep, % 200*sleepBaseTime
+ControlSend,, {Enter Down}{Enter Up}, %pinballTitleClass%	; cancel pinball fx2 logo
 Sleep, %sleepMenu%	; sleep till table select window appears
 
-Loop % tableNavX-1
-{	ControlSend,, {Right Down}{Right Up}, %pinballTitleClass%
-	Sleep, 50
+tableNavX := tableNavX - initialTableX
+tableNavY := tableNavY - initialTableY
+If (tableNavX<0){
+	Loop % -tableNavX
+	{	ControlSend,, {Left Down}{Left Up}, %pinballTitleClass%
+		Sleep, % 50*sleepBaseTime
+	}
+} Else {
+	Loop % tableNavX
+	{	ControlSend,, {Right Down}{Right Up}, %pinballTitleClass%
+		Sleep, % 50*sleepBaseTime
+	}
 }
-Loop % tableNavY-1
-{	ControlSend,, {Down Down}{Down Up}, %pinballTitleClass%
-	Sleep, 50
+If (tableNavY<0){
+	Loop % -tableNavY
+	{	ControlSend,, {Up Down}{Up Up}, %pinballTitleClass%
+		Sleep, % 50*sleepBaseTime
+	}
+} Else {
+	Loop % tableNavY
+	{	ControlSend,, {Down Down}{Down Up}, %pinballTitleClass%
+		Sleep, % 50*sleepBaseTime
+	}
 }
-ControlSend,, {Enter Down}{Enter Up}, %pinballTitleClass%	; select game
-Sleep, 500
+	
+If (tableNavX2) and (tableNavY2)
+{	iniRead,currentFootballTable, %settingsFile%, Settings, Current_Football_Table
+	if !(currentFootballTable=romName){
+		ControlSend,, {Enter Down}{Enter Up}, %pinballTitleClass%	; select game
+		Sleep, % 500*sleepBaseTime
+		ControlSend,, {Up Down}{Up Up}, %pinballTitleClass%	; Move up
+		Sleep, % 50*sleepBaseTime
+		ControlSend,, {Enter Down}{Enter Up}, %pinballTitleClass%	; select team
+		iniRead,initialX,%settingsFile%,%currentFootballTable%,X2, 1
+		iniRead,initialY,%settingsFile%,%currentFootballTable%,Y2, 1
+		NavX2 := tableNavX2 - initialX
+		NavY2 := tableNavY2 - initialY
+		Sleep, % 500*sleepBaseTime
+		If (NavX2<0){
+			Loop % -NavX2
+			{	ControlSend,, {Left Down}{Left Up}, %pinballTitleClass%
+				Sleep, % 50*sleepBaseTime
+			}
+		} Else {
+			Loop % NavX2
+			{	ControlSend,, {Right Down}{Right Up}, %pinballTitleClass%
+				Sleep, % 50*sleepBaseTime
+			}
+		}
+		If (NavY2<0){
+			Loop % -NavY2
+			{	ControlSend,, {Up Down}{Up Up}, %pinballTitleClass%
+				Sleep, % 50*sleepBaseTime
+			}
+		} Else {
+			Loop % NavY2
+			{	ControlSend,, {Down Down}{Down Up}, %pinballTitleClass%
+				Sleep, % 50*sleepBaseTime
+			}
+		}
+		iniWrite, %romName%, %settingsFile%, Settings, Current_Football_Table
+	}
+}
+
+ControlSend,, {Enter Down}{Enter Up}, %pinballTitleClass%	; select team or game
+Sleep, % 750*sleepBaseTime
+
+If (tableNavX2 && tableNavY2)
+	If !(currentFootballTable = romName)
+		ControlSend,, {Down Down}{Down Up}, %pinballTitleClass%	; down to play single game
+
+If (SelectedNumberofPlayers > 1)  ; select number of players
+{	Sleep, % 50*sleepBaseTime
+	ControlSend,, {Down Down}{Down Up}, %pinballTitleClass%		; down to hot seat
+	ControlSend,, {Enter Down}{Enter Up}, %pinballTitleClass%	; select hot seat
+	Sleep, % 500*sleepBaseTime
+	Loop % SelectedNumberofPlayers-2
+	{	ControlSend,, {Down Down}{Down Up}, %pinballTitleClass%   ;select number of players
+		Sleep, % 50*sleepBaseTime
+	}
+}
+
 ControlSend,, {Enter Down}{Enter Up}, %pinballTitleClass%	; start game
+
 Process("Close", "BlockInput.exe")	; end script that blocks all input
 
+BezelDraw()
 FadeInExit()
+
 Process("WaitClose", "Pinball FX2.exe")
+BezelExit()
 FadeOutExit()
 ExitModule()
     
-    
+
+ShellMessage(wParam, lParam) {
+	Log("DEBUG - " . wParam,3)
+	; msgbox % wParam
+	If (wParam = 1)
+		IfWinExist Pinball FX2 DotMatrix
+		{
+			WinSet, Style, -0xC00000 ; hide title bar
+			WinSet, Style, -0x800000 ; hide thin-line border
+			WinSet, Style, -0x400000 ; hide dialog frame
+			WinSet, Style, -0x40000 ; hide thickframe/sizebox
+			;WinMove, , , 0, 0, 1920, 1080
+		} 
+}
+
 CloseProcess:
 	FadeOutStart()
 	WinClose(pinballTitleClass)
+	If DXWndGame
+		DxwndClose()
 Return

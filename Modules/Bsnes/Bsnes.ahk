@@ -2,8 +2,8 @@ MEmu = Bsnes
 MEmuV =  v0.87
 MURL = http://byuu.org/bsnes/
 MAuthor = djvj
-MVersion = 2.0.2
-MCRC = A8675C53
+MVersion = 2.0.3
+MCRC = BCB1B09
 iCRC = 77DA7529
 MID = 635038268877141627
 MSystem = "Nintendo Entertainment System","Nintendo Famicom""Nintendo Game Boy","Nintendo Game Boy Color","Nintendo Satellaview","Nintendo Super Famicom","Super Nintendo Entertainment System"
@@ -31,6 +31,7 @@ FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
 
+hideEmuObj := Object("ahk_class phoenix_window",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
@@ -78,12 +79,15 @@ If controllerReassigningEnabled = true
 	SaveFile(newCfg,bsnesFile)
 }
 
+HideEmuStart()
+
 Run(executable . " """ . romPath . "\" . romName . romExtension . """", emuPath)
 
 WinWait(romName . " ahk_class phoenix_window")
 WinWaitActive(romName . " ahk_class phoenix_window")
 
 BezelDraw()
+HideEmuEnd()
 FadeInExit()
 
 ; WinMove, 0, 0 ; when going from fullscreen to window, bsnes still has its menubar hidden, uncomment this to access it

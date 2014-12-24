@@ -2,8 +2,8 @@ MEmu = Emma 02
 MEmuV =  v1.18
 MURL = http://www.emma02.hobby-site.com/
 MAuthor = brolly
-MVersion = 2.0.1
-MCRC = 868D853D
+MVersion = 2.0.2
+MCRC = 8744EDDD
 iCRC = 1E716C97
 MID = 635038268887179980
 MSystem = "RCA Studio II"
@@ -22,12 +22,15 @@ FadeInStart()
 settingsFile := modulePath . "\" . moduleName . ".ini"
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 
+hideEmuObj := Object("Studio II ahk_class wxWindowNR",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 If romExtension in %7zFormats%
 	ScriptError(MEmu . " only supports extracted roms. Please extract your roms or turn on 7z for this system as the emu is being sent this extension: """ . romExtension . """")
 
 options := "-p" . (If Fullscreen = "true" ? " -f" : "") . " -u -c=studio"
+
+HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
 
 Run(executable . " " . options . " -s """ . (If romExtension = .txt ? "" : romPath . "\" . romName . romExtension) . """", emuPath)
 
@@ -37,7 +40,7 @@ WinWaitActive("Studio II ahk_class wxWindowNR")
 ;Built-In Games require a button press for selection
 ;Make sure you change the keys below to match your own configuration!
 If romExtension = .txt
-{	SetKeyDelay, 50
+{	SetKeyDelay(50)
 	Sleep, 1500 ;Increase if game doesn't start automatically
 	If romName contains Doodle
 		SendInput, {k down}{k up}	; Press 1 on P1 controller
@@ -51,6 +54,7 @@ If romExtension = .txt
 		SendInput, {z down}{z up}	; Press 5 on P1 controller
 }
 
+HideEmuEnd()
 FadeInExit()
 Process("WaitClose", executable)
 7zCleanUp()

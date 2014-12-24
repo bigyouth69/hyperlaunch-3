@@ -2,8 +2,8 @@ MEmu = GameCom
 MEmuV = v29/12/1998
 MURL =
 MAuthor = djvj
-MVersion = 2.0.1
-MCRC = BE94305
+MVersion = 2.0.2
+MCRC = EE3D4FA5
 iCRC = CCF77D79
 MID = 635038268895496903
 MSystem = "Tiger Game.com"
@@ -19,9 +19,11 @@ MSystem = "Tiger Game.com"
 ; F3 - Mute
 ; F4 - Pause (this seems to reboot the console also)
 ; Arrows - Digital pad
+; Mouse - Stylus/Touchscreen
 ; Aiming in Resident Evil 2 goes with Z. Then A is shooting
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
@@ -36,7 +38,29 @@ winLang := mLang[MLanguage]	; search object for the MLanguage associated to the 
 If !winLang
 	ScriptError("Your chosen language is: """ . MLanguage . """. It is not one of the known supported languages for this module: " . moduleName)
 
+BezelStart()
 hideEmuObj := Object("Game.Com Emulator ahk_class #32770",1,"Windows - No Disk ahk_class #32770",0,"Disassemble Window ahk_class #32770",0,winLang . " ahk_class #32770",0,"Input ahk_class #32770",0)	;Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
+
+emuIniFile := CheckFile(emuPath . "\gamecom.ini")
+emuIni := LoadProperties(emuIniFile)	; load the config into memory
+
+;Disable MemOpen window as this will cause the Disassemble window to never become active
+currentMemOpen := ReadProperty(emuIni,"MemOpen")
+currentDisasmOpen := ReadProperty(emuIni,"DisasmOpen")
+
+emuIniEdited := "false"
+If (currentMemOpen = "Yes")
+{
+	WriteProperty(emuIni,"MemOpen", "No")
+	emuIniEdited := "true"
+}
+If (currentDisasmOpen = "No")
+{
+	WriteProperty(emuIni,"DisasmOpen", "Yes")
+	emuIniEdited := "true"
+}
+If (emuIniEdited = "true")
+	SaveProperties(emuIniFile,emuIni)
 
 If fadeIn = true
 {
@@ -55,10 +79,10 @@ errorLvl := Run(executable, emuPath, "UseErrorLevel")
 
 HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
 
-If errorLvl != 0
-{	MsgBox, 48, Exe Error, Error launching emulator`, closing script., 5
-	ExitModule()
-}
+;If errorLvl != 0
+;{	MsgBox, 48, Exe Error, Error launching emulator`, closing script., 5
+;	ExitModule()
+;}
 
 If BlockInput = true
 	BlockInput, On
@@ -85,19 +109,11 @@ DisWindow:
 WinWait("Disassemble Window ahk_class #32770") ; waiting for disassemble window to open
 WinWaitActive("Disassemble Window ahk_class #32770")
 WinMenuSelectItem, Disassemble Window ahk_class #32770,, File, Load BIN File
-WinWait(winLang . " ahk_class #32770") ; Waiting for window to open to select the rom
-WinWaitActive(winLang . " ahk_class #32770")
-Loop { ; looping this so we don't need a sleep timer, usually 2nd loop text gets pasted in correctly
-	ControlGetText, edit1Text, Edit1, %winLang% ahk_class #32770
-	If ( edit1Text = romPath . "\" . romName . romExtension )
-		Break
-	Sleep, 100
-	ControlSetText, Edit1, %romPath%\%romName%%romExtension%, %winLang% ahk_class #32770
-}
-Send {Enter}
+OpenROM(winLang . " ahk_class #32770", romPath . "\" . romName . romExtension)
 WinWait("Input ahk_class #32770") ; waiting for input box to appear
 WinWaitActive("Input ahk_class #32770")
 Send {Enter}
+
 WinWait("Disassemble Window ahk_class #32770") ; waiting for disassemble window to come back into focus
 WinWaitActive("Disassemble Window ahk_class #32770")
 If ShowIntro = true
@@ -124,6 +140,7 @@ If AutoStartGame = true
 If Fullscreen = true
 	MaximizeWindow("Game.Com Emulator ahk_class #32770")
 
+BezelDraw()
 HideEmuEnd()
 FadeInExit()
 
@@ -131,6 +148,7 @@ BlockInput, Off
 Process("WaitClose", executable)
 
 7zCleanUp()
+BezelExit()
 FadeOutExit()
 ExitModule()
 

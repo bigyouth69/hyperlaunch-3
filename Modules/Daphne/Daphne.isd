@@ -60,69 +60,68 @@
 						<KEY name="params" required="false" nullable="true">
 							<KEYTYPE>String</KEYTYPE>
 						</KEY>
-						<KEY name="version" required="false">
+						<KEY name="version" required="false" nullable="true">
 							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>Use this if you want to use a different rom for this version of the game. Useful if you want to have several entries for the same game with different settings in your database.</DESCRIPTION>
+							<DESCRIPTION>Use this if you want to use a different rom for this version of the game. Useful if you want to have several entries for the same game with different settings in your database. Those with * are recommended.</DESCRIPTION>
 							<VALUES>
-								<VALUE>ace</VALUE>
-								<VALUE>ace_a</VALUE>
-								<VALUE>ace_a2</VALUE>
-								<VALUE>ace91</VALUE>
-								<VALUE>aceeuro</VALUE>
-								<VALUE>astron</VALUE>
-								<VALUE>astronp</VALUE>
-								<VALUE>badlandp</VALUE>
-								<VALUE>badlands</VALUE>
-								<VALUE>bega</VALUE>
-								<VALUE>begar1</VALUE>
-								<VALUE>blazer</VALUE>
-								<VALUE>cliff</VALUE>
-								<VALUE>cliffalt</VALUE>
-								<VALUE>cobra</VALUE>
-								<VALUE>cobraab</VALUE>
-								<VALUE>cobraconv</VALUE>
-								<VALUE>cobram3</VALUE>
-								<VALUE>dle11</VALUE>
-								<VALUE>dle21</VALUE>
-								<VALUE>dle21</VALUE>
-								<VALUE>esh</VALUE>
-								<VALUE>eshalt</VALUE>
-								<VALUE>eshalt2</VALUE>
-								<VALUE>galaxy</VALUE>
-								<VALUE>galaxyp</VALUE>
-								<VALUE>gpworld</VALUE>
-								<VALUE>interstellar</VALUE>
-								<VALUE>lair</VALUE>
-								<VALUE>lair_a</VALUE>
-								<VALUE>lair_b</VALUE>
-								<VALUE>lair_c</VALUE>
-								<VALUE>lair_d</VALUE>
-								<VALUE>lair_e</VALUE>
-								<VALUE>lair_f</VALUE>
-								<VALUE>lair_ita</VALUE>
-								<VALUE>lair_n1</VALUE>
-								<VALUE>lair_x</VALUE>
-								<VALUE>lair2</VALUE>
-								<VALUE>lair2_211</VALUE>
-								<VALUE>lair2_300</VALUE>
-								<VALUE>lair2_314</VALUE>
-								<VALUE>lair2_315</VALUE>
-								<VALUE>lair2_316_euro</VALUE>
-								<VALUE>lair2_318</VALUE>
-								<VALUE>lair2_318</VALUE>
-								<VALUE>lair2_319_euro</VALUE>
-								<VALUE>lair2_319_span</VALUE>
-								<VALUE>laireuro</VALUE>
-								<VALUE>mach3</VALUE>
-								<VALUE>roadblaster</VALUE>
-								<VALUE>sae</VALUE>
-								<VALUE>sdq</VALUE>
-								<VALUE>sdqshort</VALUE>
-								<VALUE>sdqshortalt</VALUE>
-								<VALUE>tq</VALUE>
-								<VALUE>tq_alt</VALUE>
-								<VALUE>tq_swear</VALUE>
-								<VALUE>uvt</VALUE>
+								<VALUE description="Space Ace: Rev A3 *">ace</VALUE>
+								<VALUE description="Space Ace: Enhanced V1.0">sae</VALUE>
+								<VALUE description="Space Ace: Rev A">ace_a</VALUE>
+								<VALUE description="Space Ace: Rev A2">ace_a2</VALUE>
+								<VALUE description="Space Ace: Remake (1991)">ace91</VALUE>
+								<VALUE description="Space Ace: European">aceeuro</VALUE>
+								<VALUE description="Astron Belt: Hitachi *">astron</VALUE>
+								<VALUE description="Astron Belt: Pioneer">astronp</VALUE>
+								<VALUE description="Badlands: Standard *">badlands</VALUE>
+								<VALUE description="Badlands: Prototype">badlandp</VALUE>
+								<VALUE description="Bega's Battle: Revision 3 *">bega</VALUE>
+								<VALUE description="Bega's Battle: Revision 1">begar1</VALUE>
+								<VALUE description="Cliff Hanger: Standard *">cliff</VALUE>
+								<VALUE description="Cliff Hanger: Alternate #1">cliffalt</VALUE>
+								<VALUE description="Cobra Command: Astron Belt Hardware *">cobraab</VALUE>
+								<VALUE description="Cobra Command: Dedicated/Bega's Battle Hardware">cobra</VALUE>
+								<VALUE description="Cobra Command: Cliff Hanger/Interstellar/Dragon's Lair Conversion">cobraconv</VALUE>
+								<VALUE description="Cobra Command: MACH 3 Hardware">cobram3</VALUE>
+								<VALUE description="Esh's Aurumilla: Standard *">esh</VALUE>
+								<VALUE description="Esh's Aurumilla: Alternate #1">eshalt</VALUE>
+								<VALUE description="Esh's Aurumilla: Alternate #2">eshalt2</VALUE>
+								<VALUE description="Galaxy Ranger: Hitachi *">galaxy</VALUE>
+								<VALUE description="Galaxy Ranger: Pioneer">galaxyp</VALUE>
+								<VALUE description="GP World: Standard *">gpworld</VALUE>
+								<VALUE description="Interstellar: Standard *">interstellar</VALUE>
+								<VALUE description="Dragon's Lair: Rev F2 *">lair</VALUE>
+								<VALUE description="Dragon's Lair: Enhancement 1.1">dle11</VALUE>
+								<VALUE description="Dragon's Lair: Enhancement 2.1">dle21</VALUE>
+								<VALUE description="Dragon's Lair: Enhancement 2.1 - prototype mode">dle21</VALUE>
+								<VALUE description="Dragon's Lair: Rev A">lair_a</VALUE>
+								<VALUE description="Dragon's Lair: Rev B">lair_b</VALUE>
+								<VALUE description="Dragon's Lair: Rev C">lair_c</VALUE>
+								<VALUE description="Dragon's Lair: Rev D">lair_d</VALUE>
+								<VALUE description="Dragon's Lair: Rev E">lair_e</VALUE>
+								<VALUE description="Dragon's Lair: Rev F">lair_f</VALUE>
+								<VALUE description="Dragon's Lair: Italian">lair_ita</VALUE>
+								<VALUE description="Dragon's Lair: Beta 1 (serial #1)">lair_n1</VALUE>
+								<VALUE description="Dragon's Lair: Beta 2">lair_x</VALUE>
+								<VALUE description="Dragon's Lair: European">laireuro</VALUE>
+								<VALUE description="Dragon's Lair 2: Version 3.19 *">lair2</VALUE>
+								<VALUE description="Dragon's Lair 2: Version 2.11">lair2_211</VALUE>
+								<VALUE description="Dragon's Lair 2: Version 3.00">lair2_300</VALUE>
+								<VALUE description="Dragon's Lair 2: Version 3.14">lair2_314</VALUE>
+								<VALUE description="Dragon's Lair 2: Version 3.15">lair2_315</VALUE>
+								<VALUE description="Dragon's Lair 2: Version 3.16 (European)">lair2_316_euro</VALUE>
+								<VALUE description="Dragon's Lair 2: Version 3.18">lair2_318</VALUE>
+								<VALUE description="Dragon's Lair 2: Version 3.19 (European)">lair2_319_euro</VALUE>
+								<VALUE description="Dragon's Lair 2: Version 3.19 (Spanish)">lair2_319_span</VALUE>
+								<VALUE description="M.A.C.H. 3: Standard *">mach3</VALUE>
+								<VALUE description="Road Blaster: Standard *">roadblaster</VALUE>
+								<VALUE description="Star Blazer: Standard *">blazer</VALUE>
+								<VALUE description="Super Don Quix-ote: Standard *">sdq</VALUE>
+								<VALUE description="Super Don Quix-ote: Shortened Scenes">sdqshort</VALUE>
+								<VALUE description="Super Don Quix-ote: Shortened Scenes, Alternate">sdqshortalt</VALUE>
+								<VALUE description="Thayer's Quest: Standard *">tq</VALUE>
+								<VALUE description="Thayer's Quest: Alternate">tq_alt</VALUE>
+								<VALUE description="Thayer's Quest: 'Swearing' ROM Hack">tq_swear</VALUE>
+								<VALUE description="Us vs Them: Standard *">uvt</VALUE>
 							</VALUES>
 						</KEY>
 					</KEYS>

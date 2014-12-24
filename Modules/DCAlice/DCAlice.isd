@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true emulator will run fullscreen.</DESCRIPTION>
+						</KEY>
+						<KEY name="RestoreTaskbar" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Emu hides taskbar for an unknown reason when you go fullscreen (verified on xp and 7). If true this will unhide it.</DESCRIPTION>
+						</KEY>
+						<KEY name="Model" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set the machine model you want to use. Make sure you create separate dcalice.ini files in the emulator folder, one for each model you want to use. Naming should be dcalice_MODEL.ini (eg dcalice_alice32.ini, dcalice_alice4k.ini, etc.). If such a file doesn't exist, dcalice.ini will be used.</DESCRIPTION>
+							<VALUES>
+								<VALUE>alice32</VALUE>
+								<VALUE>alice4k</VALUE>
+								<VALUE>alice90</VALUE>
+								<VALUE>mc10</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Model" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set the machine model you want to use. Make sure you create separate dcalice.ini files in the emulator folder, one for each model you want to use. Naming should be dcalice_MODEL.ini (eg dcalice_alice32.ini, dcalice_alice4k.ini, etc.). If such a file doesn't exist, dcalice.ini will be used.</DESCRIPTION>
+							<VALUES>
+								<VALUE>alice32</VALUE>
+								<VALUE>alice4k</VALUE>
+								<VALUE>alice90</VALUE>
+								<VALUE>mc10</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Command" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Command needed to start the game.</DESCRIPTION>
+							<VALUES>
+								<VALUE>CLOAD+RUN</VALUE>
+								<VALUE>CLOADM+EXEC</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

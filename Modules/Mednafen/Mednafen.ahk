@@ -2,9 +2,9 @@ MEmu = Mednafen
 MEmuV =  v0.9.31 WIP
 MURL = http://mednafen.sourceforge.net/
 MAuthor = djvj
-MVersion = 2.0.9
-MCRC = DAAB2BB2
-iCRC = 1ECCF5E8
+MVersion = 2.1.0
+MCRC = C50D0FA7
+iCRC = 6BB3C8AD
 MID = 635038268903923913
 MSystem = "Atari Lynx","Bandai Wonderswan","Bandai Wonderswan Color","NEC PC Engine","NEC PC Engine-CD","NEC PC-FX","NEC SuperGrafx","NEC TurboGrafx-16","NEC TurboGrafx-CD","Nintendo Entertainment System","Nintendo Famicom","Nintendo Famicom Disk System","Nintendo Game Boy","Nintendo Game Boy Advance","Nintendo Game Boy Color","Nintendo Super Famicom","Nintendo Virtual Boy","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","SNK Neo Geo Pocket","SNK Neo Geo Pocket Color","Sony PlayStation","Super Nintendo Entertainment System"
 ;----------------------------------------------------------------------------
@@ -24,6 +24,12 @@ MSystem = "Atari Lynx","Bandai Wonderswan","Bandai Wonderswan Color","NEC PC Eng
 ; the key configuration.  Also see mednafen.cfg to change other keys such
 ; as the exit key.
 ;
+; Windows Aero:
+; Since v0.9.33, the emu disables aero when launching mednafen in an effort to improve performance. This can also cause flashing among other issues namely bezel support not working.
+; http://forum.fobby.net/index.php?t=msg&goto=3411&
+; You can disable Desktop Composition by editing mednafen.cfg and adding this line to it:
+; video.disable_composition 0
+
 ; Atari Lynx:
 ; Create a folder called "firmware" in your mednafen folder and place lynxboot.img in there
 ;
@@ -84,33 +90,37 @@ vDriver := IniReadCheck(settingsFile, "Settings", "vDriver","opengl",,1)				; op
 xRes := IniReadCheck(settingsFile, "Settings", "xRes",0,,1)
 yRes := IniReadCheck(settingsFile, "Settings", "yRes",0,,1)
 
-stretch := If Stretch ? ("-" . ident . ".stretch " . Stretch) : ""
-vDriver := If vDriver ? ("-vdriver " . vDriver) : ""
-xRes := If xRes ? ("-" . ident . ".xres " . xRes) : ""
-yRes := If yRes ? ("-" . ident . ".yres " yRes) : ""
+stretch := If Stretch ? (" -" . ident . ".stretch " . Stretch) : ""
+vDriver := If vDriver ? (" -vdriver " . vDriver) : ""
+xRes := If xRes ? (" -" . ident . ".xres " . xRes) : ""
+yRes := If yRes ? (" -" . ident . ".yres " yRes) : ""
+
+;Defining screen orientation
+gameRes := IniReadCheck(A_ScriptDir . "\Settings\" systemName . "\resolutions.ini", dbname, "Resolution",,,1)  
+StringSplit, res, gameRes, x ; res1=Width  	res2=Height 
+
+if ((ident = "lynx") or (ident = "wsan"))
+	rotateScreen := If ((IniReadCheck(settingsFile, romName, "RotateScreen","") = "true") or (res2>res1)) ? " -" . ident . ".rotateinput 1" : ""
 
 If ident = lynx	; this needs to be before BezelStart so we can tell it if we need to rotate the screen or not
-{	rotateScreen := IniReadCheck(settingsFile, romName, "RotateScreen","false",,1)	; also remove all systemName section support, using systemName ini files instead, like MESS module
-	rotateScreen := If rotateScreen = "true" ? "-lynx.rotateinput 1" : ""
 	CheckFile(emuPath . "\firmware\lynxboot.img","Cannot find the Atari Lynx bios file required to use this system:`n" . emuPath . "\firmware\lynxboot.img")
-}
 
 BezelStart(,,(If rotateScreen ? 1:""))
 
-emuFullscreen := If Fullscreen = "true" ? "-fs 1" : "-fs 0"	; This needs to stay after BezelStart
+emuFullscreen := If Fullscreen = "true" ? " -fs 1" : " -fs 0"	; This needs to stay after BezelStart
 
 If ident1 = pce
-	sgfxMode := If (systemName = "NEC SuperGrafx" && romExtension != sgx) ? "-pce.forcesgx 1"  : ""
+	sgfxMode := If (systemName = "NEC SuperGrafx" && romExtension != sgx) ? " -pce.forcesgx 1"  : ""
 
 If ident2 = pce
 {	PCE_CD_Bios := IniReadCheck(settingsFile, "Bios", "PCE_CD_Bios","syscard3.pce",,1)		; Bios, placed in the bios subfolder of the emu, required for these systems: NEC PC Engine-CD & NEC TurboGrafx-CD
 	CheckFile(emuPath . "\firmware\" . PCE_CD_Bios ,"Cannot find the PCE_CD_Bios  file you have defined in the module:`n" . emuPath . "\firmware\" . PCE_CD_Bios)
-	pceCDBios := If PCE_CD_Bios ? ("-pce.cdbios ""firmware\"  . PCE_CD_Bios  . """") : ""
+	pceCDBios := If PCE_CD_Bios ? (" -pce.cdbios ""firmware\"  . PCE_CD_Bios  . """") : ""
 }
 If ident = pcfx
 {	PCFX_Bios := IniReadCheck(settingsFile, "Bios", "PCFX_Bios","pcfxbios.bin",,1)			; Bios, placed in the bios subfolder of the emu, required for NEC PC-FX
 	CheckFile(emuPath . "\firmware\" . PCFX_Bios ,"Cannot find the PCFX_Bios  file you have defined in the module:`n" . emuPath . "\firmware\" . PCFX_Bios)
-	pcfxBios := If PCFX_Bios ? ("-pcfx.bios ""firmware\"  . PCFX_Bios  . """") : ""
+	pcfxBios := If PCFX_Bios ? (" -pcfx.bios ""firmware\"  . PCFX_Bios  . """") : ""
 }
 
 If ident = psx	; only need these for Sony PlayStation, must check If these files exist, otherwise mednafan doesn't launch and HL gets stuck
@@ -120,68 +130,44 @@ If ident = psx	; only need these for Sony PlayStation, must check If these files
 	CheckFile(emuPath . "\firmware\" . NA_Bios,"Cannot find the NA_Bios file you have defined in the module:`n" . emuPath . "\firmware\" . NA_Bios)
 	CheckFile(emuPath . "\firmware\" . EU_Bios,"Cannot find the EU_Bios file you have defined in the module:`n" . emuPath . "\firmware\" . EU_Bios)
 	CheckFile(emuPath . "\firmware\" . JP_Bios,"Cannot find the JP_Bios file you have defined in the module:`n" . emuPath . "\firmware\" . JP_Bios)
-	naBios := If NA_Bios ? ("-psx.bios_na ""firmware\" . NA_Bios . """") : ""
-	euBios := If EU_Bios ? ("-psx.bios_eu ""firmware\" .  EU_Bios . """") : ""
-	jpBios := If JP_Bios ? ("-psx.bios_jp ""firmware\"  . JP_Bios . """") : ""
+	naBios := If NA_Bios ? (" -psx.bios_na ""firmware\" . NA_Bios . """") : ""
+	euBios := If EU_Bios ? (" -psx.bios_eu ""firmware\" .  EU_Bios . """") : ""
+	jpBios := If JP_Bios ? (" -psx.bios_jp ""firmware\"  . JP_Bios . """") : ""
 }
 
 If bezelPath ; defining xscale and yscale relative to the bezel windowed mode
-{	If ident = lynx
-	{	If !rotateScreen
-		{	bezelXres := IniReadCheck(settingsFile, "Settings", "Bezel_X_Res",160,,1)	; Controls width of the emu's window, relative to the bezel's window
-			bezelYres := IniReadCheck(settingsFile, "Settings", "Bezel_Y_Res",102,,1)	; Controls height of the emu's window, relative to the bezel's window
-		} Else {
-			bezelXres := IniReadCheck(settingsFile, "Settings", "Bezel_X_Vertical_Res",198,,1)	; Only for Atari Lynx vertical games - Controls height of the emu's window, relative to the bezel's vertical window
-			bezelYres := IniReadCheck(settingsFile, "Settings", "Bezel_Y_Vertical_Res",164,,1)	; Only for Atari Lynx vertical games - Controls width of the emu's window, relative to the bezel's vertical window
+{	If res1
+		baseWidth := res1 , baseHeight := res2
+	Else {
+			baseWidthArray := [] 
+			baseWidthArray["lynx", "width"] := 160 , baseWidthArray["lynx", "height"] := 102
+			baseWidthArray["wswan", "width"] := 224 , baseWidthArray["wswan", "height"] := 144
+			baseWidthArray["pce", "width"] := 288 , baseWidthArray["pce", "height"] := 231
+			baseWidthArray["pcfx", "width"] := 341 , baseWidthArray["pcfx", "height"] := 480
+			baseWidthArray["nes", "width"] := 298 , baseWidthArray["nes", "height"] := 240
+			baseWidthArray["gb", "width"] := 160 , baseWidthArray["gb", "height"] := 144
+			baseWidthArray["gba", "width"] := 240 , baseWidthArray["gba", "height"] := 160
+			baseWidthArray["snes", "width"] := 256 , baseWidthArray["snes", "height"] := 224
+			baseWidthArray["vb", "width"] := 384 , baseWidthArray["vb", "height"] := 224
+			baseWidthArray["gg", "width"] := 160 , baseWidthArray["gg", "height"] := 144
+			baseWidthArray["md", "width"] := 320 , baseWidthArray["md", "height"] := 480
+			baseWidthArray["sms", "width"] := 256 , baseWidthArray["aaa", "height"] := 240
+			baseWidthArray["ngp", "width"] := 160 , baseWidthArray["ngp", "height"] := 152
+			baseWidthArray["psx", "width"] := 640 , baseWidthArray["psx", "height"] := 480
+			baseWidth := (If rotateScreen ? baseWidthArray[ident,"height"]:baseWidthArray[ident,"width"])
+			baseHeight := (If rotateScreen ? baseWidthArray[ident,"width"]:baseWidthArray[ident,"height"])
 		}
-	} Else If ident = wswan
-	{	bezelXres := IniReadCheck(settingsFile, "Settings", "Bezel_X_Res",224,,1)
-		bezelYres := IniReadCheck(settingsFile, "Settings", "Bezel_Y_Res",144,,1)
-	} Else If ident = pce
-	{	bezelXres := IniReadCheck(settingsFile, "Settings", "Bezel_X_Res",288,,1)
-		bezelYres := IniReadCheck(settingsFile, "Settings", "Bezel_Y_Res",231,,1)
-	} Else If ident = pcfx
-	{	bezelXres := IniReadCheck(settingsFile, "Settings", "Bezel_X_Res",341,,1)
-		bezelYres := IniReadCheck(settingsFile, "Settings", "Bezel_Y_Res",480,,1)
-	} Else If ident = nes
-	{	bezelXres := IniReadCheck(settingsFile, "Settings", "Bezel_X_Res",298,,1)
-		bezelYres := IniReadCheck(settingsFile, "Settings", "Bezel_Y_Res",240,,1)
-	} Else If ident = gb
-	{	bezelXres := IniReadCheck(settingsFile, "Settings", "Bezel_X_Res",160,,1)
-		bezelYres := IniReadCheck(settingsFile, "Settings", "Bezel_Y_Res",144,,1)
-	} Else If ident = gba
-	{	bezelXres := IniReadCheck(settingsFile, "Settings", "Bezel_X_Res",240,,1)
-		bezelYres := IniReadCheck(settingsFile, "Settings", "Bezel_Y_Res",160,,1)
-	} Else If ident = snes
-	{	bezelXres := IniReadCheck(settingsFile, "Settings", "Bezel_X_Res",256,,1)
-		bezelYres := IniReadCheck(settingsFile, "Settings", "Bezel_Y_Res",224,,1)
-	} Else If ident = vb
-	{	bezelXres := IniReadCheck(settingsFile, "Settings", "Bezel_X_Res",384,,1)
-		bezelYres := IniReadCheck(settingsFile, "Settings", "Bezel_Y_Res",224,,1)
-	} Else If ident = gg
-	{	bezelXres := IniReadCheck(settingsFile, "Settings", "Bezel_X_Res",160,,1)
-		bezelYres := IniReadCheck(settingsFile, "Settings", "Bezel_Y_Res",144,,1)
-	} Else If ident = md
-	{	bezelXres := IniReadCheck(settingsFile, "Settings", "Bezel_X_Res",320,,1)
-		bezelYres := IniReadCheck(settingsFile, "Settings", "Bezel_Y_Res",480,,1)
-	} Else If ident = sms
-	{	bezelXres := IniReadCheck(settingsFile, "Settings", "Bezel_X_Res",256,,1)
-		bezelYres := IniReadCheck(settingsFile, "Settings", "Bezel_Y_Res",240,,1)
-	} Else If ident = ngp
-	{	bezelXres := IniReadCheck(settingsFile, "Settings", "Bezel_X_Res",160,,1)
-		bezelYres := IniReadCheck(settingsFile, "Settings", "Bezel_Y_Res",152,,1)
-	} Else If ident = psx
-	{	bezelXres := IniReadCheck(settingsFile, "Settings", "Bezel_X_Res",640,,1)
-		bezelYres := IniReadCheck(settingsFile, "Settings", "Bezel_Y_Res",480,,1)
-	}
+	bezelXres := IniReadCheck(settingsFile, "Settings" . "|" . romName, "Bezel_X_Res",baseWidth,,1)	; Controls width of the emu's window, relative to the bezel's window
+	bezelYres := IniReadCheck(settingsFile, "Settings" . "|" . romName, "Bezel_Y_Res",baseHeight,,1)	; Controls height of the emu's window, relative to the bezel's window
 	xscale := round( bezelScreenWidth / bezelXres , 2)
 	yscale := round( bezelScreenHeight / bezelYres , 2)
-	xscale := "-" . ident . ".xscale " . xscale
-	yscale := "-" . ident . ".yscale " . yscale
+	xscale := " -" . ident . ".xscale " . xscale
+	yscale := " -" . ident . ".yscale " . yscale
 }
 
 ;----------------------------------------------------------------------------
 
+hideEmuObj := Object("ahk_class SDL_app",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 ; Mount the CD using DaemonTools
@@ -192,13 +178,16 @@ If ((romExtension = ".cue" || romExtension = ".ccd" || romExtension = ".iso") &&
 	useDT = 1
 }
 
-Run(executable . " " . emuFullscreen . " " . stretch . " " . vDriver . " " . (If Fullscreen = "true" ? xRes . " " . yRes : xscale . " " . yscale) . " " . sgfxMode . " " . naBios . " " . euBios . " " . jpBios . " " . pceCDBios . " " . pcfxBios . " " . rotateScreen . " " . (If useDT ? "-physcd " . dtDriveLetter . ":" : """" . romPath . "\" . romName . romExtension . """"), emuPath)
+HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
+
+Run(executable . " " . emuFullscreen . stretch . vDriver . (If Fullscreen = "true" ? xRes . " " . yRes : xscale . " " . yscale) . sgfxMode . naBios . euBios . jpBios . pceCDBios . pcfxBios . rotateScreen . (If useDT ? " -physcd " . dtDriveLetter . ":" : " """ . romPath . "\" . romName . romExtension . """"), emuPath)
 
 ; WinWait, % (If ident2 ? ("Mednafen") : (romName)) . " ahk_class SDL_app"
 ; WinWaitActive, % (If ident2 ? ("Mednafen") : (romName)) . " ahk_class SDL_app"
 WinWait("ahk_class SDL_app")
 WinWaitActive("ahk_class SDL_app")
 BezelDraw()
+HideEmuEnd()
 FadeInExit()
 
 errorLvl := Process("Exist", executable)
@@ -216,7 +205,7 @@ ExitModule()
 
 MultiGame:
 	If useDT {
-		SetKeyDelay, 50
+		SetKeyDelay(50)
 		Send, {F8 down}{F8 up}	; eject disc in mednafen - MIGHT WANT TO TRY DOING A CONTROLSEND
 		DaemonTools("unmount")
 		Sleep, 500	; Required to prevent  DT from bugging

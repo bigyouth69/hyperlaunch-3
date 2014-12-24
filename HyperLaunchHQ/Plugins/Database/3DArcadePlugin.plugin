@@ -10,6 +10,7 @@ namespace HyperEmu.Database
     [DisplayName("3D Arcade")]
     [FrontendExecutable("fe3darcade.exe")]
     [PluginDescription("Loads from 3D Arcade atf databases")]
+    [HyperLaunchPluginName("")]
     public class _3DArcadePlugin : DefaultDatabasePlugin
     {
         Dictionary<String, String> new_to_old_system_names = new Dictionary<String, String>();
@@ -28,15 +29,15 @@ namespace HyperEmu.Database
             return @"\cfg\lists\" + system + ".atf";
         }
 
-        public override void createSystem(String system_name, String system_description)
-        {
-            //Creating systems isn't supported yet
-            return;
-        }
-
         public override void renameFrontendSystem(String old_system_name, String new_system_name, String new_system_description)
         {
             //Renaming systems isn't supported yet
+            return;
+        }
+
+        public override void createSystemDatabase(String system, List<GameXml> games, bool overwrite)
+        {
+            //Creating databases isn't supported yet
             return;
         }
 
@@ -63,9 +64,15 @@ namespace HyperEmu.Database
                             String system = fields[2];
                             String mapsystem = ini.GetIniValue("Remapping", system, "");
                             system = mapsystem.Trim().Length == 0 ? system : mapsystem;
-                            systemsList.Add(system);
-
-                            new_to_old_system_names.Add(system, fields[2]);
+                            if (!systemsList.Contains(system))
+                            {
+                                systemsList.Add(system);
+                                new_to_old_system_names.Add(system, fields[2]);
+                            }
+                            else
+                            {
+                                duplicateSystemFound(system);
+                            }
                         }
                     }
                 }
@@ -138,6 +145,8 @@ namespace HyperEmu.Database
                                                 GameXml gamexml = new GameXml(name, desc, genre, clone, system);
                                                 if (!gamesList.Contains(gamexml))
                                                     gamesList.Add(gamexml);
+                                                else
+                                                    duplicateGameFound(name, system);
                                             }
                                         }
                                     }

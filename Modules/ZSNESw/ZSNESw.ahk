@@ -2,8 +2,8 @@ MEmu = ZSNESw
 MEmuV =  v1.51
 MURL = http://www.zsnes.com/
 MAuthor = djvj
-MVersion = 2.0.3
-MCRC = 61907E62
+MVersion = 2.0.4
+MCRC = C8A5967D
 iCRC = FF33BDC8
 MID = 635038268938832977
 MSystem = "Super Nintendo Entertainment System"
@@ -58,13 +58,17 @@ If ( DisplayRomInfo != "true" And currentDRI = 1 ) {
 
 SaveProperties(zsnesFile,zsnesIni)	; save zsnesFile to disk
 
+hideEmuObj := Object("ZSNES ahk_class ZSNES",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
+
+HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
 
 Run(executable . " """ . romPath . "\" . romName . romExtension . """", emuPath)
 
 WinWait("ZSNES ahk_class ZSNES")
 WinWaitActive("ZSNES ahk_class ZSNES")
 
+HideEmuEnd()
 FadeInExit()
 Process("WaitClose",executable)
 7zCleanUp()
@@ -79,7 +83,7 @@ SaveFile(text,file) {
 
 CloseProcess:
 	FadeOutStart()
-	SetKeyDelay, 50	; slow down the keys below so the emu can register them
+	SetKeyDelay(50)	; slow down the keys below so the emu can register them
 	SetWinDelay, 50	; don't remember why I needed this
 	Send, {Alt Down}{F4 Down}{F4 Up}{Alt Up} ; No other closing method seems to work, not even ControlSend
 Return

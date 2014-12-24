@@ -1,0 +1,111 @@
+﻿using HyperEmu.Entity;
+using HyperEmu.Ini;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+
+namespace HyperEmu.Database
+{
+    [DisplayName("PinballX")]
+    [FrontendExecutable("pinballx.exe")]
+    [PluginDescription("Loads from PinballX databases")]
+    [HyperLaunchPluginName("")]
+    public class PinballXPlugin : DefaultDatabasePlugin
+    {
+        //This will hold a map between the system names and their respective section name in the main ini file
+        //Will be needed for when renaming systems for instance
+        Dictionary<String, String> system_to_section_names = new Dictionary<String, String>();
+
+        public PinballXPlugin(String HLpath)
+            : base(HLpath)
+        {}
+
+        protected override String getMainDBsubPath()
+        {
+            return @"\Config\PinballX.ini";
+        }
+
+        protected override String getSystemDBsubPath(String system)
+        {
+            return @"\Databases\" + system + @"\" + system + ".xml";
+        }
+
+        public override void renameFrontendSystem(String old_system_name, String new_system_name, String new_system_description)
+        {
+            //Renaming systems isn't supported yet
+            return;
+        }
+
+        //CREATING XML FILE FOR SYSTEM BASED ON ROMPATH AND ROMEXTENSION SET ON HL
+        public virtual bool canCreateSystemDatabase()
+        {
+            return true;
+        }
+        public override void createSystemDatabase(String system, List<GameXml> games, bool overwrite)
+        {
+            //This will create the default XML file in the Databases folder
+            createSystemDatabaseDefault(system, games, overwrite);
+        }
+
+        //LOADING SYSTEMS FROM MAIN MENU INI FILE
+        public override List<String> loadSystems()
+        {
+            //This list will hold the name of all configured systems
+            List<String> systemsList = new List<String>();
+
+            //Clear the mapping hash
+            system_to_section_names.Clear();
+
+            //Absolute Path to the main menu ini file
+            String inifile = getMainDBFullPath();
+            IniLoader ini = new IniLoader(inifile);
+
+            //Find all systems declared in the main menu ini file
+            List<String> sections = ini.ListSections();
+            foreach (String section in sections)
+            {
+                if (section.Equals("FuturePinball", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    if (!systemsList.Contains("Future Pinball"))
+                    {
+                        systemsList.Add("Future Pinball");
+                        system_to_section_names.Add("Future Pinball", section);
+                    }
+                }
+                else if (section.Equals("VisualPinball", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    if (!systemsList.Contains("Visual Pinball"))
+                    {
+                        systemsList.Add("Visual Pinball");
+                        system_to_section_names.Add("Visual Pinball", section);
+                    }
+                }
+                else if (section.StartsWith("System_", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    //This is a system
+                    String systemName = ini.GetIniValue(section, "Name", "");
+                    if (systemName != null && systemName.Trim().Length > 0 && !systemsList.Contains(systemName))
+                    {
+                        systemsList.Add(systemName);
+                        system_to_section_names.Add(systemName, section);
+                    }
+                }
+            }
+            return systemsList;
+        }
+
+        //LOADING GAMES FROM SYSTEM XML FILE
+        public override ObservableCollection<GameXml> loadGames(String system, out bool loaded)
+        {
+            //PinballX uses the default XML format so it's only a matter of calling the default parsing method
+            return loadGamesDefault(system, out loaded);
+        }
+
+        //PATH TO WHEEL IMAGE RELATIVE TO THE FRONTEND FOLDER
+        public override String getSystemLogoSubPath(String system)
+        {
+            return null;
+        }
+
+    }
+}

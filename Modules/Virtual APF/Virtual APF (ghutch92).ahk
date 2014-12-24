@@ -2,8 +2,8 @@ MEmu = VirtualAPF
 MEmuV =  v0.4
 MURL = http://www.oocities.org/emucompboy/
 MAuthor = ghutch92
-MVersion = 2.0
-MCRC = B7800462
+MVersion = 2.0.1
+MCRC = A63B0611
 iCRC = 73727B15
 MID = 635038268930766257
 MSystem = "APF Imagination Machine"
@@ -19,6 +19,7 @@ FadeInStart()
 settingsFile := modulePath . "\" . moduleName . ".ini"
 HideCassetteLoading := IniReadCheck(settingsFile, "Settings", "HideCassetteLoading","true",,1)
 
+hideEmuObj := Object("Open ahk_class #32770",0,"ahk_class VAPF",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 If FileExist(emuPath . "\mc10.ini")
@@ -82,6 +83,8 @@ Else If romExtension in .bin,.rom
 } Else
 	ScriptError("This module does not support " . romExtension . " files")
 
+HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
+
 Run(executable, emuPath)
 
 
@@ -91,7 +94,7 @@ If HideCassetteLoading = true
 WinWaitActive("ahk_class VAPF")
 If romExtension in  .cpf,.wav,.cas,.k7
 {	SetTimer, WaitForDialog, 2
-	SetKeyDelay, 200
+	SetKeyDelay(200)
 	Send, {delete down}{delete up}
 	Send, {C down}{C up}
 	Send,{l down}{l up}{o down}{o up}{a down}{a up}{d down}{d up}{enter down}{enter up}
@@ -105,6 +108,7 @@ If HideCassetteLoading = true
 
 Send, {F12} ;fullscreen
 
+HideEmuEnd()
 FadeInExit()
 Process("WaitClose",executable)
 7zCleanUp()

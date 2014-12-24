@@ -2,10 +2,10 @@ MEmu = NeoRaine
 MEmuV = v1.4.3
 MURL = http://rainemu.swishparty.co.uk/
 MAuthor = brolly & djvj
-MVersion = 2.0.2
-MCRC = FA419DB9
+MVersion = 2.0.3
+MCRC = B6CA058C
 iCRC = 1E716C97
-MID = 635038268907767111
+mId = 635383115607260584
 MSystem = "SNK Neo Geo CD"
 ;-------------------------------------------------------------------------
 ; Notes:
@@ -33,17 +33,21 @@ If ( Fullscreen != "true" And currentFullScreen = 1 )
 Else If ( Fullscreen = "true" And currentFullScreen = 0 )
 	IniWrite, 1, %neoINI%, Display, fullscreen
 
+hideEmuObj := Object("ahk_class SDL_app",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 If romExtension in .7z,.rar
 	ScriptError("NeoRaine only supports zip archives. Either enable 7z support, or extract your games first.")
 
+HideEmuStart()
+
 Run(executable . " -nogui """ . romPath . "\" . romName . romExtension . """", emuPath) ;qs, "Hide")
 
 WinWait("ahk_class SDL_app")
 WinWaitActive("ahk_class SDL_app")
-BezelDraw()
 
+BezelDraw()
+HideEmuEnd()
 FadeInExit()
 Process("WaitClose", executable)
 7zCleanUp()

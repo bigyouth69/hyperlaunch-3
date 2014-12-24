@@ -11,6 +11,14 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
 						</KEY>
+						<KEY name="WindowWidth" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If not fullscreen, width of the window in pixels</DESCRIPTION>
+						</KEY>						
+						<KEY name="WindowHeight" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If not fullscreen, height of the window in pixels</DESCRIPTION>
+						</KEY>
 						<KEY name="WarpKey" required="false" nullable="false">
 							<KEYTYPE>xHotkey</KEYTYPE>
 							<DESCRIPTION>toggle warp speed</DESCRIPTION>
@@ -27,13 +35,21 @@
 							<KEYTYPE>xHotkey</KEYTYPE>
 							<DESCRIPTION>stop tape key</DESCRIPTION>
 						</KEY>
-						<KEY name="SelectGameMode" required="false" nullable="false">
+						<KEY name="bezelTopOffset" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>1 = Uses a loop to detect the Edit Box has the romname and path in it. This doesn't work on all PCs, so if you get stuck at the open rom window, use mode 2. 2 = Uses a simple Ctrl+v to paste the romname and path, then press Enter to load the game.</DESCRIPTION>
-							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-							</VALUES>
+							<DESCRIPTION>If you see part of the emulator window at the top of your playing screen increase this value. If your playing screen is hidden at the top decrease it.</DESCRIPTION>
+						</KEY>
+						<KEY name="bezelBottomOffset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the bottom of your playing screen increase this value. If your playing screen is hidden at the bottom decrease it.</DESCRIPTION>
+						</KEY>
+						<KEY name="bezelLeftOffset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the left of your playing screen increase this value. If your playing screen is hidden at the left decrease it.</DESCRIPTION>
+						</KEY>
+						<KEY name="bezelRightOffset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the right of your playing screen increase this value. If your playing screen is hidden at the right decrease it.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>
@@ -70,6 +86,77 @@
 				</SECTION>
 			</SECTIONS>
 		</INIFILE>		
+		<INIFILE name="Commodore 64" required="false">
+		<INITYPE>System</INITYPE>
+			<SECTIONS>
+				 <SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="WarpKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>toggle warp speed</DESCRIPTION>
+						</KEY>
+						<KEY name="JoySwapKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>swap joystick port</DESCRIPTION>
+						</KEY>
+						<KEY name="StartTapeKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>start tape key</DESCRIPTION>
+						</KEY>
+						<KEY name="StopTapeKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>stop tape key</DESCRIPTION>
+						</KEY>
+						<KEY name="SendCommandDelay" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Time in milliseconds to wait until commands are being type for those cart games that have the Command setting filled in</DESCRIPTION>
+						</KEY>
+						<KEY name="bezelTopOffset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the top of your playing screen increase this value. If your playing screen is hidden at the top decrease it.</DESCRIPTION>
+						</KEY>
+						<KEY name="bezelBottomOffset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the bottom of your playing screen increase this value. If your playing screen is hidden at the bottom decrease it.</DESCRIPTION>
+						</KEY>
+						<KEY name="bezelLeftOffset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the left of your playing screen increase this value. If your playing screen is hidden at the left decrease it.</DESCRIPTION>
+						</KEY>
+						<KEY name="bezelRightOffset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the right of your playing screen increase this value. If your playing screen is hidden at the right decrease it.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="VideoMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Display Format.</DESCRIPTION>
+							<VALUES>
+								<VALUE>NTSC</VALUE>
+								<VALUE>PAL</VALUE>
+							</VALUES>							
+						</KEY>
+						<KEY name="Default Joyport" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Used if rom requires a command after loading is complete to start the game.</DESCRIPTION>
+						</KEY>
+						<KEY name="TrueDriveEmulation" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if rom requires true drive emulation.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>		
+			</SECTIONS>
+		</INIFILE>
 		<INIFILE name="Commodore VIC-20" required="false">
 		<INITYPE>System</INITYPE>
 			<SECTIONS>
@@ -96,17 +183,25 @@
 							<KEYTYPE>xHotkey</KEYTYPE>
 							<DESCRIPTION>stop tape key</DESCRIPTION>
 						</KEY>
-						<KEY name="SelectGameMode" required="false" nullable="false">
-							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>1 = Uses a loop to detect the Edit Box has the romname and path in it. This doesn't work on all PCs, so if you get stuck at the open rom window, use mode 2. 2 = Uses a simple Ctrl+v to paste the romname and path, then press Enter to load the game.</DESCRIPTION>
-							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-							</VALUES>
-						</KEY>
 						<KEY name="SendCommandDelay" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>Time in milliseconds to wait until commands are being type for those cart games that have the Command setting filled in</DESCRIPTION>
+						</KEY>
+						<KEY name="bezelTopOffset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the top of your playing screen increase this value. If your playing screen is hidden at the top decrease it.</DESCRIPTION>
+						</KEY>
+						<KEY name="bezelBottomOffset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the bottom of your playing screen increase this value. If your playing screen is hidden at the bottom decrease it.</DESCRIPTION>
+						</KEY>
+						<KEY name="bezelLeftOffset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the left of your playing screen increase this value. If your playing screen is hidden at the left decrease it.</DESCRIPTION>
+						</KEY>
+						<KEY name="bezelRightOffset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the right of your playing screen increase this value. If your playing screen is hidden at the right decrease it.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>
@@ -204,17 +299,25 @@
 							<KEYTYPE>xHotkey</KEYTYPE>
 							<DESCRIPTION>hotkey used for automatically typing the loading command for tapes that require it (the one you set under the Command key. Default is Ctrl+F12). Make sure you disable Warp Mode before you press it!</DESCRIPTION>
 						</KEY>
-						<KEY name="SelectGameMode" required="false" nullable="false">
-							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>1 = Uses a loop to detect the Edit Box has the romname and path in it. This doesn't work on all PCs, so if you get stuck at the open rom window, use mode 2. 2 = Uses a simple Ctrl+v to paste the romname and path, then press Enter to load the game.</DESCRIPTION>
-							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-							</VALUES>
-						</KEY>
 						<KEY name="SendCommandDelay" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>Time in milliseconds to wait until commands are being type for those games that have the Command setting filled in</DESCRIPTION>
+						</KEY>
+						<KEY name="bezelTopOffset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the top of your playing screen increase this value. If your playing screen is hidden at the top decrease it.</DESCRIPTION>
+						</KEY>
+						<KEY name="bezelBottomOffset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the bottom of your playing screen increase this value. If your playing screen is hidden at the bottom decrease it.</DESCRIPTION>
+						</KEY>
+						<KEY name="bezelLeftOffset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the left of your playing screen increase this value. If your playing screen is hidden at the left decrease it.</DESCRIPTION>
+						</KEY>
+						<KEY name="bezelRightOffset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the right of your playing screen increase this value. If your playing screen is hidden at the right decrease it.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>
@@ -259,6 +362,82 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Set to true if rom requires a reset command after loading is complete to start the game</DESCRIPTION>
 						</KEY>
+					</KEYS>
+				</SECTION>		
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="Commodore 128" required="false">
+		<INITYPE>System</INITYPE>
+			<SECTIONS>
+				 <SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="WarpKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>toggle warp speed</DESCRIPTION>
+						</KEY>
+						<KEY name="JoySwapKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>swap joystick port</DESCRIPTION>
+						</KEY>
+						<KEY name="SendCommandDelay" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Time in milliseconds to wait until commands are being type for those games that have the Command setting filled in</DESCRIPTION>
+						</KEY>
+						<KEY name="bezelTopOffset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the top of your playing screen increase this value. If your playing screen is hidden at the top decrease it.</DESCRIPTION>
+						</KEY>
+						<KEY name="bezelBottomOffset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the bottom of your playing screen increase this value. If your playing screen is hidden at the bottom decrease it.</DESCRIPTION>
+						</KEY>
+						<KEY name="bezelLeftOffset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the left of your playing screen increase this value. If your playing screen is hidden at the left decrease it.</DESCRIPTION>
+						</KEY>
+						<KEY name="bezelRightOffset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the right of your playing screen increase this value. If your playing screen is hidden at the right decrease it.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="VideoMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Display Format.</DESCRIPTION>
+							<VALUES>
+								<VALUE>NTSC</VALUE>
+								<VALUE>PAL</VALUE>
+							</VALUES>							
+						</KEY>
+						<KEY name="Command" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Used if rom requires a command after loading is complete to start the game.</DESCRIPTION>
+						</KEY>
+						<KEY name="ColumnMode" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<VALUES>
+								<VALUE>40</VALUE>
+								<VALUE>80</VALUE>
+							</VALUES>							
+
+							<DESCRIPTION>Set to true if game requires 40 column mode.</DESCRIPTION>
+						</KEY>
+						<KEY name="TrueDriveEmulation" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if rom requires true drive emulation.</DESCRIPTION>
+						</KEY>
+						<KEY name="Commodore64Mode" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if rom requires Commodore64 mode.</DESCRIPTION>
+						</KEY>												
 					</KEYS>
 				</SECTION>		
 			</SECTIONS>

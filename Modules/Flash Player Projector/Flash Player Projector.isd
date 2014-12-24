@@ -4,6 +4,15 @@
 		<INIFILE name="%ModuleName%" required="false">
 			<INITYPE>Module</INITYPE>
 			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
 				<SECTION name="%RomName%" required="false">
 					<SECTIONTYPE>Rom</SECTIONTYPE>
 					<KEYS>

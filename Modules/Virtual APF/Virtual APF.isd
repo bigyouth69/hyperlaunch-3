@@ -7,12 +7,30 @@
 				<SECTION name="Settings" required="false">
 					<SECTIONTYPE>Global</SECTIONTYPE>
 					<KEYS>
-						<KEY name="SelectGameMode" required="false" nullable="false" minLength="1" maxLength="2">
-							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>1 = Uses a loop to detect the Edit Box has the romname and path in it. This doesn't work on all PCs, so if you get stuck at the open rom window, use mode 2. 2 = Uses a simple Ctrl+v to paste the romname and path, then press Enter to load the game.</DESCRIPTION>
+						<KEY name="Fullscreen" required="false" nullable="false">
+								<KEYTYPE>Boolean</KEYTYPE>
+								<DESCRIPTION>Set to true for fullscreen.</DESCRIPTION>
+						</KEY>
+						<KEY name="WindowSize" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Window Dimension (Windowed Mode only).</DESCRIPTION>
 							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
+								<VALUE description="100%">1</VALUE>
+								<VALUE description="200%">2</VALUE>
+								<VALUE description="300%">3</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="TapeLoadingMethod" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Tape Loading method, should be CLOAD+RUN for most tapes, only some professional APF tapes seem to use different loading methods</DESCRIPTION>
+							<VALUES>
+								<VALUE description="CLOAD+RUN">1</VALUE>							
+								<VALUE description="RUN+CLOAD+GOTO100">2</VALUE>
 							</VALUES>
 						</KEY>
 					</KEYS>

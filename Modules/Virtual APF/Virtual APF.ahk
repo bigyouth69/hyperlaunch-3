@@ -2,9 +2,9 @@ MEmu = Virtual APF
 MEmuV =  v0.4
 MURL = http://www.oocities.org/emucompboy/
 MAuthor = brolly
-MVersion = 2.0
-MCRC = F879A832
-iCRC = A17E58D9
+MVersion = 2.0.2
+MCRC = C27BE7E4
+iCRC = 8046E4E1
 MID = 635038268930235818
 MSystem = "APF Imagination Machine"
 ;----------------------------------------------------------------------------
@@ -16,24 +16,34 @@ MSystem = "APF Imagination Machine"
 ; Make sure you don't have any cart loaded and the system is booting into the built-in Basic ROM with Enable ROM hack fast I/O checked
 ; Press your FR button (delete by default) type CLOAD, hit enter, hit enter again to get the file browser dialog, select your tape 
 ; file, once you see OK on the screen type RUN and hit enter again to start the game.
+; Some games might require you to type RUN before CLOAD to clear the memory/pointers. This happens on at least some APF Professional tapes
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
-SelectGameMode := IniReadCheck(settingsFile, "Settings", "SelectGameMode","1",,1)		;1 = Uses a loop to detect the Edit Box has the romname and path in it. This doesn't work on all PCs, so if you get stuck at the open rom window, use mode 2. 2 = Uses a simple Ctrl+v to paste the romname and path, then press Enter to load the game.
-
-7z(romPath, romName, romExtension, 7zExtractPath)
+Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
+WindowSize := IniReadCheck(settingsFile, "Settings", "WindowSize","2",,1)
+TapeLoadingMethod := IniReadCheck(settingsFile, romName, "TapeLoadingMethod","1",,1)
 
 mcIni := CheckFile(emuPath . "\mc10.ini")
 IniRead, DefaultIni, %emuPath%\mc10.ini, CONFIG, ini
-
 emuIni := CheckFile(emuPath . "\" . DefaultIni)
 
-enhancedflag := IniReadCheck(settingsFile, "MEMORY", "enhancedflag","1",,1)
-usebuiltinromflag := IniReadCheck(settingsFile, "MEMORY", "usebuiltinromflag","1",,1)
-carttype := IniReadCheck(settingsFile, "MEMORY", "carttype","1",,1)
-enableromhacksflag := IniReadCheck(settingsFile, "MEMORY", "enableromhacksflag","1",,1)
+enhancedflag := IniReadCheck(emuIni, "MEMORY", "enhancedflag","1",,1)
+usebuiltinromflag := IniReadCheck(emuIni, "MEMORY", "usebuiltinromflag","1",,1)
+carttype := IniReadCheck(emuIni, "MEMORY", "carttype","1",,1)
+enableromhacksflag := IniReadCheck(emuIni, "MEMORY", "enableromhacksflag","1",,1)
+
+dialogOpen := i18n("dialog.open")	; Looking up local translation
+
+BezelStart("fixResMode")
+
+windowscaling := IniReadCheck(emuIni, "VIDEO", "windowscaling","1",,1)
+
+hideEmuObj := Object(dialogOpen . " ahk_class #32770",0,"ahk_class VAPF",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
+7z(romPath, romName, romExtension, 7zExtractPath)
 
 NewfileNameType=GAMEfilename
 NewEnhancedflag=0
@@ -74,48 +84,40 @@ If carttype != NewCarttype
 	IniWrite, %NewCarttype%, %emuIni%, MEMORY, carttype
 If enableromhacksflag != NewEnableromhacksflag
 	IniWrite, %NewEnableromhacksflag%, %emuIni%, MEMORY, enableromhacksflag
+If windowscaling != WindowSize
+	IniWrite, %WindowSize%, %emuIni%, VIDEO, windowscaling
 
+HideEmuStart()
 Run(executable, emuPath)
 
 WinWait("ahk_class VAPF")
 WinWaitActive("ahk_class VAPF")
 
 If TapeGame = true
-{	Sleep, 200 ;Wait for Basic screen to boot
-	SetKeyDelay, 100
-	Send, {delete down}{delete up} ;Fire button to get past the Basic boot screen
-	Sleep, 200
-	Send,{C down}{C up},{l down}{l up}{o down}{o up}{a down}{a up}{d down}{d up}{enter down}{enter up}
-	Sleep, 200
-	Send, {enter down}{enter up}
-	
-	WinWait("Open ahk_class #32770")
-	WinWaitActive("Open ahk_class #32770")
-
-	If ( SelectGameMode = 1 ) {
-		Loop {
-			ControlGetText, edit1Text, Edit1, Open ahk_class #32770
-			If ( edit1Text = romPath . "\" . romName . romExtension )
-				Break
-			Sleep, 100
-			ControlSetText, Edit1, %romPath%\%romName%%romExtension%, Open ahk_class #32770
-		}
-		Sleep, 500
-		ControlSend, Button1, {Enter}, Open ahk_class #32770 ; Select Open
-	} Else If SelectGameMode = 2
-	{	Clipboard := romPath . "\" . romName . romExtension
-		Send, ^v{Enter}
-	} Else
-		ScriptError("You did not choose a valid SelectGameMode.`nOpen the module and set the mode at the top.")
-
+{	Sleep, 250 ;Wait for Basic screen to boot
+	SetKeyDelay(100)
+	SendCommand("{delete}{Wait:200}") ;Fire button to get past the Basic boot screen
+	If (TapeLoadingMethod = "2")
+		SendCommand("run{Enter}")
+	SendCommand("cload{Enter}{Wait:200}{Enter}")
+	fullRomPath := romPath . "\" . romName . romExtension
+	OpenROM(dialogOpen . " ahk_class #32770", fullRomPath)
 	Sleep, 1500 ;wait for OK to show up, increase this if run is being sent too soon
-	Send, {r down}{r up}{u down}{u up}{n down}{n up}{enter down}{enter up}
+	If (TapeLoadingMethod = "2")
+		SendCommand("goto100{Enter}")
+	Else
+		SendCommand("run{Enter}")
 }
 
-Send, {F12} ;Fullscreen
+If (Fullscreen = "true")
+	Send, {F12} ;Fullscreen
+
+BezelDraw()
+HideEmuEnd()
 FadeInExit()
 Process("WaitClose",executable)
 7zCleanUp()
+BezelExit()
 FadeOutExit()
 ExitModule()
 

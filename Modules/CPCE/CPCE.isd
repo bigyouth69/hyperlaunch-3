@@ -163,7 +163,35 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Sound filtering.</DESCRIPTION>
 						</KEY>
-				</KEYS>
+						<KEY name="Command" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Used if rom requires a command after loading is complete to start the game. Use standard AutoHotkey key names, use {Wait} to pause 500 milliseconds between words/characters. ie, "R{Wait}C" to press the R and C keys with a slight delay between them. Useful for navigating through menus.</DESCRIPTION>
+						</KEY>
+						<KEY name="SendCommandDelay" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Time in milliseconds to wait initially until commands/keystrokes are typed for those games that have the Command setting filled in</DESCRIPTION>
+						</KEY>																		
+						<KEY name="ResetRequired" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Used if rom requires the computer to be reset prior to issuing a startup command.</DESCRIPTION>
+						</KEY>
+						<KEY name="CPM Mode" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Used if rom requires the computer to be started in CP/M mode.</DESCRIPTION>
+						</KEY>
+						<KEY name="TapeSpeedup" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Use faster tape handling. Defaults to true</DESCRIPTION>
+						</KEY>
+						<KEY name="TapeCompatibility" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Used tape compatibility mode.  Some tapes may need this mode to boot properly.</DESCRIPTION>
+						</KEY>
+						<KEY name="LightgunMode" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Use mouse as Gunstick, allowing for playing of lightgun games with a mouse.</DESCRIPTION>
+						</KEY>
+					</KEYS>
 				</SECTION>
 			</SECTIONS>
 		</INIFILE>

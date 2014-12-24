@@ -1,12 +1,13 @@
-MCRC=2050AE27
-MVersion=1.0.4
+MCRC=264ED3BB
+MVersion=1.0.5
 
 FadeInStart(){
 	Gosub, FadeInStart
 	Gosub, CoverFE
 }
 FadeInExit(){
-	SetTimer, FadeInExit, -1	; so we can have emu launch while waiting for fade delay to end
+	gosub, FadeInExit
+	;SetTimer, FadeInExit, -1	; so we can have emu launch while waiting for fade delay to end
 }
 FadeOutStart(){
 	Gosub, FadeOutStart
@@ -101,57 +102,77 @@ FadeInStart:
 			Hotkey, Esc, CloseFadeIn, On
 			XHotKeywrapper(fadeInterruptKey,"CloseFadeIn","ON")
 		}
-
-		fadeInLyr1File := GetFadePicFile("Layer",1)
-		fadeInLyr2File := GetFadePicFile("Layer",2)
-
-		; Create canvas and Image for Layer 1
-		IfExist, % fadeInLyr1File	; If a layer 1 image exists, let's get its dimensions
+		
+		;Acquiring screen info for dealing with rotated menu drawings
+		Gdip_Alt_GetRotatedDimensions(A_ScreenWidth, A_ScreenHeight, screenRotationAngle, baseScreenWidth, baseScreenHeight)
+		Gdip_GetRotatedTranslation(baseScreenWidth, baseScreenHeight, screenRotationAngle, xTranslation, yTranslation)
+		xTranslation:=round(xTranslation), yTranslation:=round(yTranslation)
+		XBaseRes := 1920, YBaseRes := 1080
+		if (((A_screenWidth < A_screenHeight) and ((screenRotationAngle=0) or (screenRotationAngle=180))) or ((A_screenWidth > A_screenHeight) and ((screenRotationAngle=90) or (screenRotationAngle=270))))
+			XBaseRes := 1080, YBaseRes := 1920
+		if !fadeXScale 
+			fadeXScale := baseScreenWidth/XBaseRes
+		if !fadeYScale
+			fadeYScale := baseScreenHeight/YBaseRes
+		Log("Fade screen scale factor: X=" . fadeXScale . ", Y= " . fadeYScale,5)
+		OptionScale(fadeLyr2X, fadeXScale)
+		OptionScale(fadeLyr2Y, fadeYScale)
+		OptionScale(fadeLyr2PicPad, fadeXScale) ;could be Y also
+	
+		fadeInLyr1File := GetFadePicFile("Layer 1",if (fadeUseBackgrounds="true") ? true : false)
+		If fadeLyr2Prefix
+			fadeInLyr2File := GetFadePicFile(fadeLyr2Prefix)
+		
+		; Create canvas for the two first fade in screens
+		Loop, 2 { 
+        CurrentGUI := A_Index
+			If (A_Index=1)
+                Gui, Fade_GUI%CurrentGUI%: -Caption +E0x80000 +LastFound +ToolWindow +AlwaysOnTop 
+			else { 
+				OwnerGUI := CurrentGUI - 1
+                Gui, Fade_GUI%CurrentGUI%: +OwnerFade_GUI%OwnerGUI% -Caption +E0x80000 +LastFound +ToolWindow +AlwaysOnTop
+			}
+            Gui, Fade_GUI%CurrentGUI%: Margin,0,0
+            Gui, Fade_GUI%CurrentGUI%: Show,, fadeLayer%CurrentGUI%
+            Fade_hwnd%CurrentGUI% := WinExist()
+            Fade_hbm%CurrentGUI% := CreateDIBSection(A_ScreenWidth, A_ScreenHeight)
+            Fade_hdc%CurrentGUI% := CreateCompatibleDC()
+            Fade_obm%CurrentGUI% := SelectObject(Fade_hdc%CurrentGUI%, Fade_hbm%CurrentGUI%)
+            Fade_G%CurrentGUI% := Gdip_GraphicsFromhdc(Fade_hdc%CurrentGUI%)
+            Gdip_SetInterpolationMode(Fade_G%CurrentGUI%, 7)
+            Gdip_SetSmoothingMode(Fade_G%CurrentGUI%, 4)
+			Gdip_TranslateWorldTransform(Fade_G%CurrentGUI%, xTranslation, yTranslation)
+            Gdip_RotateWorldTransform(Fade_G%CurrentGUI%, screenRotationAngle)
+        }	
+		fadeLyr1CanvasX := 0 , fadeLyr1CanvasY := 0
+		fadeLyr1CanvasW := baseScreenWidth, fadeLyr1CanvasH := baseScreenHeight
+		pGraphUpd(Fade_G1,fadeLyr1CanvasW,fadeLyr1CanvasH)
+		pBrush := Gdip_BrushCreateSolid("0x" . fadeLyr1Color)
+		Gdip_Alt_FillRectangle(Fade_G1, pBrush, -1, -1, baseScreenWidth+2, baseScreenHeight+2)
+		
+		If FileExist(fadeInLyr1File)	; If a layer 1 image exists, let's get its dimensions
 		{	fadeLyr1Pic := Gdip_CreateBitmapFromFile(fadeInLyr1File)
 			Gdip_GetImageDimensions(fadeLyr1Pic, fadeLyr1PicW, fadeLyr1PicH)
+			GetBGPicPosition(fadeLyr1PicXNew,fadeLyr1PicYNew,fadeLyr1PicWNew,fadeLyr1PicHNew,fadeLyr1PicW,fadeLyr1PicH,fadeLyr1AlignImage)	; get the background pic's new position and size
+			If (fadeLyr1AlignImage = "Stretch and Lose Aspect") {	; 
+				Gdip_Alt_DrawImage(Fade_G1, fadeLyr1Pic, fadeLyr1PicXNew,fadeLyr1PicYNew,fadeLyr1PicWNew+1,fadeLyr1PicHNew+1)
+			} Else If (fadeLyr1AlignImage = "Stretch and Keep Aspect" Or fadeLyr1AlignImage = "Center Width" Or fadeLyr1AlignImage = "Center Height" Or fadeLyr1AlignImage = "Align to Bottom Left" Or fadeLyr1AlignImage = "Align to Bottom Right") {
+				Gdip_Alt_DrawImage(Fade_G1, fadeLyr1Pic, fadeLyr1PicXNew, fadeLyr1PicYNew, fadeLyr1PicWNew+1, fadeLyr1PicHNew+1)
+			} Else If (fadeLyr1AlignImage = "Center") {	; original image size and aspect
+				Gdip_Alt_DrawImage(Fade_G1, fadeLyr1Pic, fadeLyr1PicXNew, fadeLyr1PicYNew, fadeLyr1PicW+1, fadeLyr1PicH+1)
+			} Else If (fadeLyr1AlignImage = "Align to Top Right") {	; place the pic so the top right corner matches the screen's top right corner
+				Gdip_Alt_DrawImage(Fade_G1, fadeLyr1Pic, fadeLyr1PicXNew, 0,fadeLyr1PicWNew+1,fadeLyr1PicHNew)
+			} Else {	; place the pic so the top left corner matches the screen's top left corner, also the default
+				Gdip_Alt_DrawImage(Fade_G1, fadeLyr1Pic, 0, 0,fadeLyr1PicWNew+1,fadeLyr1PicHNew+1)
+			}
 		}
-		hbm1 := CreateDIBSection(A_ScreenWidth,A_ScreenHeight)	; still need to create these if an image does not exist so a background color can be used instead
-		hdc1 := CreateCompatibleDC(), obm1 := SelectObject(hdc1, hbm1)
-		G1 := Gdip_GraphicsFromhdc(hdc1), Gdip_SetInterpolationMode(G1, 7)
-
-		; Create canvas and Image for Layer 2
-		IfExist, % fadeInLyr2File	; If a layer 2 image exists, let's get its dimensions
+		
+		If FileExist(fadeInLyr2File)	; If a layer 2 image exists, let's get its dimensions
 		{	fadeLyr2Pic := Gdip_CreateBitmapFromFile(fadeInLyr2File)
 			Gdip_GetImageDimensions(fadeLyr2Pic, fadeLyr2PicW, fadeLyr2PicH)
 			fadeLyr2PicW := fadeLyr2PicW * fadeLyr2Adjust
 			fadeLyr2PicH := fadeLyr2PicH * fadeLyr2Adjust
 			GetFadePicPosition(fadeLyr2PicX,fadeLyr2PicY,fadeLyr2X,fadeLyr2Y,fadeLyr2PicW,fadeLyr2PicH,fadeLyr2Pos)
-			hbm2 := CreateDIBSection(fadeLyr2PicW,fadeLyr2PicH)
-			hdc2 := CreateCompatibleDC(), obm2 := SelectObject(hdc2, hbm2)
-			G2 := Gdip_GraphicsFromhdc(hdc2), Gdip_SetInterpolationMode(G2, 7)
-		}
-
-		CurrentGUI := 1
-		Gui, Fade_GUI%CurrentGUI%: New, +Hwnd%CurrentGUI%_ID +E0x80000 +ToolWindow -Caption +AlwaysOnTop +OwnDialogs, FadeIn Layer %CurrentGUI%
-		Loop, 6
-		{	CurrentGUI++
-			OwnerGUI := A_Index
-			Gui, Fade_GUI%CurrentGUI%: New, +OwnerFade_GUI%OwnerGUI% +Hwnd%CurrentGUI%_ID +E0x80000 +ToolWindow -Caption +AlwaysOnTop +OwnDialogs, FadeIn Layer %CurrentGUI%
-		}
-
-		pBrush := Gdip_BrushCreateSolid("0x" . fadeLyr1Color)
-		Gdip_FillRectangle(G1, pBrush, -1, -1, A_ScreenWidth+1, A_ScreenHeight+1)
-		If fadeInLyr1File {
-			GetBGPicPosition(fadeLyr1PicXNew,fadeLyr1PicYNew,fadeLyr1PicWNew,fadeLyr1PicHNew,fadeLyr1PicW,fadeLyr1PicH,fadeLyr1AlignImage)	; get the background pic's new position and size
-			If (fadeLyr1AlignImage = "Stretch and Lose Aspect") {	; 
-				Gdip_DrawImage(G1, fadeLyr1Pic, 0, 0, A_ScreenWidth+1, A_ScreenHeight+1, 0, 0, fadeLyr1PicW, fadeLyr1PicH)
-			} Else If (fadeLyr1AlignImage = "Stretch and Keep Aspect" Or fadeLyr1AlignImage = "Center Width" Or fadeLyr1AlignImage = "Center Height" Or fadeLyr1AlignImage = "Align to Bottom Left" Or fadeLyr1AlignImage = "Align to Bottom Right") {
-				Gdip_DrawImage(G1, fadeLyr1Pic, fadeLyr1PicXNew, fadeLyr1PicYNew, fadeLyr1PicWNew+1, fadeLyr1PicHNew+1, 0, 0, fadeLyr1PicW, fadeLyr1PicH)
-			} Else If (fadeLyr1AlignImage = "Center") {	; original image size and aspect
-				Gdip_DrawImage(G1, fadeLyr1Pic, fadeLyr1PicXNew, fadeLyr1PicYNew, fadeLyr1PicW+1, fadeLyr1PicH+1, 0, 0, fadeLyr1PicW, fadeLyr1PicH)
-			} Else If (fadeLyr1AlignImage = "Align to Top Right") {	; place the pic so the top right corner matches the screen's top right corner
-				Gdip_DrawImage(G1, fadeLyr1Pic, fadeLyr1PicXNew, 0,fadeLyr1PicWNew+1,fadeLyr1PicHNew, 0, 0, fadeLyr1PicW, fadeLyr1PicH)
-			} Else {	; place the pic so the top left corner matches the screen's top left corner, also the default
-				Gdip_DrawImage(G1, fadeLyr1Pic, 0, 0,fadeLyr1PicWNew+1,fadeLyr1PicHNew+1, 0, 0, fadeLyr1PicW, fadeLyr1PicH)
-			}
-		}
-
-		If fadeInLyr2File {
 			; figure out what quadrant the layer 2 image is in, so we know to apply a + or - pad value so the user does not have to
 			If fadeLyr2Pos in No Alignment,Center,Top Left Corner
 				fadeLyr2PicPadX:=fadeLyr2PicPad, fadeLyr2PicPadY:=fadeLyr2PicPad
@@ -169,29 +190,46 @@ FadeInStart:
 				fadeLyr2PicPadX:=0, fadeLyr2PicPadY:=fadeLyr2PicPad*-1
 			Else If fadeLyr2Pos = Bottom Right Corner
 				fadeLyr2PicPadX:=fadeLyr2PicPad*-1, fadeLyr2PicPadY:=fadeLyr2PicPad*-1
-
-			Gdip_DrawImage(G2, fadeLyr2Pic, 0, 0, fadeLyr2PicW, fadeLyr2PicH, 0, 0, fadeLyr2PicW//fadeLyr2Adjust, fadeLyr2PicH//fadeLyr2Adjust)
+			fadeLyr2CanvasX := fadeLyr2PicX + fadeLyr2PicPadX , fadeLyr2CanvasY := fadeLyr2PicY + fadeLyr2PicPadY
+			fadeLyr2CanvasW := fadeLyr2PicW, fadeLyr2CanvasH := fadeLyr2PicH
+			pGraphUpd(Fade_G2,fadeLyr2CanvasW,fadeLyr2CanvasH)
+			Gdip_Alt_DrawImage(Fade_G2, fadeLyr2Pic, 0, 0, fadeLyr2PicW, fadeLyr2PicH, 0, 0, fadeLyr2PicW//fadeLyr2Adjust, fadeLyr2PicH//fadeLyr2Adjust)
 		}
 
-		UpdateLayeredWindow(1_ID, hdc1, 0, 0, A_ScreenWidth, A_ScreenHeight)
-		UpdateLayeredWindow(2_ID, hdc2, fadeLyr2PicX + fadeLyr2PicPadX, fadeLyr2PicY + fadeLyr2PicPadY, fadeLyr2PicW, fadeLyr2PicH)
-
-		Loop, 7	; Show all 7 layers of GUI on screen
-			Gui Fade_GUI%A_Index%: Show
 		%fadeInTransitionAnimation%("in",fadeInDuration)
 
 		fadeInEndTime := A_TickCount + fadeInDelay
 
-		If (7zEnabled != "true") or (7zEnabled = "true" && found7z != "true") {
+		fadeOptionsScale() ; scale fade options to adjust for user resolution
+		
+		; Create canvas for all remaining fade in screens
+		Loop, 5 { 
+        CurrentGUI := A_Index+2
+			OwnerGUI := CurrentGUI - 1
+			Gui, Fade_GUI%CurrentGUI%: +OwnerFade_GUI%OwnerGUI% -Caption +E0x80000 +LastFound +ToolWindow +AlwaysOnTop
+			Gui, Fade_GUI%CurrentGUI%: Margin,0,0
+            Gui, Fade_GUI%CurrentGUI%: Show,, fadeLayer%CurrentGUI%
+            Fade_hwnd%CurrentGUI% := WinExist()
+            Fade_hbm%CurrentGUI% := CreateDIBSection(A_ScreenWidth, A_ScreenHeight)
+            Fade_hdc%CurrentGUI% := CreateCompatibleDC()
+            Fade_obm%CurrentGUI% := SelectObject(Fade_hdc%CurrentGUI%, Fade_hbm%CurrentGUI%)
+            Fade_G%CurrentGUI% := Gdip_GraphicsFromhdc(Fade_hdc%CurrentGUI%)
+            Gdip_SetInterpolationMode(Fade_G%CurrentGUI%, 7)
+            Gdip_SetSmoothingMode(Fade_G%CurrentGUI%, 4)
+			Gdip_TranslateWorldTransform(Fade_G%CurrentGUI%, xTranslation, yTranslation)
+            Gdip_RotateWorldTransform(Fade_G%CurrentGUI%, screenRotationAngle)
+        }
+		
+		If (7zEnabled != "true") or (7zEnabled = "true" && found7z != "true") or (hlmode="fade7z") {
 			GoSub, %fadeLyr3Animation%
 		}
 		Log("FadeInStart - Ended",4)
 	}
 	; Tacking on these features below so they trigger at the desired positions during launch w/o a need for additional calls in each module
-	If (mgEnabled = "true" || hpEnabled = "true")
+	If (!romTable && mgCandidate)
 		SetTimer, CreateMGRomTable, -1
 
-	If (romMappingLaunchMenuEnabled = "true") ; && romMapMultiRomsFound)
+	If (romMappingLaunchMenuEnabled = "true" && romMapLaunchMenuCreated) ; && romMapMultiRomsFound)
 		DestroyRomMappingLaunchMenu()
 	StartGlobalUserFeatures%zz%()	; starting global user functions here so they are triggered after fade screen is up
 Return
@@ -220,15 +258,27 @@ FadeInExit:
 			Hotkey, Enter, CloseFadeIn, Off
 			XHotKeywrapper(fadeInterruptKey,"CloseFadeIn","OFF")
 		}
+	
+		if (fadeMuteEmulator = "true") and !(hlMode){
+			if !emulatorInitialMuteState
+				{
+				getVolume(emulatorInitialVolume,emulatorVolumeObject) 
+				setVolume(0,emulatorVolumeObject) 
+				setMute(0,emulatorVolumeObject)
+				SetTimer, FadeSmoothVolumeIncrease, 100
+			}
+		}
+		
+		fadeInExitComplete := true
 		
 		%fadeInTransitionAnimation%("out",fadeInDuration)
-
+		
 		; Clean up on exit
 		Gdip_DeleteBrush(pBrush)
 		Loop, 7 {
-			Gdip_GraphicsClear(G%A_Index%)	; clearing canvas for all layers
-			UpdateLayeredWindow(hwnd%A_Index%, hdc%A_Index%)	; showing cleared canvas
-			Gdip_DisposeImage(fadeLyr%A_Index%Pic), SelectObject(hdc%A_Index%, obm%A_Index%), DeleteObject(hbm%A_Index%), DeleteDC(hdc%A_Index%), Gdip_DeleteGraphics(G%A_Index%)
+			Gdip_GraphicsClear(Fade_G%A_Index%)	; clearing canvas for all layers
+			UpdateLayeredWindow(Fade_hwnd%A_Index%, Fade_hdc%A_Index%)	; showing cleared canvas
+			Gdip_DisposeImage(fadeLyr%A_Index%Pic), SelectObject(Fade_hdc%A_Index%, Fade_obm%A_Index%), DeleteObject(Fade_hbm%A_Index%), DeleteDC(Fade_hdc%A_Index%), Gdip_DeleteGraphics(Fade_G%A_Index%)
 			Gui, Fade_GUI%A_Index%: Destroy
 		}
 		If mgEnabled = true
@@ -240,6 +290,24 @@ FadeInExit:
 	}
 	gameSectionStartTime := A_TickCount
 	gameSectionStartHour := A_Now ; These two vars are in StartModule() and here because we need a way of it always being created if the module does not have Fade support. It's more accurate if used here vs starting in StartModule()
+	;if bezelPath
+	;	Loop, 7 { 
+	;		index := a_index + 1
+	;		Gui, Bezel_GUI%index%: Show
+	;	}
+Return
+
+FadeSmoothVolumeIncrease:
+	if !smoothVolumeIncreaseStartTime
+		smoothVolumeIncreaseStartTime := A_TickCount
+	fadeSmoothVolumeIncreasePercentage := ((A_TickCount-smoothVolumeIncreaseStartTime)/fadeInDuration)
+	fadeSmoothVolumeIncreasePercentage := (fadeSmoothVolumeIncreasePercentage>=1) ? 1 : fadeSmoothVolumeIncreasePercentage
+	if emulatorVolumeObject
+		setVolume(Round(emulatorInitialVolume*fadeSmoothVolumeIncreasePercentage,1),emulatorVolumeObject)
+	else
+		setVolume(Round(emuVolume*fadeSmoothVolumeIncreasePercentage,1),emulatorVolumeObject)
+	if (fadeSmoothVolumeIncreasePercentage=1)
+		SetTimer, FadeSmoothVolumeIncrease, off
 Return
 
 FadeOutStart:
@@ -247,7 +315,9 @@ FadeOutStart:
 	{	Log("FadeOutStart - Started",4)
 		If !pToken := Gdip_Startup()	; Start gdi+
 			ScriptError("Gdiplus failed to start. Please ensure you have gdiplus on your system")
-
+		if (fadeMuteEmulator = "true") and !(hlMode)
+			if !emulatorInitialMuteState
+				setMute(1,emulatorVolumeObject)
 		fadeInterrupted:=	; need to reset this key in case Fade_In was interrupted
 		If mgEnabled = true
 			XHotKeywrapper(mgKey,"StartMulti","OFF")
@@ -265,46 +335,58 @@ FadeOutStart:
 			XHotKeywrapper(fadeInterruptKey,"CloseFadeOut","ON")
 		}
 
-		lyr1OutFile := GetFadePicFile("Layer",-1)
+		lyr1OutFile := GetFadePicFile("Layer -1")
 		; lyr1OutFile := GetFadePicFile("Layer",-2)	; support for 2nd image on fadeOut
 
 		IfExist, % lyr1OutFile
 		{	lyr1OutPic := Gdip_CreateBitmapFromFile(lyr1OutFile)
 			Gdip_GetImageDimensions(lyr1OutPic, lyr1OutPicW, lyr1OutPicH)	; get the width and height of the background image
-		}
-		outhbm1 := CreateDIBSection(A_ScreenWidth, A_ScreenHeight), outhdc1 := CreateCompatibleDC(), outobm1 := SelectObject(outhdc1, outhbm1)	; might have to use the original width / height from before the emu launched if  the screen res changed
-		outG1 := Gdip_GraphicsFromhdc(outhdc1), Gdip_SetInterpolationMode(outG1, 7) ;, Gdip_SetSmoothingMode(outG1, 4)
-		Gui, Fade_GUI8: New, +Hwndout1_ID +E0x80000 +ToolWindow -Caption +AlwaysOnTop +OwnDialogs, FadeOut Layer 1	; E0x80000 required for UpdateLayeredWindow to work. Is always on top, has no taskbar entry, no caption, and msgboxes will appear on top of the GUI
-
+		}		
+		;Acquiring screen info for dealing with rotated menu drawings
+		if !(If fadeIn = true)
+			{
+			Gdip_Alt_GetRotatedDimensions(A_ScreenWidth, A_ScreenHeight, screenRotationAngle, baseScreenWidth, baseScreenHeight)
+			Gdip_GetRotatedTranslation(baseScreenWidth, baseScreenHeight, screenRotationAngle, xTranslation, yTranslation)
+			xTranslation:=round(xTranslation), yTranslation:=round(yTranslation)
+		}		
+		FadeOut_hbm1 := CreateDIBSection(A_ScreenWidth, A_ScreenHeight), FadeOut_hdc1 := CreateCompatibleDC(), FadeOut_obm1 := SelectObject(FadeOut_hdc1, FadeOut_hbm1)	; might have to use the original width / height from before the emu launched if  the screen res changed
+		FadeOut_G1 := Gdip_GraphicsFromhdc(FadeOut_hdc1), Gdip_SetInterpolationMode(FadeOut_G1, 7) ;, Gdip_SetSmoothingMode(FadeOut_G1, 4)
+		Gui, FadeOut_GUI1: New, +HwndFadeOut_hwnd1 +E0x80000 +ToolWindow -Caption +AlwaysOnTop +OwnDialogs, FadeOut Layer 1	; E0x80000 required for UpdateLayeredWindow to work. Is always on top, has no taskbar entry, no caption, and msgboxes will appear on top of the GUI
+		Gdip_TranslateWorldTransform(FadeOut_G1, xTranslation, yTranslation)
+		Gdip_RotateWorldTransform(FadeOut_G1, screenRotationAngle)
+		fadeOutLyr1CanvasX := 0 , fadeOutLyr1CanvasY := 0
+		fadeOutLyr1CanvasW := baseScreenWidth, fadeOutLyr1CanvasH := baseScreenHeight
+		pGraphUpd(FadeOut_G1,fadeOutLyr1CanvasW,fadeOutLyr1CanvasH)
 		; Draw Layer 1 (Background image and color)
 		pBrush := Gdip_BrushCreateSolid("0x" . fadeLyr1Color)	; Painting the background color
-		Gdip_FillRectangle(outG1, pBrush, -1, -1, A_ScreenWidth+3, A_ScreenHeight+3)	; draw the background first on layer 1, layer order matters!!
+		Gdip_Alt_FillRectangle(FadeOut_G1, pBrush, -1, -1, baseScreenWidth+3, baseScreenHeight+3)	; draw the background first on layer 1, layer order matters!!
 		If lyr1OutFile {
 			GetBGPicPosition(fadeLyr1OutPicXNew,fadeLyr1OutPicYNew,fadeLyr1OutPicWNew,fadeLyr1OutPicHNew,lyr1OutPicW,lyr1OutPicH,fadeLyr1AlignImage)	; get the background pic's new position and size
 			If (fadeLyr1AlignImage = "Stretch and Lose Aspect") {	; 
-				Gdip_DrawImage(outG1, lyr1OutPic, 0, 0, A_ScreenWidth+3, A_ScreenHeight+3, 0, 0, lyr1OutPicW, lyr1OutPicH)	; adding a few pixels to avoid showing background on some pcs
+				Gdip_Alt_DrawImage(FadeOut_G1, lyr1OutPic, 0, 0, baseScreenWidth+3, baseScreenHeight+3, 0, 0, lyr1OutPicW, lyr1OutPicH)	; adding a few pixels to avoid showing background on some pcs
 			} Else If (fadeLyr1AlignImage = "Stretch and Keep Aspect" Or fadeLyr1AlignImage = "Center Width" Or fadeLyr1AlignImage = "Center Height" Or fadeLyr1AlignImage = "Align to Bottom Left" Or fadeLyr1AlignImage = "Align to Bottom Right") {
-				Gdip_DrawImage(outG1, lyr1OutPic, fadeLyr1OutPicXNew, fadeLyr1OutPicYNew, fadeLyr1OutPicWNew+1, fadeLyr1OutPicHNew+1, 0, 0, lyr1OutPicW, lyr1OutPicH)
+				Gdip_Alt_DrawImage(FadeOut_G1, lyr1OutPic, fadeLyr1OutPicXNew, fadeLyr1OutPicYNew, fadeLyr1OutPicWNew+1, fadeLyr1OutPicHNew+1, 0, 0, lyr1OutPicW, lyr1OutPicH)
 			} Else If (fadeLyr1AlignImage = "Center") {	; original image size and aspect
-				Gdip_DrawImage(outG1, lyr1OutPic, fadeLyr1OutPicXNew, fadeLyr1OutPicYNew, lyr1OutPicW+1, lyr1OutPicH+1, 0, 0, lyr1OutPicW, lyr1OutPicH)
+				Gdip_Alt_DrawImage(FadeOut_G1, lyr1OutPic, fadeLyr1OutPicXNew, fadeLyr1OutPicYNew, lyr1OutPicW+1, lyr1OutPicH+1, 0, 0, lyr1OutPicW, lyr1OutPicH)
 			} Else If (fadeLyr1AlignImage = "Align to Top Right") {	; place the pic so the top right corner matches the screen's top right corner
-				Gdip_DrawImage(outG1, lyr1OutPic, fadeLyr1OutPicXNew, 0,fadeLyr1OutPicWNew+1,fadeLyr1OutPicHNew+1, 0, 0, lyr1OutPicW, lyr1OutPicH)
+				Gdip_Alt_DrawImage(FadeOut_G1, lyr1OutPic, fadeLyr1OutPicXNew, 0,fadeLyr1OutPicWNew+1,fadeLyr1OutPicHNew+1, 0, 0, lyr1OutPicW, lyr1OutPicH)
 			} Else {	; place the pic so the top left corner matches the screen's top left corner, also the default
-				Gdip_DrawImage(outG1, lyr1OutPic, 0, 0,fadeLyr1OutPicWNew+1,fadeLyr1OutPicHNew+1, 0, 0, lyr1OutPicW, lyr1OutPicH)
+				Gdip_Alt_DrawImage(FadeOut_G1, lyr1OutPic, 0, 0,fadeLyr1OutPicWNew+1,fadeLyr1OutPicHNew+1, 0, 0, lyr1OutPicW, lyr1OutPicH)
 			}
 		}
-		UpdateLayeredWindow(out1_ID, outhdc1, 0, 0, A_ScreenWidth, A_ScreenHeight)
+		;Alt_UpdateLayeredWindow(FadeOut_hwnd1, FadeOut_hdc1, fadeOutLyr1CanvasX,fadeOutLyr1CanvasY,fadeOutLyr1CanvasW,fadeOutLyr1CanvasH)
 
 		If fadeOutExtraScreen = true	; if user wants to use a temporary extra gui layer for this system right before fadeOut starts
 		{	Log("FadeOutStart - Creating temporary FadeOutExtraScreen",4)
 			Gosub, FadeOutExtraScreen
 		}
-		Gui Fade_GUI8: Show	; show layer -1 GUI
+		Gui FadeOut_GUI1: Show	; show layer -1 GUI
 		%fadeOutTransitionAnimation%("in",fadeOutDuration)
 
 		fadeOutEndTime := A_TickCount + fadeOutDelay
 		Log("FadeOutStart - Ended",4)
 	}
+	HideEmuStart()	; global support for hiding emus on exit
 Return
 
 FadeOutExtraScreen:
@@ -347,11 +429,15 @@ FadeOutExit:
 		}
 
 		%fadeOutTransitionAnimation%("out",fadeOutDuration)
-
+		
+		if (fadeMuteEmulator = "true") and !(hlMode)
+			if !emulatorInitialMuteState
+				setMute(0,emulatorVolumeObject)
+		
 		; Clean up on exit
 		Gdip_DeleteBrush(pBrush)
-		Gdip_DisposeImage(lyr1OutPic), SelectObject(outhdc1, outobm1), DeleteObject(outhbm1), DeleteDC(outhdc1), Gdip_DeleteGraphics(outG1)
-		Gui, Fade_GUI8: Destroy
+		Gdip_DisposeImage(lyr1OutPic), SelectObject(FadeOut_hdc1, FadeOut_obm1), DeleteObject(FadeOut_hbm1), DeleteDC(FadeOut_hdc1), Gdip_DeleteGraphics(FadeOut_G1)
+		Gui, FadeOut_GUI1: Destroy
 		if GifAnimation
 			{
 			AniGif_DestroyControl(hAniGif1)
@@ -360,6 +446,7 @@ FadeOutExit:
 		
 		Log("FadeOutExit - Ended",4)
 	}
+	HideEmuEnd()
 Return
 
 FadeInDelay:
@@ -379,12 +466,12 @@ FadeLayer4Anim:
 		AniGif_SetBkColor(hAniGif1, fadeTranspGifColor)
 		Gui, Fade_GifAnim_GUI: Show, x%fadeLyr4PicX% y%fadeLyr4PicY% w%fadeLyr4PicW% h%fadeLyr4PicH%	
 	} else {
-		Gdip_GraphicsClear(G4)
+		Gdip_GraphicsClear(Fade_G4)
 		currentFadeLyr4Image++
 		If (currentFadeLyr4Image>FadeLayer4AnimTotal)
 			currentFadeLyr4Image=1
-		Gdip_DrawImage(G4, FadeLayer4Anim%currentFadeLyr4Image%Pic, 0, 0, fadeLyr4PicW, fadeLyr4PicH)
-		UpdateLayeredWindow(4_ID, hdc4,fadeLyr4PicX,fadeLyr4PicY, fadeLyr4PicW, fadeLyr4PicH)
+		Gdip_Alt_DrawImage(Fade_G4, FadeLayer4Anim%currentFadeLyr4Image%Pic, 0, 0, fadeLyr4PicW, fadeLyr4PicH)
+		Alt_UpdateLayeredWindow(Fade_hwnd4, Fade_hdc4, fadeLyr4CanvasX,fadeLyr4CanvasY,fadeLyr4CanvasW,fadeLyr4CanvasH)
 	}
 Return
 
@@ -420,32 +507,64 @@ DetectFadeError:
 	}
 Return
 
-GetFadePicFile(name,num){
-	Global fadeImgPath,dbName,systemName,fadeSystemAndRomLayersOnly
-	fadePicType = png|gif|tif|bmp|jpg
-	fadePicPath1 := fadeImgPath . "\" . systemName . "\" . dbName . "\" . name . " " . num	; rom file
-	fadePicPath2 := fadeImgPath . "\" . systemName . "\_Default\" . name . " " . num	; system file
-	fadePicPath3 := fadeImgPath . "\_Default\" . name . " " . num	; global file
+
+GetFadePicFile(name,useBkgdPath=false){
+	Global fadeImgPath,dbName,systemName, HLMediaPath, feMedia
+	fadePicPath1 := fadeImgPath . "\" . systemName . "\" . dbName . "\" . name	; rom file
+	fadePicPath2 := fadeImgPath . "\" . systemName . "\_Default\" . name	; system file
+	fadePicPath3 := fadeImgPath . "\_Default\" . name	; global file
+	bkgdPicPath1 := HLMediaPath . "\Backgrounds\" . systemName . "\" . dbName . "\"	; rom file
+	bkgdPicPath2 := HLMediaPath . "\Backgrounds\" . systemName . "\_Default\"	; system file
+	bkgdPicPath3 := HLMediaPath . "\Backgrounds\_Default\"	; global file
 	fadePicList := []	; initialize array
-	Loop, 3 {
-		Log("GetFadePicFile - Checking if any Fade " . name . A_Space . num . " images exist in: " . fadePicPath%A_Index% . "*.*",4)
-		fadePicIndex := A_Index	; so it can be used in the next loop
-		If FileExist(fadePicPath%A_Index% . "*.*")
-			Loop, Parse, fadePicType,|
-			{	Log("GetFadePicFile - Looking for Fade " . name . A_Space . num . " pic: " . fadePicPath%fadePicIndex% . "*." . A_LoopField,4)
-				Loop, % fadePicPath%fadePicIndex% . "*." . A_LoopField
-				{	Log("GetFadePicFile - Found Fade " . name . A_Space . num . " pic: " . A_LoopFileFullPath,4)
-					fadePicList.Insert(A_LoopFileFullPath)
+	loop, 3 {
+		If !fadePicList[1]
+			fadePicList := GetFadeDirPicFile(name,fadePicPath%a_index%) 
+		If ((useBkgdPath) and (!(fadePicList[1]))){
+			fadePicList := GetFadeDirPicFile(name,bkgdPicPath%a_index%) 
+			If (!(fadePicList[1]))
+			{	if (a_index=1)
+					currentAssetType := "game"
+				else if (a_index=2)
+					currentAssetType := "system"
+				if ((a_index=1) or (a_index=2))
+				{	for index, element in feMedia["Backgrounds"]
+					{   if element.Label
+						{   if (element.AssetType=currentAssetType)
+							{   loop, % element.TotalItems    
+								{    fadePicList.Insert(element["Path" . a_index])
+								}
+							}
+						}
+					}
 				}
 			}
-		If fadePicList[1]	; if we filled anything in the array, stop here, randomize pics found	, and return
-		{	Random, RndmfadePic, 1, % fadePicList.MaxIndex()
-			file := fadePicList[RndmfadePic]
-			Log("GetFadePicFile - Randomized images and Fade " . name . " " . num . " will use " . file)
-			Return file
 		}
+	}	
+	If fadePicList[1]	; if we filled anything in the array, stop here, randomize pics found	, and return
+	{	Random, RndmfadePic, 1, % fadePicList.MaxIndex()
+		file := fadePicList[RndmfadePic]
+		Log("GetFadePicFile - Randomized images and Fade " . name . " will use " . file)
+		Return file
 	}
 }
+
+GetFadeDirPicFile(name,path){
+	Log("GetFadePicFile - Checking if any Fade " . name . " images exist in: " . path . "*.*",4)
+	fadePicType = png|gif|tif|bmp|jpg
+	fadePicList := []
+	If (FileExist(path . "*.*")) {
+		Loop, Parse, fadePicType,|
+		{	Log("GetFadePicFile - Looking for Fade " . name . " pic: " . path . "*." . A_LoopField,4)
+			Loop, % path . "*." . A_LoopField
+			{	Log("GetFadePicFile - Found Fade " . name . " pic: " . A_LoopFileFullPath,4)
+				fadePicList.Insert(A_LoopFileFullPath)
+			}
+		}
+	}
+	Return fadePicList
+}
+	
 
 GetFadeAnimFiles(name,num){
 	Global fadeImgPath,dbName,systemName,fadeSystemAndRomLayersOnly
@@ -523,4 +642,49 @@ AnimateWindow(Hwnd,Direction,Type,Time=100){
 		Else hFlags |= %A_LoopField%
 	IfEqual, hFlags, ,Return "Error: Some of the types are invalid"
 	DllCall("AnimateWindow", "uint", Hwnd, "uint", Time, "uint", If Direction="out"?Hide|=hFlags:hFlags)	; adds the Hide type on "out" direction
+}
+
+
+fadeOptionsScale(){
+	global
+	OptionScale(fadeLyr3X, fadeXScale)
+	OptionScale(fadeLyr3Y, fadeYScale)
+	OptionScale(fadeLyr3PicPad, fadeXScale) ;could be Y also
+	OptionScale(fadeLyr4X, fadeXScale)
+	OptionScale(fadeLyr4Y, fadeYScale)
+	OptionScale(fadeLyr4PicPad, fadeXScale)
+	OptionScale(fadeBarWindowX, fadeXScale) ;could be Y also
+	OptionScale(fadeBarWindowY, fadeYScale)
+	OptionScale(fadeBarWindowW, fadeXScale)
+	OptionScale(fadeBarWindowH, fadeYScale)
+	OptionScale(fadeBarWindowR, fadeXScale) ;could be Y also
+	OptionScale(fadeBarWindowM, fadeXScale) ;could be Y also
+	OptionScale(fadeBarH, fadeYScale)
+	OptionScale(fadeBarR, fadeXScale) ;could be Y also
+	OptionScale(fadeBarXOffset, fadeXScale)
+	OptionScale(fadeBarYOffset, fadeYScale)
+	OptionScale(fadeRomInfoTextMargin, fadeXScale)
+	TextOptionScale(fadeRomInfoText1Options,fadeXScale, fadeYScale)
+	TextOptionScale(fadeRomInfoText2Options,fadeXScale, fadeYScale)
+	TextOptionScale(fadeRomInfoText3Options,fadeXScale, fadeYScale)
+	TextOptionScale(fadeRomInfoText4Options,fadeXScale, fadeYScale)
+	TextOptionScale(fadeRomInfoText5Options,fadeXScale, fadeYScale)
+	TextOptionScale(fadeRomInfoText6Options,fadeXScale, fadeYScale)
+	OptionScale(fadeStatsInfoTextMargin, fadeXScale) ;could be Y also
+	TextOptionScale(fadeStatsInfoText1Options,fadeXScale, fadeYScale)
+	TextOptionScale(fadeStatsInfoText2Options,fadeXScale, fadeYScale)
+	TextOptionScale(fadeStatsInfoText3Options,fadeXScale, fadeYScale)
+	TextOptionScale(fadeStatsInfoText4Options,fadeXScale, fadeYScale)
+	TextOptionScale(fadeStatsInfoText5Options,fadeXScale, fadeYScale)
+	TextOptionScale(fadeStatsInfoText6Options,fadeXScale, fadeYScale)
+	OptionScale(fadeText1X, fadeXScale)
+	OptionScale(fadeText1Y, fadeYScale)
+	TextOptionScale(fadeText1Options,fadeXScale, fadeYScale)
+	OptionScale(fadeText2X, fadeXScale)
+	OptionScale(fadeText2Y, fadeYScale)
+	TextOptionScale(fadeText2Options,fadeXScale, fadeYScale)
+	OptionScale(fadeExtractionTimeTextX, fadeXScale)
+	OptionScale(fadeExtractionTimeTextY, fadeYScale)
+	TextOptionScale(fadeExtractionTimeTextOptions,fadeXScale, fadeYScale)
+Return	
 }

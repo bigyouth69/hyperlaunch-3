@@ -1,0 +1,20 @@
+; HyperLaunchHQ Plugin
+
+PluginInit:
+	Log("PluginInit - Started")
+
+	; Load Plugin settings
+	frontendPlugin := pluginName
+	frontendWinClass := "HyperLaunch HQ"
+	frontendSystemDb := frontendPath . "\Databases\Systems.xml"
+	; frontendGamesDb := frontendPath . "\Databases\" . systemName . "\" . systemName . ".xml"
+	
+	frontendPluginInit := 1	; used to keep track if the FE plugin was initialized already
+	Log("PluginInit - Ended")
+Return
+
+ReadFEGameInfo:
+	Log("ReadFEGameInfo - Started")
+	readFEGameInfo := 1	; used to keep track if the FE game info was read already
+	Log("ReadFEGameInfo - Ended")
+Return

@@ -2,8 +2,8 @@ MEmu = Higan
 MEmuV =  v0.93
 MURL = http://byuu.org/higan/
 MAuthor = djvj
-MVersion = 2.0.2
-MCRC = 723A9893
+MVersion = 2.0.3
+MCRC = C38CF770
 iCRC = A3607D8A
 MID = 635038268899159961
 MSystem = "Nintendo Entertainment System","Nintendo Famicom","Nintendo Game Boy","Nintendo Game Boy Color","Nintendo Satellaview","Nintendo Super Famicom","Super Nintendo Entertainment System"
@@ -30,7 +30,7 @@ bezelLeftOffset := IniReadCheck(settingsFile, "Settings", "bezelLeftOffset","7",
 bezelRightOffset := IniReadCheck(settingsFile, "Settings", "bezelRightOffset","7",,1)
 
 BezelStart()
-
+hideEmuObj := Object("ahk_class phoenix_window",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 ; Set desired fullscreen mode
@@ -50,12 +50,15 @@ If sramSupport = true
 	IfExist, %emuPath%\srm\%romName%.srm
 		FileCopy, %emuPath%\srm\%romName%.srm, %romPath%, 1 ; overwriting existing srm with backup if it exists in destination folder
 
+HideEmuStart()
+
 Run(executable . " """ . romPath . "\" . romName . romExtension . """", emuPath)
 
 WinWait("higan ahk_class phoenix_window")
 WinWaitActive("higan ahk_class phoenix_window")
 
 BezelDraw()
+HideEmuEnd()
 FadeInExit()
 
 ; WinMove, 0, 0 ; when going from fullscreen to window, higan still has its menubar hidden, uncomment this to access it

@@ -23,24 +23,50 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>If true, creates and loads a unique 128k Ram Cart for each Sega CD and Mega CD game on launch</DESCRIPTION>
 						</KEY>
-						<KEY name="FluxAudioCD" required="false" nullable="true">
-							<KEYTYPE>FilePath</KEYTYPE>
-							<DESCRIPTION>Path to an Audio CD that will be mounted in Daemon Tools when you run the Sega-CD game "Flux - Audio Visual Experience (Europe)"</DESCRIPTION>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="PerfectSync" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Some games will not boot or play correctly without turning on Perfect Sync in Fusion. Set this to true for this game to enable it.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>
-				<SECTION name="%SystemName%" required="false">
-					<SECTIONTYPE>System</SECTIONTYPE>
+			</SECTIONS>
+		</INIFILE>
+		
+		<INIFILE name="%SystemName%" required="false">
+			<INITYPE>System</INITYPE>
+			<SYSTEMS>
+				<SYSTEM>Sega 32X</SYSTEM>
+				<SYSTEM>Sega CD</SYSTEM>
+				<SYSTEM>Sega Genesis</SYSTEM>
+				<SYSTEM>Sega Mega Drive</SYSTEM>
+				<SYSTEM>Sega Mega-CD</SYSTEM>
+			</SYSTEMS>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
 					<KEYS>
-						<KEY name="DTWaitTime" required="false" nullable="false">
-							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>Amount of time in MS to wait for Daemon Tools to mount the cd image before running fusion. Increase this if the game doesn't start from the bios.</DESCRIPTION>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="ForceFullScreen32" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, when Fusion goes fullscreen, it will force 32-bit mode. This will help prevent flickering and your monitor changing modes. Default is true.</DESCRIPTION>
+						</KEY>
+						<KEY name="hideTitleBar" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Removes the border, titlebar, menubar, and centers the emu on your screen. Only need this if fullscreen is false</DESCRIPTION>
 						</KEY>
 						<KEY name="Controller_Reassigning_Enabled" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>If true, the module will update fusion's settings to enable per-rom controller settings and when no settings are defined, will use the default controller defined below.</DESCRIPTION>
 						</KEY>
-                        <KEY name="Default_MultiTapType" required="false" nullable="false">
+                        <KEY name="MultiTapType" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>If a MultiTap Type is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
@@ -52,7 +78,16 @@
 								<VALUE description="J-Cart">8</VALUE>
 							</VALUES>
                         </KEY>
-						<KEY name="Default_Genesis_P1_Controller" required="false" nullable="false">
+						<KEY name="UseRamCarts" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, creates and loads a unique 128k Ram Cart for each Sega CD and Mega CD game on launch</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="Controllers" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Genesis_P1_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
@@ -64,7 +99,7 @@
 								<VALUE description="Justifier (Gun)">5</VALUE>
 							</VALUES>
 						</KEY>
-						<KEY name="Default_Genesis_P1b_Controller" required="false" nullable="false">
+						<KEY name="Genesis_P1b_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
@@ -76,7 +111,7 @@
 								<VALUE description="Justifier (Gun)">5</VALUE>
 							</VALUES>
 						</KEY>
-						<KEY name="Default_Genesis_P1c_Controller" required="false" nullable="false">
+						<KEY name="Genesis_P1c_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
@@ -88,7 +123,7 @@
 								<VALUE description="Justifier (Gun)">5</VALUE>
 							</VALUES>
 						</KEY>
-						<KEY name="Default_Genesis_P1d_Controller" required="false" nullable="false">
+						<KEY name="Genesis_P1d_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
@@ -100,7 +135,7 @@
 								<VALUE description="Justifier (Gun)">5</VALUE>
 							</VALUES>
 						</KEY>
-						<KEY name="Default_Genesis_P2_Controller" required="false" nullable="false">
+						<KEY name="Genesis_P2_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
@@ -112,7 +147,7 @@
 								<VALUE description="Justifier (Gun)">5</VALUE>
 							</VALUES>
 						</KEY>
-						<KEY name="Default_Genesis_P2b_Controller" required="false" nullable="false">
+						<KEY name="Genesis_P2b_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
@@ -124,7 +159,7 @@
 								<VALUE description="Justifier (Gun)">5</VALUE>
 							</VALUES>
 						</KEY>
-						<KEY name="Default_Genesis_P2c_Controller" required="false" nullable="false">
+						<KEY name="Genesis_P2c_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
@@ -136,7 +171,7 @@
 								<VALUE description="Justifier (Gun)">5</VALUE>
 							</VALUES>
 						</KEY>
-						<KEY name="Default_Genesis_P2d_Controller" required="false" nullable="false">
+						<KEY name="Genesis_P2d_Controller" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
 							<VALUES>
@@ -148,105 +183,207 @@
 								<VALUE description="Justifier (Gun)">5</VALUE>
 							</VALUES>
 						</KEY>
-						<KEY name="Default_SMS_P1_Controller" required="false" nullable="false">
+						<KEY name="Genesis_P1_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Sega Master System and Game Gear.</DESCRIPTION>
-							<VALUES>
-								<VALUE description="None">0</VALUE>
-								<VALUE description="Control Pad">1</VALUE>
-								<VALUE description="Paddle">2</VALUE>
-								<VALUE description="Light Phaser (Gun)">3</VALUE>
-							</VALUES>
-						</KEY>
-						<KEY name="Default_SMS_P2_Controller" required="false" nullable="false">
-							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Sega Master System and Game Gear.</DESCRIPTION>
-							<VALUES>
-								<VALUE description="None">0</VALUE>
-								<VALUE description="Control Pad">1</VALUE>
-								<VALUE description="Paddle">2</VALUE>
-								<VALUE description="Light Phaser (Gun)">3</VALUE>
-							</VALUES>
-						</KEY>
-						<KEY name="Default_Genesis_P1_Use" required="false" nullable="false">
-							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD. Devices in slot 3+ are typically game controllers, but differ on each system depending on what is currently plugged in.</DESCRIPTION>
 							<VALUES>
 								<VALUE description="Keyboard">1</VALUE>
 								<VALUE description="Mouse">2</VALUE>
+								<VALUE description="Device in Slot 3">3</VALUE>
+								<VALUE description="Device in Slot 4">4</VALUE>
+								<VALUE description="Device in Slot 5">5</VALUE>
+								<VALUE description="Device in Slot 6">6</VALUE>
+								<VALUE description="Device in Slot 7">7</VALUE>
+								<VALUE description="Device in Slot 8">8</VALUE>
+								<VALUE description="Device in Slot 9">9</VALUE>
+								<VALUE description="Device in Slot 10">10</VALUE>
+								<VALUE description="Device in Slot 11">11</VALUE>
+								<VALUE description="Device in Slot 12">12</VALUE>
+								<VALUE description="Device in Slot 13">13</VALUE>
+								<VALUE description="Device in Slot 14">14</VALUE>
+								<VALUE description="Device in Slot 15">15</VALUE>
+								<VALUE description="Device in Slot 16">16</VALUE>
 							</VALUES>
 						</KEY>
-						<KEY name="Default_Genesis_P1b_Use" required="false" nullable="false">
+						<KEY name="Genesis_P1b_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD. Devices in slot 3+ are typically game controllers, but differ on each system depending on what is currently plugged in.</DESCRIPTION>
 							<VALUES>
 								<VALUE description="Keyboard">1</VALUE>
 								<VALUE description="Mouse">2</VALUE>
+								<VALUE description="Device in Slot 3">3</VALUE>
+								<VALUE description="Device in Slot 4">4</VALUE>
+								<VALUE description="Device in Slot 5">5</VALUE>
+								<VALUE description="Device in Slot 6">6</VALUE>
+								<VALUE description="Device in Slot 7">7</VALUE>
+								<VALUE description="Device in Slot 8">8</VALUE>
+								<VALUE description="Device in Slot 9">9</VALUE>
+								<VALUE description="Device in Slot 10">10</VALUE>
+								<VALUE description="Device in Slot 11">11</VALUE>
+								<VALUE description="Device in Slot 12">12</VALUE>
+								<VALUE description="Device in Slot 13">13</VALUE>
+								<VALUE description="Device in Slot 14">14</VALUE>
+								<VALUE description="Device in Slot 15">15</VALUE>
+								<VALUE description="Device in Slot 16">16</VALUE>
 							</VALUES>
 						</KEY>
-						<KEY name="Default_Genesis_P1c_Use" required="false" nullable="false">
+						<KEY name="Genesis_P1c_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD. Devices in slot 3+ are typically game controllers, but differ on each system depending on what is currently plugged in.</DESCRIPTION>
 							<VALUES>
 								<VALUE description="Keyboard">1</VALUE>
 								<VALUE description="Mouse">2</VALUE>
+								<VALUE description="Device in Slot 3">3</VALUE>
+								<VALUE description="Device in Slot 4">4</VALUE>
+								<VALUE description="Device in Slot 5">5</VALUE>
+								<VALUE description="Device in Slot 6">6</VALUE>
+								<VALUE description="Device in Slot 7">7</VALUE>
+								<VALUE description="Device in Slot 8">8</VALUE>
+								<VALUE description="Device in Slot 9">9</VALUE>
+								<VALUE description="Device in Slot 10">10</VALUE>
+								<VALUE description="Device in Slot 11">11</VALUE>
+								<VALUE description="Device in Slot 12">12</VALUE>
+								<VALUE description="Device in Slot 13">13</VALUE>
+								<VALUE description="Device in Slot 14">14</VALUE>
+								<VALUE description="Device in Slot 15">15</VALUE>
+								<VALUE description="Device in Slot 16">16</VALUE>
 							</VALUES>
 						</KEY>
-						<KEY name="Default_Genesis_P1d_Use" required="false" nullable="false">
+						<KEY name="Genesis_P1d_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD. Devices in slot 3+ are typically game controllers, but differ on each system depending on what is currently plugged in.</DESCRIPTION>
 							<VALUES>
 								<VALUE description="Keyboard">1</VALUE>
 								<VALUE description="Mouse">2</VALUE>
+								<VALUE description="Device in Slot 3">3</VALUE>
+								<VALUE description="Device in Slot 4">4</VALUE>
+								<VALUE description="Device in Slot 5">5</VALUE>
+								<VALUE description="Device in Slot 6">6</VALUE>
+								<VALUE description="Device in Slot 7">7</VALUE>
+								<VALUE description="Device in Slot 8">8</VALUE>
+								<VALUE description="Device in Slot 9">9</VALUE>
+								<VALUE description="Device in Slot 10">10</VALUE>
+								<VALUE description="Device in Slot 11">11</VALUE>
+								<VALUE description="Device in Slot 12">12</VALUE>
+								<VALUE description="Device in Slot 13">13</VALUE>
+								<VALUE description="Device in Slot 14">14</VALUE>
+								<VALUE description="Device in Slot 15">15</VALUE>
+								<VALUE description="Device in Slot 16">16</VALUE>
 							</VALUES>
 						</KEY>
-						<KEY name="Default_Genesis_P2_Use" required="false" nullable="false">
+						<KEY name="Genesis_P2_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD. Devices in slot 3+ are typically game controllers, but differ on each system depending on what is currently plugged in.</DESCRIPTION>
 							<VALUES>
 								<VALUE description="Keyboard">1</VALUE>
 								<VALUE description="Mouse">2</VALUE>
+								<VALUE description="Device in Slot 3">3</VALUE>
+								<VALUE description="Device in Slot 4">4</VALUE>
+								<VALUE description="Device in Slot 5">5</VALUE>
+								<VALUE description="Device in Slot 6">6</VALUE>
+								<VALUE description="Device in Slot 7">7</VALUE>
+								<VALUE description="Device in Slot 8">8</VALUE>
+								<VALUE description="Device in Slot 9">9</VALUE>
+								<VALUE description="Device in Slot 10">10</VALUE>
+								<VALUE description="Device in Slot 11">11</VALUE>
+								<VALUE description="Device in Slot 12">12</VALUE>
+								<VALUE description="Device in Slot 13">13</VALUE>
+								<VALUE description="Device in Slot 14">14</VALUE>
+								<VALUE description="Device in Slot 15">15</VALUE>
+								<VALUE description="Device in Slot 16">16</VALUE>
 							</VALUES>
 						</KEY>
-						<KEY name="Default_Genesis_P2b_Use" required="false" nullable="false">
+						<KEY name="Genesis_P2b_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD. Devices in slot 3+ are typically game controllers, but differ on each system depending on what is currently plugged in.</DESCRIPTION>
 							<VALUES>
 								<VALUE description="Keyboard">1</VALUE>
 								<VALUE description="Mouse">2</VALUE>
+								<VALUE description="Device in Slot 3">3</VALUE>
+								<VALUE description="Device in Slot 4">4</VALUE>
+								<VALUE description="Device in Slot 5">5</VALUE>
+								<VALUE description="Device in Slot 6">6</VALUE>
+								<VALUE description="Device in Slot 7">7</VALUE>
+								<VALUE description="Device in Slot 8">8</VALUE>
+								<VALUE description="Device in Slot 9">9</VALUE>
+								<VALUE description="Device in Slot 10">10</VALUE>
+								<VALUE description="Device in Slot 11">11</VALUE>
+								<VALUE description="Device in Slot 12">12</VALUE>
+								<VALUE description="Device in Slot 13">13</VALUE>
+								<VALUE description="Device in Slot 14">14</VALUE>
+								<VALUE description="Device in Slot 15">15</VALUE>
+								<VALUE description="Device in Slot 16">16</VALUE>
 							</VALUES>
 						</KEY>
-						<KEY name="Default_Genesis_P2c_Use" required="false" nullable="false">
+						<KEY name="Genesis_P2c_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD. Devices in slot 3+ are typically game controllers, but differ on each system depending on what is currently plugged in.</DESCRIPTION>
 							<VALUES>
 								<VALUE description="Keyboard">1</VALUE>
 								<VALUE description="Mouse">2</VALUE>
+								<VALUE description="Device in Slot 3">3</VALUE>
+								<VALUE description="Device in Slot 4">4</VALUE>
+								<VALUE description="Device in Slot 5">5</VALUE>
+								<VALUE description="Device in Slot 6">6</VALUE>
+								<VALUE description="Device in Slot 7">7</VALUE>
+								<VALUE description="Device in Slot 8">8</VALUE>
+								<VALUE description="Device in Slot 9">9</VALUE>
+								<VALUE description="Device in Slot 10">10</VALUE>
+								<VALUE description="Device in Slot 11">11</VALUE>
+								<VALUE description="Device in Slot 12">12</VALUE>
+								<VALUE description="Device in Slot 13">13</VALUE>
+								<VALUE description="Device in Slot 14">14</VALUE>
+								<VALUE description="Device in Slot 15">15</VALUE>
+								<VALUE description="Device in Slot 16">16</VALUE>
 							</VALUES>
 						</KEY>
-						<KEY name="Default_Genesis_P2d_Use" required="false" nullable="false">
+						<KEY name="Genesis_P2d_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
+							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Genesis, 32x, and Sega CD. Devices in slot 3+ are typically game controllers, but differ on each system depending on what is currently plugged in.</DESCRIPTION>
 							<VALUES>
 								<VALUE description="Keyboard">1</VALUE>
 								<VALUE description="Mouse">2</VALUE>
+								<VALUE description="Device in Slot 3">3</VALUE>
+								<VALUE description="Device in Slot 4">4</VALUE>
+								<VALUE description="Device in Slot 5">5</VALUE>
+								<VALUE description="Device in Slot 6">6</VALUE>
+								<VALUE description="Device in Slot 7">7</VALUE>
+								<VALUE description="Device in Slot 8">8</VALUE>
+								<VALUE description="Device in Slot 9">9</VALUE>
+								<VALUE description="Device in Slot 10">10</VALUE>
+								<VALUE description="Device in Slot 11">11</VALUE>
+								<VALUE description="Device in Slot 12">12</VALUE>
+								<VALUE description="Device in Slot 13">13</VALUE>
+								<VALUE description="Device in Slot 14">14</VALUE>
+								<VALUE description="Device in Slot 15">15</VALUE>
+								<VALUE description="Device in Slot 16">16</VALUE>
 							</VALUES>
 						</KEY>
-						<KEY name="Default_SMS_P1_Use" required="false" nullable="false">
+					</KEYS>
+				</SECTION>
+				<SECTION name="Sega CD" required="false">
+					<SECTIONTYPE>System</SECTIONTYPE>
+					<KEYS>
+						<KEY name="DTWaitTime" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Sega Master System and Game Gear.</DESCRIPTION>
-							<VALUES>
-								<VALUE description="Keyboard">1</VALUE>
-								<VALUE description="Mouse">2</VALUE>
-							</VALUES>
+							<DESCRIPTION>Amount of time in MS to wait for Daemon Tools to mount the cd image before running fusion. Increase this if the game doesn't start from the bios.</DESCRIPTION>
 						</KEY>
-						<KEY name="Default_SMS_P2_Use" required="false" nullable="false">
+						<KEY name="FluxAudioCD" required="false" nullable="true">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<DESCRIPTION>Path to an Audio CD that will be mounted in Daemon Tools when you run the Sega-CD game "Flux - Audio Visual Experience (Europe)"</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="Sega Mega-CD" required="false">
+					<SECTIONTYPE>System</SECTIONTYPE>
+					<KEYS>
+						<KEY name="DTWaitTime" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Sega Master System and Game Gear.</DESCRIPTION>
-							<VALUES>
-								<VALUE description="Keyboard">1</VALUE>
-								<VALUE description="Mouse">2</VALUE>
-							</VALUES>
+							<DESCRIPTION>Amount of time in MS to wait for Daemon Tools to mount the cd image before running fusion. Increase this if the game doesn't start from the bios.</DESCRIPTION>
+						</KEY>
+						<KEY name="FluxAudioCD" required="false" nullable="true">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<DESCRIPTION>Path to an Audio CD that will be mounted in Daemon Tools when you run the Sega-CD game "Flux - Audio Visual Experience (Europe)"</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>
@@ -365,26 +502,6 @@
 								<VALUE description="Justifier (Gun)">5</VALUE>
 							</VALUES>
 						</KEY>
-						<KEY name="SMS_P1_Controller" required="false" nullable="false">
-							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The controller type plugged into this port, it will use this setting for Sega Master System and Game Gear.</DESCRIPTION>
-							<VALUES>
-								<VALUE description="None">0</VALUE>
-								<VALUE description="Control Pad">1</VALUE>
-								<VALUE description="Paddle">2</VALUE>
-								<VALUE description="Light Phaser (Gun)">3</VALUE>
-							</VALUES>
-						</KEY>
-						<KEY name="SMS_P2_Controller" required="false" nullable="false">
-							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>The controller type plugged into this port, it will use this setting for Sega Master System and Game Gear.</DESCRIPTION>
-							<VALUES>
-								<VALUE description="None">0</VALUE>
-								<VALUE description="Control Pad">1</VALUE>
-								<VALUE description="Paddle">2</VALUE>
-								<VALUE description="Light Phaser (Gun)">3</VALUE>
-							</VALUES>
-						</KEY>
 						<KEY name="Genesis_P1_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>The input device this controller will use in this port, it will use this setting for Genesis, 32x, and Sega CD.</DESCRIPTION>
@@ -449,6 +566,109 @@
 								<VALUE description="Mouse">2</VALUE>
 							</VALUES>
 						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="%SystemName%" required="false">
+			<INITYPE>System</INITYPE>
+			<SYSTEMS>
+				<SYSTEM>Samsung Gam Boy</SYSTEM>
+				<SYSTEM>Sega Game Gear</SYSTEM>
+				<SYSTEM>Sega Master System</SYSTEM>
+				<SYSTEM>Sega SC-3000</SYSTEM>
+				<SYSTEM>Sega SG-1000</SYSTEM>
+			</SYSTEMS>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="ForceFullScreen32" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, when Fusion goes fullscreen, it will force 32-bit mode. This will help prevent flickering and your monitor changing modes. Default is true.</DESCRIPTION>
+						</KEY>
+						<KEY name="hideTitleBar" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Removes the border, titlebar, menubar, and centers the emu on your screen. Only need this if fullscreen is false</DESCRIPTION>
+						</KEY>
+						<KEY name="Controller_Reassigning_Enabled" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, the module will update fusion's settings to enable per-rom controller settings and when no settings are defined, will use the default controller defined below.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="Controllers" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="SMS_P1_Controller" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Sega Master System and Game Gear.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="Control Pad">1</VALUE>
+								<VALUE description="Paddle">2</VALUE>
+								<VALUE description="Light Phaser (Gun)">3</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="SMS_P2_Controller" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If your controller is not specified per rom, it will use this setting for Sega Master System and Game Gear.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="Control Pad">1</VALUE>
+								<VALUE description="Paddle">2</VALUE>
+								<VALUE description="Light Phaser (Gun)">3</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="SMS_P1_Use" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Sega Master System and Game Gear.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Keyboard">1</VALUE>
+								<VALUE description="Mouse">2</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="SMS_P2_Use" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The input device this controller will use if your controller is not specified per rom, it will use this setting for Sega Master System and Game Gear.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Keyboard">1</VALUE>
+								<VALUE description="Mouse">2</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="PerfectSync" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Some games will not boot or play correctly without turning on Perfect Sync in Fusion. Set this to true for this game to enable it.</DESCRIPTION>
+						</KEY>
+						<KEY name="SMS_P1_Controller" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The controller type plugged into this port, it will use this setting for Sega Master System and Game Gear.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="Control Pad">1</VALUE>
+								<VALUE description="Paddle">2</VALUE>
+								<VALUE description="Light Phaser (Gun)">3</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="SMS_P2_Controller" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The controller type plugged into this port, it will use this setting for Sega Master System and Game Gear.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="Control Pad">1</VALUE>
+								<VALUE description="Paddle">2</VALUE>
+								<VALUE description="Light Phaser (Gun)">3</VALUE>
+							</VALUES>
+						</KEY>
 						<KEY name="SMS_P1_Use" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>The input device this controller will use in this port, it will use this setting for Sega Master System and Game Gear.</DESCRIPTION>
@@ -464,6 +684,58 @@
 								<VALUE description="Keyboard">1</VALUE>
 								<VALUE description="Mouse">2</VALUE>
 							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="Sega Pico" required="false">
+			<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="ForceFullScreen32" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, when Fusion goes fullscreen, it will force 32-bit mode. This will help prevent flickering and your monitor changing modes. Default is true.</DESCRIPTION>
+						</KEY>
+						<KEY name="hideTitleBar" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Removes the border, titlebar, menubar, and centers the emu on your screen. Only need this if fullscreen is false</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="StoryWare Overlay" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Storywave_Overlay_Path" required="false" nullable="false" altname="Overlay Path">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<DESCRIPTION>Path to storywave overlay images. Default assumes that your overlays are on a folder "Overlays\game name" under your emulator folder (ex. C:\Emulators\Fusion\Overlays\Sonic The Hedgehog's Gameworld (USA)\Overlay1.png,...)."</DESCRIPTION>
+							<FULLROW>true</FULLROW>
+						</KEY>
+						<KEY name="Storywave_Overlay_Transparency" required="false" nullable="false" altname="Transparency">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Transparency of the overlay to be showed above the gameplay area.</DESCRIPTION>
+						</KEY>
+						<KEY name="Toggle_Storywave_Overlay_Visibility_Key" required="false" nullable="false" altname="Visibility Key">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>Key for toggle storywave book overlay visibility.</DESCRIPTION>
+						</KEY>
+						<KEY name="Storywave_Overlay_Page_Up_Key" required="false" nullable="false" altname="Page Up/Next Page Key">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>Key for changing one page up the storywave book.</DESCRIPTION>
+						</KEY>
+						<KEY name="Storywave_Overlay_Page_Down_Key" required="false" nullable="false" altname="Page Down/Previous Page Key">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>Key for changing one page down the storywave book.</DESCRIPTION>
+						</KEY>	
+						<KEY name="Storywave_Overlay_Reset_Page_Key" required="false" nullable="false" altname="Reset Page Key">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>Key for reset to initial page storywave book. This is useful when Fusion and your overlay images are no longer in sync which can happen if you are not careful with your key press timings.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>

@@ -92,6 +92,7 @@
 		</INIFILE>
 		<INIFILE name="Texas Instruments TI 99-4A" required="false">
 			<INITYPE>System</INITYPE>
+			<STANDALONE>false</STANDALONE>
 			<SECTIONS>
 				<SECTION name="%RomName%" required="false">
 					<SECTIONTYPE>Rom</SECTIONTYPE>
@@ -114,6 +115,7 @@
 		</INIFILE>
 		<INIFILE name="Apple IIGS" required="false">
 			<INITYPE>System</INITYPE>
+			<STANDALONE>false</STANDALONE>
 			<SECTIONS>
 				<SECTION name="%RomName%" required="false">
 					<SECTIONTYPE>Rom</SECTIONTYPE>
@@ -128,6 +130,7 @@
 		</INIFILE>
 		<INIFILE name="Magnavox Odyssey 2" required="false">
 			<INITYPE>System</INITYPE>
+			<STANDALONE>false</STANDALONE>
 			<SECTIONS>
 				<SECTION name="%RomName%" required="false">
 					<SECTIONTYPE>Rom</SECTIONTYPE>
@@ -135,6 +138,24 @@
 						<KEY name="Bios" required="false" nullable="true">
 							<KEYTYPE>String</KEYTYPE>
 							<DESCRIPTION>for all games, we use the default bios (odyssey2). Some games might require different bios like Odyssey2's Jopac games use the videopac bios instead.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="SNK Neo Geo AES" required="false">
+			<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="BIOS_Region" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>The region BIOS this rom should use. This can affect the language of the in game menus. Default is Asia.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Asia">asia</VALUE>
+								<VALUE description="Japan">japan</VALUE>
+							</VALUES>
 						</KEY>
 					</KEYS>
 				</SECTION>

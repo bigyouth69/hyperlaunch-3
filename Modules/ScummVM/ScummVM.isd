@@ -15,6 +15,19 @@
 							<KEYTYPE>FilePath</KEYTYPE>
 							<DESCRIPTION>Set the path to a custom config file and the module will use this instead of the ScummVM's default one.</DESCRIPTION>
 						</KEY>
+						<KEY name="LaunchMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>This defines the way the module will try to launch the game. Auto will assume all the info is in the scummvm.ini file and that your rom name (or whatever you defined for TargetName for this rom) will match ScummVM's target name (default), ParseIni will try to parse your scummvm.ini file and get the path to your game from there, eXoDOS should be used when using the module with the eXoDOS sets as it will use the respective file structure.</DESCRIPTION>
+							<VALUES>
+								<VALUE>Auto</VALUE>
+								<VALUE>ParseIni</VALUE>
+								<VALUE>eXoDOS</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="ForceExtractionToRomPath" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you want to force the extraction of compressed roms to the rom path regardless what you have set for 7z_Extract_Path. It's not advisable to do this since if something goes wrong you can end up with your roms folder deleted, but if you are using the eXoDOS sets and intend to run the games with both HyperLaunch and Meagre then you will want this option active since this how those sets will work out of the box. This setting can only be enabled if LaunchMode=eXoDOS.</DESCRIPTION>
+						</KEY>
 						<KEY name="SaveKey" required="false" nullable="false">
 							<KEYTYPE>xHotkey</KEYTYPE>
 							<DESCRIPTION>hotkey to save state</DESCRIPTION>
@@ -26,6 +39,93 @@
 						<KEY name="MenuKey" required="false" nullable="false">
 							<KEYTYPE>xHotkey</KEYTYPE>
 							<DESCRIPTION>hotkey to access the ScummVM menu</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="TargetName" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>ScummVM target name for this rom. If not set defaults to the rom name</DESCRIPTION>
+						</KEY>
+						<KEY name="LaunchMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>This defines the way the module will try to launch the game. Auto will assume all the info is in the scummvm.ini file and that your rom name (or whatever you defined for TargetName for this rom) will match ScummVM's target name (default), ParseIni will try to parse your scummvm.ini file and get the path to your game from there, eXoDOS should be used when using the module with the eXoDOS sets as it will use the respective file structure</DESCRIPTION>
+							<VALUES>
+								<VALUE>Auto</VALUE>
+								<VALUE>ParseIni</VALUE>
+								<VALUE>eXoDOS</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="ForceExtractionToRomPath" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you want to force the extraction of compressed roms to the rom path regardless what you have set for 7z_Extract_Path. It's not advisable to do this since if something goes wrong you can end up with your roms folder deleted, but if you are using the eXoDOS sets and intend to run the games with both HyperLaunch and Meagre then you will want this option active since this how those sets will work out of the box. This setting can only be enabled if LaunchMode=eXoDOS.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="%SystemName%" required="false">
+			<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="CustomConfig" required="false" nullable="false">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<DESCRIPTION>Set the path to a custom config file and the module will use this instead of the ScummVM's default one.</DESCRIPTION>
+						</KEY>
+						<KEY name="LaunchMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>This defines the way the module will try to launch the game. Auto will assume all the info is in the scummvm.ini file and that your rom name (or whatever you defined for TargetName for this rom) will match ScummVM's target name (default), ParseIni will try to parse your scummvm.ini file and get the path to your game from there, eXoDOS should be used when using the module with the eXoDOS sets as it will use the respective file structure</DESCRIPTION>
+							<VALUES>
+								<VALUE>Auto</VALUE>
+								<VALUE>ParseIni</VALUE>
+								<VALUE>eXoDOS</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="ForceExtractionToRomPath" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you want to force the extraction of compressed roms to the rom path regardless what you have set for 7z_Extract_Path. It's not advisable to do this since if something goes wrong you can end up with your roms folder deleted, but if you are using the eXoDOS sets and intend to run the games with both HyperLaunch and Meagre then you will want this option active since this how those sets will work out of the box. This setting can only be enabled if LaunchMode=eXoDOS.</DESCRIPTION>
+						</KEY>
+						<KEY name="SaveKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>hotkey to save state</DESCRIPTION>
+						</KEY>
+						<KEY name="LoadKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>hotkey to load state</DESCRIPTION>
+						</KEY>
+						<KEY name="MenuKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>hotkey to access the ScummVM menu</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="TargetName" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>ScummVM target name for this rom. If not set defaults to the rom name</DESCRIPTION>
+						</KEY>
+						<KEY name="LaunchMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>This defines the way the module will try to launch the game. Auto will assume all the info is in the scummvm.ini file and that your rom name (or whatever you defined for TargetName for this rom) will match ScummVM's target name (default), ParseIni will try to parse your scummvm.ini file and get the path to your game from there, eXoDOS should be used when using the module with the eXoDOS sets as it will use the respective file structure</DESCRIPTION>
+							<VALUES>
+								<VALUE>Auto</VALUE>
+								<VALUE>ParseIni</VALUE>
+								<VALUE>eXoDOS</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="ForceExtractionToRomPath" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you want to force the extraction of compressed roms to the rom path regardless what you have set for 7z_Extract_Path. It's not advisable to do this since if something goes wrong you can end up with your roms folder deleted, but if you are using the eXoDOS sets and intend to run the games with both HyperLaunch and Meagre then you will want this option active since this how those sets will work out of the box. This setting can only be enabled if LaunchMode=eXoDOS.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>

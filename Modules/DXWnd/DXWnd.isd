@@ -9,10 +9,11 @@
 					<KEYS>
 						<KEY name="verticalMethod" required="false" nullable="false">
 							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>choices are display or irotate, use whatever works best for you</DESCRIPTION>
+							<DESCRIPTION>The tool you want to use to rotate your desktop. Default is the what you have set in the global HyperLaunch setting for Rotate_Method. Only set this if you want to override your global setting for this module.</DESCRIPTION>
 							<VALUES>
-								<VALUE>Display</VALUE>
-								<VALUE>iRotate</VALUE>
+								<VALUE>display</VALUE>
+								<VALUE>irotate</VALUE>
+								<VALUE>shortcut</VALUE>
 							</VALUES>
 						</KEY>
 					</KEYS>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="DiskSwapKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>Define Disk Swap Key. Default is F5</DESCRIPTION>
+						</KEY>
+						<KEY name="RotateMethod" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>The tool you want to use to rotate your desktop. Default is the what you have set in the global HyperLaunch setting for Rotate_Method. Only set this if you want to override your global setting for this module.</DESCRIPTION>
+							<VALUES>
+								<VALUE>display</VALUE>
+								<VALUE>irotate</VALUE>
+								<VALUE>shortcut</VALUE>
+							</VALUES>
+						</KEY>						
+						<KEY name="bezelRightOffset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Adjust this value if you still see the vertical bar component at the right of the emulator window.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="DualDiskLoad" required="false" nullable="true">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Choose False if this game can't handle two discs inserted simultaneously. Default is True.</DESCRIPTION>
+						</KEY>
+						<KEY name="MultipleDiskSlot" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Choose the FDD slot where MultiGame needs to change the disk. Default is slot0.</DESCRIPTION>
+							<VALUES>
+								<VALUE>0</VALUE>
+								<VALUE>1</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="SystemType" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Choose the type of AppleII you want to emulate. Default is the Enhanced AppleII/e</DESCRIPTION>
+							<VALUES>
+								<VALUE description="AppleII">0</VALUE>
+								<VALUE description="AppleII+">1</VALUE>
+								<VALUE description="AppleII/e">16</VALUE>
+								<VALUE description="Enhanced AppleII/e">17</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="VideoMode" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Choose Video mode for the machine.  Text adventures may look better in one of the monochrome options.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Color">1</VALUE>
+								<VALUE description="Monochrome(Amber)">4</VALUE>
+								<VALUE description="Monochrome(Green)">5</VALUE>
+								<VALUE description="Monochrome(White)">6</VALUE>								
+							</VALUES>
+						</KEY>
+						<KEY name="Command" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Used if rom requires a command after loading is complete to start the game. Use standard AutoHotkey key names, use {Wait} to pause 500 milliseconds between words/characters. ie, "R{Wait}C" to press the R and C keys with a slight delay between them. Useful for navigating through menus.</DESCRIPTION>
+						</KEY>
+						<KEY name="SendCommandDelay" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Time in milliseconds to wait initially until commands/keystrokes are typed for those games that have the Command setting filled in</DESCRIPTION>
+						</KEY>						
+						<KEY name="EamonAdventureDOS" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Only applicable for Eamon text adventures.  Default is DOS3.3</DESCRIPTION>
+							<VALUES>
+								<VALUE description="DOS3.3">DOS3.3</VALUE>
+								<VALUE description="ProDOS">ProDOS</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="RotateDisplay" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Rotate the display 90 degrees either left or right for vertical games.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="Left">90</VALUE>
+								<VALUE description="Right">270</VALUE>
+							</VALUES>							
+						</KEY>
+						<KEY name="ReadOnlyDisk" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Is this rom required to be read only in order for the game to start?  This does NOT set that attribute, it is used for check/verify that the actualy rom has the correct file attributes.</DESCRIPTION>
+						</KEY>						
+						<KEY name="Drive2Disk" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Rare case if the disk that needs to be loaded at boot time in drive two is something other than Disk 2.  This integer represents what disk number should start in Drive 2.</DESCRIPTION>
+						</KEY>												
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

@@ -19,6 +19,22 @@
 							<KEYTYPE>String</KEYTYPE>
 							<DESCRIPTION>Set Nestopia's Toggle Menu key. Make sure this is not the same as your exit key.</DESCRIPTION>
 						</KEY>
+						<KEY name="bezelTopOffset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the top of your playing screen increase this value. If your playing screen is hidden at the top decrease it.</DESCRIPTION>
+						</KEY>
+						<KEY name="bezelBottomOffset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the bottom of your playing screen increase this value. If your playing screen is hidden at the bottom decrease it.</DESCRIPTION>
+						</KEY>
+						<KEY name="bezelLeftOffset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the left of your playing screen increase this value. If your playing screen is hidden at the left decrease it.</DESCRIPTION>
+						</KEY>
+						<KEY name="bezelRightOffset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the right of your playing screen increase this value. If your playing screen is hidden at the right decrease it.</DESCRIPTION>
+						</KEY>
 					</KEYS>
 				</SECTION>
 				<SECTION name="%RomName%" required="false">

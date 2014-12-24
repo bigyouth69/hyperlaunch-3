@@ -1,9 +1,9 @@
-MCRC=6158961F
-MVersion=1.0.5
+MCRC=B332A4A2
+MVersion=1.0.6
 
 RunAHKKeymapper(method) {
 	Global ahkDefaultProfile,ahkFEProfile,ahkRomProfile,ahkEmuProfile,ahkSystemProfile,ahkHyperLaunchProfile,ahkLauncherPath,ahkLauncherExe,keymapperFrontEndProfile
-	Global systemName,dbName,emuName
+	Global systemName,dbName,emuName,moduleExtensionsPath
 	Log("RunAHKKeymapper - Started")
 
 	If method = load
@@ -17,8 +17,8 @@ RunAHKKeymapper(method) {
 	} Else If (method = "menu")	; this method we do not want to unload AHK if a new profile was not found, existing profile should stay running
 	{	Log("RunAHKKeymapper - Loading HyperLaunch AHK Keymapper profile",4)
 		profile := GetAHKProfile(ahkHyperLaunchProfile)
-	} Else If (method = "unload"  && keymapperFrontEndProfile = "false")
-	{	Log("RunAHKKeymapper - Unloading AhkLauncher because the Front End profile is disabled.",4)
+	} Else If (method = "unload")
+	{	Log("RunAHKKeymapper - Unloading AhkLauncher",4)
 		unloadAHK = 1
 	}
 	If (unloadAHK || profile)	; if a profile was found or this method should unload the existing AHK profile
@@ -30,6 +30,8 @@ RunAHKKeymapper(method) {
 	}
 
 	If profile {	; if a profile was found, load it
+		If FileExist(moduleExtensionsPath . "\autohotkey.dll")
+			ScriptError("Please delete autohotkey.dll from the folder """ . moduleExtensionsPath . """ as it will cause errors with " . ahkLauncherExe)
 		Log("RunAHKKeymapper - This profile was found and needs to be loaded: " . profile,4)
 		Run(ahkLauncherExe . " -notray """ . profile . """", ahkLauncherPath)	; load desired ahk profile
 	}
@@ -66,9 +68,10 @@ GetAHKProfile(ProfilePrefixes) {
 
 LoadPreferredControllers(JoyIDsPreferredControllers) {
 	Global CustomJoyNameArray
-	Log("Keymapper - JoyIDsPreferredControllers = " . JoyIDsPreferredControllers,5)
+	Log("LoadPreferredControllers - Started")
+	Log("LoadPreferredControllers - JoyIDsPreferredControllers = " . JoyIDsPreferredControllers,5)
 	; 16 is max number of joysticks windows and joyids allows
-	Log("Keymapper - Creating a list of currently connected joysticks",5) 
+	Log("LoadPreferredControllers - Creating a list of currently connected joysticks",5) 
 	JoystickArray := GetJoystickArray()
 	Loop, 16
 	{	ControllerName := JoystickArray[A_Index,1]
@@ -98,17 +101,17 @@ LoadPreferredControllers(JoyIDsPreferredControllers) {
 			;it will be appended with a decimal value relative to order they were found in.
 			;create sorting string also add the order found. If controllers are not found in preferred, plug-in order is used.
 			;example format: 123.01|360 Controller
-			Log("Keymapper - Preferred Order Sorting List -> " . PositionOrder . "." . SubStr("0" . A_Index, -1) . "|" . MID . "|" . PID . "|" . GUID,5)
+			Log("LoadPreferredControllers - Preferred Order Sorting List -> " . PositionOrder . "." . SubStr("0" . A_Index, -1) . "|" . MID . "|" . PID . "|" . GUID,5)
 			If !String2Sort
 				String2Sort := PositionOrder . "." . SubStr("0" . A_Index, -1) . "|" . MID . "|" . PID . "|" . GUID
 			Else
 				String2Sort .= "`n" . PositionOrder . "." . SubStr("0" . A_Index, -1) . "|" . MID . "|" . PID . "|" . GUID
 		}
 	}
-	Log("Keymapper - Sorting Currently Connected joysticks List to match the order of the Preferred Controller List")  
+	Log("LoadPreferredControllers - Sorting Currently Connected joysticks List to match the order of the Preferred Controller List")  
 	;sort numerically
 	Sort, String2Sort, N
-	Log("Keymapper - Assigning the New Joystick IDs according to the preferred list for the active controllers")
+	Log("LoadPreferredControllers - Assigning the New Joystick IDs according to the preferred list for the active controllers")
 	;parse the string
 	Loop, Parse, String2Sort, `n
 	{	StringSplit, JoyIDsSortArray, A_LoopField, |
@@ -117,6 +120,7 @@ LoadPreferredControllers(JoyIDsPreferredControllers) {
 		GUID := JoyIDsSortArray4
 		ChangeJoystickID(MID,PID,GUID,A_Index)
 	}
+	Log("LoadPreferredControllers - Ended")
 }
 
 ;##################################################################
@@ -135,6 +139,7 @@ RunKeymapper(keymapperLoad_Or_Unload,Keymapper) {
 	Global keymapperFullPath 
 	Global KeymapperHyperLaunchProfileEnabled, keymapperEnabled
 	;Global keymapperLoad_Or_Unload
+	Log("RunKeymapper - Started")
 	
 	If ((KeymapperHyperLaunchProfileEnabled = "false") OR (keymapperEnabled = "false")) AND (keymapperLoad_Or_Unload = "menu")
 		Return
@@ -144,10 +149,12 @@ RunKeymapper(keymapperLoad_Or_Unload,Keymapper) {
 	;define profiles to load and run keymappers
 	
 	If (keymapper="xpadder")
-	{	Loop,16
+	{	Log("RunKeymapper - Looping through controllers to find xpadder profiles for each one",5)
+		Loop,16
 		{	ControllerName := joystickArray[A_Index,1]
 			If ControllerName
-			{	If (keymapperLoad_Or_Unload = "load")
+			{	Log("RunKeymapper - ID: " . A_Index . " Now searching for a matching profile for this controller: """ . ControllerName . """",5)
+				If (keymapperLoad_Or_Unload = "load")
 					Profile2Load := GetProfile(keymapper, romProfile . "|" . emuProfile . "|" . xPadderSystemProfile . "|" . defaultProfile . "|" . blankProfile, keymapperLoad_Or_Unload, ControllerName, Player_Number)
 				Else If (keymapperLoad_Or_Unload = "unload")
 					Profile2Load := GetProfile(keymapper, (If keymapperFrontEndProfile = "xpadder" ? FEProfile . "|"  : "") . blankProfile, keymapperLoad_Or_Unload, ControllerName, Player_Number)
@@ -162,7 +169,7 @@ RunKeymapper(keymapperLoad_Or_Unload,Keymapper) {
 		}
 		RunXpadder(keymapperPath,keymapperExe,ProfilesInIdOrder,joystickArray)
 	} Else If (keymapper="joy2key") OR (keymapper = "joytokey")
-	{
+	{	Log("RunKeymapper - Looping through controllers to find joytokey profiles for each one",5)
 		If (keymapperLoad_Or_Unload = "load")
 			Profile2Load := GetProfile(keymapper, romProfile . "\" . dbName . "|" . emuProfile . "\" . emuName . "|" . systemProfile . "\" . systemName . "|" . defaultProfile . "\_Default", keymapperLoad_Or_Unload)
 		Else If (keymapperLoad_Or_Unload = "unload" && keymapperFrontEndProfile = "joytokey")
@@ -174,6 +181,7 @@ RunKeymapper(keymapperLoad_Or_Unload,Keymapper) {
 	
 		RunJoyToKey(keymapperPath,keymapperExe,Profile2Load)
 	}	
+	Log("RunKeymapper - Ended")
 	Return %FEProfile%
 }
 
@@ -224,26 +232,27 @@ GetProfile(keymapper, ProfilePrefixes, keymapperLoad_Or_Unload = "load",  Contro
 	;profile prefixes for loading should look like %romProfile%|%emuProfile%|%systemProfile%|%defaultProfile%|%blankProfile%
 	;profile prefixes for unloading should look like %FEProfile%|%blankProfile%
 	Profile2Load := ""
+	; Log("GetProfile - Searching for these profiles: " . ProfilePrefixes,5)
 	Loop,Parse,ProfilePrefixes,|
 	{	ProfileName := A_LoopField
 		Loop, %LoopNumber%
 		{	JoyName := PossibleJoyNames%A_Index%
 			If (ProfileName = blankProfile) ;blankProfile is global variable. This check is here because blank profiles don't need player number.
 			{	Profile := ProfileName . keymapperExtension
-				Log("Keymapper - Searching -> " . Profile,5)
+				Log("GetProfile - Searching -> " . Profile,5)
 				If FileExist(Profile)
 				{	Profile2Load := Profile
-					Log("Keymapper - Loading Profile -> " . Profile2Load)
+					Log("GetProfile - Loading Profile -> " . Profile2Load)
 					PlayerNumber++
 					Return %Profile2Load%
 				}
 				Break
 			} Else {
 				Profile := ProfileName . JoyName . PlayerIndicator . keymapperExtension
-				Log("Keymapper - Searching -> " . Profile,5)
+				Log("GetProfile - Searching for a Player " . PlayerNumber . " profile -> " . Profile,5)
 				If FileExist(Profile)
 				{	Profile2Load := Profile
-					Log("Keymapper - Loading Profile -> " . Profile2Load)
+					Log("GetProfile - Loading Player " . PlayerNumber . " Profile -> " . Profile2Load)
 					PlayerNumber++
 					Return %Profile2Load%
 				}
@@ -252,11 +261,11 @@ GetProfile(keymapper, ProfilePrefixes, keymapperLoad_Or_Unload = "load",  Contro
 	}
 	If !Profile2Load
 		If (keymapperLoad_Or_Unload = "load")
-			Log("Keymapper support is enabled for """ . keymapper . """`, but could not find a """ . dbName . """`, """ . emuName . """`, """ . systemName . """`, default`, a """ . ControllerName . """ player " . PlayerNumber . " profile or a blank profile in """ . keymapperProfilePath . """ for controller """ . ControllerName . """",2)
+			Log("GetProfile - Keymapper support is enabled for """ . keymapper . """`, but could not find a """ . dbName . """`, """ . emuName . """`, """ . systemName . """`, default`, a """ . ControllerName . """ player " . PlayerNumber . " profile or a blank profile in """ . keymapperProfilePath . """ for controller """ . ControllerName . """",2)
 		Else If (keymapperLoad_Or_Unload = "unload")
-			Log("Keymapper support is enabled for """ . keymapper . """`, but could not find a " . keymapperFrontEndProfileName . " profile or a blank profile in " . keymapperProfilePath . " for controller " . ControllerName,2)
+			Log("GetProfile - Keymapper support is enabled for """ . keymapper . """`, but could not find a " . keymapperFrontEndProfileName . " profile or a blank profile in " . keymapperProfilePath . " for controller " . ControllerName,2)
 		Else If (keymapperLoad_Or_Unload = "menu")
-			Log("Keymapper support is enabled for """ . keymapper . """`, but could not find a HyperLaunch profile or a blank profile in " . keymapperProfilePath . " for controller " . ControllerName,2)
+			Log("GetProfile - Keymapper support is enabled for """ . keymapper . """`, but could not find a HyperLaunch profile or a blank profile in " . keymapperProfilePath . " for controller " . ControllerName,2)
 }
 
 ;#########################
@@ -271,41 +280,49 @@ GetProfile(keymapper, ProfilePrefixes, keymapperLoad_Or_Unload = "load",  Contro
 ;#########################
 
 GetJoystickArray() {
-	Global HLObject
-	Result := COM_Invoke(HLObject, "getConnectedJoysticks")
-	log("Keymapper - Joysticks Detected: " . Result,5)
-	
-	StringSplit,joyDet,Result
+	Log("GetJoystickArray - Started")
+	DllCall("winmm\joyConfigChanged", UInt, 0)
+	Loop,16
+	{
+		port := A_Index - 1
+		VarSetCapacity(joyState,512)
+		joyError := DllCall("winmm\joyGetPosEx", "ptr", port, "ptr", &joyState)
+		If joyError = 0
+			joysDetected .= 1
+		Else
+			joysDetected .= 0
+	}
+	Log("GetJoystickArray - Joysticks Detected: " . joysDetected,5)
 	joyArray := Object()
 	Loop, 5
 		joyArray[0,A_Index] := ""
-	Loop, %joyDet0%
+	Loop, Parse, joysDetected
 	{	CurrentController := A_Index
-		Mid := "", Pid := "", joy_name := "" ; erase values
-		Connected := joyDet%CurrentController%
-		If (Connected = "1")
+		currentJoyGUID :=
+		Mid := "", Pid := "", joyName := ""	; Erase values
+		If (A_LoopField = "1")
 		{	If joyArray[0,1]
 				joyArray[0,1] := joyArray[0,1] . "|" . CurrentController 
 			Else
 				joyArray[0,1] := CurrentController
 			VarSetCapacity(joybank,1024,0)
-			i:=0
+			i := 0
 			port := CurrentController - 1
 			Loop, 1024
-			{	;get driver information
-				err :=dllcall("winmm.dll\joyGetDevCapsA",Int,port,UInt,&joybank,UInt,i)
+			{	; Get driver information
+				err := dllcall("winmm.dll\joyGetDevCapsA",Int,port,UInt,&joybank,UInt,i)
 				i++
-				; a successful dllcall returns a 0
+				; A successful dllcall returns a 0
 				If (err = 0)
-				{	;converting decimal values to hex since windows uses the hex value more often
+				{	; Converting decimal values to hex since windows uses the hex value more often
 					offset = 0
 					Loop, 2 
 					{	SetFormat, IntegerFast, hex
 						ret := NumGet(&joybank,offset,"UShort")
 						ret .= ""
 						SetFormat, IntegerFast, d
-						; remove the 0x we don't need it and padding it with 0's to have a width of four
-						; advice: leave these two lines out if using this function in other scripts
+						; Remove the 0x we don't need it and padding it with 0's to have a width of four
+						; Advice: leave these two lines out if using this function in other scripts
 						StringTrimLeft,ret,ret,2
 						ID%A_Index% := SubStr("0000" . ret,-3)
 						offset := offset+2
@@ -313,22 +330,26 @@ GetJoystickArray() {
 					Mid := ID1, Pid := ID2
 				}
 			}
-			If !Mid OR !Pid
-				joy_name := ""
+			If !Mid && !Pid
+				joyName := ""
 			Else {
 				regFolder := "VID_" . Mid . "&PID_" . Pid
-				RegRead, joy_name, HKEY_CURRENT_USER, System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\%regFolder%, OEMName
+				RegRead, joyName, HKEY_CURRENT_USER, System\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\%regFolder%, OEMName
 				If ErrorLevel
-					RegRead, joy_name, HKEY_LOCAL_MACHINE, SYSTEM\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\%regFolder%, OEMName
+					RegRead, joyName, HKEY_LOCAL_MACHINE, SYSTEM\CurrentControlSet\Control\MediaProperties\PrivateProperties\Joystick\OEM\%regFolder%, OEMName
 			}
+			currentJoyGUID := GetJoystickGUID(Mid,Pid,CurrentController)
+			Log("GetJoystickArray - ID: " . CurrentController . " | Port: " . port . " | Name: " . joyName . " | MID: " . mid . " | PID: " . pid . " | GUID: " . currentJoyGUID,5)
 		}
-		;append empty string to avoid ahk's auto converting string type containing integers to integer type because we want the leading zeros
-		joyArray[A_Index,1] := joy_name . ""
-		joyArray[A_Index,2] := Mid . ""
-		joyArray[A_Index,3] := Pid . ""
-		joyArray[A_Index,4] := GetJoystickGUID(Mid,Pid,A_Index) . ""
-		joyArray[A_Index,5] := ""
+		joyName = %joyName%	; Xpadder trims leading and trailing whitespace so we will do the same
+		; Append empty string to avoid ahk's auto converting string type containing integers to integer type because we want the leading zeros
+		joyArray[CurrentController,1] := joyName . ""
+		joyArray[CurrentController,2] := Mid . ""
+		joyArray[CurrentController,3] := Pid . ""
+		joyArray[CurrentController,4] := currentJoyGUID . ""
+		joyArray[CurrentController,5] := ""
 	}
+	Log("GetJoystickArray - Ended")
 	Return %joyArray%
 }
 
@@ -347,6 +368,7 @@ GetJoystickGUID(Mid,Pid,JoystickID) {
 	If JoystickID not between 1 and 16
 		Return
 
+	Log("GetJoystickGUID - Started")
 	SetFormat, IntegerFast, hex
 	REG_JOY_ID := JoystickID - 1
 	REG_JOY_ID .= "000000"
@@ -364,11 +386,12 @@ GetJoystickGUID(Mid,Pid,JoystickID) {
 			RegRead, regvar
 			If (regvar = REG_JOY_ID) {
 				RegSubKey := A_LoopRegSubKey
-				break
+				Break
 			}
 		}
 	}
 	RegRead, GUID, %RootKey%, %RegSubKey%, GUID
+	Log("GetJoystickGUID - Ended and found GUID: " . GUID)
 	Return %GUID%
 }
 
@@ -386,6 +409,7 @@ GetJoystickGUID(Mid,Pid,JoystickID) {
 ;#########################
 
 ChangeJoystickID(Mid,Pid,GUID,NewJoystickID) {
+	Log("ChangeJoystickID - Started")
 	If !Mid OR !Pid OR !GUID OR !NewJoystickID
 		Return 1
 	If NewJoystickID not between 1 and 16
@@ -414,44 +438,47 @@ ChangeJoystickID(Mid,Pid,GUID,NewJoystickID) {
 	}
 	RegRead, jid, %RootKey%, %RegSubKey%, Joystick Id
 	RegWrite, REG_BINARY, %RootKey%, %RegSubKey%, Joystick Id, %NewJoystickID%
-	Log("Keymapper - Swapping Joystick ID: " . jid . " to the New Joystick ID: " . NewJoystickID . ", for the Joystick VID_" . Mid . "&PID_" . Pid . "&GUID_" . GUID,5)
+	Log("ChangeJoystickID - Swapping Joystick ID: " . jid . " to the New Joystick ID: " . NewJoystickID . ", for the Joystick VID_" . Mid . "&PID_" . Pid . "&GUID_" . GUID,5)
+	Log("ChangeJoystickID - Ended")
 	Return %ErrorLevel%
 }
 
 RunXpadder(keymapperPath,keymapperExe,ProfilesInIdOrder,joystickArray) {
 	Global joyToKeyFullPath
-	;closing joytokey to avoid dual keymapper conflict.
-	If FileExist(joyToKeyFullPath) {
-		SplitPath, joyToKeyFullPath, j2kexe, j2kdir
-		Process, Close, %j2kexe%
-	}
+	Log("RunXpadder - Started")
+
+	; Closing joytokey to avoid dual keymapper conflict.
+	SplitPath, joyToKeyFullPath, joyToKeyExe, joyToKeyPath
+	errLvl := Process("Exist", joyToKeyExe)
+	If errLvl
+		Process("Close", joyToKeyExe)
 	
-	;close xpadder to refresh controllers
-	Log("Keymapper - Closing xpadder to refresh controllers seen by xpadder",5)
-	Run, %keymapperExe% /C, %keymapperPath%
+	; Close xpadder to refresh controllers
+	Log("RunXpadder - Closing xpadder to refresh controllers seen by xpadder",5)
+	Run(keymapperExe . " /C", keymapperPath)
 	
 	StringSplit,Profiles,ProfilesInIdOrder,|
-	Log("Keymapper - Creating an array of connected controllers and profiles to arrange according to the order found in " . keymapperPath . "\xpadder.ini",5)
+	Log("RunXpadder - Creating an array of connected controllers and profiles to arrange according to the order found in " . keymapperPath . "\xpadder.ini",5)
 	XpadderArray := []
 	ProfileCount = 0
 	Loop,16
 	{	ControllerName := joystickArray[A_Index,1]
 		MID := joystickArray[A_Index,2]
 		PID := joystickArray[A_Index,3]
-		;check to see if controller name has been previously been found
+		; Check to see if controller name has been previously been found
 		String := XpadderArray[ControllerName]	
 		StringSplit,SplitArray,String,|
 		If SplitArray0
 		{	ProfileCount++
 			Profile2Load := Profiles%ProfileCount%
-			;store ID numbers that are compatible xpadder in SplitArray1
-			;append the newly found profile2load with the previously found profiles associated with this controller separated with a ? to be later replaced with " "
+			; Store ID numbers that are compatible xpadder in SplitArray1
+			; Append the newly found profile2load with the previously found profiles associated with this controller separated with a ? to be later replaced with " "
 			XpadderArray[ControllerName] := SplitArray1 . "|" . SplitArray2 . "?" . Profile2Load
 		} Else If ControllerName
 		{	ProfileCount++
 			Profile2Load := Profiles%ProfileCount%
 			
-			;convert hexadecimal Mid and Pid values into a format compatible with xpadder's xpadder.ini
+			; Convert hexadecimal Mid and Pid values into a format compatible with xpadder's xpadder.ini
 			ID1:=SubStr(Mid,1,2),ID2:=SubStr(Mid,3,2),ID3:=SubStr(Pid,1,2),ID4:=SubStr(Pid,3,2)
 			Loop,4
 			{	ID%A_Index% := "0x" . ID%A_Index%
@@ -462,55 +489,57 @@ RunXpadder(keymapperPath,keymapperExe,ProfilesInIdOrder,joystickArray) {
 			XpadderArray.Insert(ControllerName,Value)
 		}
 	}
-	Process, WaitClose, %keymapperExe%, 2		;wait for xpadder to finish writing its values to xpadder.ini before reading and editing it
-	If ErrorLevel
-		Process, Close, %keymapperExe%
-	Log("Keymapper - Reading the order in " . keymapperPath . "\xpadder.ini and arranging profiles found to match that order",5)
+	errLvl := Process("WaitClose", keymapperExe, 2)		;wait for xpadder to finish writing its values to xpadder.ini before reading and editing it
+	If errLvl
+		Process("Close", keymapperExe)
+	Log("RunXpadder - Reading the order in " . keymapperPath . "\xpadder.ini and arranging profiles found to match that order",5)
 	Loop {
-		;get profiles in order as appears in xpadder.ini
+		; Get profiles in order as appears in xpadder.ini
 		LoopIndex := A_Index ;record number in case we need to add a new key to xpadder.
 		IniRead, IniControllerName, %keymapperPath%\Xpadder.ini, Controllers, Controller%LoopIndex%Name
-		If (IniControllerName = "ERROR") ;this means there are no more controllers to be found in the ini
+		If (IniControllerName = "ERROR") { ;this means there are no more controllers to be found in the ini
+			Log("RunXpadder - No more controllers to be found",5)
 			Break
-		;look to see if the controller found in the ini is already in our array
+		}
+		; Look to see if the controller found in the ini is already in our array
 		XpadderArrayValue := XpadderArray[IniControllerName]
 		If XpadderArrayValue
 		{	StringSplit,SplitArray,XpadderArrayValue,|
-			;make sure controller is not hidden. if it is one xpadder does not recognize controller and the profile loading is messed up.
+			; Make sure controller is not hidden. if it is one xpadder does not recognize controller and the profile loading is messed up.
 			IniWrite, 0, %keymapperPath%\Xpadder.ini, Controllers, Controller%LoopIndex%Hidden
-			; this is for later use
+			; This is for later use
 			If !IniControllersFound
 				IniControllersFound := IniControllerName
 			Else
 				IniControllersFound .= "," . IniControllerName
-			;start creating the string of profiles to send to xpadder
+			; Start creating the string of profiles to send to xpadder
 			If !ProfilesInXpadderOrder
 				ProfilesInXpadderOrder := SplitArray2
 			Else
 				ProfilesInXpadderOrder.= """ """ . SplitArray2
-			;because we looped and looked up profiles in the array in the order of the ini, they will be in order when sent to xpadder
+			; Because we looped and looked up profiles in the array in the order of the ini, they will be in order when sent to xpadder
 		}
 	}
 	For key, XpadderArrayValue in XpadderArray
 	{	If key not in %IniControllersFound%
-		{	Log("Keymapper - Could not find " . key . " in xpadder.ini. Writing the new controller to xpadder.ini",5)
+		{	Log("RunXpadder - Could not find " . key . " in xpadder.ini. Writing the new controller to xpadder.ini",5)
 			StringSplit,SplitArray,XpadderArrayValue,|
-			;write new key values for the controllers not found in xpadder.ini to xpadder so it sees them when it restarts.
+			; Write new key values for the controllers not found in xpadder.ini to xpadder so it sees them when it restarts.
 			IniWrite, %key%, %keymapperPath%\Xpadder.ini, Controllers, Controller%LoopIndex%Name
 			IniWrite, %SplitArray1%, %keymapperPath%\Xpadder.ini, Controllers, Controller%LoopIndex%ID
 			IniWrite, 0, %keymapperPath%\Xpadder.ini, Controllers, Controller%LoopIndex%Hidden
 			
-			;look for matching xpaddercontroller file in xpadder.exe root directory
+			; Look for matching xpaddercontroller file in xpadder.exe root directory
 			CustomJoyName := CustomJoyNameArray[key]
-			;profiles can be named after CustomJoyName or controller name. Oem Name takes priority.
+			; Profiles can be named after CustomJoyName or controller name. Oem Name takes priority.
 			If (FileExist(keymapperPath . key . ".xpaddercontroller")) {
-				Log("Keymapper - Loading " . keymapperPath . "\" . key  ".xpaddercontroller layout for the new controller",5)
+				Log("RunXpadder - Loading " . keymapperPath . "\" . key  ".xpaddercontroller layout for the new controller",5)
 				IniWrite, %key%.xpaddercontroller, %keymapperPath%\Xpadder.ini, Controllers, Controller%LoopIndex%File
 			} Else If (CustomJoyName AND FileExist(keymapperPath . CustomJoyName . ".xpaddercontroller")) {
-				Log("Keymapper - Loading " . keymapperPath . "\" . CustomJoyName  ".xpaddercontroller layout for the new controller",5)
+				Log("RunXpadder - Loading " . keymapperPath . "\" . CustomJoyName  ".xpaddercontroller layout for the new controller",5)
 				IniWrite, %CustomJoyName%.xpaddercontroller, %keymapperPath%\Xpadder.ini, Controllers, Controller%LoopIndex%File
 			} Else {
-				;this means a xpaddercontroller profile has not been found
+				; This means a xpaddercontroller profile has not been found
 				ScriptError("Please create a xpaddercontroller profile named either " . key . " or " . CustomJoyName . ". It also needs to be in the same folder as xpadder.exe")
 			}
 			Loop, 4
@@ -524,23 +553,25 @@ RunXpadder(keymapperPath,keymapperExe,ProfilesInIdOrder,joystickArray) {
 	}
 	StringReplace, ProfilesInXpadderOrder, ProfilesInXpadderOrder, ?, " ", All
 	If ProfilesInXpadderOrder
-	{	Log("Keymapper - Run`," . keymapperExe . " """ . ProfilesInXpadderOrder . """ /M`, " . keymapperPath . "`, Hide")
-		Run, %keymapperExe% "%ProfilesInXpadderOrder%" /M, %keymapperPath%, Hide
-	}
+		Run(keymapperExe . " """ . ProfilesInXpadderOrder . """ /M", keymapperPath, "Hide")
+	Else
+		Log("RunXpadder - No profiles found and nothing to tell Xpadder to load",2)
+	Log("RunXpadder - Ended")
 }	
 
 RunJoyToKey(keymapperPath,keymapperExe,Profile="") {
 	Global xpadderFullPath
-	;closing xpadder to avoid dual keymapper conflict.
+	Log("RunJoyToKey - Started")
+	; Closing xpadder to avoid dual keymapper conflict.
 	If FileExist(xpadderFullPath) {
 		SplitPath, xpadderFullPath, xpadderexe, xpadderdir
-		Process, Exist, %xpadderexe%
-		If ErrorLevel
-		{
-			Run, %xpadderexe% /C, %xpadderdir%
-			Process, Exist, %xpadderexe%
-			If ErrorLevel
-				Process, Close, %xpadderexe%
+		errLvl := Process("Exist", xpadderexe)
+		If errLvl
+		{	Log("RunJoyToKey - Closing xpadder to avoid dual keymapper conflict",2)
+			Run(xpadderexe . " /C", xpadderdir)
+			errLvl := Process("Exist", xpadderexe)
+			If errLvl
+				Process("Close", xpadderexe)
 		}
 	}
 	
@@ -548,26 +579,24 @@ RunJoyToKey(keymapperPath,keymapperExe,Profile="") {
 	If exitMeansMinimize = ERROR
 		ScriptError("You are using KeyMapper support but are not up-to-date with JoyToKey or cannot find JoyToKey.ini in " . keymapperPath . "`nPlease make sure you are running JoyToKey v5.1.0 or later",10)
 	Else If ( exitMeansMinimize = 1 ) {
-		Process, Close, %keymapperExe%
-		Process, WaitClose, %keymapperExe%
+		Process("Close", keymapperExe)
+		Process("WaitClose", keymapperExe)
 		IniWrite, 0, %keymapperPath%\JoyToKey.ini, LastStatus, ExitMeansMinimize
 	}
 	DetectHiddenWindows, On
-	WinClose, JoyToKey ahk_class TMainForm
+	WinClose("JoyToKey ahk_class TMainForm")
 
-	Process, WaitClose, %keymapperExe%,2
-	If ErrorLevel
-		Process, Close, %keymapperExe%
+	errLvl := Process("WaitClose", keymapperExe, 2)
+	If errLvl
+		Process("Close", keymapperExe)
 	; HQ may turn off joytokey from starting minimized, let's set it just in case
 	IniRead, startMinimized, %keymapperPath%\JoyToKey.ini, LastStatus, StartIconified
 	If startMinimized != 1
 		IniWrite, 1, %keymapperPath%\JoyToKey.ini, LastStatus, StartIconified
-	; finally we start the keymapper with the cfg profile we found
+	; Finally we start the keymapper with the cfg profile we found
 	If Profile
-	{
-		Log("Keymapper - Run`, " . keymapperExe .  " """ . Profile . """`, " . keymapperPath)
-		Run, %keymapperExe% "%Profile%", %keymapperPath%
-	}
+		Run(keymapperExe .  """" . Profile . """", keymapperPath)
+	Log("RunJoyToKey - Ended")
 }
 
 Keymapper_HyperPauseProfileList(ControllerName,PlayerNumber,keymapper) {
@@ -575,6 +604,7 @@ Keymapper_HyperPauseProfileList(ControllerName,PlayerNumber,keymapper) {
 	Global blankProfile,defaultProfile,romProfile,emuProfile,xPadderSystemProfile,systemProfile
 	Global systemName,dbName,emuName ;for use with joytokey
 	Global CustomJoyNameArray ;for use with xpadder
+	Log("Keymapper_HyperPauseProfileList - Started")
 	
 	If keymapper = xpadder
 	{	keymapperExtension = .xpadderprofile
@@ -621,15 +651,15 @@ Keymapper_HyperPauseProfileList(ControllerName,PlayerNumber,keymapper) {
 		;If CustomJoyName Exists look for it. If not, don't look for a \\ directory
 		Loop, %LoopNumber%
 		{	
-			Joy_Name := PossibleJoyNames%A_Index%
-			If Joy_Name
+			joyName := PossibleJoyNames%A_Index%
+			If joyName
 				Controller_Specific_Boolean := 1
 			Else
 				Controller_Specific_Boolean := 0
 			
 			If (keymapper = "xpadder") {
-				normProfile := FolderPath . Joy_Name . PlayerIndicator . keymapperExtension
-				FilePattern := FolderPath . Joy_Name . "\*" . keymapperExtension
+				normProfile := FolderPath . joyName . PlayerIndicator . keymapperExtension
+				FilePattern := FolderPath . joyName . "\*" . keymapperExtension
 			} Else {	; keymapper = joy2key
 				normProfile := FolderPath . "\" . normProfileName[j] . keymapperExtension
 				FilePattern := FolderPath . "\*" . keymapperExtension
@@ -651,14 +681,14 @@ Keymapper_HyperPauseProfileList(ControllerName,PlayerNumber,keymapper) {
 				
 				If (normProfile = A_LoopFileFullPath) && !normalProfileFound 
 				{	normalProfileFound = 1
-					Log("Keymapper - Creating Profile List (normal load profile) -> 1`," . FileNameNoExt . "`," . ProfileFolderArray[j] . "`," . Controller_Specific_Boolean . "`," . A_LoopFileFullPath,5)
+					Log("Keymapper_HyperPauseProfileList - Creating Profile List (normal load profile) -> 1`," . FileNameNoExt . "`," . ProfileFolderArray[j] . "`," . Controller_Specific_Boolean . "`," . A_LoopFileFullPath,5)
 					ProfileList[1,1] := FileNameNoExt
 					ProfileList[1,2] := ProfileFolderArray[j]
 					ProfileList[1,3] := Controller_Specific_Boolean
 					ProfileList[1,4] := A_LoopFileFullPath
 				} Else If A_LoopFileFullPath
 				{	i++
-					Log("Keymapper - Creating Profile List -> " . i . "`," . FileNameNoExt . "`," . ProfileFolderArray[j] . "`," . Controller_Specific_Boolean . "`," . A_LoopFileFullPath,5)
+					Log("Keymapper_HyperPauseProfileList - Creating Profile List -> " . i . "`," . FileNameNoExt . "`," . ProfileFolderArray[j] . "`," . Controller_Specific_Boolean . "`," . A_LoopFileFullPath,5)
 					ProfileList[0,1] := i
 					ProfileList[i,1] := FileNameNoExt
 					ProfileList[i,2] := ProfileFolderArray[j]
@@ -668,5 +698,6 @@ Keymapper_HyperPauseProfileList(ControllerName,PlayerNumber,keymapper) {
 			}
 		}
 	}
+	Log("Keymapper_HyperPauseProfileList - Ended")
 	Return %ProfileList%
 }

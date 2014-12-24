@@ -15,21 +15,14 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Emu hides taskbar for an unknown reason when you go fullscreen (verified on xp and 7). If true this will unhide it.</DESCRIPTION>
 						</KEY>
-						<KEY name="SelectGameMode" required="false" nullable="false" minLength="1" maxLength="2">
-							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>1 = Uses a loop to detect the Edit Box has the romname and path in it. This doesn't work on all PCs, so if you get stuck at the open rom window, use mode 2. 2 = Uses a simple Ctrl+v to paste the romname and path, then press Enter to load the game.</DESCRIPTION>
-							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-							</VALUES>
-						</KEY>
-						<KEY name="MLanguage" required="false" nullable="false">
-							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>If English, dialog boxes look for the word "Open" and if Spanish/Portuguese, looks for "Abrir"</DESCRIPTION>
-							<VALUES>
-								<VALUE>English</VALUE>
-								<VALUE>Spanish/Portuguese</VALUE>
-							</VALUES>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="RequiresRun" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if the game requires a RUN command to be called after CLOAD. Some homebrew games will require this.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>

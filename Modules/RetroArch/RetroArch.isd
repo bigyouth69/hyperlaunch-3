@@ -21,123 +21,171 @@
 						</KEY>
 						<KEY name="LibRetro_2600" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Atari 2600. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is stella_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Atari 2600. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is stella_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_5200" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Atari 5200. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_7800" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Atari 7800. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is prosystem_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_32X" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Sega 32X. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is genesis_plus_gx_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Sega 32X. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is genesis_plus_gx_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_3DO" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Panasonic 3DO. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is 4do_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_DS" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Nintendo DS. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is desmume_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_FBA" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Final Burn Alpha. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is fb_alpha_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Final Burn Alpha. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is fb_alpha_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_GB" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Nintendo Game Boy. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is gambatte_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Nintendo Game Boy. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is gambatte_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_GBC" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Nintendo Game Boy Color. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is gambatte_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Nintendo Game Boy Color. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is gambatte_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_GBA" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Nintendo Game Boy Advance. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is vba_next_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Nintendo Game Boy Advance. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is vba_next_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_GEN" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Sega Genesis. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator.  Default is genesis_plus_gx_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Sega Genesis. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting.  Default is genesis_plus_gx_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_GG" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Sega GameGear. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is genesis_plus_gx_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Sega GameGear. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is genesis_plus_gx_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_JAG" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Atari Jaguar. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is virtualjaguar_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_LYNX" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Atari Lynx. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mupen64plus_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_MAME" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for MAME. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mame_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_MSX" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Microsoft MSX. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is bluemsx_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_N64" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Nintendo 64. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is mupen64plus_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Nintendo 64. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mupen64plus_libretro</DESCRIPTION>
 						</KEY>
+						<KEY name="LibRetro_NEO" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for SNK Neo Geo. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is fb_alpha_libretro</DESCRIPTION>
+						</KEY>	
 						<KEY name="LibRetro_NES" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Nintendo Entertaiment System. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is nestopia_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Nintendo Entertaiment System. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is nestopia_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_NFAM" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Nintendo Famicom. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is nestopia_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Nintendo Famicom. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is nestopia_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_NFDS" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Nintendo Famicom Disk System. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is nestopia_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Nintendo Famicom Disk System. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is nestopia_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_NGP" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for SNK Neo Geo Pocket. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is mednafen_vb_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for SNK Neo Geo Pocket. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_vb_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_NGPC" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for SNK Neo Geo Pocket Color. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is mednafen_vb_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for SNK Neo Geo Pocket Color. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_vb_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_NSF" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Nintendo Super Famicom. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is bsnes_balanced_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Nintendo Super Famicom. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is bsnes_balanced_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_NVB" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Nintendo Virtual Boy. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is mednafen_vb_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Nintendo Virtual Boy. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_vb_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_PCE" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for NEC PC Engine. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is mednafen_vb_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for NEC PC Engine. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_vb_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_PCECD" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for NEC PC Engine-CD. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is mednafen_vb_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for NEC PC Engine-CD. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_vb_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_PICO" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Sega Pico. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is picodrive_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Sega Pico. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is picodrive_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_PSP" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Sony PSP. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is ppsspp_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_PSX" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Sony Playstation. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is mednafen_psx_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Sony Playstation. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_psx_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_SAT" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Sega Saturn. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting.  Default is yabause_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_SCD" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Sega CD. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator.  Default is genesis_plus_gx_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Sega CD. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting.  Default is genesis_plus_gx_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_SG1K" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Sega SG-1000. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator.  Default is genesis_plus_gx_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Sega SG-1000. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting.  Default is genesis_plus_gx_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_SGB" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Nintendo Super Game Boy. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator.  Default is bsnes_balanced_libretro</DESCRIPTION>
-						</KEY>
-						<KEY name="LibRetro_SMS" required="false" nullable="true">
-							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Sega Master System. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is genesis_plus_gx_libretro</DESCRIPTION>
-						</KEY>
-						<KEY name="LibRetro_SNES" required="false" nullable="true">
-							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Super Nintendo Entertainment System. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is bsnes_balanced_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Nintendo Super Game Boy. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting.  Default is bsnes_balanced_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_SGFX" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for NEC SuperGrafx. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is mednafen_vb_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for NEC SuperGrafx. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_vb_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_SMS" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Sega Master System. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is genesis_plus_gx_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_SNES" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Super Nintendo Entertainment System. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is bsnes_balanced_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_ST" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Atari ST. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is hatari_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_TG16" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for NEC TuboGrafx-16. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is mednafen_vb_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for NEC TuboGrafx-16. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_vb_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_TGCD" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for NEC TuboGrafx-CD. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is mednafen_vb_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for NEC TuboGrafx-CD. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_vb_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_WSAN" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Bandai WonderSwan. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is mednafen_wswan_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Bandai WonderSwan. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_wswan_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_WSANC" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Bandai WonderSwan Color. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator. Default is mednafen_wswan_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Bandai WonderSwan Color. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_wswan_libretro</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>
@@ -156,6 +204,236 @@
 						<KEY name="SuperGameBoy" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Set this to true if this game should enable Super Game Boy mode in RetroArch. Make sure the rom "Super Game Boy (World).sfc" is located in the bios folder in your emuPath.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="Nintendo 64" required="false">
+			<INITYPE>System</INITYPE>
+			<STANDALONE>false</STANDALONE>
+			<SECTIONS>
+				<SECTION name="%SystemName%" required="false">
+					<SECTIONTYPE>System</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Mupen_Gfx_Plugin" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set this to the graphics plugin you would like to use for this system.</DESCRIPTION>
+							<VALUES>
+								<VALUE>auto</VALUE>
+								<VALUE>glide64</VALUE>
+								<VALUE>gln64</VALUE>
+								<VALUE>rice</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_RSP_Plugin" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set this to the RSP plugin you would like to use for this system.</DESCRIPTION>
+							<VALUES>
+								<VALUE>auto</VALUE>
+								<VALUE>hle</VALUE>
+								<VALUE>cxd4</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_CPU_Core" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set this to the CPU core you would like to use for this system.</DESCRIPTION>
+							<VALUES>
+								<VALUE>dynamic_recompiler</VALUE>
+								<VALUE>cached_interpreter</VALUE>
+								<VALUE>pure_interpreter</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_Pak_1" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set this to the expansion pack you would like to use for controller 1.</DESCRIPTION>
+							<VALUES>
+								<VALUE>none</VALUE>
+								<VALUE>memory</VALUE>
+								<VALUE>rumble</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_Pak_2" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set this to the expansion pack you would like to use for controller 2.</DESCRIPTION>
+							<VALUES>
+								<VALUE>none</VALUE>
+								<VALUE>memory</VALUE>
+								<VALUE>rumble</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_Pak_3" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set this to the expansion pack you would like to use for controller 3.</DESCRIPTION>
+							<VALUES>
+								<VALUE>none</VALUE>
+								<VALUE>memory</VALUE>
+								<VALUE>rumble</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_Pak_4" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set this to the expansion pack you would like to use for controller 4.</DESCRIPTION>
+							<VALUES>
+								<VALUE>none</VALUE>
+								<VALUE>memory</VALUE>
+								<VALUE>rumble</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_Gfx_Accuracy" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set this to the graphics accuracy you would like to use for this system.</DESCRIPTION>
+							<VALUES>
+								<VALUE>low</VALUE>
+								<VALUE>medium</VALUE>
+								<VALUE>high</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_Disable_Exp_Memory" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, disables expansion memory for this system.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="true">yes</VALUE>
+								<VALUE description="false">no</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_Texture_Filtering" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set this to the texture filtering you would like to use for this system.</DESCRIPTION>
+							<VALUES>
+								<VALUE>automatic</VALUE>
+								<VALUE>N64 3-point</VALUE>
+								<VALUE>bilinear</VALUE>
+								<VALUE>nearest</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_VI_Refresh" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set this to the VI refresh you would like to use for this system.</DESCRIPTION>
+							<VALUES>
+								<VALUE>1500</VALUE>
+								<VALUE>2200</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_Framerate" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set this to the framerate you would like to use for this system.</DESCRIPTION>
+							<VALUES>
+								<VALUE>original</VALUE>
+								<VALUE>fullspeed</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Mupen_Gfx_Plugin" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set this to the graphics plugin you would like to use for this rom.</DESCRIPTION>
+							<VALUES>
+								<VALUE>auto</VALUE>
+								<VALUE>glide64</VALUE>
+								<VALUE>gln64</VALUE>
+								<VALUE>rice</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_RSP_Plugin" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set this to the RSP plugin you would like to use for this rom.</DESCRIPTION>
+							<VALUES>
+								<VALUE>auto</VALUE>
+								<VALUE>hle</VALUE>
+								<VALUE>cxd4</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_CPU_Core" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set this to the CPU core you would like to use for this rom.</DESCRIPTION>
+							<VALUES>
+								<VALUE>dynamic_recompiler</VALUE>
+								<VALUE>cached_interpreter</VALUE>
+								<VALUE>pure_interpreter</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_Pak_1" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set this to the expansion pack you would like to use for controller 1.</DESCRIPTION>
+							<VALUES>
+								<VALUE>none</VALUE>
+								<VALUE>memory</VALUE>
+								<VALUE>rumble</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_Pak_2" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set this to the expansion pack you would like to use for controller 2.</DESCRIPTION>
+							<VALUES>
+								<VALUE>none</VALUE>
+								<VALUE>memory</VALUE>
+								<VALUE>rumble</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_Pak_3" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set this to the expansion pack you would like to use for controller 3.</DESCRIPTION>
+							<VALUES>
+								<VALUE>none</VALUE>
+								<VALUE>memory</VALUE>
+								<VALUE>rumble</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_Pak_4" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set this to the expansion pack you would like to use for controller 4.</DESCRIPTION>
+							<VALUES>
+								<VALUE>none</VALUE>
+								<VALUE>memory</VALUE>
+								<VALUE>rumble</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_Gfx_Accuracy" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set this to the graphics accuracy you would like to use for this rom.</DESCRIPTION>
+							<VALUES>
+								<VALUE>low</VALUE>
+								<VALUE>medium</VALUE>
+								<VALUE>high</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_Disable_Exp_Memory" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, disables expansion memory for this system.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="true">yes</VALUE>
+								<VALUE description="false">no</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_Texture_Filtering" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set this to the texture filtering you would like to use for this rom.</DESCRIPTION>
+							<VALUES>
+								<VALUE>automatic</VALUE>
+								<VALUE>N64 3-point</VALUE>
+								<VALUE>bilinear</VALUE>
+								<VALUE>nearest</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_VI_Refresh" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set this to the VI refresh you would like to use for this rom.</DESCRIPTION>
+							<VALUES>
+								<VALUE>1500</VALUE>
+								<VALUE>2200</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_Framerate" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set this to the framerate you would like to use for this rom.</DESCRIPTION>
+							<VALUES>
+								<VALUE>original</VALUE>
+								<VALUE>fullspeed</VALUE>
+							</VALUES>
 						</KEY>
 					</KEYS>
 				</SECTION>

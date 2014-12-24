@@ -2,9 +2,9 @@ MEmu = Nestopia
 MEmuV =  v1.42
 MURL = http://www.emucr.com/2011/09/nestopia-unofficial-v1420.html
 MAuthor = djvj
-MVersion = 2.0.1
-MCRC = 472F9F52
-iCRC = 7BA5F4F9
+MVersion = 2.0.2
+MCRC = 89EE8369
+iCRC = F9662CA1
 MID = 635038268908287546
 MSystem = "Nintendo Entertainment System","Nintendo Famicom","Nintendo Famicom Disk System"
 ;----------------------------------------------------------------------------
@@ -13,16 +13,22 @@ MSystem = "Nintendo Entertainment System","Nintendo Famicom","Nintendo Famicom D
 ; Set your fullscreen key to Alt+Enter if it is not already for HyperPause support
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
 Fullscreen := IniReadCheck(settingsFile, "settings", "Fullscreen","true",,1)
 ExitKey := IniReadCheck(settingsFile, "settings", "ExitKey","Esc",,1)
 ToggleMenuKey := IniReadCheck(settingsFile, "settings", "ToggleMenuKey","Alt+M",,1)
+bezelTopOffset := IniReadCheck(settingsFile, "Settings", "bezelTopOffset",16,,1)
+bezelBottomOffset := IniReadCheck(settingsFile, "Settings", "bezelBottomOffset",26,,1)
+bezelLeftOffset := IniReadCheck(settingsFile, "Settings", "bezelLeftOffset",7,,1)
+bezelRightOffset := IniReadCheck(settingsFile, "Settings", "bezelRightOffset",7,,1)
 force4players := IniReadCheck(settingsFile, romName, "force4players","False",,1)
 
-emuSettingsFile := emuPath . "\" . "nestopia.xml"
+BezelStart()
 
+emuSettingsFile := emuPath . "\" . "nestopia.xml"
 FileRead, nesXML, %emuSettingsFile%
 
 IfInString, nesXML, % "<confirm-exit>yes</confirm-exit>"	; find if this setting is not the desired value
@@ -51,16 +57,22 @@ StringReplace, nesXML, nesXML, % currentFS, % "<start-fullscreen>" . ((If Fullsc
 
 SaveFile()
 
+hideEmuObj := Object(romName . " - Nestopia",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
+
+HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
 
 Run(executable . " """ . romPath . "\" . romName . romExtension . """", emuPath)
 
-WinActivate, ahk_class Nestopia
-WinWaitActive("ahk_class Nestopia")
-FadeInExit()
+WinWait(romName . " - Nestopia")
+WinWaitActive(romName . " - Nestopia")
 
+BezelDraw()
+HideEmuEnd()
+FadeInExit()
 Process("WaitClose", executable)
 7zCleanUp()
+BezelExit()
 FadeOutExit()
 ExitModule()
 

@@ -1,5 +1,5 @@
-MCRC=3C8D0E1A
-mVersion=1.0.1
+MCRC=33D035F2
+mVersion=1.0.2
 
 ;Author: bleasby
 ;This file contains all functions and labels related with the HyperLaunch Statistics Saving
@@ -74,7 +74,7 @@ return
 
 LoadStatistics:
     ;Description name without (Disc X)
-    If !romTable
+    If (!romTable && mgCandidate)
         romTable:=CreateRomTable(dbName)
     Totaldiscsofcurrentgame:=romTable.MaxIndex()
     If (Totaldiscsofcurrentgame>1){ 

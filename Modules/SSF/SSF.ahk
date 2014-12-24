@@ -2,8 +2,8 @@ MEmu = SSF
 MEmuV =  v0.12 beta R4
 MURL = http://www.geocities.jp/mj3kj8o5/ssf/index.html
 MAuthor = djvj
-MVersion = 2.0.9
-MCRC = D853A040
+MVersion = 2.1.0
+MCRC = F1DABF42
 iCRC = 76F243DE
 MID = 635038268924991452
 MSystem = "Sega Saturn","Sega ST-V"
@@ -71,6 +71,7 @@ euBios := GetFullName(euBios)
 jpBios := GetFullName(jpBios)
 
 BezelStart("fixResMode")
+hideEmuObj := Object("Decoding ahk_class #32770",0,"Select ROM file ahk_class #32770",0,"SSF",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 If InStr(systemName, "Saturn")
@@ -168,8 +169,14 @@ Loop, Parse, iniLookup, `n
 	}
 }
 
-If systemName = Sega Saturn
+If InStr(systemName, "Saturn") {
+	If dtEnabled != true
+		ScriptError("Daemon Tools must be enabled to use this SSF module")
+	usedDT := 1
 	DaemonTools("mount",romPath . "\" . romName . romExtension)
+}
+
+HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
 
 ; Run(executable,emuPath,(If Fullscreen = 1 ? ("Hide" ): ("")), ssfPID)	; Worked in R3, not in R4
 Run(executable,emuPath,, ssfPID)
@@ -185,14 +192,7 @@ If systemName = Sega ST-V
 	IfWinNotActive, Select ROM file ahk_class #32770, , WinActivate, Select ROM file
 	WinWaitActive("Select ROM file ahk_class #32770")
 	Send, {SHIFTUP}
-	Loop {
-		ControlGetText, edit1Text, Edit1, Select ROM file ahk_class #32770
-		If ( edit1Text = romPath . "\" . romName . romExtension )
-			Break
-		Sleep, 100
-		ControlSetText, Edit1, %romPath%\%romName%%romExtension%, Select ROM file ahk_class #32770
-	}
-	Send, {ENTER}
+	OpenROM("Select ROM file ahk_class #32770", romPath . "\" . romName . romExtension)
 	WinWait("Decoding ahk_class #32770")
 }
 
@@ -213,13 +213,14 @@ If bezelEnabled = true
 } Else
 	Sleep, 1000 ; SSF flashes in real fast before going fullscreen if this is not here
 
+HideEmuEnd()
 FadeInExit()
 
 ; WinMove,SSF,,0,0 ; uncomment me if you turned off fullscreen mode and cannot see the emu, but hear it in the background
 
 Process("WaitClose", executable)
 
-If systemName = Sega Saturn
+If usedDT
 	DaemonTools("unmount")
 
 7zCleanUp()
@@ -234,7 +235,7 @@ HaltEmu:
 	{		; SSF cannot swap discs in fullscreen mode, so we have to go windowed first, swap, and restore fullscreen
 		WinGet, ssfPID, ID, A
 		WinGetPos,,,ssfW,ssfH,ahk_id %ssfPID%
-		SetKeyDelay,,10
+		SetKeyDelay(,10)	; change only pressDuration
 		Send, !{Enter}
 		WinSet, Transparent, 0, ahk_id %ssfPID%
 		If (mySW != ssfW || mySH != ssfH) { ; if our screen not the same size as SSF uses for it's fullscreen, we can detect when it changes
@@ -267,7 +268,7 @@ MultiGame:
 				Break
 		}
 		WinActivate, ahk_id %ssfID%
-		SetKeyDelay,,10
+		SetKeyDelay(,10)	; change only pressDuration
 		Send, !{Enter}
 		Sleep, 500
 		Gui, 69: Destroy
@@ -279,7 +280,7 @@ Return
 RestoreEmu:
 	WinActivate, ahk_id %ssfID%
 	Sleep, 500
-	SetKeyDelay,,100
+	SetKeyDelay(,100)	; change only pressDuration
 	Send, !{Enter}
 Return
 

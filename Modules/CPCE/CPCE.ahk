@@ -1,10 +1,10 @@
 MEmu = CPCE
 MEmuV = v1.94
 MURL = http://cngsoft.no-ip.org/cpce/index.htm
-MAuthor = horseyhorsey & djvj
-MVersion = 2.0.1
-MCRC = 48461B7
-iCRC = CCC36497
+MAuthor = horseyhorsey, djvj & wahoobrian
+MVersion = 2.0.2
+MCRC = D150D651
+iCRC = 9C04FD16
 mId = 635251593387342549
 MSystem = "Amstrad CPC"
 ;------------------------------------------------------------------------
@@ -18,8 +18,9 @@ MSystem = "Amstrad CPC"
 ; Should auto load every unzipped game - Tape or Disk (.cdt .dsk) - 7z should be enabled for archives
 ;
 ; Multigame:
-; In the module and works but I've only managed to get these working If they are pre unzipped. I keep them in separate folders:
-; ie: Disk-Multi Tape-Multi (Disk 1) (Disk 2) (Tape 1 Side A) (Tape 1 Side B) etc.
+; Functions correctly, but in order for it to work, the module must start start the game without autorun enabled.
+; If autorun is enabled, the emu will attempt to boot the disk/tape after swapping.  So, for games with multiple disks or tapes, autorun will be disabled by
+; the module, and the appropriate load command will need to configured using via HyperLaunchHQ
 ;
 ; Emulator SpecIfic Keys:
 ;
@@ -43,6 +44,7 @@ BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
+
 CPCEconfig := CheckFile(emuPath . "\CPCE.ini")
 ; Video
 Fullscreen := IniReadCheck(settingsFile, "Win32 Video Settings|" . romName, "Fullscreen","true",,1)	
@@ -58,6 +60,14 @@ SoundQuality := IniReadCheck(settingsFile, "Audio Settings|" . romName, "Sound Q
 16Bit := IniReadCheck(settingsFile, "Audio Settings|" . romName, "16Bit","true",,1)
 Stereo := IniReadCheck(settingsFile, "Audio Settings|" . romName, "Stereo","true",,1)
 Filter := IniReadCheck(settingsFile, "Audio Settings|" . romName, "Filter","true",,1)
+; Rom
+Command := IniReadCheck(settingsFile, "Rom|" . romName, "Command","",,1)
+SendCommandDelay := IniReadCheck(settingsFile, romName, "SendCommandDelay", "1000",,1)
+ResetRequired := IniReadCheck(settingsFile, "Rom|" . romName, "ResetRequired","false",,1)
+CPMMode := IniReadCheck(settingsFile, "Rom|" . romName, "CPM Mode","false",,1)
+TapeSpeedup := IniReadCheck(settingsFile, "Rom|" . romName, "TapeSpeedup","true",,1)
+TapeCompatibility := IniReadCheck(settingsFile, "Rom|" . romName, "TapeCompatibility","false",,1)
+LightgunMode := IniReadCheck(settingsFile, "Rom|" . romName, "LightgunMode","false",,1)
 
 BezelStart()
 
@@ -74,19 +84,54 @@ IniWrite, %SoundQuality%, %CPCEconfig%, CPCE, WIN32.SOUND_QUALITY
 IniWrite, % If (16Bit = "true") ? 1 : 0, %CPCEconfig%, CPCE, WIN32.SOUND_16BITS
 IniWrite, % If (Stereo = "true") ? 1 : 0, %CPCEconfig%, CPCE, WIN32.SOUND_STEREO
 IniWrite, % If (Filter = "true") ? 1 : 0, %CPCEconfig%, CPCE, WIN32.SOUND_FILTER
+IniWrite, % If (TapeSpeedup = "true") ? 1 : 0, %CPCEconfig%, CPCE, TAPE_SPEEDUP
+IniWrite, % If (TapeCompatibility = "true") ? 1 : 0, %CPCEconfig%, CPCE, TAPE_COMPATIBLE
+IniWrite, % If (LightgunMode = "true") ? 1 : 0, %CPCEconfig%, CPCE, GUNSTICK
 
+;Autorun must be disabled for games which require a reset or are contained across multiple disks/tapes.
+If ResetRequired = true
+	AutoRun = 0
+Else If romName contains (Disk, (Side
+	AutoRun = 0
+Else 
+	AutoRun = 1
+	
+IniWrite, %AutoRun%, %CPCEconfig%, CPCE, AUTORUN
+
+hideEmuObj := Object("ahk_class OS95",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
 
-; Running emu with the auto run /a+ switch
-Run(executable . " """ . romPath . "\" . romName . romExtension . " """ . "/a+", emuPath)
+HideEmuStart()
+Run(executable . " """ . romPath . "\" . romName . romExtension . " """, emuPath)
 
 WinWait("ahk_class OS95")
 WinWaitActive("ahk_class OS95")
 
 BezelDraw()
 
+If ResetRequired = true 
+{
+	Sleep, 500
+	Send ^{F5}
+}	
+
+If (CPMMode = "true" && AutoRun = "0")
+{
+	Sleep, 1000
+	SendCommand("{Shift Down}{vkBBsc01A}{Shift Up}cpm{Enter}",500)
+	;Send, {{ down}{{ up}  ;needed since global SendCommand function cannot handle "{" since it is used for special entries
+	;SendCommand("cpm{Enter}",500)
+}
+
+;US keyboards need to send @ to type " while most EUR keyboards type "
+;Both are located in the 2 key so we send Shift+2 instead so it will work on all cases
+StringReplace, Command, Command, ", {Shift Down}2{Shift Up}, All
+
+SendCommand(Command, SendCommandDelay)
+
 Gosub, JoystickOn
 
+HideEmuEnd()
 FadeInExit()
 Process("WaitClose", executable)
 7zCleanUp()

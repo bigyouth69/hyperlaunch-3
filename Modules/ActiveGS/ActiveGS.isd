@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="KeepAspectRatio" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables proper aspect ratio when Fullscreen. If false image will be stretched to fill the whole screen</DESCRIPTION>
+						</KEY>
+						<KEY name="WindowWidth" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If not fullscreen, width of the window in pixels</DESCRIPTION>
+						</KEY>						
+						<KEY name="WindowHeight" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If not fullscreen, height of the window in pixels</DESCRIPTION>
+						</KEY>
+						<KEY name="VideoType" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Default Video Type to use</DESCRIPTION>
+							<VALUES>
+								<VALUE description="LCD">lcd</VALUE>
+								<VALUE description="CRT">crt</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="BootableHardDiskImage" required="false" nullable="false">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Relative path to your Apple IIGS hard drive image. Path relative to the emulator folder.</DESCRIPTION>
+							<PATHTYPE>Relative</PATHTYPE>
+							<BASEPATH>%EmulatorPath%</BASEPATH>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="SingleDrive" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true for games that require all disks to be mounted on the same drive</DESCRIPTION>
+						</KEY>
+						<KEY name="DiskSwapDrive" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Disk Drive to use for when inserting new disks in MultiGame.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Drive 1">1</VALUE>
+								<VALUE description="Drive 2">2</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="VideoType" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Video Type to use for this specific game</DESCRIPTION>
+							<VALUES>
+								<VALUE description="LCD">lcd</VALUE>
+								<VALUE description="CRT">crt</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="ColorMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Color Mode of the monitor to use for this specific game</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Color">auto</VALUE>
+								<VALUE description="B&amp;W">bw</VALUE>
+								<VALUE description="Green">green</VALUE>
+								<VALUE description="Amber">amber</VALUE>
+								<VALUE description="Mono">mono</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="Apple IIGS" required="false">
+			<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="KeepAspectRatio" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables proper aspect ratio when Fullscreen. If false image will be stretched to fill the whole screen</DESCRIPTION>
+						</KEY>
+						<KEY name="WindowWidth" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If not fullscreen, width of the window in pixels</DESCRIPTION>
+						</KEY>						
+						<KEY name="WindowHeight" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If not fullscreen, height of the window in pixels</DESCRIPTION>
+						</KEY>
+						<KEY name="VideoType" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Default Video Type to use</DESCRIPTION>
+							<VALUES>
+								<VALUE description="LCD">lcd</VALUE>
+								<VALUE description="CRT">crt</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="SendCommandDelay" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Time in milliseconds to wait initially until commands/keystrokes are typed for those games that have the Command setting filled in. Can be overriden at a rom level.</DESCRIPTION>
+						</KEY>
+						<KEY name="WaitBetweenSends" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you want the module to make a pause between sending each key press. Can be overriden at a rom level.</DESCRIPTION>
+						</KEY>
+						<KEY name="BootableHardDiskImage" required="false" nullable="false">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Relative path to your Apple IIGS hard drive image. Path relative to the emulator folder.</DESCRIPTION>
+							<PATHTYPE>Relative</PATHTYPE>
+							<BASEPATH>%EmulatorPath%</BASEPATH>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="External_OS" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true for games without OS included, this game will then use %emuPath%\System6.2mg as its OS if the BootableHardDriveImage is not set.</DESCRIPTION>
+						</KEY>
+						<KEY name="SingleDrive" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true for games that require all disks to be mounted on the same drive</DESCRIPTION>
+						</KEY>
+						<KEY name="DiskSwapDrive" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Disk Drive to use for when inserting new disks in MultiGame.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Drive 1">1</VALUE>
+								<VALUE description="Drive 2">2</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="HardDiskImage" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true for games that are not on 3.5" disks and are hard disk images</DESCRIPTION>
+						</KEY>
+						<KEY name="Command" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Used if rom requires a command after loading is complete to start the game. Use standard AutoHotkey key names, use {Wait} to pause 500 milliseconds between words/characters. ie, "R{Wait}C" to press the R and C keys with a slight delay between them. Useful for navigating through menus.</DESCRIPTION>
+						</KEY>
+						<KEY name="SendCommandDelay" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Time in milliseconds to wait initially until commands/keystrokes are typed for those games that have the Command setting filled in</DESCRIPTION>
+						</KEY>
+						<KEY name="WaitBetweenSends" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you want the module to make a pause between sending each key press.</DESCRIPTION>
+						</KEY>
+						<KEY name="VideoType" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Video Type to use for this specific game</DESCRIPTION>
+							<VALUES>
+								<VALUE description="LCD">lcd</VALUE>
+								<VALUE description="CRT">crt</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="ColorMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Color Mode of the monitor to use for this specific game</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Color">auto</VALUE>
+								<VALUE description="B&amp;W">bw</VALUE>
+								<VALUE description="Green">green</VALUE>
+								<VALUE description="Amber">amber</VALUE>
+								<VALUE description="Mono">mono</VALUE>
+							</VALUES>
+						</KEY>						
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="Apple II" required="false">
+			<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="KeepAspectRatio" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables proper aspect ratio when Fullscreen. If false image will be stretched to fill the whole screen</DESCRIPTION>
+						</KEY>
+						<KEY name="WindowWidth" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If not fullscreen, width of the window in pixels</DESCRIPTION>
+						</KEY>						
+						<KEY name="WindowHeight" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If not fullscreen, height of the window in pixels</DESCRIPTION>
+						</KEY>
+						<KEY name="VideoType" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Default Video Type to use</DESCRIPTION>
+							<VALUES>
+								<VALUE description="LCD">lcd</VALUE>
+								<VALUE description="CRT">crt</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="SendCommandDelay" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Time in milliseconds to wait initially until commands/keystrokes are typed for those games that have the Command setting filled in. Can be overriden at a rom level.</DESCRIPTION>
+						</KEY>
+						<KEY name="WaitBetweenSends" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you want the module to make a pause between sending each key press. Can be overriden at a rom level.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="SingleDrive" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true for games that require all disks to be mounted on the same drive</DESCRIPTION>
+						</KEY>
+						<KEY name="DiskSwapDrive" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Disk Drive to use for when inserting new disks in MultiGame.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Drive 1">1</VALUE>
+								<VALUE description="Drive 2">2</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Command" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Used if rom requires a command after loading is complete to start the game.  Separate all words by a space.  Use {ENTER} for the Enter Key, {SPACE} for a space, and {Pause} to pause 500 milliseconds between words/characters.  ie, "RUN {SPACE} STARTUP {ENTER}"  or "R {PAUSE} C" to press the R and C keys with a slight delay between them.  Useful for navigating through menus.</DESCRIPTION>
+						</KEY>
+						<KEY name="SendCommandDelay" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Time in milliseconds to wait initially until commands/keystrokes are typed for those games that have the Command setting filled in</DESCRIPTION>
+						</KEY>
+						<KEY name="WaitBetweenSends" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you want the module to make a pause between sending each key press.</DESCRIPTION>
+						</KEY>
+						<KEY name="VideoType" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Video Type to use for this specific game</DESCRIPTION>
+							<VALUES>
+								<VALUE description="LCD">lcd</VALUE>
+								<VALUE description="CRT">crt</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="ColorMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Color Mode of the monitor to use for this specific game</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Color">auto</VALUE>
+								<VALUE description="B&amp;W">bw</VALUE>
+								<VALUE description="Green">green</VALUE>
+								<VALUE description="Amber">amber</VALUE>
+								<VALUE description="Mono">mono</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

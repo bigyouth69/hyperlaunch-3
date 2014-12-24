@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true emulator will run fullscreen.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="%SystemName%" required="false">
+			<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true emulator will run fullscreen.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="CartType" required="false" nullable="false" minLength="1" maxLength="59">						
+							<KEYTYPE>Integer</KEYTYPE>
+							<VALUES>
+								<VALUE description="Standard 8K">1</VALUE>
+								<VALUE description="Standard 16K">2</VALUE>
+								<VALUE description="32K XEGS">12</VALUE>
+								<VALUE description="128K XEGS">14</VALUE>
+								<VALUE description="Default">0</VALUE>
+							</VALUES>
+							<DESCRIPTION>Choices are 1-59 Info on what number is what type can be found in %emupath%\DOC\cart.txt</DESCRIPTION>
+						</KEY>
+						<KEY name="Basic" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Only used for Atari 8-Bit. Set to true if the rom is a BASIC rom. default is false.</DESCRIPTION>
+						</KEY>
+						<KEY name="OSType" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<VALUES>
+								<VALUE description="Osa">0</VALUE>							
+								<VALUE description="Osb">1</VALUE>
+								<VALUE description="Default">2</VALUE>
+							</VALUES>
+							<DESCRIPTION>Only used for Atari 8-Bit. More information can be found in found in %emupath%\DOC\USAGE</DESCRIPTION>
+						</KEY>
+						<KEY name="CassetteLoadingMethod" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Only used for Atari 8-Bit. More information can be found in found in %emupath%\DOC\USAGE</DESCRIPTION>
+							<VALUES>
+								<VALUE>Auto</VALUE>
+								<VALUE>Mount</VALUE>
+								<VALUE>CLOAD+RUN</VALUE>
+							</VALUES>							
+						</KEY>
+						<KEY name="DisableSIOPatch" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Only used for Atari 8-Bit. Disable SIO fast disk access.  Some games will not boot unless this is disabled.</DESCRIPTION>
+						</KEY>
+						<KEY name="VideoMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Only used for Atari 8-Bit. Choices are pal and ntsc. default is pal.</DESCRIPTION>
+							<VALUES>
+								<VALUE>pal</VALUE>
+								<VALUE>ntsc</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="MachineType" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Only used for Atari 8-Bit. Define what machine you are using. default is xl.</DESCRIPTION>
+							<VALUES>
+								<VALUE>atari</VALUE>
+								<VALUE>1200</VALUE>
+								<VALUE>xl</VALUE>
+								<VALUE>xe</VALUE>
+								<VALUE>320xe</VALUE>
+								<VALUE>rambo</VALUE>
+								<VALUE>xegs</VALUE>
+								<VALUE>5200</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="MouseMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Used if you want the mouse to emulate paddles or a lightgun.</DESCRIPTION>
+							<VALUES>
+								<VALUE>Paddle</VALUE>
+								<VALUE>Lightgun</VALUE>
+								<VALUE>Lightpen</VALUE>								
+							</VALUES>
+						</KEY>
+						<KEY name="LoadBasicAsCart" required="false" nullable="false">
+							<KEYTYPE>FolderPath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Used if game requires Basic loaded as a cartridge (rare). If needed, enter the path to the rom/cart. Path relative to the emulator folder.</DESCRIPTION>
+							<PATHTYPE>Relative</PATHTYPE>
+							<BASEPATH>%EmulatorPath%</BASEPATH>
+						</KEY>
+						<KEY name="Command" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Used if rom requires a command after loading is complete to start the game. Use standard AutoHotkey key names, use {Wait} to pause 500 milliseconds between words/characters. ie, "R{Wait}C" to press the R and C keys with a slight delay between them. Useful for navigating through menus.</DESCRIPTION>
+						</KEY>
+
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="Atari 5200" required="false">
+			<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true emulator will run fullscreen.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="MouseMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Used if you want the mouse to emulate a specific device.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Disable">off</VALUE>
+								<VALUE description="Paddle">pad</VALUE>
+								<VALUE description="Touch Tablet">touch</VALUE>
+								<VALUE description="Koala Pad">koala</VALUE>							
+								<VALUE description="Light Pen">pen</VALUE>
+								<VALUE description="Light Gun">gun</VALUE>
+								<VALUE description="Amiga Mouse">amiga</VALUE>
+								<VALUE description="ST Mouse">st</VALUE>
+								<VALUE description="Trak-Ball">trak</VALUE>
+								<VALUE description="Joystick Using Mouse">joy</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="CartType" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Options are 6 and 16. 6 = Two chip 16 KB 5200 cartridge. 16 = One chip 16 KB 5200 cartridge. CartType=16 is the default.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="One chip 16 KB 5200 cartridge">16</VALUE>
+								<VALUE description="Two chip 16 KB 5200 cartridge">6</VALUE>
+								<VALUE description="Bounty Bob Strikes Back 40 KB 5200 cartridge">7</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="Atari XEGS" required="false">
+			<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true emulator will run fullscreen.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="MouseMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Used if you want the mouse to emulate a specific device.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Disable">off</VALUE>
+								<VALUE description="Paddle">pad</VALUE>
+								<VALUE description="Touch Tablet">touch</VALUE>
+								<VALUE description="Koala Pad">koala</VALUE>							
+								<VALUE description="Light Pen">pen</VALUE>
+								<VALUE description="Light Gun">gun</VALUE>
+								<VALUE description="Amiga Mouse">amiga</VALUE>
+								<VALUE description="ST Mouse">st</VALUE>
+								<VALUE description="Trak-Ball">trak</VALUE>
+								<VALUE description="Joystick Using Mouse">joy</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

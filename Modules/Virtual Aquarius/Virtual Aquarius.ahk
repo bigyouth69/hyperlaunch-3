@@ -2,14 +2,14 @@ MEmu = Virtual Aquarius
 MEmuV = v0.72
 MURL = http://www.oocities.org/emucompboy/
 MAuthor = djvj
-MVersion = 2.0
-MCRC = 3CA3E549
+MVersion = 2.0.1
+MCRC = 6430D0DA
 iCRC = 92C08CD7
 MID = 635038268931296709
 MSystem = "Mattel Aquarius"
 ;----------------------------------------------------------------------------
 ; Notes:
-; Module requires uncompressed roms or must have 7z_Enabled set to true in your Hyperspin\Settings\Mattel Aquarius.ini
+; Module requires uncompressed roms or must have 7z support enabled in HLHQ
 ;
 ; HowTo use custom controls for each game:
 ;	Create a "controls" folder in your emulator folder
@@ -27,9 +27,11 @@ Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 controlsFolder := IniReadCheck(settingsFile, "Settings", "controlsFolder",emuPath . "\controls",,1)	; the path to your custom controls folder
 cloadWaitTime := IniReadCheck(settingsFile, "Settings", "cloadWaitTime","1000",,1)
 
+dialogOpen := i18n("dialog.open")	; Looking up local translation
+
 controlsFolder := GetFullName(controlsFolder) ;convert relative paths to absolute
 
-SetKeyDelay, 40 ; required otherwise emu doesn't capture keystrokes
+SetKeyDelay(40)	; required otherwise emu doesn't capture keystrokes
 defaultINI := CheckFile(emuPath . "\default.ini") ; emu settings stored in here
 
  ; copying custom controls ini to emuPath, otherwise copying default back if it exists
@@ -44,6 +46,7 @@ IniRead, ramSetting, %defaultINI%, MEMORY, ramexpanders
 If ramSetting != 2
 	IniWrite, 2, %defaultINI%, MEMORY, ramexpanders
 
+hideEmuObj := Object(dialogOpen . " ahk_class #32770",0,"Virtual Aquarius ahk_class Virtual Aquarius",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
 
  ; checking if the BASIC cassette exists in the romPath
@@ -51,7 +54,9 @@ If romExtension = .caq
 	IfExist, %romPath%\%romName% (BASIC)%romExtension%
 		basicRom = 1
 
-If ( Fullscreen = "True" && romExtension = ".bin" )
+HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
+
+If ( Fullscreen = "true" && romExtension = ".bin" )
 	Run(executable, emuPath ,"Hide") ; can only hide the emu's launch process with tapes, we need to see the emu in order to load cassettes
 Else
 	Run(executable,emuPath) ; windowed mode cannot hide the emu or else there will be nothing to see
@@ -71,16 +76,7 @@ If romExtension = .caq	; handle cassette games
 	; loading 1st "BASIC" cassette if it exists
 	If basicRom {
 		WinMenuSelectItem, Virtual Aquarius ahk_class Virtual Aquarius,, File, Play Cassette File ; load a cassette game
-		WinWait("Open ahk_class #32770")
-		WinWaitActive("Open ahk_class #32770")
-		Loop { ; looping this so we don't need a sleep timer, usually 2nd loop text gets pasted in correctly
-			ControlGetText, Edit1Text, Edit1, Open ahk_class #32770
-			If ( edit1Text = romPath . "\" . romName . " (BASIC)" . romExtension )
-				Break
-			Sleep, 100
-			ControlSetText, Edit1, %romPath%\%romName% (BASIC)%romExtension%, Open ahk_class #32770
-		}
-		Send {Enter}
+		OpenROM(dialogOpen . " ahk_class #32770", romPath . "\" . romName . " (BASIC)" . romExtension)
 		WinWait("Virtual Aquarius ahk_class Virtual Aquarius")
 		WinWaitActive("Virtual Aquarius ahk_class Virtual Aquarius")
 		Sleep, 1500 ; waiting until emu loads BASIC cassette, sometimes the emu lags loading this file so need this sleep to be somewhat high
@@ -91,16 +87,7 @@ If romExtension = .caq	; handle cassette games
 
 	; loading regular cassette
 	WinMenuSelectItem, Virtual Aquarius ahk_class Virtual Aquarius,, File, Play Cassette File ; load a cassette game
-	WinWait("Open ahk_class #32770")
-	WinWaitActive("Open ahk_class #32770")
-	Loop { ; looping this so we don't need a sleep timer, usually 2nd loop text gets pasted in correctly
-		ControlGetText, Edit1Text, Edit1, Open ahk_class #32770
-		If ( edit1Text = romPath . "\" . romName . romExtension )
-			Break
-		Sleep, 100
-		ControlSetText, Edit1, %romPath%\%romName%%romExtension%, Open ahk_class #32770
-	}
-	Send {Enter}
+	OpenROM(dialogOpen . " ahk_class #32770", romPath . "\" . romName . romExtension)
 
 	If !basicRom {
 		WinWait("Virtual Aquarius ahk_class Virtual Aquarius")
@@ -108,25 +95,16 @@ If romExtension = .caq	; handle cassette games
 		Sleep, 1500 ; waiting until emu loads BASIC cassette, sometimes the emu lags loading this file so need this sleep to be somewhat high
 		Send, {r down}{r up}{u down}{u up}{n down}{n up}{Enter down}{Enter up} ; send run & enter
 	}
-	
 } Else If romExtension = .bin	; handle tape games
 {	WinMenuSelectItem, Virtual Aquarius ahk_class Virtual Aquarius,, File, Load Game ROM ; load a tape game
-	WinWait("Open ahk_class #32770")
-	WinWaitActive("Open ahk_class #32770")
-	Loop { ; looping this so we don't need a sleep timer, usually 2nd loop text gets pasted in correctly
-		ControlGetText, Edit1Text, Edit1, Open ahk_class #32770
-		If ( edit1Text = romPath . "\" . romName . romExtension )
-			Break
-		Sleep, 100
-		ControlSetText, Edit1, %romPath%\%romName%%romExtension%, Open ahk_class #32770
-	}
-	Send {Enter}
+	OpenROM(dialogOpen . " ahk_class #32770", romPath . "\" . romName . romExtension)
 	WinWait("Virtual Aquarius ahk_class Virtual Aquarius")
 	WinWaitActive("Virtual Aquarius ahk_class Virtual Aquarius")
 	WinMenuSelectItem, Virtual Aquarius ahk_class Virtual Aquarius,, File, Soft Reset ; reset emu
-
 } Else
 	ScriptError("Rom type " . romExtension . " is not supported by this module")
+
+HideEmuEnd()
 
 If Fullscreen = true
 {	Sleep, 300 ; increase if emu is not going fullscreen

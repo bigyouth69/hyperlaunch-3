@@ -3,10 +3,10 @@ MEmu = T98-Next
 MEmuV = v13.1th Beta
 MURL = http://www.geocities.jp/t98next/
 MAuthor = djvj
-MVersion = 2.0.4
-MCRC = 81CF3914
+MVersion = 2.0.5
+MCRC = 2096D52F
 MID = 635038268927083194
-MSystem = "NEC PC-9801","Touhou"
+MSystem = "NEC PC-9801","Touhou","Touhou Project"
 ;----------------------------------------------------------------------------
 ; Notes:
 ; This is only needed for games 1th through 5th, so make sure in your Games.ini, you have this Emulator set to load this module
@@ -33,6 +33,7 @@ FadeInStart()
 settingsFile := modulePath . "\" . moduleName . ".ini"
 fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 
+hideEmuObj := Object("Emulation Window ahk_class T98-Next",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 ; Setting Fullscreen setting in ini if it doesn't match what user wants above
@@ -45,6 +46,9 @@ Else If (fullscreen = "true" && currentFullScreen = 0)
 
 IniWrite, %romPath%\%romName%%romExtension%, %emuPath%\MAIN.INI, DISK, DISK02
 IniWrite, 1, %emuPath%\MAIN.INI, Control, AutoRun	; required for games to start on emu launch
+
+HideEmuStart()
+
 Run(executable, emuPath, "Hide")
 
 WinWait("Emulation Window ahk_class T98-Next")
@@ -55,6 +59,7 @@ MouseMove 0,2000,0  ;Move mouse off screen
 ; If romName = 3th - Phantasmagoria of Dim Dream
 	; Run, remap_keys.exe, %modulePath%
 
+HideEmuEnd()
 FadeInExit()
 Process("WaitClose", executable)
 ; Process, Close, remap_keys.exe

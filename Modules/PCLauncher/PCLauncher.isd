@@ -51,6 +51,10 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Set to true if this game uses the Origin service. If true, it will automatically login to Origin so you do not get stuck at a login prompt while loading.</DESCRIPTION>
 						</KEY>
+						<KEY name="DXWndGame" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if this game should be launched with DXWnd to run in windowed mode. It is your responsibility to make sure this game is already configured in DXWnd software (in the Module Extensions folder). You also need to make sure the game works with DXWnd first.</DESCRIPTION>
+						</KEY>
 						<KEY name="WorkingFolder" required="false" nullable="true">
 							<KEYTYPE>ExeStartIn</KEYTYPE>
 							<FULLROW>true</FULLROW>
@@ -118,6 +122,10 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enable/Disable hiding of the mouse cursor just this game ran through PCLauncher. Overides the global setting for this module. Note: HyperLaunch's version of this setting does not affect the cursor for this game, so it must be set here if you want to use it.</DESCRIPTION>
 						</KEY>
+						<KEY name="BezelEnabled" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enable/Disable bezel support for just this game. Overides the global setting for this module. Note: HyperLaunch's version of this setting does not affect the bezels for this game, so it must be set here if you want to use it.</DESCRIPTION>
+						</KEY>
 					</KEYS>
 				</SECTION>
 			</SECTIONS>
@@ -131,6 +139,10 @@
 						<KEY name="HideCursor" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enable/Disable hiding of the mouse cursor globally for all games ran through PCLauncher. Note: HyperLaunch's version of this setting does not affect the cursor for this module, so it must be set here if you want to use it. Default is disabled.</DESCRIPTION>
+						</KEY>
+						<KEY name="BezelEnabled" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enable/Disable bezel support for this entire system. Overides the global setting for this module. Note: HyperLaunch's version of this setting does not affect the bezels for this game, so it must be set here if you want to use it.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>
@@ -240,7 +252,11 @@
 						</KEY>
 						<KEY name="HideCursor" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
-							<DESCRIPTION>True or False - Same as the HyperLaunch setting, but allows for per-game use.</DESCRIPTION>
+							<DESCRIPTION>Enable/Disable hiding of the mouse cursor just this game ran through PCLauncher. Overides the global setting for this module. Note: HyperLaunch's version of this setting does not affect the cursor for this game, so it must be set here if you want to use it.</DESCRIPTION>
+						</KEY>
+						<KEY name="BezelEnabled" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enable/Disable bezel support for just this game. Overides the global setting for this module. Note: HyperLaunch's version of this setting does not affect the bezels for this game, so it must be set here if you want to use it.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>

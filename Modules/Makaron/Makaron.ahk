@@ -2,9 +2,9 @@ MEmu = Makaron
 MEmuV =  T12-5
 MURL = http://dknute.livejournal.com/tag/makaron
 MAuthor = djvj
-MVersion = 2.0.1
-MCRC = 1E7C1142
-iCRC = 8A6539FE
+MVersion = 2.0.2
+MCRC = 5C91BACE
+iCRC = FECEA0BD
 MID = 635038268902322593
 MSystem = "Sega Dreamcast","Sega Naomi"
 ;----------------------------------------------------------------------------
@@ -71,7 +71,7 @@ iniLookup =
 	Settings, MakaronHeight
 	Settings, VerticalMakaronWidth
 	Settings, VerticalMakaronHeight
-	Settings, VerticalMethod
+	Settings, VerticalMethod, %rotateMethod%
 	%romName%, Vertical
 	%romName%, MakaronBios
 	%romName%, Controls, Standard
@@ -133,12 +133,7 @@ If systemName contains Naomi	; Sega Naomi script
 		IniWrite, %verticalMakaronWidth%x%verticalMakaronHeight%, %naomiFile%, Settings, video_mode	; writing our desired res for vertical makaron games
 		;WinMinimizeAll ;If we don't minimize, parts of HS still show on our screen
 
-		If verticalMethod = irotate
-			Run(verticalExe . " /rotate=90 /exit", moduleExtensionsPath) ; another option to rotate screen
-		Else If  verticalMethod = display
-			Run(verticalExe . " /rotate:90", moduleExtensionsPath) ; Switching to 90�
-		Else
-			ScriptError(verticalMethod . " is not a compatible VerticalMethod. Please choose either irotate or display.")
+		Rotate(verticalMethod, 90)
 		Sleep, 200
 
 		; Custom Gui, because upon rotation, coordinates get messed up and only part of the desktop is hidden. Using 2 Guis because some pcs don't work correctly with one and others work only with the second one. Gui 2 makes the little makaron window never show up.
@@ -250,10 +245,7 @@ Process("WaitClose", executable)
 ; Switching orientation back to normal
 If vertical = true
 {
-	If verticalMethod = irotate
-		Run(verticalExe . " /rotate=0 /exit", A_ScriptDir . "\Modules\" . systemName)	; another option to rotate screen
-	Else If  verticalMethod = display
-		Run(verticalExe . " /rotate:0", A_ScriptDir . "\Modules\" . systemName) ; Switching back to 0
+	Rotate(verticalMethod, 0)
 	;WinMinimizeAllUndo
 	Gui 2: Destroy 
 }

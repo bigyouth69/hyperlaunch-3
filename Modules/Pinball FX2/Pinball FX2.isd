@@ -7,6 +7,44 @@
 				<SECTION name="settings" required="false">
 					<SECTIONTYPE>Global</SECTIONTYPE>
 					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen. Requires dxwnd configured for windowed mode. Please read the module notes.</DESCRIPTION>
+						</KEY>
+						<KEY name="Windowed_Resolution" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Determines resolution for windowed mode (ex. "1920x1080"). Must be set to the same resolution set on Pinball FX2 configurations.</DESCRIPTION>
+						</KEY>
+						<KEY name="Initial_Table_X" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The X spot on the map grid were Pinball FX2 starts. Recommended for steam = 1 or empty; recommended for executable launch = 2.</DESCRIPTION>
+							<VALUES>
+								<VALUE>1</VALUE>
+								<VALUE>2</VALUE>
+								<VALUE>3</VALUE>
+								<VALUE>4</VALUE>
+								<VALUE>5</VALUE>
+								<VALUE>6</VALUE>
+								<VALUE>7</VALUE>
+								<VALUE>8</VALUE>
+								<VALUE>9</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Initial_Table_Y" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The Y spot on the map grid were Pinball FX2 starts. Recommended for steam and executable launch = 1 or empty.</DESCRIPTION>
+							<VALUES>
+								<VALUE>1</VALUE>
+								<VALUE>2</VALUE>
+								<VALUE>3</VALUE>
+								<VALUE>4</VALUE>
+								<VALUE>5</VALUE>
+								<VALUE>6</VALUE>
+								<VALUE>7</VALUE>
+								<VALUE>8</VALUE>
+								<VALUE>9</VALUE>
+							</VALUES>
+						</KEY>
 						<KEY name="Sleep_Until_Logo" required="false" nullable="true">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>In Milliseconds, the amount of time to sleep until the Pinball FX2 logo starts to appear. If the module does not cancel this immediately upon seeing this logo, decrease this value. Default is 12000, which is 12 seconds.</DESCRIPTION>
@@ -14,6 +52,10 @@
 						<KEY name="Sleep_Until_Main_Menu" required="false" nullable="true">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>In Milliseconds, the amount of time to sleep until the Main Menu appears with all the tables. If the module is not accurate with choosing the table, increase this value. Default is 1500, which is 1.5 seconds.</DESCRIPTION>
+						</KEY>
+						<KEY name="Sleep_Base_Time" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The multiplier applied to all the sleeps in the module. Default is 1. If you have a problem where the module is not accurately sending keys to Pinball FX2, try increasing this multplier by .1 at a time.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>
@@ -48,6 +90,28 @@
 								<VALUE>7</VALUE>
 								<VALUE>8</VALUE>
 								<VALUE>9</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="X2" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The X spot on the secondary map grid this game can be found at. Start at the top left and count right to determine the column this number should be set to. First square counts as 1.</DESCRIPTION>
+							<VALUES>
+								<VALUE>1</VALUE>
+								<VALUE>2</VALUE>
+								<VALUE>3</VALUE>
+								<VALUE>4</VALUE>
+								<VALUE>5</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Y2" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The Y spot on the secondary map grid this game can be found at. Start at the top left and count right to determine the column this number should be set to. First square counts as 1.</DESCRIPTION>
+							<VALUES>
+								<VALUE>1</VALUE>
+								<VALUE>2</VALUE>
+								<VALUE>3</VALUE>
+								<VALUE>4</VALUE>
+								<VALUE>5</VALUE>
 							</VALUES>
 						</KEY>
 					</KEYS>

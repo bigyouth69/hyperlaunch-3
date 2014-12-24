@@ -1,15 +1,15 @@
 MEmu = XMillennium
-MEmuV =  v0.26 T-Tune 1.43 + ikaTune r5
+MEmuV = v0.26 T-Tune 1.43 + ikaTune r5
 MURL = http://www.jcec.co.uk/x1emu.html
 MAuthor = faahrev,brolly
-MVersion = 2.0
-MCRC = B118BD78
+MVersion = 2.0.1
+MCRC = 1F3AED1
 iCRC = 381666D6
 mId = 635255894552751744
 MSystem = "Sharp X1"
 ;----------------------------------------------------------------------------
 ; This module will also work with the standard XMillennium v0.26d, but that version doesn't 
-; support tape files. So if you are using that version make sure you do not attempt to load .tap 
+; support tape files. So If you are using that version make sure you do not attempt to load .tap 
 ; files with it.
 ;
 ; Notes:
@@ -19,6 +19,7 @@ MSystem = "Sharp X1"
 ; - Option to load the second disc in floppy station 1 at boot (first disc in station 0 is default)
 ; - Option to configure in which floppy station discs should be changed (0 or 1)
 ;----------------------------------------------------------------------------
+
 StartModule()
 BezelGUI()
 FadeInStart()
@@ -33,6 +34,7 @@ InfoToolBarVisible := IniReadCheck(xmillIniFile, "Xmillennium", "Info_Bar","",,1
 
 BezelStart()
 
+hideEmuObj := Object("ahk_class #32770",0,"X millennium ahk_class Xmill-MainWindow",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 ; Hiding the info toolbar
@@ -50,48 +52,34 @@ If (DualDiskLoad = "true")
 	}
 }
 
+HideEmuStart()
 Run(executable,emuPath)
 WinWait("X millennium ahk_class Xmill-MainWindow")
 	
 If (Fullscreen = "true")
-  PostMessage, 0x111, 40030,,,X millennium ahk_class Xmill-MainWindow ; Fullscreen
+  PostMessage, 0x111, 40030,,, X millennium ahk_class Xmill-MainWindow ; Fullscreen
 
 If romExtension = .tap
-	PostMessage, 0x111, 40056,,,X millennium ahk_class Xmill-MainWindow ; Open tape
+	PostMessage, 0x111, 40056,,, X millennium ahk_class Xmill-MainWindow ; Open tape
 Else
-	PostMessage, 0x111, 40035,,,X millennium ahk_class Xmill-MainWindow ; Open floppy0
+	PostMessage, 0x111, 40035,,, X millennium ahk_class Xmill-MainWindow ; Open floppy0
 
-WinWaitActive("ahk_class #32770")
-Loop {
-		ControlGetText, edit1Text, Edit1, A
-		If ( edit1Text = romPath . "\" . romName . romExtension )
-			Break
-		Sleep, 100
-		ControlSetText, Edit1, %romPath%\%romName%%romExtension%, A
-	}
-PostMessage, 0x111, 1,,, A ; Select Open
+OpenROM("ahk_class #32770", romPath . "\" . romName . romExtension)
 
 If romExtension != .tap
 {
 	If (romName2) 
 	{
-		PostMessage, 0x111, 40037,,,X millennium ahk_class Xmill-MainWindow ; Open floppy1
-		WinWaitActive("ahk_class #32770")
-		Loop {
-			ControlGetText, edit1Text, Edit1, A
-			If ( edit1Text = romName2 )
-				Break
-			Sleep, 100
-			ControlSetText, Edit1, %romName2%, A
-		}
-		PostMessage, 0x111, 1,,, A ; Select Open
+		PostMessage, 0x111, 40037,,, X millennium ahk_class Xmill-MainWindow ; Open floppy1
+		OpenROM("ahk_class #32770", romName2)
 	}
 }
-	
+
 WinWait("X millennium ahk_class Xmill-MainWindow")
 WinWaitActive("X millennium ahk_class Xmill-MainWindow")
 
 BezelDraw()
+HideEmuEnd()
 FadeInExit()
 Process("WaitClose", executable)                                                                                                     
 7zCleanUp()
@@ -102,25 +90,16 @@ ExitModule()
 
 HaltEmu:
 Return
-
-MultiGame:
-Control := (If MultipleDiskSlot = "1" ? ("40037") : ("40035"))
-PostMessage, 0x111, %Control%,,,X millennium ahk_class Xmill-MainWindow ; Open correct floppy
-WinWaitActive("ahk_class #32770")
-	Loop {
-		ControlGetText, edit1Text, Edit1, A
-		If ( edit1Text = selectedRom )
-			Break
-		Sleep, 100
-		ControlSetText, Edit1, %selectedRom%, A
-	}
-PostMessage, 0x111, 1,,, A ; Select Open
-Return
-
 RestoreEmu:
 Return
 
+MultiGame:
+	Control := If MultipleDiskSlot = "1" ? "40037" : "40035"
+	PostMessage, 0x111, %Control%,,, X millennium ahk_class Xmill-MainWindow ; Open correct floppy
+	OpenROM("ahk_class #32770", selectedRom)
+Return
+
 CloseProcess:
-  FadeOutStart()
-  WinClose("X millennium ahk_class Xmill-MainWindow")
+	FadeOutStart()
+	WinClose("X millennium ahk_class Xmill-MainWindow")
 Return

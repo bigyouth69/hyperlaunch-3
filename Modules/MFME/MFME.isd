@@ -16,14 +16,6 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Set to true if you want to use a different screen resolution when playing a game. This is useful if you use layouts.</DESCRIPTION>
 						</KEY>
-						<KEY name="ResizeW" required="false" nullable="true" minLength="1">
-							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>Do not change this, layouts are made to fit this size desktop. Default Value is 1280.</DESCRIPTION>
-						</KEY>
-						<KEY name="ResizeH" required="false" nullable="true" minLength="1">
-							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>Do not change this, layouts are made to fit this size desktop. Default Value is 1024.</DESCRIPTION>
-						</KEY>
 						<KEY name="BackgroundPic" required="false" nullable="false" FULLROW="true">
 							<KEYTYPE>FilePath</KEYTYPE>
 							<DESCRIPTION>a background picture that persists during gameplay. Your emulator will display on top of this image and this image will hide your desktop</DESCRIPTION>

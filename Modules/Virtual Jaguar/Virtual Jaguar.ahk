@@ -1,30 +1,51 @@
 MEmu = Virtual Jaguar
-MEmuV =  vGIT 20130209
+MEmuV =  v2.1.2
 MURL = http://icculus.org/virtualjaguar/
-MAuthor = djvj
-MVersion = 2.0
-MCRC = C4C04CC1
-iCRC = E71DFE48
+MAuthor = djvj & brolly
+MVersion = 2.1.0
+MCRC = C1F665E4
+iCRC = 31619F7D
 MID = 635038268931827139
 MSystem = "Atari Jaguar"
 ;----------------------------------------------------------------------------
 ; Notes:
-; Fullscreen works but is not perfect until the emu dev allows hiding of the toolbar
+; The Atari Jaguar bios "jagboot.rom" must exist in the eeproms emulator folder
 ; The emu stores its config in the registry @ HKEY_CURRENT_USER\Software\Underground Software\Virtual Jaguar
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
-MouseClicks := IniReadCheck(settingsFile, "Settings", "MouseClicks","true",,1)	; By default this is true and the module clicks your mouse to hide the toolbar, but this may not be needed on all PCs. On win8, I do not need it.
+WindowZoom := IniReadCheck(settingsFile, "Settings", "WindowZoom","3",,1)
+Filter := IniReadCheck(settingsFile, "Settings", "Filter","0",,1)
 
-; This is necessary so we can paste in the rom we want to run, yet doesn't work lol...
-;currentFullScreen := ReadReg("showUnknownSoftware")
-;If ( showUnknownSoftware != "true")
-;	WriteReg("showUnknownSoftware", true)
+VideoMode := IniReadCheck(settingsFile, "Settings" . "|" . romName, "VideoMode","0",,1)
+GPUEnabled := IniReadCheck(settingsFile, "Settings" . "|" . romName, "GPUEnabled","true",,1)
+DSPEnabled := IniReadCheck(settingsFile, "Settings" . "|" . romName, "DSPEnabled","true",,1)
+EnableJaguarBIOS := IniReadCheck(settingsFile, "Settings" . "|" . romName, "EnableJaguarBIOS","true",,1)
+UseFastBlitter := IniReadCheck(settingsFile, romName, "useFastBlitter","false",,1)
 
-; winset, disable,, HyperSpin_2_0 ahk_class ApolloRuntimeContentWindow
+If bezelEnabled
+{
+	If (Fullscreen = "true") {
+		disableForceFullscreen := true
+		disableWinMove := true
+		disableHideTitleBar := true
+		disableHideToggleMenu := true
+		disableHideBorder := true
+		BezelStart()
+	} Else {
+		disableHideToggleMenu := true
+		disableHideBorder := true
+		bezelTopOffset := IniReadCheck(settingsFile, "Settings", "Bezel_Top_Offset","62",,1)
+		bezelBottomOffset := IniReadCheck(settingsFile, "Settings", "Bezel_Bottom_Offset","52",,1)
+		bezelRightOffset := IniReadCheck(settingsFile, "Settings", "Bezel_Right_Offset", "8",,1)
+		bezelLeftOffset := IniReadCheck(settingsFile, "Settings", "Bezel_Left_Offset", "8",,1)
+		BezelStart("fixResMode")
+	}
+}
 
 ; Setting Fullscreen setting in registry if it doesn't match what user wants above
 currentFullScreen := ReadReg("fullscreen")
@@ -33,48 +54,80 @@ If ( Fullscreen = "true" And currentFullScreen = "false" )
 Else If ( Fullscreen != "true" And currentFullScreen = "true" )
 	WriteReg("fullscreen", "false")
 
+;Same for window zoom
+currentWindowZoom := ReadReg("zoom")
+If ( WindowZoom != currentWindowZoom )
+	WriteReg("zoom", WindowZoom, "REG_DWORD")
+
+;Same for GPU Enabled
+currentGPUEnabled := ReadReg("GPUEnabled")
+If ( GPUEnabled = "true" And currentGPUEnabled = "false" )
+	WriteReg("GPUEnabled", "true")
+Else If ( GPUEnabled != "true" And currentGPUEnabled = "true" )
+	WriteReg("GPUEnabled", "false")
+
+;Same for DSP Enabled
+currentDSPEnabled := ReadReg("DSPEnabled")
+If ( DSPEnabled = "true" And currentDSPEnabled = "false" )
+	WriteReg("DSPEnabled", "true")
+Else If ( DSPEnabled != "true" And currentDSPEnabled = "true" )
+	WriteReg("DSPEnabled", "false")
+
+;And for use BIOS
+currentEnableJaguarBIOS := ReadReg("useJaguarBIOS")
+If ( EnableJaguarBIOS = "true" And currentEnableJaguarBIOS = "false" )
+	WriteReg("useJaguarBIOS", "true")
+Else If ( EnableJaguarBIOS != "true" And currentEnableJaguarBIOS = "true" )
+	WriteReg("useJaguarBIOS", "false")
+
+;And for bilenear filter
+currentFilter := ReadReg("glFilterType")
+If ( Filter != currentFilter )
+	WriteReg("glFilterType", Filter, "REG_DWORD")
+
+;And Video Mode
+currentHardwareTypeNTSC := ReadReg("hardwareTypeNTSC")
+If ( VideoMode = "PAL" And currentHardwareTypeNTSC = "true" )
+	WriteReg("hardwareTypeNTSC", "false")
+Else If ( VideoMode = "NTSC" And currentHardwareTypeNTSC = "false" )
+	WriteReg("hardwareTypeNTSC", "true")
+
+;And Fast Blitter
+currentUseFastBlitter := ReadReg("useFastBlitter")
+If ( UseFastBlitter = "true" And currentUseFastBlitter = "false" )
+	WriteReg("useFastBlitter", "true")
+Else If ( UseFastBlitter != "true" And currentUseFastBlitter = "true" )
+	WriteReg("useFastBlitter", "false")
+
+jagBIOS := emuPath . "\eeproms\jagboot.rom"
+CheckFile(jagBIOS, "Could not find ""jagboot.rom"" bios rom, it is required for " . MEmu . ": " . jagBIOS)
+
+hideEmuObj := Object("Virtual Jaguar ahk_class QWidget",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
-Run(executable . " """ . romPath . "\" . romName . romExtension, emuPath)
+
+HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
+
+Run(executable . " """ . romPath . "\" . romName . romExtension . """", emuPath)
 
 WinWait("Virtual Jaguar ahk_class QWidget")
 WinWaitActive("Virtual Jaguar ahk_class QWidget")
 
-If Fullscreen != true
-	Center(ahk_class QWidget) ; center window
-
+BezelDraw()
+HideEmuEnd()
 FadeInExit()
-
-If Fullscreen = true	; if windowed mode, moving the control causes the game to never show
-{	Sleep, 1	; necessary on some pcs
-	If MouseClicks = true
-	{	MouseClick Right, 1, 1
-		MouseClick Left, 5, 5
-	}
-	ControlMove QGLWidget1, 0, 0, %A_ScreenWidth%, %A_ScreenHeight%, ahk_class QWidget	; hides the toolbar from view
-	If MouseClicks != true
-		ControlMove QWidget2, 0, 0, 0, 0, ahk_pid %App_PID%
-}
-
 Process("WaitClose",executable)
 7zCleanUp()
+BezelExit()
 FadeOutExit()
 ExitModule()
 
-
 ReadReg(var1) {
-	RegRead, regValue, HKEY_CURRENT_USER, Software\Underground Software\Virtual Jaguar, %var1%
+	regValue := RegRead("HKEY_CURRENT_USER", "Software\Underground Software\Virtual Jaguar", var1) 
 	Return %regValue%
 }
 
-WriteReg(var1, var2) {
-	RegWrite, REG_SZ, HKEY_CURRENT_USER, Software\Underground Software\Virtual Jaguar, %var1%, %var2%
-}
-
-Center(title) {
-	WinGetPos, X, Y, width, height, %title%
-	x := ( A_ScreenWidth / 2 ) - ( width / 2 )
-	y := ( A_ScreenHeight / 2 ) - ( height / 2 )
-	WinMove, %title%, , x, y
+WriteReg(var1, var2, ValueType="REG_SZ") {
+	RegWrite(ValueType, "HKEY_CURRENT_USER", "Software\Underground Software\Virtual Jaguar", var1, var2)
 }
 
 CloseProcess:

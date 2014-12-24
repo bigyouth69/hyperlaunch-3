@@ -2,10 +2,10 @@ MEmu = DCVG5K
 MEmuV = v2012.04.13
 MURL = http://dcvg5k.free.fr/
 MAuthor = djvj
-MVersion = 2.0.1
-MCRC = F01E031C
-iCRC = 800B124B
-MID = 635038268880784660
+MVersion = 2.0.2
+MCRC = A207DE3B
+iCRC = 523A2AEE
+mId = 635535817998209107
 MSystem = "Philips VG 5000"
 ;------------------------------------------------------------------------
 ; Notes:
@@ -15,64 +15,53 @@ MSystem = "Philips VG 5000"
 ; Emu doesnt work right and is very slow in Win8. Also sometimes takes awhile to close.
 ;------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
 Fullscreen := IniReadCheck(settingsFile, "settings", "Fullscreen","true",,1)
 RestoreTaskbar := IniReadCheck(settingsFile, "settings", "RestoreTaskbar","true",,1)
-SelectGameMode := IniReadCheck(settingsFile, "settings", "SelectGameMode","1",,1)
-MLanguage := IniReadCheck(settingsFile, "Settings", "MLanguage","English",,1)		; If English, dialog boxes look for the word "Open" and if Spanish/Portuguese, looks for "Abrir"
+RequiresRun := IniReadCheck(settingsFile, romName, "RequiresRun","false",,1)
 
-mLang := Object("English","Open","Spanish/Portuguese","Abrir")
-winLang := mLang[MLanguage]	; search object for the MLanguage associated to the user's language
-If !winLang
-	ScriptError("Your chosen language is: """ . MLanguage . """. It is not one of the known supported languages for this module: " . moduleName)
+dialogOpen := i18n("dialog.open")	; Looking up local translation
 
-hideEmuObj := Object("Open ahk_class #32770",0,"ahk_class VG5000",1)	;Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
+BezelStart()
+
+hideEmuObj := Object(dialogOpen . " ahk_class #32770",0,"ahk_class VG5000",1)	;Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
 
+HideEmuStart()
 Run(executable, emuPath)
-
-HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
 
 WinWait("ahk_class VG5000")
 WinActivate, ahk_class VG5000
-Send, {ALT}{DOWN}{ENTER}
-
-Sleep, 50
-WinWait(winLang . " ahk_class #32770")
-WinWaitActive(winLang . " ahk_class #32770")
 Sleep, 100
 
-If ( SelectGameMode = 1 ) {
-	Loop {
-		ControlGetText, edit1Text, Edit1, %winLang% ahk_class #32770
-		If ( edit1Text = romPath . "\" . romName . romExtension )
-			Break
-		Sleep, 100
-		ControlSetText, Edit1, %romPath%\%romName%%romExtension%, %winLang% ahk_class #32770
-	}
-	ControlSend, Button1, {Enter}, %winLang% ahk_class #32770 ; Select Open
-} Else If ( SelectGameMode = 2 ) {
-	Clipboard := romPath . "\" . romName . romExtension
-	Send, ^v{Enter}
-} Else
-	ScriptError("You did not choose a valid SelectGameMode.`nOpen the module and set the mode at the top.")
+PostMessage, 0x111, 9001,,,ahk_class VG5000
+OpenROM(dialogOpen . " ahk_class #32770", romPath . "\" . romName . romExtension)
 
 WinWaitActive("ahk_class VG5000")
-Sleep, 1200 ; increase if CLOAD is not appearing in the emu window or some just some letters
-SetKeyDelay, 50
-Send, {C down}{C up}{L down}{L up}{O down}{O up}{Q down}{Q up}{D down}{D up}{ENTER down}{ENTER up} ; necessary for the emu to pick up on the key presses
-Sleep, 1000 ; increase if you see the blue emu screen while you are in fullscreen
+Sleep, 1200 ; increase If CLOAD is not appearing in the emu window or some just some letters
+SetKeyDelay(50)
+SendCommand("CLOQD{Enter}") ;This will type CLOAD in the screen
 
-HideEmuEnd()
+If (RequiresRun = "true") ; Sending RUN is required for some homebrew games to boot
+{
+	Sleep, 500
+	Send, {R down}{R up}{U down}{U up}{N down}{N up}
+	Send, {ENTER}
+}
+Sleep, 1000 ; increase If you see the blue emu screen while you are in fullscreen
 
 If Fullscreen = true
 	Send, {PGUP}
 
+BezelDraw()
+HideEmuEnd()
 FadeInExit()
 Process("WaitClose", executable)
 7zCleanUp()
+BezelExit()
 FadeOutExit()
 
 If RestoreTaskbar = true

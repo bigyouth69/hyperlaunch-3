@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true to enable fullscreen.</DESCRIPTION>
+						</KEY>
+						<KEY name="Fullscreen_Resolution" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Sets the fullscreen mode resolution. Type 'original' to use the game's default resolution, type 'desktop' to use the same resolution as your desktop</DESCRIPTION>
+						</KEY>
+						<KEY name="Windowed_Resolution" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Sets the windowed mode resolution. Type 'original' to use the game's default resolution</DESCRIPTION>
+						</KEY>
+						<KEY name="Scaler" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select the scaler you want to use on DOSBox</DESCRIPTION>
+							<VALUES>
+								<VALUE>2xsai</VALUE>
+								<VALUE>advinterp2x</VALUE>
+								<VALUE>advinterp3x</VALUE>
+								<VALUE>advmame2x</VALUE>
+								<VALUE>advmame3x</VALUE>
+								<VALUE>hq2x</VALUE>
+								<VALUE>hq3x</VALUE>
+								<VALUE>none</VALUE>
+								<VALUE>normal2x</VALUE>
+								<VALUE>normal3x</VALUE>
+								<VALUE>rgb2x</VALUE>
+								<VALUE>rgb3x</VALUE>
+								<VALUE>scan2x</VALUE>
+								<VALUE>scan3x</VALUE>
+								<VALUE>super2xsai</VALUE>
+								<VALUE>supereagle</VALUE>
+								<VALUE>tv2x</VALUE>
+								<VALUE>tv3x</VALUE>
+							</VALUES>							
+						</KEY>
+						<KEY name="Aspect" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Aspect Correction, disabled by default. If you set this to true make sure you set Output=overlay as surface does not support aspect correction.</DESCRIPTION>
+						</KEY>
+						<KEY name="Output" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>What to use for DOSBox output. Surface does not support scaling or aspect correction. Default is surface</DESCRIPTION>
+							<VALUES>
+								<VALUE>surface</VALUE>
+								<VALUE>overlay</VALUE>
+								<VALUE>opengl</VALUE>
+								<VALUE>openglnb</VALUE>
+								<VALUE>ddraw</VALUE>
+							</VALUES>	
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

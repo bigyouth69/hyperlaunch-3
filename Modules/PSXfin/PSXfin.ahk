@@ -3,8 +3,8 @@ MEmu = PSXfin
 MEmuV =  v1.13
 MURL = http://psxemulator.gazaxian.com/
 MAuthor = brolly & djvj
-MVersion = 2.0.1
-MCRC = 2D3676B5
+MVersion = 2.0.2
+MCRC = 7D7FF096
 MID = 635038268919606980
 MSystem = "Sony PlayStation"
 ;----------------------------------------------------------------------------
@@ -21,14 +21,16 @@ If dtEnabled = true
 	DaemonTools("get")	; populates the dtDriveLetter variable with the drive letter to your scsi or dt virtual drive
 
 BezelStart()
+hideEmuObj := Object("ahk_class ConsoleWindowClass",0,"pSX ahk_class pSX",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 fullscreen := If fullscreen = "true" ? " -f" : ""
 
+HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
+
 ; Mount the CD using DaemonTools
 If ( romExtension = ".cue" && dtEnabled = "true" ) 
-{
-	DaemonTools("mount",romPath . "\" . romName . romExtension)
+{	DaemonTools("mount",romPath . "\" . romName . romExtension)
 	Run(executable . fullscreen . " " . dtDriveLetter . ":", emuPath)
 } Else {
 	Log("Module RunWait - " . emuPath "\" . executable . " -f """ . romPath . "\" . romName . romExtension . """")
@@ -37,15 +39,15 @@ If ( romExtension = ".cue" && dtEnabled = "true" )
 
 SetTitleMatchMode, slow
 WinWait("pSX ahk_class pSX")
-WinSet, Transparent, On, ahk_class ConsoleWindowClass	; hide console window
 WinWaitActive("pSX ahk_class pSX")
 
 If fullscreen = true
-{	SetKeyDelay, 50
+{	SetKeyDelay(50)
 	Send, {Alt Down}{Enter Down}{Enter Up}{Alt Up}
 }
 
 BezelDraw()
+HideEmuEnd()
 FadeInExit()
 Process("WaitClose", executable)
 
@@ -72,7 +74,7 @@ Return
 RestoreEmu:
 	SetWinDelay, 50
 	If fullscreen = true
-	{	SetKeyDelay, 50
+	{	SetKeyDelay(50)
 		Send, {Alt Down}{Enter Down}{Enter Up}{Alt Up}
 	}
 Return

@@ -1,0 +1,30 @@
+; RetroFE Plugin
+
+PluginInit:
+	Log("PluginInit - Started")
+
+	; Load Plugin settings
+	frontendPlugin := pluginName
+	frontendWinClass := "RetroFE ahk_class SDL_app"
+	; frontendGamesDb := frontendPath . "\Databases\" . systemName . "\" . systemName . ".xml"
+	frontendSystemDb := frontendPath . "\Collections\Main\Menu.xml"
+	frontendSystemIni := frontendPath . "\Collections\" . systemName . "\Settings.conf"
+	frontendMainMenuIni := frontendPath . "\Collections\Main\Settings.conf"
+	; frontendBaseGamesAssetPath := frontendPath . "\Media\" . systemName . "\Images"
+	; frontendBaseSystemsAssetPath := frontendPath . "\Media\Main Menu\Images"
+	; frontendGameWheel := frontendBaseGamesAssetPath . "\Wheel\" . dbName . ".png"
+	; frontendSystemWheel := frontendBaseSystemsAssetPath . "\Wheel\" . systemName . ".png"
+	; frontendArtworkTypes := Object("Artwork1",frontendBaseGamesAssetPath . "\Artwork1","Artwork2",frontendBaseGamesAssetPath . "\Artwork2","Artwork3",frontendBaseGamesAssetPath . "\Artwork3","Artwork4",frontendBaseGamesAssetPath . "\Artwork4")
+	frontendVideoExtensions := ["mp4","flv"]	; order matters, preferred is found first
+	frontendArtworkExtensions := ["png"]
+	; frontendMGArtwork := 
+
+	frontendPluginInit := 1	; used to keep track if the FE plugin was initialized already
+	Log("PluginInit - Ended")
+Return
+
+ReadFEGameInfo:
+	Log("ReadFEGameInfo - Started")
+	readFEGameInfo := 1	; used to keep track if the FE game info was read already
+	Log("ReadFEGameInfo - Ended")
+Return

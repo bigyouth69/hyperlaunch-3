@@ -2,8 +2,8 @@ MEmu = MUGEN
 MEmuV = N/A
 MURL = http://www.elecbyte.com/
 MAuthor = brolly & djvj
-MVersion = 2.0.1
-MCRC = FA399B17
+MVersion = 2.0.2
+MCRC = C7CEEEE
 iCRC = 965C2F5A
 MID = 635038268906726252
 MSystem = "MUGEN"
@@ -59,12 +59,13 @@ If Err
 WinWait("ahk_pid " . game_PID)
 WinWaitActive("ahk_pid " . game_PID)
 
-WinGetTitle, gameTitle, ahk_pid %game_PID%
+WinGetActiveTitle, gameTitle
+Log("Module - Active window is currently: " . gameTitle)
 
 FadeInExit()
 
-If ( exitHack = 1)	; Sometimes mugen crashes during exit and doesn't close, so we need to do a workaround to detect it, this doesn't seem to happen on MUGEN 1.0
-{	If gameTitle != HyperSpin	; If the user exited mugen in under 1500ms then we don't need to do this otherwise the script would hang
+If (exitHack = 1)	; Sometimes mugen crashes during exit and doesn't close, so we need to do a workaround to detect it, this doesn't seem to happen on MUGEN 1.0
+{	If (gameTitle != frontendWinTitle)	; If the user exited mugen in under 1500ms then we don't need to do this otherwise the script would hang
 		IfWinExist, %gameTitle%
 			Loop {
 				Sleep, 1000
@@ -74,7 +75,7 @@ If ( exitHack = 1)	; Sometimes mugen crashes during exit and doesn't close, so w
 			}
 
 	Sleep 2000
-	If gameTitle != HyperSpin
+	If (gameTitle != frontendWinTitle)
 		IfWinExist, %gameTitle%
 		{	
 			FadeOutExit()	; this needs to be on its own line so it does not error

@@ -2,9 +2,9 @@ MEmu = ePSXe
 MEmuV =  v1.9.0
 MURL = http://www.epsxe.com/
 MAuthor = djvj & Shateredsoul & brolly
-MVersion = 2.0.7
-MCRC = A47833DF
-iCRC = AFD664B0
+MVersion = 2.0.8
+MCRC = 748F1FE3
+iCRC = 727A7789
 MID = 635038268888210842
 MSystem = "Sony PlayStation"
 ;----------------------------------------------------------------------------
@@ -41,15 +41,11 @@ turboButton := IniReadCheck(settingsFile, "Settings", "turboButton","F12",,1)		;
 slowBoot := IniReadCheck(settingsFile, "Settings", "slowBoot","false",,1)			; If true, force emulator to show bios screen at boot
 enableAnalog := IniReadCheck(settingsFile, "Settings", "enableAnalog","true",,1)	; If true, enables analog controls at start of game for you, so you don't have to press F5
 hideEpsxeGUIs := IniReadCheck(settingsFile, "Settings", "HideePSXeGUIs","true",,1)
-MLanguage := IniReadCheck(settingsFile, "Settings", "MLanguage","English",,1)		; If English, dialog boxes look for the word "Open" and if Spanish/Portuguese, looks for "Abrir"
 perGameMemCards := IniReadCheck(settingsFile, "Settings", "PerGameMemoryCards","true",,1)
 disableMemoryCard1 := IniReadCheck(settingsFile, romName, "DisableMemoryCard1","false",,1)	; If true, disables memory card 1 for this game. Some games may not boot if both memory cards are inserted.
 disableMemoryCard2 := IniReadCheck(settingsFile, romName, "DisableMemoryCard2","false",,1)	; If true, disables memory card 2 for this game. Some games may not boot if both memory cards are inserted.
 
-mLang := Object("English","Open","Spanish/Portuguese","Abrir")
-winLang := mLang[MLanguage]	; search object for the MLanguage associated to the user's language
-If !winLang
-	ScriptError("Your chosen language is: """ . MLanguage . """. It is not one of the known supported languages for this module: " . moduleName)
+dialogOpen := i18n("dialog.open")	; Looking up local translation
 
 BezelStart()
 
@@ -93,11 +89,12 @@ Loop 2
 		WriteReg("SZ", "epsxe\config", "Memcard" . A_Index . "Enable", 1)
 }
 
+hideEmuObj := Object(dialogOpen . " PSX ISO ahk_class #32770",0,"ahk_class EPSXGUI",0,"ePSXe ahk_class EPSX",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 epsxeExtension := InStr(".ccd|.cue|.img|.iso|.mdf",romExtension)	; the psx extensions supported by the emu
 
-SetKeyDelay, 50
+SetKeyDelay(50)
 ; turboButton := xHotKeyVarEdit(turboButton,"turboButton","~","Add")
 xHotKeywrapper(turboButton,"TurboProcess")
 turboEnabled = 0				; Initialize turbo state
@@ -113,12 +110,33 @@ If (noGUI = "" && hideEpsxeGUIs = "true") {	; for multi disc games only
 
 ; Mount the CD using DaemonTools
 If (epsxeExtension && dtEnabled = "true" ) {
-	Log("Module - Daemon Tools is enabled and " . romExtension . " is a supported DT extension.")
+	Log("Module - Daemon Tools is enabled and " . romExtension . " is a supported DT extension")
+
+	DaemonTools("get")	; populates the dtDriveLetter variable with the drive letter to your scsi or dt virtual drive
+	currentCDRomAscii := ReadReg("epsxe\config", "CdromLetter")	; read the current setting for ePSXe's cdrom it is using
+	currentCDRomLetter := Chr(currentCDRomAscii)	; converts the ascii code to a letter
+
+	If (currentCDRomLetter = "")
+		Log("Module - " . MEmu . " is not configured with a CDRom Drive")
+	Else If (currentCDRomAscii = 48)
+		Log("Module - " . MEmu . " is configured to read from the FirstCdrom Drive and will be updated to a proper letter instead")
+	Else
+		Log("Module - " . MEmu . " is configured to read from Drive " . currentCDRomLetter . ":")
+	
+	If (currentCDRomLetter != dtDriveLetter) {
+		newCDRomAscii := Asc(dtDriveLetter)	; converts the letter to an ascii code
+		WriteReg("SZ", "epsxe\config", "CdromLetter", newCDRomAscii)
+		Log("Module - Updated " . MEmu . " to use Drive " . dtDriveLetter . ": for all future launches.",2)
+	} Else
+		Log("Module - " . MEmu . " is configured to use the correct drive already")
+
 	DaemonTools("mount",romPath . "\" . romName . romExtension)
+	HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
 	errorLvl := Run(executable . noGUI . slowBoot, emuPath)
 	usedDT := 1
 } Else {
 	Log("Module - Sending rom to emu directly as Daemon Tools is not enabled or " . romExtension . " is not a supported DT extension.")
+	HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
 	errorLvl := Run(executable . noGUI . slowBoot . " -loadiso """ . romPath . "\" . romName . romExtension . """", emuPath)
 }
 If errorLvl
@@ -139,18 +157,9 @@ If (noGUI = "") {	; for multi disc games only
 } Else
 	Log("Module - " . romName . " is not a multi-disc game, so launching " . MEmu . " with GUI disabled.")
 
-epsxeOpenWindow := winLang . " PSX ISO ahk_class #32770"
 If (!usedDT && noGUI = "") {		; for some reason, epsxe still shows an open psx iso box even though it was provided on the run command when we don't also send -nogui. This handles loading the rom.
 	Log("Module - " . MEmu . " GUI and DT support are both disabled. Loading rom via the Open PSX ISO window.")
-	WinWait(epsxeOpenWindow)
-	Loop {
-		ControlGetText, edit1Text, Edit1, %epsxeOpenWindow%
-		If (edit1Text = romPath . "\" . romName . romExtension)
-			Break
-		Sleep, 100
-		ControlSetText, Edit1, %romPath%\%romName%%romExtension%, %epsxeOpenWindow%
-	}
-	ControlSend, Button1, {Enter}, %epsxeOpenWindow% ; Select Open
+	OpenROM(dialogOpen . " PSX ISO ahk_class #32770", romPath . "\" . romName . romExtension)
 }	
 
 WinWait("ePSXe ahk_class EPSX")
@@ -162,6 +171,7 @@ If (noGUI = "" && hideEpsxeGUIs = "true") {	; for multi disc games only
 }
 
 BezelDraw()
+HideEmuEnd()
 FadeInExit()
 
 If enableAnalog = true
@@ -200,7 +210,6 @@ TurboProcess:
 Return
 
 HaltEmu:
-	SetKeyDelay, 50
 	If Fullscreen = true
 	{	PostMessage, 0x111, 40001,,,ahk_class EPSXGUI	; Go fullscreen, same as alt+enter
 		Sleep, 200
@@ -208,7 +217,7 @@ HaltEmu:
 Return
 MultiGame:
 	; msgbox % "selectedRom = " . selectedRom . "`nselected game = " . currentButton . "`nmgRomPath = " . mgRomPath . "`nmgRomExt = " . mgRomExt . "`nmgRomName = "  . mgRomName
-	SetKeyDelay, 50
+	SetKeyDelay(50)
 	If usedDT
 	{	DaemonTools("unmount")	; Unmount the CD from DaemonTools
 		Sleep, 500	; Required to prevent  DT from bugging
@@ -232,23 +241,16 @@ MultiGame:
 	{	WinWait("Change Disc Option ahk_class #32770")
 		ControlSend,Button1,{Enter},Change Disc Option ahk_class #32770
 	} Else {
-		WinWait(epsxeOpenWindow)
-		Loop {
-			ControlGetText, edit1Text, Edit1, %epsxeOpenWindow% 
-			If (edit1Text = selectedRom)
-				Break
-			Sleep, 100
-			ControlSetText, Edit1, %selectedRom%, %epsxeOpenWindow%
-		}
-		ControlSend, Button1, {Enter}, %epsxeOpenWindow% ; Select Open
+		OpenROM(dialogOpen . " PSX ISO ahk_class #32770", romPath . "\" . romName . romExtension)
 	}	
 	If hideEpsxeGUIs = true
 	{	Log("Module - Stopping the HideGUIWindow timer")
 		SetTimer, HideGUIWindow, off
 	}
+	; If BezelEnabled
+		; BezelDraw()
 Return
 RestoreEmu:
-	SetKeyDelay, 50
 	WinActivate, ahk_id  %emulatorID%
 	If Fullscreen = true
 		PostMessage, 0x111, 40001,,,ahk_class EPSXGUI	; Go fullscreen, same as alt+enter
@@ -265,7 +267,7 @@ CloseProcess:
 	SetWinDelay, 50
 	Log("Module - Sending Escape to close emulator")
 	; ControlSend,, {Esc down}{Esc up}, ePSXe ahk_class EPSX ; DO NOT CHANGE
-	PostMessage, 0x111, 40007,,,ahk_class EPSX	; Go fullscreen, same as alt+enter
+	PostMessage, 0x111, 40007,,,ahk_class EPSX	; Exit ePSXe
 	If (noGUI = "") {	; for multi disc games only
 		WinWait("ePSXe ahk_class EPSXGUI")
 		WinClose("ePSXe ahk_class EPSXGUI")

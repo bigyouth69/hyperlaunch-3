@@ -19,6 +19,10 @@
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>Set fullscreen height.</DESCRIPTION>
 						</KEY>
+						<KEY name="ForcePathUpdate" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, the module will always update paths in your singe files regardless if they "look" correct or not. Use this if some games are not launching correctly and you feel its related to a path problem.</DESCRIPTION>
+						</KEY>
 					</KEYS>
 				</SECTION>
 			</SECTIONS>

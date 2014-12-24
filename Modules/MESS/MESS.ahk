@@ -1,12 +1,12 @@
 MEmu = MESS
-MEmuV =  v0.151
+MEmuV =  v0.154
 MURL = http://www.mess.org/
-MAuthor = djvj & faahrev
-MVersion = 2.2.2
-MCRC = 464C9400
-iCRC = AA949FDC
+MAuthor = djvj & faahrev & brolly
+MVersion = 2.2.4
+MCRC = 9FA7BBEE
+iCRC = FAF9D0F2
 MID = 635038268905515239
-MSystem = "Amstrad GX4000","APF Imagination Machine","Apple IIGS","Atari 8-bit","Atari 2600","Atari 5200","Atari 7800","Atari Jaguar","Atari Lynx","Bally Astrocade","Bandai WonderSwan","Bandai WonderSwan Color","Casio PV-1000","Casio PV-2000","Coleco ADAM","ColecoVision","Creatronic Mega Duck","Emerson Arcadia 2001","Entex Adventure Vision","Epoch Game Pocket Computer","Epoch Super Cassette Vision","Fairchild Channel F","Funtech Super Acan","GCE Vectrex","Hartung Game Master","Interton VC 4000","Magnavox Odyssey 2","Mattel Aquarius","Mattel Intellivision","NEC PC Engine","NEC PC Engine-CD","NEC SuperGrafx","NEC TurboGrafx-16","NEC TurboGrafx-CD","Nintendo 64","Nintendo Entertainment System","Nintendo Game Boy","Nintendo Game Boy Advance","Nintendo Game Boy Color","Nintendo Virtual Boy","Philips CD-i","RCA Studio II","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","SNK Neo Geo AES","SNK Neo Geo CD","SNK Neo Geo Pocket","SNK Neo Geo Pocket Color","Sony PlayStation","Super Nintendo Entertainment System","Texas Instruments TI 99-4A","Tiger Game.com","VTech CreatiVision","Watara Supervision"
+MSystem = "Amstrad GX4000","APF Imagination Machine","Apple IIGS","Atari 8-bit","Atari 2600","Atari 5200","Atari 7800","Atari Jaguar","Atari Lynx","Bally Astrocade","Bandai WonderSwan","Bandai WonderSwan Color","Casio PV-1000","Casio PV-2000","Coleco ADAM","ColecoVision","Creatronic Mega Duck","Emerson Arcadia 2001","Entex Adventure Vision","Epoch Game Pocket Computer","Epoch Super Cassette Vision","Exidy Sorcerer","Fairchild Channel F","Funtech Super Acan","GCE Vectrex","Hartung Game Master","Interton VC 4000","JungleTac Sport Vii","Magnavox Odyssey 2","Matra & Hachette Alice","Mattel Aquarius","Mattel Intellivision","NEC PC Engine","NEC PC Engine-CD","NEC SuperGrafx","NEC TurboGrafx-16","NEC TurboGrafx-CD","Nintendo 64","Nintendo Entertainment System","Nintendo Famicom Disk System","Nintendo Game Boy","Nintendo Game Boy Advance","Nintendo Game Boy Color","Nintendo Virtual Boy","Philips CD-i","RCA Studio II","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","Sega SG-1000","Sinclair ZX81","SNK Neo Geo AES","SNK Neo Geo CD","SNK Neo Geo Pocket","SNK Neo Geo Pocket Color","Sony PlayStation","Sony PocketStation","Sord M5","Super Nintendo Entertainment System","Tandy TRS-80 Color Computer","Texas Instruments TI 99-4A","Tiger Game.com","Tomy Tutor","VTech CreatiVision","Watara Supervision"
 ;----------------------------------------------------------------------------
 ; Notes:
 ; Exit fade will only work correctly if you don't have Esc, the default MESS exit key,  as your exit key. If you use Esc, turn off the ExitScreen
@@ -36,14 +36,18 @@ MSystem = "Amstrad GX4000","APF Imagination Machine","Apple IIGS","Atari 8-bit",
 ; Entex Adventure Vision - advision
 ; Epoch Game Pocket Computer - gamepock
 ; Epoch Super Cassette Vision - scv
+; Exidy Sorcerer - sorcerer
 ; Fairchild Channel F - channelf
 ; Funtech Super ACan - supracan
 ; GCE Vectrex - vextrex
 ; Hartung Game Master - gmaster
 ; Interton VC 4000 - vc4000
+; JungleTac Sport Vii - vii
 ; Magnavox Odyssey 2 - odyssey2
+; Matra & Hachette Alice - alice32
 ; Mattel Aquarius - aquarius
 ; Mattel Intellivision - intv ("exec.bin" [8,192 bytes] & "grom.bin" [2,048 bytes])
+; MGT Sam Coupe - samcoupe
 ; NEC PC Engine - N/A
 ; NEC PC Engine-CD - N/A
 ; NEC SuperGrafx - N/A
@@ -51,6 +55,7 @@ MSystem = "Amstrad GX4000","APF Imagination Machine","Apple IIGS","Atari 8-bit",
 ; NEC TurboGrafx-CD - "Super CD-ROM2 System V3.01 (U).pce" [262,144 bytes] (placed in the roms subfolder in the emuPath)
 ; Nintendo 64 - n64
 ; Nintendo Entertainment System - N/A
+; Nintendo Famicom Disk System - famicom
 ; Nintendo Game Boy - gameboy
 ; Nintendo Game Boy Advance - gba
 ; Nintendo Game Boy Color - gbcolor
@@ -62,14 +67,20 @@ MSystem = "Amstrad GX4000","APF Imagination Machine","Apple IIGS","Atari 8-bit",
 ; Sega Game Gear - gamegear
 ; Sega Genesis - N/A
 ; Sega Master System - sms
+; Sega Mega Drive - N/A
+; Sinclair ZX81 - zx81
 ; SNK Neo Geo AES - aes
 ; SNK Neo Geo CD - neocd
 ; SNK Neo Geo Pocket - ngp
 ; SNK Neo Geo Pocket Color - ngpc
 ; Sony PlayStation - psa, pse, psj, psu
+; Sony PocketStation - pockstat
+; Sord M5 - m5
 ; Super Nintendo Entertainment System - snes
+; Tandy TRS-80 Color Computer - coco3
 ; Texas Instruments TI 99-4A - ti99_4a
 ; Tiger Game.com - gamecom
+; Tomy Tutor - tutor
 ; VTech CreatiVision - crvision
 ; Watara Supervision - N/A
 ;
@@ -103,13 +114,18 @@ MSystem = "Amstrad GX4000","APF Imagination Machine","Apple IIGS","Atari 8-bit",
 ; You can check how to convert split cart dumps to RPK here:
 ; http://www.ninerpedia.org/index.php/MESS_multicart_system
 ; For floppy games make sure you have a RPK dump of an extended basic rom on your roms folder. It should be named "extended_basic.rpk"
+
+; Bezels:
+; Module settings control whether HyperLaunch or MESS bezels are shown
+; In the bezel normal mode only HyperLaunch Bezels will be show and the MESS use_bezels option will be forced disbaled
+; In the bezel layout mode, HyperLaunch Bezels will be drawn only when you do not have a layout file on your MESS folders for the current game
 ;----------------------------------------------------------------------------
 StartModule()
 BezelGUI()
 FadeInStart()
 
 ; This object controls how the module reacts to different systems. MESS can play a lot of systems, but needs to know what system you want to run, so this module has to adapt.
-mType := Object("Amstrad GX4000","gx4000","APF Imagination Machine","apfimag","Apple IIGS","apple2gs","Atari 8-bit","a800","Atari 2600","a2600","Atari 5200","a5200","Atari 7800","a7800","Atari Jaguar","jaguar","Atari Lynx","lynx","Bally Astrocade","astrocde","Bandai WonderSwan","wswan","Bandai WonderSwan Color","wscolor","Casio PV-1000","pv1000","Casio PV-2000","pv2000","Coleco ADAM","adam","ColecoVision","coleco","Creatronic Mega Duck","megaduck","Emerson Arcadia 2001","arcadia","Entex Adventure Vision","advision","Epoch Game Pocket Computer","gamepock","Epoch Super Cassette Vision","scv","Fairchild Channel F","channelf","Funtech Super Acan","supracan","GCE Vectrex","vectrex","Hartung Game Master","gmaster","Interton VC 4000","vc4000","Magnavox Odyssey 2","odyssey2","Mattel Aquarius","aquarius","Mattel Intellivision","intv","NEC PC Engine","pce","NEC PC Engine-CD","pce","NEC SuperGrafx","sgx","NEC TurboGrafx-16","tg16","NEC TurboGrafx-CD","tg16","Nintendo 64","n64","Nintendo Entertainment System","nes","Nintendo Game Boy","gameboy","Nintendo Game Boy Advance","gba","Nintendo Game Boy Color","gbcolor","Nintendo Virtual Boy","vboy","Philips CD-i","cdimono1","RCA Studio II","studio2","Sega 32X","32x","Sega CD","segacd","Sega Game Gear","gamegear","Sega Genesis","genesis","Sega Master System","sms","Sega Mega Drive","genesis","SNK Neo Geo AES","aes","SNK Neo Geo CD","neocdz","SNK Neo Geo Pocket","ngp","SNK Neo Geo Pocket Color","ngpc","Sony PlayStation","psx","Super Nintendo Entertainment System","snes","Texas Instruments TI 99-4A","ti99_4a","Tiger Game.com","gamecom","VTech CreatiVision","crvision","Watara Supervision","svision")
+mType := Object("Amstrad GX4000","gx4000","APF Imagination Machine","apfimag","Apple IIGS","apple2gs","Atari 8-bit","a800","Atari 2600","a2600","Atari 5200","a5200","Atari 7800","a7800","Atari Jaguar","jaguar","Atari Lynx","lynx","Bally Astrocade","astrocde","Bandai WonderSwan","wswan","Bandai WonderSwan Color","wscolor","Casio PV-1000","pv1000","Casio PV-2000","pv2000","Coleco ADAM","adam","ColecoVision","coleco","Creatronic Mega Duck","megaduck","Emerson Arcadia 2001","arcadia","Entex Adventure Vision","advision","Epoch Game Pocket Computer","gamepock","Epoch Super Cassette Vision","scv","Exidy Sorcerer","sorcerer","Fairchild Channel F","channelf","Funtech Super Acan","supracan","GCE Vectrex","vectrex","Hartung Game Master","gmaster","Interton VC 4000","vc4000","JungleTac Sport Vii","vii","Magnavox Odyssey 2","odyssey2","Matra & Hachette Alice","alice32","Mattel Aquarius","aquarius","Mattel Intellivision","intv","NEC PC Engine","pce","NEC PC Engine-CD","pce","NEC SuperGrafx","sgx","NEC TurboGrafx-16","tg16","NEC TurboGrafx-CD","tg16","Nintendo 64","n64","Nintendo Entertainment System","nes","Nintendo Famicom Disk System","famicom","Nintendo Game Boy","gameboy","Nintendo Game Boy Advance","gba","Nintendo Game Boy Color","gbcolor","Nintendo Virtual Boy","vboy","Philips CD-i","cdimono1","RCA Studio II","studio2","Sega 32X","32x","Sega CD","segacd","Sega Game Gear","gamegear","Sega Genesis","genesis","Sega Master System","sms","Sega Mega Drive","megadriv","Sega SG-1000","sg1000","Sinclair ZX81","zx81","SNK Neo Geo AES","aes","SNK Neo Geo CD","neocdz","SNK Neo Geo Pocket","ngp","SNK Neo Geo Pocket Color","ngpc","Sony PlayStation","psx","Sony PocketStation","pockstat","Sord M5","m5","Super Nintendo Entertainment System","snes","Tandy TRS-80 Color Computer","coco3","Texas Instruments TI 99-4A","ti99_4a","Tiger Game.com","gamecom","Tomy Tutor","tutor","VTech CreatiVision","crvision","Watara Supervision","svision")
 ident := mType[systemName]	; search object for the systemName identifier MESS uses
 If !ident
 	ScriptError("Your systemName is: " . systemName . "`nIt is not one of the known supported systems for this MESS module: " . moduleName)
@@ -122,35 +138,36 @@ bezelMode := IniReadCheck(settingsFile, "Settings", "BezelMode","layout",,1)	; "
 UseSoftwareList := IniReadCheck(settingsFile, SystemName, "UseSoftwareList","false",,1)
 userparams := IniReadCheck(settingsFile, SystemName, "Parameters",A_Space,,1)
 Artwork_Crop := IniReadCheck(settingsFile, systemName . "|" . romName, "Artwork_Crop", "true",,1)
-Use_Bezels := IniReadCheck(settingsFile, systemName . "|" . romName, "Use_Bezels", "true",,1)
+Use_Bezels := IniReadCheck(settingsFile, systemName . "|" . romName, "Use_Bezels", "false",,1)
 Use_Overlays := IniReadCheck(settingsFile, systemName . "|" . romName, "Use_Overlays", "true",,1)
 Use_Backdrops := IniReadCheck(settingsFile, systemName . "|" . romName, "Use_Backdrops", "true",,1)
 
-7z(romPath, romName, romExtension, 7zExtractPath)
+artworkCrop := If (Artwork_Crop = "true") ? " -artwork_crop" : " -noartwork_crop"
+useBezels := If (Use_Bezels = "true") ? " -use_bezels" : " -nouse_bezels"
+useOverlays := If (Use_Overlays = "true") ? " -use_overlays" : " -nouse_overlays"
+useBackdrops := If (Use_Backdrops = "true") ? " -use_backdrops" : " -nouse_backdrops"
 
-If (bezelEnabled = "true") {
-	artworkCrop := If (Artwork_Crop = "true") ? "-artwork_crop" : "-noartwork_crop"
-	useBezels := If (Use_Bezels = "true") ? "-use_bezels" : "-nouse_bezels"
-	useOverlays := If (Use_Overlays = "true") ? "-use_overlays" : "-nouse_overlays"
-	useBackdrops := If (Use_Backdrops = "true") ? "-use_backdrops" : "-nouse_backdrops"
+hideEmuObj := Object(dialogOpen . " ahk_class ConsoleWindowClass",0,"ahk_class MAME",1)	;Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
+
+If bezelEnabled = true
+{	
 	ListXMLtable := []
-	ListXMLtable := ListXMLInfo(ident)
-	If bezelMode = layout
-		BezelStart(ident,ListXMLtable[1],ListXMLtable[2],ListXMLtable[3],ListXMLtable[4])
-	Else if !(Use_Bezels = "true")
+	ListXMLtable := ListXMLInfo(romName)
+	If (bezelMode = "layout"){
+		BezelStart("layout",ListXMLtable[1],ListXMLtable[2],romName)
+	} else { ;bezel mode = normal
+		useBezels := " -nouse_bezels"   ; force disabling MESS built-in bezels
 		BezelStart(,,ListXMLtable[2])
-} Else {
-	artworkCrop := "-artwork_crop"
-	useBezels := "-nouse_bezels"
-	useOverlays := "-nouse_overlays"
-	useBackdrops := "-nouse_backdrops"
+	}
 }
 
+7z(romPath, romName, romExtension, 7zExtractPath)
+
 winstate := If (Fullscreen = "true") ? "Hide UseErrorLevel" : "UseErrorLevel"
-fullscreen := If (Fullscreen = "true") ? "-nowindow" : "-window"
-videomode := If (Videomode != "" )? "-video " . videomode : ""
-hlsl := If hlsl = "true" ? "-hlsl_enable" : "-nohlsl_enable"
-param1 := "-cart " . """" . romPath . "\" . romName . romExtension . """"	; default param1 used for launching most systems.
+fullscreen := If (Fullscreen = "true") ? " -nowindow" : " -window"
+videomode := If (Videomode != "" )? " -video " . videomode : ""
+hlsl := If hlsl = "true" ? " -hlsl_enable" : " -nohlsl_enable"
+param1 := " -cart " . """" . romPath . "\" . romName . romExtension . """"	; default param1 used for launching most systems.
 
 If romExtension = .txt	; This can be applied to all systems
 	param1:=
@@ -161,7 +178,7 @@ If ident = apfimag	; APF Imagination Machine
 
 If UseSoftwareList != true
 {	; Now that we know the system we are loading, determine if we use an ini assocated with that system for custom game configs a user might need. Then load the configs associated to that game.
-	If ident in apple2gs,odyssey2,ti99_4a	; these systems will use an ini to store game specific settings
+	If ident in ti99_4a,aes,apple2gs,odyssey2	; these systems will use an ini to store game specific settings
 	{	messSysINI := CheckFileMESS(modulePath . "\" . systemName . ".ini")	; create the ini if it does not exist
 		If ident = ti99_4a	; Texas Instruments TI 99-4A
 		{	mainCart := IniReadCheck(messSysINI, romName, "Main_Cart",A_Space,,1)
@@ -170,27 +187,31 @@ If UseSoftwareList != true
 			; Now set the parameters to send to mess
 			If romExtension = .dsk	; Expansion Disk
 				; If using the mainCart , send expansionLocation to MESS. This will require DirectInput to be enabled on the MESS build! Else we are loading a Disk game
-				param1:="-gromport multi -cart1", param2:="""" . romPath . "\" . (If mainCart ? (mainCart):(basicCart)) . """", param3:="-peb:slot2 32kmem -peb:slot3 speech -peb:slot6 tirs232 -peb:slot8 hfdc", param4:="-flop1", param5:="""" . romPath . "\" . romName . romExtension . """"
+				param1 := " -gromport multi -cart1", param2:="""" . romPath . "\" . (If mainCart ? (mainCart):(basicCart)) . """", param3:=" -peb:slot2 32kmem -peb:slot3 speech -peb:slot6 tirs232 -peb:slot8 hfdc", param4:=" -flop1", param5:="""" . romPath . "\" . romName . romExtension . """"
 			Else If romExtension = .rpk	; Cart Game (RPK Format)
-				param1:="-gromport multi -cart1", param2:="""" . romPath . "\" . romName . romExtension . """", param3:="-peb:slot3 speech"
-			param6 := "-ui_active" ;Enable partial keyboard mode at startup
+				param1 := " -gromport single -cart1", param2:="""" . romPath . "\" . romName . romExtension . """", param3:="-peb:slot3 speech" ;-cart will also work here
+			param6 := " -ui_active" ;Enable partial keyboard mode at startup
+		} Else If ident = aes	; SNK Neo Geo AES
+		{	biosRegion := IniReadCheck(messSysINI, romName, "BIOS_Region","asia",,1)
+			param1 := " -bios " . biosRegion	; can also be japan, but the asian one has english menus for most games
+			param2 := " -rompath " . """" . "roms;" . romPath . """"
+			param3 := " -cart " . romName
 		}Else if ident = apple2gs	; Apple IIGS
 		{	externalOS := IniReadCheck(messSysINI, romName, "External_OS","false",,1)
-			2gsSystemFile:="System6.2mg"	;For games without OS included, always force this name and error out if not found
-			multipartTable:=CreateRomTable(multipartTable)
+			2gsSystemFile := "System6.2mg"	;For games without OS included, always force this name and error out if not found
+			multipartTable := CreateRomTable(multipartTable)
 
 			If externalOS = true
 			{	CheckFile(romPath . "\" . 2gsSystemFile)
-				param1:="-flop3", param2:="""" . romPath . "\" . 2gsSystemFile . """", param3:="-flop4", param4:="""" . romPath . "\" . romName . romExtension . """"
+				param1 := " -flop3", param2:="""" . romPath . "\" . 2gsSystemFile . """", param3:=" -flop4", param4:="""" . romPath . "\" . romName . romExtension . """"
 			}Else{
-				param1:="-flop3", param2:="""" . romPath . "\" . romName . romExtension . """"
+				param1 := " -flop3", param2:="""" . romPath . "\" . romName . romExtension . """"
 				If (multipartTable.MaxIndex() > 1)
-					param3:="-flop4", param4:="""" . multipartTable[2,1] . """"
+					param3:=" -flop4", param4 := """" . multipartTable[2,1] . """"
 			}
-			param5 := "-ui_active" ;Enable partial keyboard mode at startup
+			param5 := " -ui_active" ;Enable partial keyboard mode at startup
 		}Else if ident = odyssey2	; Magnavox Odyssey 2
-			param2 := "-ui_active" ;Enable partial keyboard mode at startup
-
+			param2 := " -ui_active" ;Enable partial keyboard mode at startup
 		;Use a different bios if needed (This must be done after the above if conditions since the ident will change)
 		iniBios := IniReadCheck(messSysINI, romName, "Bios",ident,,1) ; for all games, we use the default bios. Some games might require different bios like Odyssey2's Jopac games use the videopac bios instead, which should be defined in the ini
 		If (iniBios != "")
@@ -198,17 +219,16 @@ If UseSoftwareList != true
 	}
 
 	; These systems don't use an ini, but do require parameters to be changed from the default method of launching Mess
-	If ident = aes	; SNK Neo Geo AES
-	{	param1 := "-bios asia"	; can also be japan, but the asian one has english menus for most games
-		param2 := "-rompath " . """" . "roms;" . romPath . """"
-		param3 := "-cart " . romName
-	}Else If (ident = "neocdz" || ident = "cdimono1" || ident = "segacd" || ident = "psx" || (ident = "tg16" && systemName = "NEC TurboGrafx-CD") || (ident = "pce" && systemName = "NEC PC Engine-CD"))	; SNK Neo Geo CD, Philips CD-i, Sega CD, Sony PlayStation, NEC PC Engine-CD or NEC TurboGrafx-CD
+	If (ident = "neocdz" || ident = "cdimono1" || ident = "segacd" || ident = "psx" || (ident = "tg16" && systemName = "NEC TurboGrafx-CD") || (ident = "pce" && systemName = "NEC PC Engine-CD"))	; SNK Neo Geo CD, Philips CD-i, Sega CD, Sony PlayStation, NEC PC Engine-CD or NEC TurboGrafx-CD
 	{	If romExtension not in .chd,.cue
 			ScriptError("MESS only supports " . systemName . " games in chd and cue format. It does not support:`n" . romExtension)
 		If (systemName = "NEC TurboGrafx-CD") {		; NEC TurboGrafx-CD needs an additional bios mounted as a cart to run
 			; tgcdBios := CheckFile(emuPath . "\roms\CD-ROM System V2.01 (U).pce")	; older bios that doesn't seem to work with many games
 			tgcdBios := CheckFile(emuPath . "\roms\Super CD-ROM2 System V3.01 (U).pce")
-			param2 := "-cart " . """" . tgcdBios . """"
+			param2 := " -cart " . """" . tgcdBios . """"
+		} Else If (systemName = "NEC PC Engine-CD") {		; NEC PC Engine-CD needs an additional bios mounted as a cart to run
+			pcecdBios := CheckFile(emuPath . "\roms\Super CD-ROM2 System V3.0 (J).pce")
+			param2 := " -cart " . """" . pcecdBios . """"
 		} Else If (ident = "psx") {		; Sony PlayStation
 			ident = psu	; changing ident sent to Mess to use the USA bios
 			; SelectMemCard()	; future function to swap around memcards
@@ -219,56 +239,87 @@ If UseSoftwareList != true
 			Else If InStr(romName,"(Euro")	; Mega CD European (PAL)
 				ident = megacd
 		}
-		param1 := "-cdrm " . """" . romPath . "\" . romName . romExtension . """"
+		param1 := " -cdrm " . """" . romPath . "\" . romName . romExtension . """"
 	}Else If ident = gamecom	; Tiger Game.com
 	{	If romExtension != .txt
-			param1 := "-cart1 " . """" . romPath . "\" . romName . romExtension . """"
-	}Else If ident = a800	; Atari 8-bit
+			param1 := " -cart1 " . """" . romPath . "\" . romName . romExtension . """"
+	}Else If ident = genesis	; Sega Genesis
+	{	If (InStr(romName, "(Europe") || InStr(romName, "(PAL"))	; if rom is from europe, tell MESS to boot a Mega Drive instead
+			ident = megadriv
+	}Else If ident = megadriv	; Sega Mega Drive
+	{	If (InStr(romName, "(USA") || InStr(romName, "(NTSC"))	; if rom is from America, tell MESS to boot a Genesis instead
+			ident = genesis
+	}Else If ident = vii ; JungleTac Sport Vii
+	{   If romName = Built-In Games (China)	;  Has some built-in games, gotta launch just BIOS for it.
+			param1:=
+	}Else If ident = alice32 ; Matra & Hachette Alice
+	{   If romExtension != .txt
+			param1 := " -cass1 " . """" . romPath . "\" . romName . romExtension . """"
+	}Else If ident = pockstat	; Sony PocketStation
+	{	If romExtension != .gme
+			param1 := " -cart1 " . """" . romPath . "\" . romName . romExtension . """"	
+	}Else If ident = coco3 ; Tandy TRS-80 Color Computer
+	{   If romExtension != .txt
+			param1 := " -cart " . """" . romPath . "\" . romName . romExtension . """"
+	}Else If ident = zx81 ; Sinclair ZX81
+	{   If romExtension != .txt
+			param1 := " -cass1 " . """" . romPath . "\" . romName . romExtension . """"
+	}Else If ident = sorcerer	; Exidy Sorcerer
+	{	If romExtension = .snp   ; Snapshot file
+			param1 := " -dump " . """" . romPath . "\" . romName . romExtension . """"
+		Else If romExtension = .bin
+			param1 := " -quik " . """" . romPath . "\" . romName . romExtension . """"
+	}Else If (ident = "a800" || ident = "famicom" || ident = "samcoupe")	; Atari 8-bit, Nintendo Famicom Disk System, and MGT Sam Coupe
 	{	If romExtension != .txt
-			param1 := "-flop1 " . """" . romPath . "\" . romName . romExtension . """"
+			param1 := " -flop1 " . """" . romPath . "\" . romName . romExtension . """"
 	}Else If ident = vectrex	; GCE Vectrex
 	{	If romName = Mine Storm (World)	; Mess dumps an error if you try to launch Mine Storm using a rom instead of just booting vectrex w/o a game in it (Mine Storm is built into vectrex)
 			param1:=
+	}Else If ident = apfm1000	; APF Imagination Machine/APF M1000
+	{	If romName = Rocket Patrol (USA)	; Rocket Patrol is built into the APF M1000 ROM.
+			param1:=
 	}Else If ident = adam		; Coleco ADAM
-		param1 := (If romExtension = ".ddp" ? "-cass1" : "-floppydisk") . " """ . romPath . "\" . romName . romExtension . """"	;  Decide if disk or ddp game
+		param1 := (If romExtension = ".ddp" ? " -cass1" : " -floppydisk") . " """ . romPath . "\" . romName . romExtension . """"	;  Decide if disk or ddp game
 }Else{	; Use Software List
 	hashname := ident
-	param1 := "-rompath " . """" . "roms;" . romPath . """" . A_Space . romName	; param1 used for launching from software lists
+	param1 := " -rompath " . """" . "roms;" . romPath . """" . A_Space . romName	; param1 used for launching from software lists
 
 	If ident = aes	; SNK Neo Geo AES
 	{	hashname := "neogeo"
-		param2 := "-bios asia"	; can also be japan, but the asian one has english menus for most games
+		param2 := " -bios asia"	; can also be japan, but the asian one has english menus for most games
 	}
 	CheckFile(emuPath . "\hash\" . hashname . ".xml","Could not find a software list for the system " . ident) ;Check if software list for selected system exists
 }
 
 If ident = vectrex	; GCE Vectrex
-	param2 := "-view "  . (If (FileExist(emuPath . "\artwork\Vectrex\" . romName . ".png"))?("""" . romName . """"):"standard")	; need overlays extracted in the artwork\vectres folder. PNGs must match romName
+	param2 := " -view "  . (If (FileExist(emuPath . "\artwork\Vectrex\" . romName . ".png"))?("""" . romName . """"):"standard")	; need overlays extracted in the artwork\vectres folder. PNGs must match romName
 
 ; use a custom cfg file if it exists and append it to param1
 IfExist, % emuPath . "\cfg\" . ident . "\" . dbName
-	param1 := "-cfg_directory " . """" . emuPath . "\cfg\" . ident . "\" . dbName . """" . A_Space . param1
+	param1 := " -cfg_directory " . """" . emuPath . "\cfg\" . ident . "\" . dbName . """" . param1
 
-Run(executable . A_Space . ident . A_Space . param1 . A_Space . param2 . A_Space . param3 . A_Space . param4 . A_Space . param5 . A_Space . param6 . A_Space . userparams . A_Space . fullscreen . A_Space . hlsl . A_Space . videomode . A_Space . artworkCrop . A_Space . useBezels . A_Space . useOverlays . A_Space . useBackdrops . " -skip_gameinfo", emuPath, winstate)
+HideEmuStart()
 
-If(ErrorLevel != 0){
-	If (ErrorLevel = 1)
+errLvl := Run(executable . A_Space . ident . param1 . param2 . param3 . param4 . param5 . param6 . userparams . fullscreen . hlsl . videomode . artworkCrop . useBezels . useOverlays . useBackdrops . " -skip_gameinfo", emuPath, winstate)
+
+If errLvl {
+	If (errLvl = 1)
 		Error = Failed Validity
-	Else If(ErrorLevel = 2)
+	Else If(errLvl = 2)
 		Error = Missing Files
-	Else If(ErrorLevel = 3)
+	Else If(errLvl = 3)
 		Error = Fatal Error
-	Else If(ErrorLevel = 4)
+	Else If(errLvl = 4)
 		Error = Device Error
-	Else If(ErrorLevel = 5)
+	Else If(errLvl = 5)
 		Error = Game Does Not Exist
-	Else If(ErrorLevel = 6)
+	Else If(errLvl = 6)
 		Error = Invalid Config
-	Else If ErrorLevel in 7,8,9
+	Else If errLvl in 7,8,9
 		Error = Identification Error
 	Else
 		Error = MESS Error
-	ScriptError("MESS Error - " . Error)
+	Log("MESS Error - " . Error,3)
 }
 
 WinWait("ahk_class MAME")
@@ -278,10 +329,11 @@ BezelDraw()
 
 If romName = ICBMromName	; for Bally Astrocade only
 {	Sleep, 2000 ; increase if you don't see the title screen
-	SetKeyDelay, 50
+	SetKeyDelay(50)
 	Send, {F3 down}{F3 up}	; sends a reset to MESS, needed for ICBM to boot
 }
 
+HideEmuEnd()
 FadeInExit()
 Process("WaitClose", executable)
 7zCleanUp()
@@ -315,14 +367,10 @@ ListXMLInfo(rom){ ; returns MAME/MESS info about parent rom, orientation angle, 
 	RegExMatch(Height,"[0-9]+", Height, "-6")
 	ListXMLtable[1] := parent
 	ListXMLtable[2] := angle
-	If (ListXMLtable[2]<>0)
-		ListXMLtable[3] := height
-	Else
-		ListXMLtable[3] := width
-	If (ListXMLtable[2]<>0)
-		ListXMLtable[4] := width
-	Else
-		ListXMLtable[4] := height
+	ListXMLtable[3] := height
+	ListXMLtable[4] := width
+	If (ListXMLtable[3] > ListXMLtable[4])
+		ListXMLtable[2] := true
 	FileDelete, %emuPath%\tempBezel.txt
 	Return ListXMLtable	
 }

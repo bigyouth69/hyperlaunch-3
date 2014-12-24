@@ -2,9 +2,9 @@ MEmu = FourDO
 MEmuV = v1.3.2.1
 MURL = http://www.fourdo.com/
 MAuthor = djvj
-MVersion = 2.0.1
-MCRC = 5981B8D3
-iCRC = 98CA45B0
+MVersion = 2.0.2
+MCRC = C4967BE7
+iCRC = 8FCF5737
 MID = 635038268892354290
 MSystem = "Panasonic 3DO"
 ;------------------------------------------------------------------------
@@ -20,8 +20,10 @@ MSystem = "Panasonic 3DO"
 ; --PrintKPrint        : Prints KPRINT (3DO debug) output to console.
 ; --ForceGDIRendering  : Forces GDI Rendering rather than DirectX.
 ; --DebugStartupPaused : Start 4do in a paused state.
+; Bezel requirement: Open 4do, disable Display >  Snap window to clean elements.
 ;------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
@@ -30,9 +32,15 @@ UseGDI := IniReadCheck(settingsFile, "Settings", "UseGDI","false",,1)	; Forces G
 
 4DOFile := CheckFile(emuPath . "\Settings\FourDO.settings","Cannot find " . emuPath . "\Settings\FourDO.settings`nPlease run FourDO manually first so it is created for you.")
 
+bezelTopOffset := IniReadCheck(settingsFile, "Settings", "Bezel_Top_Offset","24",,1)
+bezelBottomOffset := IniReadCheck(settingsFile, "Settings", "Bezel_Bottom_Offset","24",,1)
+
+BezelStart()
+
 If dtEnabled = true
 	DaemonTools("get")	; populates the dtDriveLetter variable with the drive letter to your scsi or dt virtual drive
 
+hideEmuObj := Object("4DO",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 If romExtension in .7z,.rar,.zip
@@ -49,6 +57,8 @@ xpath_save(4DOXML, 4DOFile) ; write new XML
 
 MouseMove, 0, A_ScreenHeight	; Moves mouse so the menubar doesn't show
 
+HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
+
 ; Basic usage: 4DO.exe [-option value][/option "value"][--switch]
 If dtEnabled = true
 {	DaemonTools("mount",romPath . "\" . romName . romExtension)
@@ -59,6 +69,8 @@ If dtEnabled = true
 WinWait("4DO")
 WinWaitActive("4DO")
 
+BezelDraw()
+HideEmuEnd()
 FadeInExit()
 Process("WaitClose", executable)
 
@@ -66,6 +78,7 @@ If dtEnabled = true
 	DaemonTools("unmount")
 
 7zCleanUp()
+BezelExit()
 FadeOutExit()
 ExitModule()
 

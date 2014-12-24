@@ -2,9 +2,9 @@ MEmu = Fusion
 MEmuV =  v3.64
 MURL = http://www.eidolons-inn.net/tiki-index.php?page=Kega
 MAuthor = djvj
-MVersion = 2.0.8
-MCRC = 792D6332
-iCRC = 3B62A7B7
+MVersion = 2.0.9
+MCRC = 6E4CD2B
+iCRC = C78F8D9A
 MID = 635038268893895568
 MSystem = "Samsung Gam Boy","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","Sega Mega-CD","Sega Pico","Sega SC-3000","Sega SG-1000"
 ;----------------------------------------------------------------------------
@@ -38,6 +38,8 @@ MSystem = "Samsung Gam Boy","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis"
 ; Both methods are fully detailed with downloads, instructions and screenshots at http://www.blitzbasic.com/Community/post.php?topic=99477&post=1202630
 ;----------------------------------------------------------------------------
 StartModule()
+If InStr(systemName, "Pico")
+	StorywaveOverlayGUI()
 BezelGUI()
 FadeInStart()
 
@@ -48,37 +50,50 @@ If !ident
 	ScriptError("Your systemName is: " . systemName . "`nIt is not one of the known supported systems for this Fusion module: " . moduleName)
 
 Log("Module - Started reading module ini")
-settingsFile := modulePath . "\" . moduleName . ".ini"
+
+IfExist, % modulePath . "\" . systemName . ".ini"	; use a custom systemName ini if it exists
+	settingsFile := modulePath . "\" . systemName . ".ini"
+Else
+	settingsFile := modulePath . "\" . moduleName . ".ini"
+
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 forceFullScreen32 := IniReadCheck(settingsFile, "Settings", "ForceFullScreen32","true",,1)
 hideTitleBar := IniReadCheck(settingsFile, "Settings", "hideTitleBar","true",,1)	; Removes the border, titlebar, menubar, and centers the emu on your screen. Only need this if fullscreen is false
 useRamCarts := IniReadCheck(settingsFile, "Settings", "UseRamCarts","true",,1)
-fluxAudioCD := IniReadCheck(settingsFile, "Settings", "FluxAudioCD",,,1)	; audio CD for use when Flux is ran
-fluxAudioCD := GetFullName(fluxAudioCD)	; convert relative path to absolute
+controllerReassigningEnabled := IniReadCheck(settingsFile, "Settings", "Controller_Reassigning_Enabled","false",,1)
+multiTapType := IniReadCheck(settingsFile, "Settings" . "|" . romName, "MultiTapType",0,,1)
 DTWaitTime := IniReadCheck(settingsFile, systemName, "DTWaitTime","0",,1)
-controllerReassigningEnabled := IniReadCheck(settingsFile, systemName, "Controller_Reassigning_Enabled","false",,1)
+fluxAudioCD := IniReadCheck(settingsFile, systemName, "FluxAudioCD",,,1)	; audio CD for use when Flux is ran
+fluxAudioCD := GetFullName(fluxAudioCD)	; convert relative path to absolute
 perfectSync := IniReadCheck(settingsFile, romName, "PerfectSync","false",,1)
-multiTapType := IniReadCheck(settingsFile, systemName . "|" . romName, "MultiTapType",0,,1)
-genP1Controller := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P1_Controller",2,,1)
-genP1bController := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P1b_Controller",2,,1)
-genP1cController := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P1c_Controller",2,,1)
-genP1dController := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P1d_Controller",2,,1)
-genP2Controller := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P2_Controller",2,,1)
-genP2bController := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P2b_Controller",2,,1)
-genP2cController := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P2c_Controller",2,,1)
-genP2dController := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P2d_Controller",2,,1)
-smsP1Controller := IniReadCheck(settingsFile, systemName . "|" . romName, "SMS_P1_Controller",1,,1)
-smsP2Controller := IniReadCheck(settingsFile, systemName . "|" . romName, "SMS_P2_Controller",1,,1)
-genP1Use := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P1_Use",1,,1)
-genP1bUse := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P1b_Use",1,,1)
-genP1cUse := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P1c_Use",1,,1)
-genP1dUse := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P1d_Use",1,,1)
-genP2Use := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P2_Use",1,,1)
-genP2bUse := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P2b_Use",1,,1)
-genP2cUse := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P2c_Use",1,,1)
-genP2dUse := IniReadCheck(settingsFile, systemName . "|" . romName, "Genesis_P2d_Use",1,,1)
-smsP1Use := IniReadCheck(settingsFile, systemName . "|" . romName, "SMS_P1_Use",1,,1)
-smsP2Use := IniReadCheck(settingsFile, systemName . "|" . romName, "SMS_P2_Use",1,,1)
+genP1Controller := IniReadCheck(settingsFile, "Controllers" . "|" . romName, "Genesis_P1_Controller",2,,1)
+genP1bController := IniReadCheck(settingsFile, "Controllers" . "|" . romName, "Genesis_P1b_Controller",2,,1)
+genP1cController := IniReadCheck(settingsFile, "Controllers" . "|" . romName, "Genesis_P1c_Controller",2,,1)
+genP1dController := IniReadCheck(settingsFile, "Controllers" . "|" . romName, "Genesis_P1d_Controller",2,,1)
+genP2Controller := IniReadCheck(settingsFile, "Controllers" . "|" . romName, "Genesis_P2_Controller",2,,1)
+genP2bController := IniReadCheck(settingsFile, "Controllers" . "|" . romName, "Genesis_P2b_Controller",2,,1)
+genP2cController := IniReadCheck(settingsFile, "Controllers" . "|" . romName, "Genesis_P2c_Controller",2,,1)
+genP2dController := IniReadCheck(settingsFile, "Controllers" . "|" . romName, "Genesis_P2d_Controller",2,,1)
+smsP1Controller := IniReadCheck(settingsFile, "Controllers" . "|" . romName, "SMS_P1_Controller",1,,1)
+smsP2Controller := IniReadCheck(settingsFile, "Controllers" . "|" . romName, "SMS_P2_Controller",1,,1)
+genP1Use := IniReadCheck(settingsFile, "Controllers" . "|" . romName, "Genesis_P1_Use",1,,1)
+genP1bUse := IniReadCheck(settingsFile, "Controllers" . "|" . romName, "Genesis_P1b_Use",1,,1)
+genP1cUse := IniReadCheck(settingsFile, "Controllers" . "|" . romName, "Genesis_P1c_Use",1,,1)
+genP1dUse := IniReadCheck(settingsFile, "Controllers" . "|" . romName, "Genesis_P1d_Use",1,,1)
+genP2Use := IniReadCheck(settingsFile, "Controllers" . "|" . romName, "Genesis_P2_Use",1,,1)
+genP2bUse := IniReadCheck(settingsFile, "Controllers" . "|" . romName, "Genesis_P2b_Use",1,,1)
+genP2cUse := IniReadCheck(settingsFile, "Controllers" . "|" . romName, "Genesis_P2c_Use",1,,1)
+genP2dUse := IniReadCheck(settingsFile, "Controllers" . "|" . romName, "Genesis_P2d_Use",1,,1)
+smsP1Use := IniReadCheck(settingsFile, "Controllers" . "|" . romName, "SMS_P1_Use",1,,1)
+smsP2Use := IniReadCheck(settingsFile, "Controllers" . "|" . romName, "SMS_P2_Use",1,,1)
+
+StorywaveOverlayPath := IniReadCheck(settingsFile, "Settings", "Storywave_Overlay_Path",emuPath . "\Overlays\" . dbName,,1)
+toggleStorywaveOverlayKey := IniReadCheck(settingsFile, "Settings", "Toggle_Storywave_Overlay_Visibility_Key","X",,1) ; Show Overlay
+downStorywaveOverlayKey := IniReadCheck(settingsFile, "Settings", "Storywave_Overlay_Page_Down_Key","Z",,1)  ; Previous Page
+upStorywaveOverlayKey := IniReadCheck(settingsFile, "Settings", "Storywave_Overlay_Page_Up_Key","C",,1)   ; Next Page
+resetStorywaveOverlayKey := IniReadCheck(settingsFile, "Settings", "Storywave_Overlay_Reset_Page_Key","R",,1)   ; Reset Storywave to Initial Page
+StorywaveOverlayTransparency := IniReadCheck(settingsFile, "Settings", "Storywave_Overlay_Transparency","50",,1) ; Overlay Transparency
+
 Log("Module - Finished reading module ini")
 
 BezelStart()
@@ -89,6 +104,7 @@ currentFullScreen := ReadProperty(fusionIni,"FullScreen")	; read current fullscr
 currentForceFullScreen32 := ReadProperty(fusionIni,"forceFullScreen32")	; read current ForceFullScreen32 state
 currentPerfectSync := ReadProperty(fusionIni,"PerfectSync")	; read current PerfectSync state
 
+hideEmuObj := Object("Load RAM Cart ahk_class #32770",0,"Create RAM Cart ahk_class #32770",0,"Select RAM Cart Size ahk_class #32770",0,"Fusion ahk_class KegaClass",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 If romExtension in .7z,.rar
@@ -124,8 +140,8 @@ If ( perfectSync != "true" And currentPerfectSync = "1" ) {
 		SaveProperties(fusionFile,fusionIni)	; save fusionFile to disk
 }
 
-hideEmu := (If Fullscreen = "true" ? ("Hide") : (""))
-fullscreen := (If Fullscreen = "true" ? ("-fullscreen") : (""))
+hideEmu := If Fullscreen = "true" ? "Hide" : ""
+fullscreen := If Fullscreen = "true" ? " -fullscreen" : ""
 
 If bezelPath ; Setting windowed mode resolution
 {	WriteProperty(fusionIni,"GameGearZoom", 1) ; disabling emulator default bezel
@@ -170,6 +186,8 @@ If fluxRom {
 
 scdExtension := InStr(".ccd|.cue|.bin|.iso", romExtension)	; the sega cd extensions supported by fusion
 
+HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
+
 If (ident = "scd" && dtEnabled = "true" && scdExtension) {
 	If dtUseSCSI = false
 		Log("Module - Daemon Tools drive type is set to ""dt"" but only ""scsi"" is supported for Fusion. Forcing scsi drive.", 2)
@@ -179,7 +197,7 @@ If (ident = "scd" && dtEnabled = "true" && scdExtension) {
 } Else {
 	If (ident = "scd" && dtEnabled = "true" && !scdExtension)
 		Log("Module - " . romExtension . " is not a supported cd image extension for Fusion. Launching Fusion without DT support.", 2)
-	Run(executable . " -auto -" . ident . " " . fullscreen . " """ . romPath . "\" . romName . romExtension . """", emuPath, hideEmu)
+	Run(executable . " -auto -" . ident . fullscreen . " """ . romPath . "\" . romName . romExtension . """", emuPath, hideEmu)
 }
 
 WinWait("Fusion ahk_class KegaClass")
@@ -202,31 +220,11 @@ If (ident = "scd" && useRamCarts = "true")	; Sega CD or Mega CD only
 		WinSet, Transparent, On, %selectRamWin%
 		Control, Check,, Button7, %selectRamWin%
 		ControlSend, Button1, {Enter}, %selectRamWin%
-		WinWait, %createRamWin%
-		WinSet, Transparent, On, %createRamWin%
-		WinWaitActive, %createRamWin%
-		Loop {
-			ControlGetText, edit1Text, Edit1, %createRamWin%
-			If ( edit1Text = brmPath . "\" . romName . ".crm" )
-				Break
-			Sleep, 100
-			ControlSetText, Edit1, %brmPath%\%romName%.crm, %createRamWin%
-		}
-		ControlSend, Button1, {Enter}, %createRamWin% ; Select Save
+		OpenROM(createRamWin, brmPath . "\" . romName . ".crm")
 	}
 	; Now load the Ram Cart
 	PostMessage, 0x111, 40035,,,ahk_class KegaClass	; Open Load Ram Cart Window
-	WinWait, %loadRamWin%
-	WinSet, Transparent, On, %loadRamWin%
-	WinWaitActive, %loadRamWin%
-	Loop {
-		ControlGetText, edit1Text, Edit1, %loadRamWin%
-		If ( edit1Text = brmPath . "\" . romName . ".crm" )
-			Break
-		Sleep, 100
-		ControlSetText, Edit1, %brmPath%\%romName%.crm, %loadRamWin%
-	}
-	ControlSend, Button1, {Enter}, %loadRamWin% ; Select Open
+	OpenROM(loadRamWin, brmPath . "\" . romName . ".crm")
 }
 
 WinWaitActive("Fusion ahk_class KegaClass")
@@ -248,6 +246,9 @@ If hideTitleBar = true
 }
 
 BezelDraw()
+If InStr(systemName, "Pico")
+	StorywaveOverlayLoad()
+HideEmuEnd()
 FadeInExit()
 
 If InStr(systemName, "Pico")
@@ -259,6 +260,7 @@ If (fluxRom || (ident = "scd" && dtEnabled = "true" && scdExtension))
 	DaemonTools("unmount")
 
 7zCleanUp()
+StorywaveOverlayExit()
 BezelExit()
 FadeOutExit()
 ExitModule()
@@ -288,4 +290,104 @@ CloseProcess:
 	; PostMessage, 0x111, 40039,,,ahk_class KegaClass	; Tells Fusion to Power Off
 	; Sleep, 100	; giving time for Fusion to unload rom
 	; PostMessage, 0x111, 40005,,,ahk_class KegaClass	; Tells Fusion to exit
+Return
+
+
+
+;_______________Storywave Overlay__________________________
+
+StorywaveOverlayGUI(){
+	Global
+	If !pToken
+		pToken := Gdip_Startup()
+	Gui, StorywaveOverlay_GUI: +Disabled -Caption +E0x80000 +OwnDialogs +LastFound +ToolWindow +AlwaysOnTop
+	Gui, StorywaveOverlay_GUI: Margin,0,0
+	Gui, StorywaveOverlay_GUI: Show,, StorywaveOverlay_Layer
+	StorywaveOverlay_hwnd := WinExist()
+	StorywaveOverlay_hbm := CreateDIBSection(A_ScreenWidth, A_ScreenHeight)
+	StorywaveOverlay_hdc := CreateCompatibleDC()
+	StorywaveOverlay_obm := SelectObject(StorywaveOverlay_hdc, StorywaveOverlay_hbm)
+	StorywaveOverlay_G := Gdip_GraphicsFromhdc(StorywaveOverlay_hdc)
+	Gdip_SetSmoothingMode(StorywaveOverlay_G, 4)
+	Return
+}
+
+StorywaveOverlayLoad(){
+	Global
+	StorywaveOverlayArray := []
+	Loop, % StorywaveOverlayPath . "\*.png"
+		StorywaveOverlayArray.Insert(A_LoopFileFullPath)
+	if (StorywaveOverlayArray.MaxIndex() > 0)
+	{
+		WinGet emulatorID, ID, A
+		WinGetPos, emuX, emuY, emuW, emuH, ahk_id %emulatorID%
+		currentStorywaveOverlay := 1
+		StorywaveOverlayDraw := false
+		XHotKeywrapper(toggleStorywaveOverlayKey,"toggleStorywaveOverlay","ON") 
+		XHotKeywrapper(upStorywaveOverlayKey,"upStorywaveOverlay","ON")
+		XHotKeywrapper(downStorywaveOverlayKey,"downStorywaveOverlay","ON")
+		XHotKeywrapper(resetStorywaveOverlayKey,"resetStorywaveOverlay","ON")
+	}
+	Return
+}
+
+StorywaveOverlayExit(){
+	Global
+	SelectObject(StorywaveOverlay_hdc,StorywaveOverlay_obm)
+	DeleteObject(StorywaveOverlay_hbm)
+	DeleteDC(StorywaveOverlay_hdc)
+	Gdip_DeleteGraphics(StorywaveOverlay_G)
+	Gui, StorywaveOverlay_GUI: Destroy
+	Gdip_DisposeImage(StorywaveOverlayBitmap)
+	Return
+}
+
+StorywaveOverlayHide(){
+	Global
+	Gdip_GraphicsClear(StorywaveOverlay_G)
+	UpdateLayeredWindow(StorywaveOverlay_hwnd, StorywaveOverlay_hdc,emuX,emuY, emuW, emuH)
+	StorywaveOverlayDraw := false
+	Return
+}
+
+StorywaveOverlayShow(){
+	Global
+	Tooltip, "Current Page " %currentStorywaveOverlay%
+	settimer,EndofCurrentPageToolTipDelay, -2000  
+	Gdip_GraphicsClear(StorywaveOverlay_G)
+	StorywaveOverlayBitmap := Gdip_CreateBitmapFromFile(StorywaveOverlayArray[currentStorywaveOverlay])
+	Gdip_DrawImage(StorywaveOverlay_G, StorywaveOverlayBitmap, 0, 0,emuW,emuH)
+	UpdateLayeredWindow(StorywaveOverlay_hwnd, StorywaveOverlay_hdc,emuX,emuY, emuW, emuH,StorywaveOverlayTransparency)
+	StorywaveOverlayDraw := true
+	Return
+}
+
+EndofCurrentPageToolTipDelay:
+	ToolTip
+Return
+
+toggleStorywaveOverlay:
+	If StorywaveOverlayDraw
+		StorywaveOverlayHide()
+	Else
+		StorywaveOverlayShow()
+Return
+
+upStorywaveOverlay:
+	currentStorywaveOverlay++
+	If (currentStorywaveOverlay > StorywaveOverlayArray.MaxIndex())
+		currentStorywaveOverlay--
+	StorywaveOverlayShow()
+Return
+
+downStorywaveOverlay:
+	currentStorywaveOverlay--
+	If (currentStorywaveOverlay < 1)	; This variable cannot be lower than 1 (first page)
+		currentStorywaveOverlay := 1
+	StorywaveOverlayShow()
+Return
+
+resetStorywaveOverlay:
+	currentStorywaveOverlay := 1
+	StorywaveOverlayShow()
 Return

@@ -11,18 +11,56 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>If true, emulator will launch fullscreen.</DESCRIPTION>
 						</KEY>
-						<KEY name="vertical" required="false" nullable="false">
+						<KEY name="Vertical" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>If true, all games will launch in a vertical orientation by default.</DESCRIPTION>
+						</KEY>
+						<KEY name="LCDs_Layout" required="false" nullable="false" minLength="0" maxLength="2">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Tells the emu what layout to be in for all games.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Vertical">0</VALUE>
+								<VALUE description="Horizontal">1</VALUE>
+								<VALUE description="One LCD">2</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="LCDs_Swap" required="false" nullable="false" minLength="0" maxLength="3">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Tells the emu the order to fill the screens for all games.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Top First (Default)">0</VALUE>
+								<VALUE description="Bottom First">1</VALUE>
+								<VALUE description="Main Screen First">2</VALUE>
+								<VALUE description="Sub Screen First">3</VALUE>
+							</VALUES>
 						</KEY>
 					</KEYS>
 				</SECTION>
 				<SECTION name="%RomName%" required="false">
 					<SECTIONTYPE>Rom</SECTIONTYPE>
 					<KEYS>
-						<KEY name="vertical" required="false" nullable="false">
+						<KEY name="Vertical" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>If true, just this one game will launch in a vertical orientation.</DESCRIPTION>
+						</KEY>
+						<KEY name="LCDs_Layout" required="false" nullable="false" minLength="0" maxLength="2">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Tells the emu what layout to be in for this game.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Vertical">0</VALUE>
+								<VALUE description="Horizontal">1</VALUE>
+								<VALUE description="One LCD">2</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="LCDs_Swap" required="false" nullable="false" minLength="0" maxLength="3">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Tells the emu the order to fill the screens for this game.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Top First (Default)">0</VALUE>
+								<VALUE description="Bottom First">1</VALUE>
+								<VALUE description="Main Screen First">2</VALUE>
+								<VALUE description="Sub Screen First">3</VALUE>
+							</VALUES>
 						</KEY>
 					</KEYS>
 				</SECTION>

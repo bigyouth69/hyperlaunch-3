@@ -2,8 +2,8 @@ MEmu = NullDC
 MEmuV =  r141
 MURL = https://code.google.com/p/nulldc/
 MAuthor = djvj
-MVersion = 2.0.2
-MCRC = 9100D39D
+MVersion = 2.0.3
+MCRC = DEE593B
 iCRC = 11A924D4
 MID = 635038268910409317
 MSystem = "Sega Dreamcast"
@@ -39,6 +39,7 @@ FadeInStart()
 settingsFile := modulePath . "\" . moduleName . ".ini"
 nullDCcfg := checkFile(emuPath . "\nullDC.cfg")
 
+hideEmuObj := Object("nullDC ahk_class ndc_main_window",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
@@ -94,6 +95,8 @@ If dualMonitors = true
 	MouseMove %A_ScreenWidth%,%A_ScreenHeight%
 }
 
+HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
+
 Run(executable, emuPath)
 
 ; TESTING TO HIDE THE CONSOLE WINDOW POPUP, NOTHING WORKS
@@ -123,6 +126,7 @@ If fullScreen = true
 ; WinShow, nullDC ahk_class ndc_main_window ; without these, nullDC may stay hidden behind HS
 ; WinActivate, nullDC ahk_class ndc_main_window
 
+HideEmuEnd()
 FadeInExit()
 WinSet, Transparent, Off, nullDC ahk_class ndc_main_window
 Process("WaitClose", executable)
@@ -146,17 +150,10 @@ MultiGame:
 		If WinActive("Select Image File ahk_class #32770")
 			Break
 	}
-	Loop {
-		ControlGetText, edit1Text, Edit1, Select Image File ahk_class #32770
-		If ( edit1Text = mgRomPath . "\" . mgRomName . "." . mgRomExt )
-			Break
-		Sleep, 100
-		ControlSetText, Edit1, %mgRomPath%\%mgRomName%.%mgRomExt%, Select Image File ahk_class #32770
-	}
-	Send, {Enter}	; selects Open
+	OpenROM("Select Image File ahk_class #32770", mgRomPath . "\" . mgRomName . "." . mgRomExt)	; unsure if Select Image File needs to be translated via i18n
 	WinWaitActive("nullDC ahk_class ndc_main_window")
 	Sleep, 300 ; giving time for emu to mount the new image
-	WinMenuSelectItem,nullDC ahk_class ndc_main_window,,Options,GDRom,Swap Disc
+	WinMenuSelectItem,nullDC ahk_class ndc_main_window,,Options,GDRom,Swap Disc	; DC does not support swapping discs on-the-fly like psx because the console reset when the drive was opened. This basically tells the emu to reset.
 	ToggleMenu(ndcID) ; Removes the MenuBar
 Return
 

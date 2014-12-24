@@ -1,0 +1,131 @@
+
+; General Plugin Building Instructions:
+; 1) If the frontend has info about the game:
+;		1.1) You should create a gameInfo object with this info following the structure defined bellow:
+;		1.2) The game info object must have this structure:
+; 			- gameInfo[%LabelName%].Label := %LabelName%
+; 			- gameInfo[%LabelName%].Value := %Value%
+;		1.3) The database formated game name should be obrigatorily defined on the gameInfo labeled "Name":
+;			- gameInfo["Name"].Value := %Game_name_obtained_from_the_frontend_database%
+;		1.4) For rom mapping menu support it is required to create a BuildDatabaseTable function capable of creating the gameinfo object:
+;			- This function should have as the inputs four parameters, on this order obrigatorily: BuildDatabaseTable(game,system,ByRef frontendDatabaseFields, ByRef frontendDatabaseLabels)
+;			- This function should return the gameInfo object
+; 2) If the frontend has art assets:
+;		2.1) You must provide the path and labels for each file assets on the following object:
+;			- feMedia["Logos"].feLogo1.Label := "feLogo1"
+;			- feMedia["Logos"].feLogo1.Path1 := "c:\aaa.png"	
+;			- feMedia["Logos"].feLogo1.Ext1 := "png"	
+;			- feMedia["Logos"].feLogo1.TotalItems := 1	
+
+
+; HyperSpin Plugin
+
+PluginInit:
+	Log("PluginInit - Started")
+
+	;---- Plugin Information
+	;frontend info (required)
+	frontendPlugin := "HyperSpin" 
+	frontendWinTitle := "HyperSpin"
+	frontendWinClass := "ThunderRT6FormDC"
+	
+	;Content assets (not required)
+	; format: one index for each asset with path and label info: Array[1,"Path"], Array[1,"Label"]
+	feMedia := {}
+	
+	; Game Info (not required)
+	; format: gameInfo["Label"] := "Value"
+	gameInfo := Object()
+	
+	;----------Loading FrontEnd asset labels
+	feLogoLabels:= RIniLoadVar(8,9, "HyperSpin", "Fe_Logo_Labels", "Game Logo|System Logo")   ; if label "keepFileName" the filename will be used as label
+	feArtworkLabels:= RIniLoadVar(8,9, "HyperSpin", "Fe_Artwork_Labels", "Artwork1|Box Art|Cartridge|Flyers|Letters|Other")
+	feBackgroundsLabels:= RIniLoadVar(8,9, "HyperSpin", "Fe_Backgrounds_Labels", "")
+	feControllerLabels:= RIniLoadVar(8,9, "HyperSpin", "Fe_Controller_Labels", "")
+	feGuidesLabels:= RIniLoadVar(8,9, "HyperSpin", "Fe_Guides_Labels", "")
+	feManualsLabels:= RIniLoadVar(8,9, "HyperSpin", "Fe_Manuals_Labels", "")
+	feVideosLabels:= RIniLoadVar(8,9, "HyperSpin", "Fe_Videos_Labels", "MP4 Game Video|FLV Game Video|MP4 System Video|FLV System Video")
+	feDiscArtworkLabel:= RIniLoadVar(8,9, "HyperSpin", "Fe_Disc_Artwork_Label", "Artwork1")
+	
+	;----------Acquiring HyperSpin Paths and defining respective labels------------
+	;Acquiring Logos
+	feMedia.Logos := BuildAssetsTable(frontendPath . "\Media\" . systemName . "\Images\Wheel\" . dbName . ".png" . "|" . frontendPath . "\Media\Main Menu\Images\Wheel\" . systemName . ".png",feLogoLabels,"game|system","png")
+
+	;Acquiring ArtWork
+	feMedia.Artwork := BuildAssetsTable(frontendPath . "\Media\" . systemName . "\Images\Artwork1\" . dbName . ".png" . "|" . frontendPath . "\Media\" . systemName . "\Images\Artwork2\" . dbName . ".png" . "|" . frontendPath . "\Media\" . systemName . "\Images\Artwork3\" . dbName . ".png" . "|" . frontendPath . "\Media\" . systemName . "\Images\Artwork4\" . dbName . ".png" . "|" . frontendPath . "\Media\" . systemName . "\Images\Letters"  . "|" . frontendPath . "\Media\" . systemName . "\Images\Other",feArtworkLabels,"game|game|game|game|system|system","png")
+		
+	;Acquiring Videos
+	IniRead, hsGameVideoPath, frontendPath . "\Settings\" . systemName . ".ini", video defaults, path		; read video path for game videos, if not exist, set default
+	hsGameVideo := if FileExist(hsGameVideoPath) ? hsGameVideoPath . dbName : frontendPath . "\Media\" . systemName . "\Video\" . dbName 
+	IniRead, hsSystemVideoPath, frontendPath . "\Settings\Main Menu.ini", video defaults, path		; read video path for system videos, if not exist, set default
+	hsSystemVideo := if FileExist(hsSystemVideoPath) ? hsSystemVideo . dbName : frontendPath . "\Media\Main Menu\Video\" . systemName 
+	feMedia.Videos := BuildAssetsTable(hsGameVideo . ".mp4" "|" . hsGameVideo . ".flv" . "|" . hsSystemVideo . ".mp4" . "|" . hsSystemVideo . ".flv",feVideosLabels,"game|game|system|system","mp4,flv")
+
+	;Acquiring Backgrounds (not available on HyperSpin)
+	;Acquiring Controller (not available on HyperSpin)
+	;Acquiring Guides (not available on HyperSpin)
+	;Acquiring Manuals (not available on HyperSpin)
+	
+	; Game Info
+	gameInfo := BuildDatabaseTable(dbName,systemName,"Description|Cloneof|Manufacturer|Year|Genre|Rating","Name|Cloneof|Manufacturer|Year|Genre|Rating")
+	Log("PluginInit - Ended")
+Return	
+
+
+BuildDatabaseTable(game,system,ByRef frontendDatabaseFields, ByRef frontendDatabaseLabels){ ; required for rom mapping menu name 
+	Log("BuildDatabaseTable - Started - Building Table for: " . frontendDatabaseLabels,4)
+	Global frontendPath, logLevel	
+	infoObject := Object()
+	stringSplit, label, frontendDatabaseLabels, |
+	systemXML := CheckFile(frontendPath . "\Databases\" . system . "\" . system . ".xml")
+	FileRead, xmlContents, %systemXML%
+	; Replacing XML invalid characters
+	StringReplace, DatabaseSearchName, game, \, \\, All
+	replace :=   {"&":"&amp;","'":"&apos;",".":"\.","*":"\*","?":"\?","+":"\+","[":"\[","{":"\{","|":"\|","(":"\(",")":"\)","^":"\^","$":"\$"}	; replace all characters that will error in a regexmatch
+	For what, with in replace
+		StringReplace, DatabaseSearchName, DatabaseSearchName, %what%, %with%, All
+	; Searching for game on xml
+	FoundPos1 := RegExMatch(xmlContents, "i)" . """" . DatabaseSearchName . """", SearchString1)
+	Log("BuildDatabaseTable - Searching for a ""Game Name"" in the database",4)
+	If !FoundPos1 {	; no info found, setting name info to the game value
+		currentobj:={}
+		currentobj.Label := "Name"
+		currentobj.Value := game
+		infoObject.Insert(currentobj["Label"], currentobj)
+		Log("BuildDatabaseTable - Ended - no ""Game Name"" found. Assigning """ . game . """ to the label ""Name""",2)
+		Return infoObject
+	} Else
+		Log("BuildDatabaseTable - Found ""Game Name"" in the database!",4)
+	; game xml info
+	RegExMatch(xmlContents, "i)</game>", SearchString2, FoundPos1)
+	GameXMLInfo := StrX(xmlContents,SearchString1,1,0,SearchString2,1,0)	; full game section from HS xml
+	loop, parse, frontendDatabaseFields,|, 
+	{	currentLabel := label%A_index%
+		Log("BuildDatabaseTable - Searching database for: " . currentLabel,4)
+		FoundPos1 := RegExMatch(GameXMLInfo, "i)<" . A_Loopfield . ">", SearchString1) ; get start of each xml open tag
+		FoundPos2 :=RegExMatch(GameXMLInfo, "i)</" . A_Loopfield . ">", SearchString2) ; get start of each xml close tag
+		FinalPos1 := FoundPos1 + StrLen(SearchString1)	; store start position and length of field data
+		If (FinalPos1 = FoundPos2) {	; if start and end are the same (no data)
+			Log("BuildDatabaseTable - Could not find: " . currentLabel,4)
+		} Else {	; found some field data
+			RegExMatch(GameXMLInfo, "i)</" . A_Loopfield . ">", SearchString2, FoundPos1)	; starting at FoundPos1, 
+			XMLDbInfo := StrX(GameXMLInfo,SearchString1,1,StrLen(SearchString1),SearchString2,1,StrLen(SearchString2))
+			StringReplace, XMLDbInfo, XMLDbInfo, &amp;, &, All	; replace all &amp; with &
+			StringReplace, XMLDbInfo, XMLDbInfo, &apos;, ', All	; replace all &apos; with '
+			XMLDbInfo := RegexReplace( XMLDbInfo, "^\s+|\s+$" )
+			currentobj:={}
+			currentobj.Label := currentLabel
+			currentobj.Value := XMLDbInfo
+			infoObject.Insert(currentobj["Label"], currentobj)
+			Log("BuildDatabaseTable - Found """ . currentLabel . """ with a value: """ . XMLDbInfo . """",4)
+		}
+	}
+	if (logLevel>=5){	
+		For attribute,value in infoObject
+			gameInfoLog := % gameInfoLog . "`r`n`t`t`t`t`tGameInfo Label: " . attribute . " | GameInfo Value: " . value
+		Log("PluginInit - GameInfo:" gameInfoLog ,5)
+	}
+	Log("BuildDatabaseTable - Ended",4)
+	Return infoObject
+}
+

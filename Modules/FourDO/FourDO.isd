@@ -15,6 +15,14 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Forces GDI rendering instead of DirectX (DirectX is the default)</DESCRIPTION>
 						</KEY>
+						<KEY name="Bezel_Top_Offset" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the top of your playing screen increase this value. If your playing screen is hidden at the top decrease it.</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Bottom_Offset" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the bottom of your playing screen increase this value. If your playing screen is hidden at the top decrease it.</DESCRIPTION>
+						</KEY>
 					</KEYS>
 				</SECTION>
 			</SECTIONS>

@@ -11,6 +11,22 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
 						</KEY>
+						<KEY name="Bezel_Top_Offset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Set top offset for bezel in pixels</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Bottom_Offset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Set bottom offset for bezel in pixels</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Right_Offset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Set right offset for bezel in pixels</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Left_Offset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Set left offset for bezel in pixels</DESCRIPTION>
+						</KEY>
 					</KEYS>
 				</SECTION>
 				<SECTION name="%RomName%" required="false">
@@ -49,6 +65,22 @@
 						<KEY name="Fullscreen" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Top_Offset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Set top offset for bezel in pixels</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Bottom_Offset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Set bottom offset for bezel in pixels</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Right_Offset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Set right offset for bezel in pixels</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Left_Offset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Set left offset for bezel in pixels</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>
@@ -103,20 +135,80 @@
 							<PATHTYPE>Relative</PATHTYPE>
 							<BASEPATH>%EmulatorPath%</BASEPATH>
 						</KEY>
+						<KEY name="Bezel_Top_Offset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Set top offset for bezel in pixels</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Bottom_Offset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Set bottom offset for bezel in pixels</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Right_Offset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Set right offset for bezel in pixels</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Left_Offset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Set left offset for bezel in pixels</DESCRIPTION>
+						</KEY>
 					</KEYS>
 				</SECTION>
 				<SECTION name="%RomName%" required="false">
 					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<GROUPS>
+						<GROUP name="Settings"/>
+						<GROUP name="CPU"/>
+						<GROUP name="Chipset"/>
+						<GROUP name="RAM"/>
+						<GROUP name="WHDLoad"/>
+					</GROUPS>
 					<KEYS>
-						<KEY name="VideoMode" required="false" nullable="false">
+						<KEY name="QuickStartMode" group="Settings" required="false" nullable="false">
 							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>Video Mode for this game (PAL/NTSC).</DESCRIPTION>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>If the game requires a specific quick-start mode define it here. By default AGA games will start in a1200,1 and non-AGA in a500,1 modes.&#13;Quickstart modes:&#13;--> a500,0 = 1.3 ROM, OCS, 512KB Chip + 512KB Slow RAM (most common) (Runs most games and demos produced for the 1st gen. hardware) only few exceptions need a different config. eg the oldest games tend to be incompatible with this config.&#13;--> a500,1 = 1.3 ROM, ECS Agnus, 512KB Chip RAM + 512KB Slow RAM (Later hardware revision of the A500. Nearly 100% compatible with the previous config.)&#13;--> a500,2 = 1.3 ROM, ECS Agnus, 1MB Chip RAM (Few newer games and demos require this config.)&#13;--> a500,3 = 1.3 ROM, OCS Agnus, 512KB Chip RAM (Very old (pre-1988) games and demos may require this config.)&#13;--> a500,4 = 1.2 ROM, OCS Agnus, 512KB Chip RAM (As available for the A1000, and installed on the first A500 and A2000 series. Some very old programs only work correctly with this configuration. This system ROM version can only boot from floppy disk.&#13;--> a500,5 = 1.2 ROM, OCS Agnus, 512KB Chip RAM + 512KB Slow RAM (This config. adds expansion memory to the first A500 produced. Try this if your game does not work with newer configurations, but works with the previous one. It could also add some features to the game, including faster loading times. This system ROM version can only boot from floppy disk.&#13;--> a500+,0 = Basic non-expanded configuration. A500+ adds an ECS Agnus Chip, 1 MB of chip RAM and a 2.0 ROM to the A500. Many A500 games and demos won't work properly on A500+.&#13;--> a500+,1 = 2MB Chip RAM expanded configuration. A500+ with 2MB of chip RAM&#13;--> a500+,2 = 4MB Fast RAM expanded configuration. A500+ with 4MB of fast RAM.&#13;--> a600,0 = Basic non-expanded configuration. A600 is smaller than the A500+ and has an updated 2.0 ROM.&#13;--> a600,1 = 2MB Chip RAM expanded configuration. A600 with 2MB of chip RAM.&#13;--> a600,2 = 4MB Fast RAM expanded configuration. A600 with 4MB of fast RAM.&#13;--> a1000,0 = 512 KB Chip RAM. The A1000 was the first model produced with a configuration equivalent to an A500 with OCS chipset. No need to use this configuration, unless you are nostalgic and want to hear the short A1000 boot tune.&#13;--> a1000,1 = 'ICS' Denise without EHB support. Very first A1000 models had Denise without EHB capability.&#13;--> a1000,2 = 256 KB Chip RAM. Unexpanded A1000. All later A1000 were sold with a 256K RAM expansion built-in.&#13;--> a1200,0 = Basic non-expanded configuration (Use this configuration to run most AGA demos and games).&#13;--> a1200,1 = 4MB Fast RAM expanded configuration (Some newer AGA games and demos need an expanded A1200 to run).&#13;--> a3000,0 = 1.4 ROM, 2MB Chip + 8MB Fast.&#13;--> a3000,1 = 2.04 ROM, 2MB Chip + 8MB Fast.&#13;--> a3000,2 = 3.1 ROM, 2MB Chip + 8MB Fast.&#13;--> a4000,0 = 68030, 3.1 ROM, 2MB Chip + 8MB Fast.&#13;--> a4000,1 = 68040, 3.1 ROM, 2MB Chip + 8MB Fast.</DESCRIPTION>
 							<VALUES>
-								<VALUE>PAL</VALUE>
-								<VALUE>NTSC</VALUE>
+								<VALUE description="A500 - 1.3 ROM, OCS, 512KB Chip + 512KB Slow RAM (most common)">a500,0</VALUE>
+								<VALUE description="A500 - 1.3 ROM, ECS Agnus, 512KB Chip RAM + 512KB Slow RAM">a500,1</VALUE>
+								<VALUE description="A500 - 1.3 ROM, ECS Agnus, 1MB Chip RAM">a500,2</VALUE>
+								<VALUE description="A500 - 1.3 ROM, OCS Agnus, 512KB Chip RAM">a500,3</VALUE>
+								<VALUE description="A500 - 1.2 ROM, OCS Agnus, 512KB Chip RAM">a500,4</VALUE>
+								<VALUE description="A500 - 1.2 ROM, OCS Agnus, 512KB Chip RAM + 512KB Slow RAM">a500,5</VALUE>
+								<VALUE description="A500+ - Basic non-expanded configuration">a500+,0</VALUE>
+								<VALUE description="A500+ - 2MB Chip RAM expanded configuration">a500+,1</VALUE>
+								<VALUE description="A500+ - 4MB Fast RAM expanded configuration">a500,2</VALUE>
+								<VALUE description="A600 - Basic non-expanded configuration">a600,0</VALUE>
+								<VALUE description="A600 - 2MB Chip RAM expanded configuration">a600,1</VALUE>
+								<VALUE description="A600 - 4MB Fast RAM expanded configuration">a600,2</VALUE>
+								<VALUE description="A1000 - 512 KB Chip RAM">a1000,0</VALUE>
+								<VALUE description="A1000 - 'ICS' Denise without EHB support">a1000,1</VALUE>
+								<VALUE description="A1000 - 256 KB Chip RAM">a1000,2</VALUE>
+								<VALUE description="A1200 - Basic non-expanded configuration">a1200,0</VALUE>
+								<VALUE description="A1200 - 4MB Fast RAM expanded configuration">a1200,1</VALUE>
+								<VALUE description="A3000 - 1.4 ROM, 2MB Chip + 8MB Fast">a3000,0</VALUE>
+								<VALUE description="A3000 - 2.04 ROM, 2MB Chip + 8MB Fast">a3000,1</VALUE>
+								<VALUE description="A3000 - 3.1 ROM, 2MB Chip + 8MB Fast">a3000,2</VALUE>
+								<VALUE description="A4000 - 68030, 3.1 ROM, 2MB Chip + 8MB Fast">a4000,0</VALUE>
+								<VALUE description="A4000 - 68040, 3.1 ROM, 2MB Chip + 8MB Fast">a4000,1</VALUE>
 							</VALUES>
 						</KEY>
-						<KEY name="FloppySpeed" required="false" nullable="false">
+						<KEY name="CustomWB" group="Settings" required="false" nullable="false">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>If a game requires a Custom WorkBench installation, select your WorkBench HDD here. Path relative to the Emulator folder.</DESCRIPTION>
+							<PATHTYPE>Relative</PATHTYPE>
+							<BASEPATH>%EmulatorPath%</BASEPATH>
+						</KEY>
+						<KEY name="Options" group="Settings" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Add any extra WinUAE CLI options we might want for that particular game.</DESCRIPTION>
+						</KEY>
+						<KEY name="RequiresWB" group="Settings" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if the game requires WorkBench to run</DESCRIPTION>
+						</KEY>
+						<KEY name="FloppySpeed" group="Settings" required="false" nullable="false">
 							<KEYTYPE>String</KEYTYPE>
 							<DESCRIPTION>Floppy drive speed.</DESCRIPTION>
 							<VALUES>
@@ -127,36 +219,139 @@
 								<VALUE>800</VALUE>
 							</VALUES>
 						</KEY>
-						<KEY name="QuickStartMode" required="false" nullable="false">
+						<KEY name="VideoMode" group="Chipset" required="false" nullable="false">
 							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>If the game requires a specific quick-start mode define it here. By default AGA games will start in a1200,1 and non-AGA in a500,1 modes.</DESCRIPTION>
+							<DESCRIPTION>Video Mode for this game (PAL/NTSC).</DESCRIPTION>
+							<VALUES>
+								<VALUE>PAL</VALUE>
+								<VALUE>NTSC</VALUE>
+							</VALUES>
 						</KEY>
-						<KEY name="ImmediateBlitter" required="false" nullable="false">
+						<KEY name="ImmediateBlitter" group="Chipset" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Set to true if you want to enable Immediate Blittler. This is mostly useful for some WHDLoad games that will show some random graphics glitches.</DESCRIPTION>
 						</KEY>
-						<KEY name="RequiresWB" required="false" nullable="false">
-							<KEYTYPE>Boolean</KEYTYPE>
-							<DESCRIPTION>Set to true if the game requires WorkBench to run</DESCRIPTION>
-						</KEY>
-						<KEY name="CustomWB" required="false" nullable="false">
-							<KEYTYPE>FilePath</KEYTYPE>
-							<FULLROW>true</FULLROW>
-							<DESCRIPTION>If a game requires a Custom WorkBench installation, select your WorkBench HDD here. Path relative to the Emulator folder.</DESCRIPTION>
-							<PATHTYPE>Relative</PATHTYPE>
-							<BASEPATH>%EmulatorPath%</BASEPATH>
-						</KEY>
-						<KEY name="WHDLoadOptions" required="false" nullable="true">
+						<KEY name="CollisionLevel" group="Chipset" required="false" nullable="false">
 							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set the desired collision level, very few games require changing this setting</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">none</VALUE>
+								<VALUE description="Sprites Only">sprites</VALUE>
+								<VALUE description="Sprites and Sprites vs. Playfield">playfields</VALUE>
+								<VALUE description="Full">full</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="CycleExact" group="CPU" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you want to enable Cycle Exact. Setting both Cpu Cycle Exact and Blitter Cycle Exact to false is the same as setting Cycle Exact to false.</DESCRIPTION>
+						</KEY>
+						<KEY name="CpuCycleExact" group="CPU" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you want to enable CPU Cycle Exact.</DESCRIPTION>
+						</KEY>
+						<KEY name="BlitterCycleExact" group="CPU" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you want to enable Blitter Cycle Exact.</DESCRIPTION>
+						</KEY>
+						<KEY name="CpuCompatible" group="CPU" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you want to use CPU Compatible mode (Prefetch Emulation), this should normally be disabled.</DESCRIPTION>
+						</KEY>
+						<KEY name="CpuSpeed" group="CPU" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>CPU Speed. Real means accuracy over performance</DESCRIPTION>
+							<VALUES>
+								<VALUE>real</VALUE>
+								<VALUE>max</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="CacheSize" group="CPU" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Define the JIT cache size you want to use (in KB, so for 8MB type 8192). Setting cache size to anything different than 0 means JIT enabled.</DESCRIPTION>
+						</KEY>
+						<KEY name="ChipMemory" group="RAM" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>How much Chip RAM you want to use</DESCRIPTION>
+							<VALUES>
+								<VALUE description="256 KB">0</VALUE>
+								<VALUE description="512 KB">1</VALUE>
+								<VALUE description="1 MB">2</VALUE>
+								<VALUE description="1.5 MB">3</VALUE>
+								<VALUE description="2 MB">4</VALUE>
+								<VALUE description="4 MB">5</VALUE>
+								<VALUE description="8 MB">6</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="FastMemory" group="RAM" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>How much Fast RAM you want to use</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="1 MB">1</VALUE>
+								<VALUE description="2 MB">2</VALUE>
+								<VALUE description="4 MB">4</VALUE>
+								<VALUE description="8 MB">8</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="AutoConfigFastMemory" group="RAM" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you want Fast Memory to be auto-configured</DESCRIPTION>
+						</KEY>
+						<KEY name="SlowMemory" group="RAM" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>How much Fast RAM you want to use</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="512 KB">2</VALUE>
+								<VALUE description="1 MB">4</VALUE>
+								<VALUE description="1.5 MB">6</VALUE>
+								<VALUE description="1.8 MB">7</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Z3FastMemory" group="RAM" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>How much Z3 Fast RAM you want to use</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="1 MB">1</VALUE>
+								<VALUE description="2 MB">2</VALUE>
+								<VALUE description="4 MB">4</VALUE>
+								<VALUE description="8 MB">8</VALUE>
+								<VALUE description="16 MB">16</VALUE>
+								<VALUE description="32 MB">32</VALUE>
+								<VALUE description="64 MB">64</VALUE>
+								<VALUE description="128 MB">128</VALUE>
+								<VALUE description="256 MB">256</VALUE>
+								<VALUE description="384 MB">384</VALUE><!--256+128-->
+								<VALUE description="512 MB">512</VALUE>
+								<VALUE description="768 MB">768</VALUE><!--512+256-->
+								<VALUE description="768 MB">768</VALUE>
+								<VALUE description="1 GB">1024</VALUE>
+								<VALUE description="1.5 GB">1536</VALUE><!--1024+512-->
+							</VALUES>
+						</KEY>
+						<KEY name="MegaChipMemory" group="RAM" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>How much Mega Chip RAM you want to use (aka 32-bit Chip RAM)</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="16 MB">16</VALUE>
+								<VALUE description="32 MB">32</VALUE>
+								<VALUE description="64 MB">64</VALUE>
+								<VALUE description="128 MB">128</VALUE>
+								<VALUE description="256 MB">256</VALUE>
+								<VALUE description="512 MB">512</VALUE>
+								<VALUE description="1 GB">1024</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="WHDLoadOptions" group="WHDLoad" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<FULLROW>true</FULLROW>
 							<DESCRIPTION>WHDLoad startup options specific for this game.</DESCRIPTION>
 						</KEY>
-						<KEY name="NeverExtract" required="false" nullable="false">
+						<KEY name="NeverExtract" group="WHDLoad" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Set to true if this game should never be extracted. This might be needed for some WHDLoad games that cannot be extracted under Windows.</DESCRIPTION>
-						</KEY>
-						<KEY name="Options" required="false" nullable="true">
-							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>Add any extra WinUAE CLI options we might want for that particular game.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>

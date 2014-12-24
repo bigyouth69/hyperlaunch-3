@@ -2,16 +2,17 @@ MEmu = DXWnd
 MEmuV = v2.01.90
 MURL = http://sourceforge.net/projects/dxwnd/
 MAuthor = djvj
-MVersion = 2.0.3
-MCRC = CF8E1D06
-iCRC = 5D806D1F
+MVersion = 2.0.4
+MCRC = EE3E60A7
+iCRC = CA9D3A93
 MID = 635038268886599500
 MSystem = "PC Games","Taito Type X"
 ;--------------------------------------------------------------------------------------------------------------------
 ; Notes:
 ; DXWnd is a windows hooker that intercepts DirectX calls to make fullscreen programs run within a window.
 ; It can be downloaded here: http://sourceforge.net/projects/dxwnd/
-; Extract it to your "Module Extensions" folder
+; Extract it to your "Module Extensions\dxwnd" folder
+; You do not need to set an emulator for this module because HyperLaunch will always look in the above folder for dxwnd. Because of this, the module will need to be set as a Virtual Emulator in HLHQ.
 ; Read the notes in the ini for further settings to help with rotating your monitor for vertical games
 ; Vertical games are windowed, rotated, windows hidden (taskbar/start button/desktop), then the correct resolution is calculated and the game's window is maximized. This gives the look of a fullscreen game, but it's actually in a window.
 ; You may have to set Skipchecks to "Rom Only" or "Rom and Emu", otherwise HyperLaunch will error looking for a rom if your exe/bat/lnk is not the same name as you have in your xml.
@@ -50,7 +51,7 @@ FadeInStart()
 
  ; check for and load into memory the Settings.ini
 settingsFile := CheckFile(modulePath . "\" . moduleName . ".ini", "Could not find """ . modulePath . "\" . moduleName . ".ini"". HyperLaunchHQ will create this file when you configure your first game to be used with this " . MEmu . " module.")
-verticalMethod := IniReadCheck(settingsFile, "settings", "VerticalMethod", "Display",,1)
+verticalMethod := IniReadCheck(settingsFile, "settings", "VerticalMethod", rotateMethod,,1)
 system := IniReadCheck(settingsFile, romName, "System","Standard",,1)
 titleClass := IniReadCheck(settingsFile, romName, "TitleClass",A_Space,,1)
 launchExe := IniReadCheck(settingsFile, romName, "LaunchExe",A_Space,,1)
@@ -78,15 +79,10 @@ If !romFound
 WinMinimize, ahk_class ApolloRuntimeContentWindow ; fix for HS2 not minimizing
 Sleep, 100
 WinMinimizeAll ;If we don't minimize, parts of HS still show on our screen, doesn't work with HS2 for an unknown reason
-Run(executable, emuPath, "Min", "dxPID")	; launch dxwnd to force windowed mode
+DxwndRun("dxPID")	; launch dxwnd to force windowed mode
 
 If system = Vertical
-{	If verticalMethod = iRotate
-		Run("iRotate.exe /rotate=90 /exit", moduleExtensionsPath) ; another option to rotate screen
-	Else If  verticalMethod = Display
-		Run("display.exe /rotate:90", moduleExtensionsPath) ; Switching to 90�
-	;Sleep, 200
-}
+	Rotate(verticalMethod, 90)
 
 ;Making our own custom hideDesktop(), because upon rotation, coordinates get messed up and only part of the desktop is hidden
 Gui 1: Color, 000000
@@ -116,11 +112,7 @@ Gui 2: -Caption +ToolWindow
 Gui 2: Show, x0 y0 W%A_ScreenWidth% H%A_ScreenHeight%, BlackScreen2
 
 If system = Vertical
-{	If verticalMethod = iRotate
-		Run("iRotate.exe /rotate=0 /exit", moduleExtensionsPath) ; another option to rotate screen
-	Else If verticalMethod = Display
-		Run("display.exe /rotate:0", moduleExtensionsPath) ; Switching back to 0�
-}
+	Rotate(verticalMethod, 0)
 
 WinClose("DXWnd",,,"Notepad++")
 Sleep, 200
@@ -179,23 +171,17 @@ MaximizeWindow(class){
 
 HaltEmu:
 	If system = Vertical
-	{	If verticalMethod = iRotate
-			Run("iRotate.exe /rotate=0 /exit", moduleExtensionsPath) ; another option to rotate screen 
-		Else If verticalMethod = Display 
-			Run("display.exe /rotate:0", moduleExtensionsPath) ; Switching back to 0� 
+	{	Rotate(verticalMethod, 0)
 		Sleep, 200 
 	}
 Return
 RestoreEmu:
 	If system = Vertical
-	{	If verticalMethod = iRotate
-			Run("iRotate.exe /rotate=90 /exit", moduleExtensionsPath) ; another option to rotate screen 
-		Else If verticalMethod = Display
-			Run("display.exe /rotate:90", moduleExtensionsPath) ; Switching to 90� 
-	}
+		Rotate(verticalMethod, 90)
 Return
 
 CloseProcess:
 	FadeOutStart()
 	WinClose(titleClass)
+	; DxwndClose()
 Return

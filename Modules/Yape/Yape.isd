@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+		<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				 <SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="DoubleSizedWindow" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>For windowed mode, set to true to double the default window dimensions</DESCRIPTION>
+						</KEY>
+						<KEY name="WarpKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>toggle warp speed</DESCRIPTION>
+						</KEY>
+						<KEY name="JoySwapKey" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>swap joystick port</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="VideoMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Display Format.</DESCRIPTION>
+							<VALUES>
+								<VALUE>NTSC</VALUE>
+								<VALUE>PAL</VALUE>
+							</VALUES>							
+						</KEY>
+						<KEY name="RequiresReset" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if rom requires a reset command after loading is complete to start the game</DESCRIPTION>
+						</KEY>
+						<KEY name="SendCommandDelay" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Time in milliseconds to wait until commands are being type for those games that have the Command setting filled in</DESCRIPTION>
+						</KEY>
+						<KEY name="Command" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Used if rom requires a command after loading is complete to start the game.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>		
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

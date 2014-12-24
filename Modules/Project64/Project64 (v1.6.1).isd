@@ -13,22 +13,10 @@
 						</KEY>
 						<KEY name="FullscreenMethod" required="false" nullable="false">
 							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>reg = registry, hotkey = alt+enter. Windows 8 does not seem to work with the registry method as the key is not even there to change, Use hotkey if reg doesn't set fullscreen for you.</DESCRIPTION>
+							<DESCRIPTION>Windows 8 does not seem to work with the registry method as the key is not even there to change, Use hotkey if reg doesn't set fullscreen for you.</DESCRIPTION>
 							<VALUES>
-								<VALUE>reg</VALUE>
-								<VALUE>hotkey</VALUE>
-							</VALUES>
-						</KEY>
-						<KEY name="HideLoading" required="false" nullable="false">
-							<KEYTYPE>Boolean</KEYTYPE>
-							<DESCRIPTION>This speeds up loading roms but can cause some PCs to get stuck at the Open Rom window or cause HS to flicker through. Disable it if you have this issue</DESCRIPTION>
-						</KEY>
-						<KEY name="SelectGameMode" required="false" nullable="false" minLength="1" maxLength="2">
-							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>1 = Uses a loop to detect the Edit Box has the romname and path in it. This doesn't work on all PCs, so if you get stuck at the open rom window, use mode 2. 2 = Uses a simple Ctrl+v to paste the romname and path, then press Enter to load the game.</DESCRIPTION>
-							<VALUES>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
+								<VALUE description="Registry">reg</VALUE>
+								<VALUE description="ALT+Enter">hotkey</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="ControlDelay" required="false" nullable="true" minLength="-1">
@@ -37,19 +25,7 @@
 						</KEY>
 						<KEY name="KeyDelay" required="false" nullable="true" minLength="-1">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>Raise this if the module is getting stuck using SelectGameMode 2. Default = -1</DESCRIPTION>
-						</KEY>
-						<KEY name="MDebug" required="false" nullable="false">
-							<KEYTYPE>Boolean</KEYTYPE>
-							<DESCRIPTION>Set to true to get some MDebug tooltips to help with debugging problems with loading</DESCRIPTION>
-						</KEY>
-						<KEY name="MLanguage" required="false" nullable="false">
-							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>If English, dialog boxes look for the word "Open" and if Spanish/Portuguese, looks for "Abrir"</DESCRIPTION>
-							<VALUES>
-								<VALUE>English</VALUE>
-								<VALUE>Spanish/Portuguese</VALUE>
-							</VALUES>
+							<DESCRIPTION>Raise this if the module is getting stuck. Default = -1</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>

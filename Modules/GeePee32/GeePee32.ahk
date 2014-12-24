@@ -2,8 +2,8 @@ MEmu = GeePee32
 MEmuV = v0.43
 MURL = http://users.skynet.be/firefly/gp32/
 MAuthor = djvj
-MVersion = 2.0.1
-MCRC = FFF214E8
+MVersion = 2.0.2
+MCRC = 8FBC03D8
 iCRC = 93050FEB
 MID = 635038268896027346
 MSystem = "GamePark 32"
@@ -25,9 +25,12 @@ settingsFile := modulePath . "\" . moduleName . ".ini"
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 SelectGameMode := IniReadCheck(settingsFile, "Settings", "SelectGameMode","1",,1)	; 1 = Uses a loop to detect the Edit Box has the romname and path in it. This doesn't work on all PCs, so if you get stuck at the open rom window, use mode 2. 2 = Uses a simple Ctrl+v to paste the romname and path, then press Enter to load the game.
 
+hideEmuObj := Object("AHK_class #32770",0,"AHK_class TFormMain",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
 
-SetKeyDelay, 50
+HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
+
+SetKeyDelay(50)
 Run(executable, emuPath)
 WinWait("AHK_class TFormMain")
 WinWaitActive("AHK_class TFormMain")
@@ -69,6 +72,7 @@ If fullscreen = true
 	MaximizeWindow("AHK_class TFormMain")
 }
 
+HideEmuEnd()
 FadeInExit()
 Process("WaitClose", executable)
 7zCleanUp()

@@ -11,6 +11,27 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>If true emulator will run fullscreen.</DESCRIPTION>
 						</KEY>
+						<KEY name="ChangeDate" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you are running the 0.5.3 beta version of the emulator which won't run after January of 2012. This will only change the date time visible to the emulator and will NOT change the date time of your system.</DESCRIPTION>
+						</KEY>
+						<KEY name="AutoPlayDisc" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If set to true games will start automatically, due to some bugs in the emulator some games will show graphical glitches with this option active, not you might need to disable and then press the start button in the CD-i startup screen manually.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="ChangeDate" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you are running the 0.5.3 beta version of the emulator which won't run after January of 2012. This will only change the date time visible to the emulator and will NOT change the date time of your system.</DESCRIPTION>
+						</KEY>
+						<KEY name="AutoPlayDisc" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If set to true games will start automatically, due to some bugs in the emulator some games will show graphical glitches with this option active, not you might need to disable and then press the start button in the CD-i startup screen manually.</DESCRIPTION>
+						</KEY>
 					</KEYS>
 				</SECTION>
 			</SECTIONS>

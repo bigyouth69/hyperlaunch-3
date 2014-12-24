@@ -2,9 +2,9 @@ MEmu = MFME
 MEmuV = v3.2 & v9.4 & v10.1a
 MURL = http://www.fruit-emu.com/
 MAuthor = djvj
-MVersion = 2.0.4
-MCRC = FE9A15DD
-iCRC = BD98DE05
+MVersion = 2.0.5
+MCRC = 2771CE7B
+iCRC = 642ECAEC
 MID = 635038268906095729
 MSystem = "Fruit Machine","MFME"
 ;----------------------------------------------------------------------------
@@ -16,6 +16,8 @@ MSystem = "Fruit Machine","MFME"
 ; 	Back To The Features\Back_To_The_Features.gam
 ; Rename it so it looks like this:
 ; 	Back To The Features\Back To The Features.gam
+;
+; MFME layouts only support a fixed resolution, so if your desktop is not set to the same size as these layouts, it takes away from the MFME environment. By default this resolution is 1280x1024, so the module will change your desktop to match if resizeDesktop is enabled (default).
 ;
 ; Your Games.ini needs to have a section for each game that will not use your default emulator defined in Emulators.ini. This module supports MFME v3.2, 9.4, and 10.1a
 ; I would set MFME v10.1a as your default emulator.
@@ -33,20 +35,19 @@ MSystem = "Fruit Machine","MFME"
 ; One known issue is the magnifier window sometimes won't launch with the desired position on screen. Yet if you launch it manually it will show where you previously told it to start. I can't find the solution to this as the values are being stored in the registry properly.
 ; Magnifier's settings are stored in the registry @ HKEY_CURRENT_USER\Software\Microsoft\ScreenMagnifier
 ;
-; MFME stores its settings in the registry @ HKEY_USERS\S-1-5-21-440413192-1003725550-97281542-1001\Software\CJW\MFME
+; MFME stores its settings (pretty much only launch history) in the registry @ HKEY_CURRENT_USER\Software\CJW\MFME
 ; As far as I can tell, there is no way to go fullscreen (only v3.2 supports it)
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
-MinimizeWindows := IniReadCheck(settingsFile, "Settings", "MinimizeWindows","true",,1)
-ResizeDesktop := IniReadCheck(settingsFile, "Settings", "ResizeDesktop","true",,1)
-ResizeW := IniReadCheck(settingsFile, "Settings", "ResizeW","1280",,1)			; Do not change this, layouts are made to fit this size desktop
-ResizeH := IniReadCheck(settingsFile, "Settings", "ResizeH","1024",,1)					; Do not change this, layouts are made to fit this size desktop
-BackgroundPic := IniReadCheck(settingsFile, "Settings", "BackgroundPic",modulePath . "\Background.png",,1)
-Magnify := IniReadCheck(settingsFile, "Settings", "Magnify","true",,1)			; Create a windows magnifier window in the bottom right corner to see things closer over your cursor
-MagnifyPercentage := IniReadCheck(settingsFile, "Settings", "MagnifyPercentage","200",,1)
-MagnifyAlignment := IniReadCheck(settingsFile, "Settings", "MagnifyAlignment","Bottom Right Corner",,1)
+minimizeWindows := IniReadCheck(settingsFile, "Settings", "minimizeWindows","true",,1)
+resizeDesktop := IniReadCheck(settingsFile, "Settings", "resizeDesktop","true",,1)
+backgroundPic := IniReadCheck(settingsFile, "Settings", "backgroundPic",modulePath . "\Background.png",,1)
+magnify := IniReadCheck(settingsFile, "Settings", "Magnify","true",,1)			; Create a windows magnifier window in the bottom right corner to see things closer over your cursor
+magnifyPercentage := IniReadCheck(settingsFile, "Settings", "MagnifyPercentage","200",,1)
+magnifyAlignment := IniReadCheck(settingsFile, "Settings", "MagnifyAlignment","Bottom Right Corner",,1)
 magWinW := IniReadCheck(settingsFile, "Settings", "MagnifyWinSizeW","245",,1)
 magWinH := IniReadCheck(settingsFile, "Settings", "MagnifyWinSizeH","245",,1)
 magWinX := IniReadCheck(settingsFile, "Settings", "MagnifyWinPosX",A_Space,,1)
@@ -55,8 +56,16 @@ ambientSound := IniReadCheck(settingsFile, "Settings", "ambientSound","true",,1)
 ambientSoundFile := IniReadCheck(settingsFile, "Settings", "ambientSoundFile",moduleExtensionsPath . "\Quiet atmosphere in a small restaurant (indistinct speech) - 1978 (1R8,reprocessed).mp3",,1)
 ambientSoundPlayer := IniReadCheck(settingsFile, "Settings", "ambientSoundPlayer",moduleExtensionsPath . "\djAmbiencePlayer.exe",,1)
 ambientStopKey := IniReadCheck(settingsFile, "Settings", "ambientStopKey","PAUSE",,1)
-ResetKey := IniReadCheck(settingsFile, "Settings", "ResetKey","F12",,1)								; key to reset the game while playing
+resetKey := IniReadCheck(settingsFile, "Settings", "resetKey","F12",,1)								; key to reset the game while playing
 
+If magnify = true
+{	magnifyWrapperFullPath := moduleExtensionsPath . "\MagnifyWrapper.exe"
+	magnifyFullPath := A_WinDir . "\system32\magnify.exe"
+	SplitPath, magnifyWrapperFullPath, magnifyWrapperName, magnifyWrapperPath
+	SplitPath, magnifyFullPath, magnifyName, magnifyPath
+	CheckFile(magnifyWrapperFullPath, "You have Magnify enabled but could not find the module extension to handle it: " . magnifyWrapperFullPath)
+	CheckFile(magnifyFullPath,"Could not find Windows Magnifier in " . magnifyFullPath . "`nPlease disable Magnify in the module settings in HLHQ, or copy it to the above folder.")
+}
 If ambientSound = true
 {	ambientSoundFile := CheckFile(ambientSoundFile)
 	ambientSoundPlayer := CheckFile(ambientSoundPlayer)
@@ -72,20 +81,20 @@ If fadeIn = true
 	WinGet GUI_ID5, ID
 	Gui 5: -AlwaysOnTop -Caption +ToolWindow
 	Gui 5: Color, %loadingColor%
-	backgroundPicHandle := Gdip_CreateBitmapFromFile(BackgroundPic)
+	backgroundPicHandle := Gdip_CreateBitmapFromFile(backgroundPic)
 	Gdip_GetImageDimensions(backgroundPicHandle, backgroundPicW, backgroundPicH)
-	Log("Module - BackgroundPic's dimensions are: " . backgroundPicW . "x" . backgroundPicH,4)
+	Log("Module - backgroundPic's dimensions are: " . backgroundPicW . "x" . backgroundPicH,4)
 	backXPos := ( A_ScreenWidth / 2 ) - ( backgroundPicW / 2 )
 	backYPos := ( A_ScreenHeight / 2 ) - ( backgroundPicH / 2 )
-	Gui 5: Add, Picture,x%backXPos% y%backYPos%, %BackgroundPic%
+	Gui 5: Add, Picture,x%backXPos% y%backYPos%, %backgroundPic%
 	Gui 5: Show, x0 y0 h%A_ScreenHeight% w%A_ScreenWidth%
-	Log("Module - Displaying BackgroundPic's dimensions at - x: " . backXPos . " y: " . backYPos,4)
+	Log("Module - Displaying backgroundPic's dimensions at - x: " . backXPos . " y: " . backYPos,4)
 }
 
-ResetKey := xHotKeyVarEdit(ResetKey,"ResetKey","~","Add")
-xHotKeywrapper(ResetKey,"Reset")
+resetKey := xHotKeyVarEdit(resetKey,"resetKey","~","Add")
+xHotKeywrapper(resetKey,"Reset")
 
-If MinimizeWindows = true
+If minimizeWindows = true
 	WinMinimizeAll
 
 If resizeDesktop = true
@@ -101,13 +110,18 @@ If resizeDesktop = true
 	;Sleep, 1000 ; probably don't need this
 }
 
+BezelStart()
+hideEmuObj := Object("ahk_class TForm1",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
+
+HideEmuStart()
 
 emuPID := Run(executable . " """ . romPath . "\"  . romName . romExtension . """", emuPath)
 
 WinWait("ahk_class TForm1")
 WinWaitActive("ahk_class TForm1")
 
+Sleep, 1000
 WinSet, Style, -0xC00000, ahk_class TForm1		;Removes the titlebar of the game window
 WinSet, Style, -0x40000, ahk_class TForm1		;Removes the border of the game window
 DllCall("SetMenu", uint, WinActive( "A" ), uint, 0) 	;Removes the MenuBar
@@ -117,14 +131,13 @@ DllCall("SetMenu", uint, WinActive( "A" ), uint, 0) 	;Removes the MenuBar
 WinActivate, ahk_class TForm1
 WinWaitActive("ahk_class TForm1")
 
-If Magnify = true
+If magnify = true
 {	Sleep, 500
-	magnifierExe:=CheckFile(A_WinDir . "\system32\magnify.exe","Could not find Windows Magnifier in " . A_WinDir . "\system32\magnify.exe`nPlease disable it's use in the module, or copy it to the above folder.")
-	magPID := Process("Exist", "magnify.exe")
+	magPID := Process("Exist", magnifyName)
 	If magPID != 0
-		Process("Close", "magnify.exe")
+		Process("Close", magnifyName)
 	
-	GetMagWinPosition(magWinX, magWinY, magWinW, magWinH, MagnifyAlignment)	; Calculate the positioning of the Magnify Window
+	GetMagWinPosition(magWinX, magWinY, magWinW, magWinH, magnifyAlignment)	; Calculate the positioning of the Magnify Window
 	
 	; If A_OSVersion not in WIN_2003, WIN_XP, WIN_2000, WIN_NT4, WIN_95, WIN_98, WIN_M
 	; {	RootKey = HKCU
@@ -132,7 +145,7 @@ If Magnify = true
 		; regwrite, REG_DWORD ,%RootKey%,%SubKey%,MagnifierUIWindowMinimized, 1 			; start with ui minimized
 		; regwrite, REG_DWORD ,%RootKey%,%SubKey%,MagnificationMode, 1					;choosing docked mode
 		; regwrite, REG_DWORD ,%RootKey%,%SubKey%,ClassicDocked, 0 						;choosing classic window mode
-		; regwrite, REG_DWORD ,%RootKey%,%SubKey%,Magnification, %MagnifyPercentage% 		;Magnification Percentage
+		; regwrite, REG_DWORD ,%RootKey%,%SubKey%,Magnification, %magnifyPercentage% 		;Magnification Percentage
 		; regwrite, REG_DWORD ,%RootKey%,%SubKey%,ClassicWindowX, %magWinX%		;Window Pos x
 		; regwrite, REG_DWORD ,%RootKey%,%SubKey%,ClassicWindowY, %magWinY% 		;Window Pos y
 		; regwrite, REG_DWORD ,%RootKey%,%SubKey%,ClassicWindowCX, %magWinW%		;Window Width
@@ -159,7 +172,7 @@ If Magnify = true
 	} Else {
 		;This is because of UAC control if it's turned off this will run much smoother
 		; errorLvl := Run("MagnifyWrapper.exe """ . executable . """ " . x . " " . y, modulePath,"UseErrorLevel")
-		errorLvl := Run("MagnifyWrapper.exe """ . executable . """ " . magWinX . " " . magWinY . " " . magWinW . " " . magWinH, modulePath,"UseErrorLevel")
+		errorLvl := Run(magnifyWrapperName . """" . executable . """ " . magWinX . " " . magWinY . " " . magWinW . " " . magWinH, modulePath,"UseErrorLevel")
 		If errorLvl {
 			mfmeError=1
 			Goto, CloseProcess
@@ -173,13 +186,17 @@ If ambientSound = true
 If resizeDesktop = true
 	SetFormat, Float, %currentFloat%	; restore previous value
 
+BezelDraw()
+HideEmuEnd()
 FadeInExit()
 
+; WinSet, TransColor, 42424A 200, ahk_class TForm1
 ; PID doesn't seem to work for MFME, so have to use this method instead
 Process("WaitClose", executable)
+BezelExit()
 
-If (Magnify = "true") And (XpBelow = "true")
-	Process("Close","magnify.exe")
+If (magnify = "true") And (XpBelow = "true")
+	Process("Close",magnifyName)
 
 If ambientSound = true
 	Process("Close", ambientSoundPlayerName)
@@ -190,7 +207,7 @@ If resizeDesktop = true
 	Sleep, 1000
 }
 
-If MinimizeWindows = true
+If minimizeWindows = true
 	WinMinimizeAllUndo
 
 7zCleanUp()

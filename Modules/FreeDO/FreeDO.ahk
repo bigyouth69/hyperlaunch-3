@@ -2,9 +2,9 @@ MEmu = FreeDO
 MEmuV = v2.1.1 alpha
 MURL = http://www.freedo.org/
 MAuthor = djvj
-MVersion = 2.0.1
-MCRC = 6F2E1419
-iCRC = 7C16552E
+MVersion = 2.0.2
+MCRC = E2050BB9
+iCRC = 7E0E6CF7
 MID = 635038268892864713
 MSystem = "Panasonic 3DO"
 ;------------------------------------------------------------------------
@@ -25,17 +25,13 @@ FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
-SelectGameMode := IniReadCheck(settingsFile, "Settings", "SelectGameMode","1",,1)	; 1 = Uses a loop to detect the Edit Box has the romname and path in it. This doesn't work on all PCs, so if you get stuck at the open rom window, use mode 2. 2 = Uses a simple Ctrl+v to paste the romname and path, then press Enter to load the game.
 ToolbarWait := IniReadCheck(settingsFile, "Settings", "ToolbarWait","300",,1) ; increase this if toolbar is staying visible
-MLanguage := IniReadCheck(settingsFile, "Settings", "MLanguage","English",,1)		; If English, dialog boxes look for the word "Open" and if Spanish/Portuguese, looks for "Abrir"
 
-mLang := Object("English","Open","Spanish/Portuguese","Abrir")
-winLang := mLang[MLanguage]	; search object for the MLanguage associated to the user's language
-If !winLang
-	ScriptError("Your chosen language is: """ . MLanguage . """. It is not one of the known supported languages for this module: " . moduleName)
+dialogOpen := i18n("dialog.open")	; Looking up local translation
 
 freeDOFile := CheckFile(emuPath . "\config.xml","Cannot find " . emuPath . "\config.xml`nPlease run FreeDO manually first so it is created for you.")
 
+hideEmuObj := Object(dialogOpen . " ahk_class #32770",0,"FreeDO ahk_class TForm1",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 If romExtension in .7z,.rar,.zip,.cue
@@ -45,6 +41,8 @@ If romExtension in .7z,.rar,.zip,.cue
 FileDelete, %emuPath%\config.xml
 FileCopy, %emuPath%\restore.xml, %emuPath%\config.xml
 
+HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
+
 Run(executable, emuPath)
 DetectHiddenWindows, on
 ; Sleep, 500
@@ -53,25 +51,10 @@ IfWinNotActive, FreeDO ahk_class TForm1
 	WinActivate, FreeDO ahk_class TForm1
 WinWaitActive("FreeDO ahk_class TForm1")
 Send, {ALTDOWN}{ALTUP}{UP}{ENTER} ; open ISO
-WinWait(winLang)
-IfWinNotActive, %winLang% ahk_class #32770, , WinActivate, %winLang% ahk_class #32770
-	WinWaitActive(winLang . " ahk_class #32770")
+WinWait(dialogOpen)
+IfWinNotActive, %dialogOpen% ahk_class #32770, , WinActivate, %dialogOpen% ahk_class #32770
 
-If ( SelectGameMode = 1 ) {
-	Loop {
-		ControlGetText, edit1Text, Edit1, %winLang% ahk_class #32770
-		If ( edit1Text = romPath . "\" . romName . romExtension )
-			Break
-		Sleep, 100
-		ControlSetText, Edit1, %romPath%\%romName%%romExtension%, %winLang% ahk_class #32770
-	}
-	ControlSend, Button1, {Enter}, AHK_class #32770 ; Select Open
-} Else If ( SelectGameMode = 2 ) {
-	Clipboard := romPath . "\" . romName . romExtension
-	Sleep, 100
-	Send, ^v{Enter}
-} Else
-	ScriptError("You did not choose a valid SelectGameMode.`nOpen the module and set the mode at the top.")
+OpenROM(dialogOpen . " ahk_class #32770", romPath . "\" . romName . romExtension)
 
 WinWait("FreeDO ahk_class TForm1")
 WinWaitActive("FreeDO ahk_class TForm1")
@@ -85,6 +68,7 @@ Send, {F9}	; disable toolbar
 WinWait("FreeDO ahk_class TForm1")
 WinWaitActive("FreeDO ahk_class TForm1")
 
+HideEmuEnd()
 FadeInExit()
 Process("WaitClose", executable)
 7zCleanUp()

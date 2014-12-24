@@ -2,8 +2,8 @@ MEmu = JPcsp
 MEmuV =  r3146
 MURL = http://jpcsp.org/
 MAuthor = djvj
-MVersion = 2.0.1
-MCRC = 5AEB631A
+MVersion = 2.0.2
+MCRC = 200F2E5A
 iCRC = E0EFE80F
 MID = 635038268900731264
 MSystem = "Sony PSP"
@@ -29,7 +29,7 @@ bezelTopOffset := IniReadCheck(settingsFile, "Settings", "bezelTopOffset :","46"
 
 BezelStart()
 
-SetKeyDelay 50
+SetKeyDelay(50)
 jpcspFile := CheckFile(emuPath . "\Settings.properties")
 FileRead, jpcspSettings, %jpcspFile%
 
@@ -85,7 +85,10 @@ RegRead, javaDir, HKEY_LOCAL_MACHINE, %javaKey%\%javaVersion%, JavaHome ; read j
 javaExe = %javaDir%\bin\javaw.exe
 CheckFile(javaExe,"Could not find javaw.exe. Try reinstalling the java version you want to use. Please make sure it exists here:`n" . javaExe)
 
+hideEmuObj := Object("Jpcsp ahk_class SunAwtFrame",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
+
+HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
 
 If ( emuBit = "32" )
 	errorLvl := Run(javaExe . " -Xmx" . useRAM . "m -XX:MaxPermSize=128m -XX:ReservedCodeCacheSize=64m -Djava.library.path=lib/windows-x86 -jar bin/jpcsp.jar -u """ . romPath . "\" . romName . romExtension . """ -r", emupath, "UseErrorLevel")
@@ -101,6 +104,7 @@ WinActivate, Jpcsp ahk_class SunAwtFrame
 WinWaitActive("Jpcsp ahk_class SunAwtFrame")
 
 BezelDraw()
+HideEmuEnd()
 FadeInExit()
 Process("WaitClose", "javaw.exe")
 7zCleanUp()

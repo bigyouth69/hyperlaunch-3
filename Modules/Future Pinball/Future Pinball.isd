@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen.</DESCRIPTION>
+						</KEY>
+						<KEY name="Windowed_Resolution" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Determines resolution for windowed mode (ex. "1920x1080"). By default, the module will use the resolution of your desktop.</DESCRIPTION>
+						</KEY>
+						<KEY name="ArcadeRenderer" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Arcade Renderer. This will probably be ignored if you already checked the Arcade render checkbox in the Future Pinball settings menu</DESCRIPTION>
+						</KEY>
+						<KEY name="StayInRAM" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>This is only applicable if you are using BAM. If set to true /STAYINRAM will be sent to FPLoader, enable this if you are having problems when exiting Future Pinball.</DESCRIPTION>
+						</KEY>
+						<KEY name="RenderGameRoom" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables the Game Room. Tables with custom game rooms will need this disabled</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="ArcadeRenderer" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Arcade Renderer for this specific table. This will probably be ignored if you already checked the Arcade render checkbox in the Future Pinball settings menu</DESCRIPTION>
+						</KEY>
+						<KEY name="StayInRAM" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>This is only applicable if you are using BAM. If set to true /STAYINRAM will be sent to FPLoader, enable this if you are having problems when exiting Future Pinball.</DESCRIPTION>
+						</KEY>
+						<KEY name="RenderGameRoom" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables the Game Room for this specific table. Tables with custom game rooms will need this disabled</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

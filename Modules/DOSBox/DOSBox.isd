@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="Hide_Console" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, will hide the console and all DOSBox logs will be dumped to stdout.txt and stderr.txt instead.</DESCRIPTION>
+						</KEY>
+						<KEY name="Gravis_Ultrasound_Folder" required="false" nullable="true">
+							<KEYTYPE>FolderPath</KEYTYPE>
+							<DESCRIPTION>Path to the Gravis Ultrasound folder. By default is %EmuPath%\Gravis_Ultrasound. In this folder should reside 2 folders, ULTRASND and ULTRAPRO. Read the module notes for more information.</DESCRIPTION>
+							<PATHTYPE>Any</PATHTYPE>
+						</KEY>
+						<KEY name="Setup_On_Launch" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>When a setup executable is supplied for a game, enabling this option will run it instead of allowing the game to launch normally. Use this when you need to configure a game's settings or controls. To return to normal launching, set this back to false or default.&#xA;&#xA;If you need to find what files were udpated when changing settings and you keep your games compressed in archives, make sure 7zDeleteTemp is disabled otherwise all changes will be deleted upon exiting the setup executable!</DESCRIPTION>
+						</KEY>
+						<KEY name="Fullscreen_Resolution" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Sets the fullscreen mode resolution. Type 'original' to use the game's default resolution, type 'desktop' to use the same resolution as your desktop</DESCRIPTION>
+						</KEY>
+						<KEY name="Windowed_Resolution" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Sets the windowed mode resolution. Type 'original' to use the game's default resolution</DESCRIPTION>
+						</KEY>
+						<KEY name="Config_Folder" required="false" nullable="true">
+							<KEYTYPE>FolderPath</KEYTYPE>
+							<DESCRIPTION>Path to the folder holding the DOSBox configuration files. By default is RomPath\!dos\</DESCRIPTION>
+							<PATHTYPE>Any</PATHTYPE>
+						</KEY>
+						<KEY name="Conf_File" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Default name for the DOSBox configuration file to be used. Default is dosbox.conf</DESCRIPTION>
+						</KEY>
+						<KEY name="Require_Games_Folder" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if the romPath must end on a folder named Games. This should be enabled for eXoDOS sets since it's required by them</DESCRIPTION>
+						</KEY>
+						<KEY name="Scaler" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select the scaler you want to use on DOSBox</DESCRIPTION>
+							<VALUES>
+								<VALUE>2xsai</VALUE>
+								<VALUE>advinterp2x</VALUE>
+								<VALUE>advinterp3x</VALUE>
+								<VALUE>advmame2x</VALUE>
+								<VALUE>advmame3x</VALUE>
+								<VALUE>hq2x</VALUE>
+								<VALUE>hq3x</VALUE>
+								<VALUE>none</VALUE>
+								<VALUE>normal2x</VALUE>
+								<VALUE>normal3x</VALUE>
+								<VALUE>rgb2x</VALUE>
+								<VALUE>rgb3x</VALUE>
+								<VALUE>scan2x</VALUE>
+								<VALUE>scan3x</VALUE>
+								<VALUE>super2xsai</VALUE>
+								<VALUE>supereagle</VALUE>
+								<VALUE>tv2x</VALUE>
+								<VALUE>tv3x</VALUE>
+							</VALUES>							
+						</KEY>
+						<KEY name="Aspect" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Aspect Correction, disabled by default. If you set this to true make sure you set Output=overlay as surface does not support aspect correction.</DESCRIPTION>
+						</KEY>
+						<KEY name="Output" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>What to use for DOSBox output. Surface does not support scaling or aspect correction. Default is surface</DESCRIPTION>
+							<VALUES>
+								<VALUE>surface</VALUE>
+								<VALUE>overlay</VALUE>
+								<VALUE>opengl</VALUE>
+								<VALUE>openglnb</VALUE>
+								<VALUE>ddraw</VALUE>
+							</VALUES>	
+						</KEY>
+						<KEY name="Send_Command_Delay" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Time in milliseconds to wait initially until commands/keystrokes are typed for those games that have the Command setting filled in. Can be overriden at a rom level.</DESCRIPTION>
+						</KEY>
+						<KEY name="Force_Extraction_To_Rom_Path" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you want to force the extraction of compressed roms to the rom path regardless what you have set for 7z_Extract_Path. It's not advisable to do this since if something goes wrong you can end up with your roms folder deleted, but if you are using the eXoDOS sets and intend to run the games with both HyperLaunch and Meagre then you will want this option active since this how those sets will work out of the box.</DESCRIPTION>
+						</KEY>
+						<KEY name="Enable_Ultrasound" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>If Standard or Pro, Gravis Ultrasound will be enabled for all games. Default is disabled. Some games will not work with Pro, for those use Standard. Be sure to set up the game's internal settings so its midi and/or sound effects cards are set to Gravis Ultrasound.&#xA;&#xA;Further settings can be made in your dosbox.conf but by default they are set to Base=240, IRQ=5, and DMA=3.&#xA;&#xA;Module will automatically enable GUS and set the path to U:\ULTRASND.&#xA;Read more info in the module notes and where to get GUS patches which are required otherwise you will get no midi in your supported games.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Ultrasound Pro">pro</VALUE>
+								<VALUE description="Ultrasound Standard">standard</VALUE>
+								<VALUE description="Disabled">false</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="Network" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Default_Server_IPX_IP" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>If you always connect to the same server as a client, put the IP address here. If no IP is entered on the GUI, this is the IP used.</DESCRIPTION>
+						</KEY>
+						<KEY name="Default_Server_IPX_Port" required="false" nullable="true" minLength="0" maxLength="65535">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you always connect to the same server as a client, put the Port here. Default IPX Port used by DOSBox is the UDP Port 213. If no Port is entered on the GUI, this is the Port used. Servers must make sure this port is forwarded through all firewalls.</DESCRIPTION>
+						</KEY>
+						<KEY name="Default_Server_NetBios_IP" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>If you always connect to the same server as a client, put the IP address here. If no IP is entered on the GUI, this is the IP used.</DESCRIPTION>
+						</KEY>
+						<KEY name="Default_Server_NetBios_Port" required="false" nullable="true" minLength="0" maxLength="65535">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you always connect to the same server as a client, put the Port here. Default NetBios Port used by DOSBox is the UDP Port 213. If no Port is entered on the GUI, this is the Port used. Servers must make sure this port is forwarded through all firewalls.</DESCRIPTION>
+						</KEY>
+						<KEY name="Default_Server_Serial_IP" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>If you always connect to the same server as a client, put the IP address here. If no IP is entered on the GUI, this is the IP used.</DESCRIPTION>
+						</KEY>
+						<KEY name="Default_Server_Serial_Port" required="false" nullable="true" minLength="1" maxLength="256">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The TCP Port used for Serial connections. Both server and client must have a port configured. Default Serial Port used by DOSBox is the TCP Port 23. If no Port is entered on the GUI, this is the Port used. Servers must make sure this port is forwarded through all firewalls.</DESCRIPTION>
+						</KEY>
+						<KEY name="Default_Server_NullModem_IP" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>If you always connect to the same server as a client, put the IP address here. If no IP is entered on the GUI, this is the IP used.</DESCRIPTION>
+						</KEY>
+						<KEY name="Default_Server_NullModem_Port" required="false" nullable="true" minLength="1" maxLength="256">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The TCP Port used for NullModem connections. Both server and client must have a port configured. Default Serial Port used by DOSBox is the TCP Port 23. If no Port is entered on the GUI, this is the Port used. Servers must make sure this port is forwarded through all firewalls.</DESCRIPTION>
+						</KEY>
+						<KEY name="Default_Server_Modem_IP" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>If you always connect to the same server as a client, put the IP address here. If no IP is entered on the GUI, this is the IP used.</DESCRIPTION>
+						</KEY>
+						<KEY name="Default_Server_Modem_Port" required="false" nullable="true" minLength="1" maxLength="256">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The TCP Port used for Modem connections. Both server and client must have a port configured. Default Serial Port used by DOSBox is the TCP Port 23. If no Port is entered on the GUI, this is the Port used. Servers must make sure this port is forwarded through all firewalls.</DESCRIPTION>
+						</KEY>
+						<KEY name="Serial_RxDelay" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>How long (milliseconds) to delay received data if the interface is not ready. Increase this value if you encounter overrun errors in the DOSBox Status Window. Default: 100.</DESCRIPTION>
+						</KEY>
+						<KEY name="Serial_TxDelay" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>how long to gather data before sending a packet. Default: 12 (reduces Network overhead).</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<GROUPS>
+						<GROUP name="General"/>
+						<GROUP name="Network"/>
+					</GROUPS>
+					<KEYS>
+						<KEY name="Enable_Ultrasound" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>If Standard or Pro, Gravis Ultrasound will be enabled for this game. Default is disabled. Some games will not work with Pro, for those use Standard. Be sure to set up the game's internal settings so its midi and/or sound effects cards are set to Gravis Ultrasound.&#xA;&#xA;Further settings can be made in your dosbox.conf but by default they are set to Base=240, IRQ=5, and DMA=3.&#xA;&#xA;Module will automatically enable GUS and set the path to U:\ULTRASND.&#xA;Read more info in the module notes and where to get GUS patches which are required otherwise you will get no midi in your supported games.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Ultrasound Pro">pro</VALUE>
+								<VALUE description="Ultrasound Standard">standard</VALUE>
+								<VALUE description="Disabled">false</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Backup_Files" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Many games make changes to config files found in the game's folder. This is especially usefule if you keep your games in archives that get extracted on each launch via 7z (like the eXoDOS sets), you probably want to backup these files so they don't get lost on next launch. List them here and separate multiple files with a |.</DESCRIPTION>
+						</KEY>
+						<KEY name="Setup_On_Launch" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>When a setup executable is supplied for this game, enabling this option will run it instead of allowing the game to launch normally. Use this when you need to configure a game's settings or controls. To return to normal launching, set this back to false or default.&#xA;&#xA;If you need to find what files were udpated when changing settings and you keep your games compressed in archives, make sure 7zDeleteTemp is disabled otherwise all changes will be deleted upon exiting the setup executable!</DESCRIPTION>
+						</KEY>
+						<KEY name="Setup_Executable" required="false" nullable="true">
+							<KEYTYPE>FileName</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>When you need to change a game's built-in settings, like audio cards, network, or controls, you often have to run a "Setup.exe". These executable normally saves changes to a cfg file which can be automatically backed up and used on next launch if you define that filename as a Backup_File. Define whatever this setup executable is here and the MultiPlayer GUI will add a question asking if you need to setup network settings instead of trying to initialize the network directly via the Network_Executable. Assumes this executable is in the same folder as the original executable. If it is not, add a "cd DIRNAME" first.&#xA;&#xA;To send multiple commands, separate them with a | (this is useful, for example, if you have to enter a folder before running an exe).&#xA;&#xA;Be sure Game_Executable is also set so the module knows what executable to look for.&#xA;&#xA;DO NOT ENTER ANYTHING IN THIS FIELD IF YOU DO NOT WANT THE GUI TO ASK TO RUN A SETUP. JUST PLACE THE SETUP EXE IN THE "Network_Direct_Executable" INSTEAD!</DESCRIPTION>
+						</KEY>
+						<KEY name="Fullscreen_Resolution" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Sets the fullscreen mode resolution. Type 'original' to use the game's default resolution, type 'desktop' to use the same resolution as your desktop</DESCRIPTION>
+						</KEY>
+						<KEY name="Windowed_Resolution" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Sets the windowed mode resolution. Type 'original' to use the game's default resolution</DESCRIPTION>
+						</KEY>
+						<KEY name="Conf_File" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Default name for the DOSBox configuration file to be used. Default is dosbox.conf</DESCRIPTION>
+						</KEY>
+						<KEY name="Require_Games_Folder" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if the romPath must end on a folder named Games. This should be enabled for eXoDOS sets since it's required by them</DESCRIPTION>
+						</KEY>
+						<KEY name="Scaler" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select the scaler you want to use on DOSBox</DESCRIPTION>
+							<VALUES>
+								<VALUE>2xsai</VALUE>
+								<VALUE>advinterp2x</VALUE>
+								<VALUE>advinterp3x</VALUE>
+								<VALUE>advmame2x</VALUE>
+								<VALUE>advmame3x</VALUE>
+								<VALUE>hq2x</VALUE>
+								<VALUE>hq3x</VALUE>
+								<VALUE>none</VALUE>
+								<VALUE>normal2x</VALUE>
+								<VALUE>normal3x</VALUE>
+								<VALUE>rgb2x</VALUE>
+								<VALUE>rgb3x</VALUE>
+								<VALUE>scan2x</VALUE>
+								<VALUE>scan3x</VALUE>
+								<VALUE>super2xsai</VALUE>
+								<VALUE>supereagle</VALUE>
+								<VALUE>tv2x</VALUE>
+								<VALUE>tv3x</VALUE>
+							</VALUES>							
+						</KEY>
+						<KEY name="Aspect" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Aspect Correction, disabled by default. If you set this to true make sure you set Output=overlay as surface does not support aspect correction.</DESCRIPTION>
+						</KEY>
+						<KEY name="Output" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>What to use for DOSBox output. Surface does not support scaling or aspect correction. Default is surface</DESCRIPTION>
+							<VALUES>
+								<VALUE>surface</VALUE>
+								<VALUE>overlay</VALUE>
+								<VALUE>opengl</VALUE>
+								<VALUE>openglnb</VALUE>
+								<VALUE>ddraw</VALUE>
+							</VALUES>	
+						</KEY>
+						<KEY name="Command" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Used if rom requires a command after loading is complete to start the game. Use standard AutoHotkey key names, use {Wait} to pause 500 milliseconds between words/characters. ie, "R{Wait}C" to press the R and C keys with a slight delay between them. Useful for navigating through menus.</DESCRIPTION>
+						</KEY>
+						<KEY name="Send_Command_Delay" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Time in milliseconds to wait initially until commands/keystrokes are typed for those games that have the Command setting filled in</DESCRIPTION>
+						</KEY>
+						<KEY name="No_Menu" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if game requires Taewoong's DOSBox (http://ykhwong.x-y.net/) and you want to hide the dropdown menu addition</DESCRIPTION>
+						</KEY>
+						<KEY name="Internal_Emu" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if game requires a specific DOSBox build which should be bundled with the game</DESCRIPTION>
+						</KEY>
+						<KEY name="Internal_Emu_Folder" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Folder name for the internal emulator folder, it must be on a folder at the root of the game folder, defaults to dosbox</DESCRIPTION>
+						</KEY>
+						<KEY name="Force_Extraction_To_Rom_Path" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you want to force the extraction of compressed roms to the rom path regardless what you have set for 7z_Extract_Path. It's not advisable to do this since if something goes wrong you can end up with your roms folder deleted, but if you are using the eXoDOS sets and intend to run the games with both HyperLaunch and Meagre then you will want this option active since this how those sets will work out of the box.</DESCRIPTION>
+						</KEY>
+						<KEY name="Enable_Network_Play" required="false" nullable="false" group="Network">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, when this game is launched, will give an option if you want to play Single or Multi-Player.</DESCRIPTION>
+						</KEY>
+						<KEY name="Network_Requires_Setup" required="false" nullable="false" group="Network">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, when this game is launched and Server or Client are selected, will give an option if you need to set up the network through the game's Setup_Executable first.</DESCRIPTION>
+						</KEY>
+						<KEY name="Network_Protocol" required="false" nullable="false" group="Network">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>The protocol this game uses for network play. IPX is the default value. Always try to use the best protocol the game supports.&#xA;&#xA;Preferred order:&#xA;1: IPX&#xA;2: NetBios&#xA;3: DirectSerial&#xA;4: Modem&#xA;&#xA;Modem can be a pain to set up because much of the configuration takes place in the game itself and you have to deal with phone numbers which you input an IP addresses instead and not all games support this.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="IPX">ipx</VALUE>
+								<VALUE description="NetBios">netbios</VALUE>
+								<VALUE description="Modem">modem</VALUE>
+								<VALUE description="Nullmodem/Serial">nullmodem</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Game_Executable" required="false" nullable="true" group="Network">
+							<KEYTYPE>FileName</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>The executable line in the conf that starts the game. This might look something liek "@doom" or "doom.exe". The module looks for this to swap out when needed for network games. I suggest putting the whole line in here, otherwise if you only put something like "doom", it might match more than one line.&#xA;&#xA;Only required when Network_Direct_Executable or Network_Setup_Executable is used.</DESCRIPTION>
+						</KEY>
+						<KEY name="Network_Direct_Executable" required="false" nullable="true" group="Network">
+							<KEYTYPE>FileName</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>If this game requires a different executable to be ran for network support, fill the name.ext here. (Ex: IPXSetup.exe or @IPXSetup). Assumes this executable is in the same folder as the original executable. If it is not, add a "cd DIRNAME" first.&#xA;&#xA;To send multiple commands, separate them with a | (this is useful, for example, if you have to enter a folder before running an exe).&#xA;&#xA;Be sure Game_Executable is also set so the module knows what executable to look for.</DESCRIPTION>
+						</KEY>
+						<KEY name="Maximum_Players" required="false" nullable="true" minLength="0" maxLength="50" group="Network">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Some games require the server to designate how many players will be connecting for the game session. Set this to the maximum amount of players this game supports or just the maximum you will ever want to support. When hosting as the server, you will get a prompt for how many players upto this maximum. Leave this blank if you do not need to tell the game a number.</DESCRIPTION>
+						</KEY>
+						<KEY name="Serial_InhSocket" required="false" nullable="true" group="Network">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Use a socket passed to DOSBox by command line. Automatically sets transparent. (Socket Inheritance: It is used for playing old DOS door games on new BBS software.)</DESCRIPTION>
+						</KEY>
+						<KEY name="Com_Port" required="false" nullable="false" group="Network">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Some games have hardcoded COM ports used for them or require certain ports to be used. Enter the COM port needed for this game.</DESCRIPTION>
+							<VALUES>
+								<VALUE>com1</VALUE>
+								<VALUE>com2</VALUE>
+								<VALUE>com3</VALUE>
+								<VALUE>com4</VALUE>
+								<VALUE>com5</VALUE>
+								<VALUE>com6</VALUE>
+								<VALUE>com7</VALUE>
+								<VALUE>com8</VALUE>
+								<VALUE>com9</VALUE>
+								<VALUE>com10</VALUE>
+								<VALUE>com11</VALUE>
+								<VALUE>com12</VALUE>
+								<VALUE>com13</VALUE>
+								<VALUE>com14</VALUE>
+								<VALUE>com15</VALUE>
+								<VALUE>com16</VALUE>
+								<VALUE>com17</VALUE>
+								<VALUE>com18</VALUE>
+								<VALUE>com19</VALUE>
+								<VALUE>com20</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

@@ -1,5 +1,5 @@
-MCRC=E6BA52F0
-MVersion=1.0.1
+MCRC=8C998A12
+MVersion=1.0.2
 
 ; xHotkey Functions:
 ; xHotkey        - Extended Hotkey command allowing the use of multile keys pressed at the same time to execute specific labels for single click, hold Key, double click and more them two clicks modes.
@@ -25,12 +25,12 @@ MVersion=1.0.1
 ; ---------------------------------------------
 ; H1000 - means to enable hold for 1 second of the key group to go to label
 ; S or nothing - means to enable single click of the key group to go to label
-; D - means to enable double click of the key group to go to label (if you use a number after the D, D600:, it means that xhotkey will wait 600 miliseconds for a second key press)
+; D - means to enable double click of the key group to go to label (If you use a number after the D, D600:, it means that xhotkey will wait 600 miliseconds for a second key press)
 ; T - means to enable more than two clicks of the key group to go to label
 
 XHotKeywrapper(ExtendedKeyName,GeneralLabel,Options="ON"){
-	if !ExtendedKeyName
-		return
+	If !ExtendedKeyName
+		Return
 	Loop, parse, ExtendedKeyName, |, %A_Space% 
 		{
 		Nooption := true
@@ -44,37 +44,37 @@ XHotKeywrapper(ExtendedKeyName,GeneralLabel,Options="ON"){
 			wrapperKeyHoldWait := 
 			wrapperDoubleClickWait :=
 			currentparseitem := A_index 
-			if currentparseitem = 1
+			If currentparseitem = 1
 				Keys := A_loopfield	
-			else {
-				if A_loopfield contains S,H,D,T
+			Else {
+				If A_loopfield contains S,H,D,T
 					Nooption := false
-				if InStr(A_loopfield,"S")
+				If InStr(A_loopfield,"S")
 					wrapperLabelForSingleKey := GeneralLabel
-				if InStr(A_loopfield,"H"){
+				If InStr(A_loopfield,"H"){
 					wrapperLabelForHoldKey := GeneralLabel
 					StringTrimLeft, wrapperKeyHoldWait, A_Loopfield, 1
 					wrapperKeyHoldWait := wrapperKeyHoldWait/1000
-					if not wrapperKeyHoldWait
+					If not wrapperKeyHoldWait
 						wrapperKeyHoldWait := 1 ;default value
 				}
-				if InStr(A_loopfield,"D"){
+				If InStr(A_loopfield,"D"){
 					wrapperLabelForDoubleClick := GeneralLabel
 					StringTrimLeft, wrapperDoubleClickWait, A_Loopfield, 1
-					if not wrapperDoubleClickWait
+					If not wrapperDoubleClickWait
 						wrapperDoubleClickWait := 600 ;default value
 				}
-				if InStr(A_loopfield,"T"){
+				If InStr(A_loopfield,"T"){
 					wrapperLabelForMoreThanTwoClicks := GeneralLabel
 					StringTrimLeft, wrapperDoubleClickWait, A_Loopfield, 1
-					if not wrapperDoubleClickWait
+					If not wrapperDoubleClickWait
 						wrapperDoubleClickWait := 600 ;default value
 				}
 			}
 		}
-		if Nooption 
+		If Nooption 
 			wrapperLabelForSingleKey := GeneralLabel
-		if Keyoptions
+		If Keyoptions
 			XHotkey(Keys,wrapperLabelForSingleKey,Options,wrapperLabelForHoldKey,wrapperKeyHoldWait,wrapperLabelForDoubleClick,wrapperLabelForMoreThanTwoClicks,wrapperDoubleClickWait)
 	}
 	Return
@@ -125,11 +125,11 @@ XHotkeyTableCreation(KeyGroup,LabelForSingleKey="",Options="",LabelForHoldKey=""
 	}
 	KeyGroup := Keys.sort().join("&")
 	KeyGroupWithSpaces := KeyGroup
-	if InStr(KeyGroup,"&")
+	If InStr(KeyGroup,"&")
 		StringReplace, KeyGroupWithSpaces, KeyGroup, &, %a_space%&%a_space% ;  KeyGroup with spaces between multiple keys to avoid autohotkey error in normal hotkey call
 	If !XHotKeyTable
         XHotKeyTable:=[] ; create key table XHotKeyTable[TableNumber,keynumber,column]
-	if KeyGroup not in %TableKeyGroups% 
+	If KeyGroup not in %TableKeyGroups% 
 		{
 		KeyGroupNumber++
 		currentGroup := KeyGroupNumber
@@ -145,7 +145,7 @@ XHotkeyTableCreation(KeyGroup,LabelForSingleKey="",Options="",LabelForHoldKey=""
 			currentKeyClean := currentkey
 			For what, with in replace
 				{
-				if InStr(currentKeyClean,what)
+				If InStr(currentKeyClean,what)
 					StringReplace, currentKeyClean, currentKeyClean, %what%, %with%, All
 			}
 			XHotKeyTable[currentGroup,currentkeyNumber,4] := currentKeyClean
@@ -157,134 +157,141 @@ XHotkeyTableCreation(KeyGroup,LabelForSingleKey="",Options="",LabelForHoldKey=""
 		XHotKeyTable[currentGroup,1,9] := LabelForDoubleClick ; save label for double click
 		XHotKeyTable[currentGroup,1,10] := LabelForMoreThanTwoClicks ; save label for three or more clicks
 		XHotKeyTable[currentGroup,1,11] := DoubleClickKeyWait ; save label for double click time between keys
-		if not InStr(options, "OFF"){
-			if	LabelForSingleKey
+		If not InStr(options, "OFF"){
+			If	LabelForSingleKey
 				XHotKeyTable[currentGroup,1,13] := true
-			if	LabelForHoldKey
+			If	LabelForHoldKey
 				XHotKeyTable[currentGroup,2,13] := true
-			if	LabelForDoubleClick
+			If	LabelForDoubleClick
 				XHotKeyTable[currentGroup,3,13] := true
-			if	LabelForMoreThanTwoClicks
+			If	LabelForMoreThanTwoClicks
 				XHotKeyTable[currentGroup,4,13] := true
-		} else {
-			if	LabelForSingleKey
+		} Else {
+			If	LabelForSingleKey
 				XHotKeyTable[currentGroup,1,13] := false
-			if	LabelForHoldKey
+			If	LabelForHoldKey
 				XHotKeyTable[currentGroup,2,13] := false
-			if	LabelForDoubleClick
+			If	LabelForDoubleClick
 				XHotKeyTable[currentGroup,3,13] := false
-			if	LabelForMoreThanTwoClicks
+			If	LabelForMoreThanTwoClicks
 				XHotKeyTable[currentGroup,4,13] := false
 		}
-		if (((Instr(KeyGroup,"joy")) and (XHotKeyTable[currentGroup,1,3]=1)) or ( not(Instr(KeyGroup,"joy")) and (XHotKeyTable[currentGroup,1,3]<=2))) and (((LabelForHoldKey="") and (LabelForDoubleClick="") and (LabelForMoreThanTwoClicks="") )){ ; defining normal hotkey command if the key group has: only one joy button or if it is a single key press with one or two simultaneous keys
+		If (((Instr(KeyGroup,"joy")) and (XHotKeyTable[currentGroup,1,3]=1)) or ( not(Instr(KeyGroup,"joy")) and (XHotKeyTable[currentGroup,1,3]<=2))) and (((LabelForHoldKey="") and (LabelForDoubleClick="") and (LabelForMoreThanTwoClicks="") )){ ; defining normal hotkey command If the key group has: only one joy button or If it is a single key press with one or two simultaneous keys
+			Log("XHotkeyTableCreation - " . (If options = "OFF" ? "Disabling """ . LabelForSingleKey . """ standard Hotkey method for key(s): """ . KeyGroupWithSpaces . """" : "Using standard Hotkey method for key(s): """ . KeyGroupWithSpaces . """ to call label: """ . LabelForSingleKey . """"),5)
 			Hotkey, % KeyGroupWithSpaces, %LabelForSingleKey%, %Options% ; normal hotkey command
-		} else { ; defining extended hotkey command if there are more them two simultaneous keys pressed (more them one for joy), or if it has hold, double or more click presses
+		} Else { ; defining extended hotkey command If there are more them two simultaneous keys pressed (more them one for joy), or If it has hold, double or more click presses
+			Log("XHotkeyTableCreation - " . (If options = "OFF" ? "Disabling extended Hotkey method for key(s): """ . KeyGroup . """" : "Using extended Hotkey method for key(s): """ . KeyGroup . """ to call a group label"),5)
 			Loop, Parse, KeyGroup, &,%a_space%
 				{
-				Hotkey, % XHotKeyTable[currentGroup,A_Index,2], HotKeyModeProcess, %Options% ; go to sub to test multiple key press if any exit emulator key is pressed
+				Hotkey, % XHotKeyTable[currentGroup,A_Index,2], HotKeyModeProcess, %Options% ; go to sub to test multiple key press If any exit emulator key is pressed
 				XHotKeyTable[currentGroup,1,12] := true
 			}
 		}
 		TableKeyGroups .= KeyGroup . ","
 		Return XHotKeyTable
-	} else {
+	} Else {
 		currentGroup:=0
-		loop, %KeyGroupNumber%
+		Loop, %KeyGroupNumber%
 			{	
 			currentGroup++
 			currentKeysonKeyGroup := XHotKeyTable[currentGroup,1,1]
-			if (currentKeysonKeyGroup = KeyGroup){
-				break
+			If (currentKeysonKeyGroup = KeyGroup){
+				Break
 			}
 		}
-			if not InStr(options, "OFF"){
-				if	LabelForSingleKey
+			If not InStr(options, "OFF"){
+				If	LabelForSingleKey
 					XHotKeyTable[currentGroup,1,13] := true
-				if	LabelForHoldKey
+				If	LabelForHoldKey
 					XHotKeyTable[currentGroup,2,13] := true
-				if	LabelForDoubleClick
+				If	LabelForDoubleClick
 					XHotKeyTable[currentGroup,3,13] := true
-				if	LabelForMoreThanTwoClicks
+				If	LabelForMoreThanTwoClicks
 					XHotKeyTable[currentGroup,4,13] := true
-			} else {
-				if	LabelForSingleKey
+			} Else {
+				If	LabelForSingleKey
 					XHotKeyTable[currentGroup,1,13] := false
-				if	LabelForHoldKey
+				If	LabelForHoldKey
 					XHotKeyTable[currentGroup,2,13] := false
-				if	LabelForDoubleClick
+				If	LabelForDoubleClick
 					XHotKeyTable[currentGroup,3,13] := false
-				if	LabelForMoreThanTwoClicks
+				If	LabelForMoreThanTwoClicks
 					XHotKeyTable[currentGroup,4,13] := false
 			}
-			if not InStr(options, "OFF"){
-				if LabelForSingleKey
-					if (XHotKeyTable[currentGroup,1,6] <> LabelForSingleKey)
+			If not InStr(options, "OFF"){
+				If LabelForSingleKey
+					If (XHotKeyTable[currentGroup,1,6] <> LabelForSingleKey)
 						XHotKeyTable[currentGroup,1,6] := LabelForSingleKey ; update label for single click
-				if LabelForHoldKey
-					if XHotKeyTable[currentGroup,1,7] <> LabelForHoldKey
+				If LabelForHoldKey
+					If XHotKeyTable[currentGroup,1,7] <> LabelForHoldKey
 						XHotKeyTable[currentGroup,1,7] := LabelForHoldKey ; update label for press and hold
-				if KeyHoldWait	
-					if XHotKeyTable[currentGroup,1,8] <> KeyHoldWait
+				If KeyHoldWait	
+					If XHotKeyTable[currentGroup,1,8] <> KeyHoldWait
 						XHotKeyTable[currentGroup,1,8] := KeyHoldWait ; update key hold wait time 
-				if LabelForDoubleClick
-					if XHotKeyTable[currentGroup,1,9] <> LabelForDoubleClick
+				If LabelForDoubleClick
+					If XHotKeyTable[currentGroup,1,9] <> LabelForDoubleClick
 						XHotKeyTable[currentGroup,1,9] := LabelForDoubleClick ; update label for double click
-				if LabelForMoreThanTwoClicks
-					if XHotKeyTable[currentGroup,1,10] <> LabelForMoreThanTwoClicks
+				If LabelForMoreThanTwoClicks
+					If XHotKeyTable[currentGroup,1,10] <> LabelForMoreThanTwoClicks
 						XHotKeyTable[currentGroup,1,10] := LabelForMoreThanTwoClicks ; update label for three or more clicks
-				if DoubleClickKeyWait
-					if XHotKeyTable[currentGroup,1,11] <> DoubleClickKeyWait
+				If DoubleClickKeyWait
+					If XHotKeyTable[currentGroup,1,11] <> DoubleClickKeyWait
 						XHotKeyTable[currentGroup,1,11] := DoubleClickKeyWait ; update label for double click time between keys
 			}
-			if not XHotKeyTable[currentGroup,1,12] ; disabling previous normal hotkey command if previously defined
-				Hotkey, %KeyGroupWithSpaces%, Off
-			if (((Instr(KeyGroup,"joy")) and (XHotKeyTable[currentGroup,1,3]=1)) or ( not(Instr(KeyGroup,"joy")) and (XHotKeyTable[currentGroup,1,3]<=2))) and (((LabelForHoldKey="") and (LabelForDoubleClick="") and (LabelForMoreThanTwoClicks="") )){ ; defining normal hotkey command if the key group has: only one joy button or if it is a single key press with one or two simultaneous keys 
+			If not XHotKeyTable[currentGroup,1,12] ; disabling previous normal hotkey command If previously defined
+			{	Hotkey, %KeyGroupWithSpaces%, Off
+				Log("XHotkeyTableCreation - Disabled Hotkey for: """ . KeyGroupWithSpaces . """",5)
+			}
+			If (((Instr(KeyGroup,"joy")) and (XHotKeyTable[currentGroup,1,3]=1)) or ( not(Instr(KeyGroup,"joy")) and (XHotKeyTable[currentGroup,1,3]<=2))) and (((LabelForHoldKey="") and (LabelForDoubleClick="") and (LabelForMoreThanTwoClicks="") )){ ; defining normal hotkey command If the key group has: only one joy button or If it is a single key press with one or two simultaneous keys 
+				Log("XHotkeyTableCreation - " . (If options = "OFF" ? "Disabling """ . LabelForSingleKey . """ standard Hotkey method for key(s): """ . KeyGroupWithSpaces . """" : "Using standard Hotkey method for key(s): """ . KeyGroupWithSpaces . """ to call label: """ . LabelForSingleKey . """"),5)
 				Hotkey, % KeyGroupWithSpaces, %LabelForSingleKey%, %Options% ; normal hotkey command
-			} else { ; defining extended hotkey command if there are more them two simultaneous keys pressed (more them one for joy), or if it has hold, double or more click presses
+			} Else { ; defining extended hotkey command If there are more them two simultaneous keys pressed (more them one for joy), or If it has hold, double or more click presses
+				Log("XHotkeyTableCreation - " . (If options = "OFF" ? "Disabling extended Hotkey method for key(s): """ . KeyGroup . """" : "Using extended Hotkey method for key(s): """ . KeyGroup . """ to call a group label"),5)
 				Loop, Parse, KeyGroup, &,%a_space%
 					{
-					Hotkey, % XHotKeyTable[currentGroup,A_Index,2], HotKeyModeProcess, %Options% ; go to sub to test multiple key press if any exit emulator key is pressed
+					Hotkey, % XHotKeyTable[currentGroup,A_Index,2], HotKeyModeProcess, %Options% ; go to sub to test multiple key press If any exit emulator key is pressed
 					XHotKeyTable[currentGroup,1,12] := true
 				}
 			}
-		if not InStr(options, "OFF")
-			if ForceHoldKeysList
+		If not InStr(options, "OFF")
+			If ForceHoldKeysList
 				forceHoldKey(ForceHoldKeysList)
 		Return
 	}
 }
 
 HotKeyModeProcess:
-	if(A_TickCount < LastHotKeyModeProcessTime+GoSubTimeDelay) ; XHotkeyMinimunDelay  necessary to avoid multiple calls to subs in multiple Key groups
-		return
+	If (A_TickCount < LastHotKeyModeProcessTime+GoSubTimeDelay) ; XHotkeyMinimunDelay  necessary to avoid multiple calls to subs in multiple Key groups
+		Return
 	LastHotKeyModeProcessTime := A_TickCount	
 	currentkey := A_ThisHotkey ; current pressed keys
 	replace := {"~":"","*":"","$":""} ; Saving current Key without modifiers to use on Keywait 
 	For what, with in replace
 		{
-		if InStr(currentkey,what)
+		If InStr(currentkey,what)
 			StringReplace, currentkey, currentkey, %what%, %with%, All
 	}
 	currentGroup:=0
-	loop, %KeyGroupNumber%
+	Loop, %KeyGroupNumber%
 		{	
 		currentGroup++ 
-		if XHotKeyTable[currentGroup,1,12] 
+		If XHotKeyTable[currentGroup,1,12] 
 			{
-			if AllKeysPressed(currentGroup) {
+			If AllKeysPressed(currentGroup) {
 				CurrentPressandHoldLabel := % XHotKeyTable[currentGroup,1,7]	
 				CurrentKeyHoldWait := % XHotKeyTable[currentGroup,1,8]
 				If %CurrentPressandHoldLabel%
 					KeyWait, %currentKey%, t%currentKeyHoldWait%
-				else
+				Else
 					KeyWait, %currentKey%
 				If (GetKeyState(currentKey,"p")) ; could be a hold key press  
 					{
-					if IsLabel(CurrentPressandHoldLabel)
-						if XHotKeyTable[currentGroup,2,13]
-							if (A_TickCount > lastHoldLabelCall + LabelHoldCallDelay)
+					If IsLabel(CurrentPressandHoldLabel)
+						If XHotKeyTable[currentGroup,2,13]
+							If (A_TickCount > lastHoldLabelCall + LabelHoldCallDelay)
 								{
 								lastHoldLabelCall := A_TickCount
+								Log("1",3)
 								Gosub, %CurrentPressandHoldLabel%
 							}
 					LastGoSubTime := A_TickCount
@@ -292,9 +299,9 @@ HotKeyModeProcess:
 					SetTimer, checkHoldKeyUp, 50
 					XHotKeyTable[currentGroup,1,5] := 0 ; reset the count to prepare for the next series of presses
 					Return
-				} else {
-					if (XHotKeyTable[currentGroup,1,5]) > 0 { ; SetTimer already started, so we log the keypress instead
-						if (IgnoreMultipleKeys>0) { ; necessary to avoid multiple key count in multiple Key groups
+				} Else {
+					If (XHotKeyTable[currentGroup,1,5]) > 0 { ; SetTimer already started, so we log the keypress instead
+						If (IgnoreMultipleKeys>0) { ; necessary to avoid multiple key count in multiple Key groups
 							IgnoreMultipleKeys--
 						Return
 						}
@@ -305,17 +312,20 @@ HotKeyModeProcess:
 					XHotKeyTable[currentGroup,1,5] := 1 ; Otherwise, this is the first press of a new series. Set count to 1 and start the timer:
 					ActiveCurrentGroup := currentGroup
 					CurrentDoubleClickKeyWait := % XHotKeyTable[ActiveCurrentGroup,1,11]
-					if XHotKeyTable[ActiveCurrentGroup,1,9] or XHotKeyTable[ActiveCurrentGroup,1,10] {
-						if XHotKeyTable[currentGroup,3,13] or XHotKeyTable[currentGroup,4,13]
+					If XHotKeyTable[ActiveCurrentGroup,1,9] or XHotKeyTable[ActiveCurrentGroup,1,10] {
+						If XHotKeyTable[currentGroup,3,13] or XHotKeyTable[currentGroup,4,13]
 							SetTimer, MultipleClickCheck, %CurrentDoubleClickKeyWait% ; Wait for more presses within a CurrentDoubleClickKeyWait millisecond time.
 						Return
-					} else {
+					} Else {
 						CurrentSinglePressLabel := % XHotKeyTable[ActiveCurrentGroup,1,6]
-						if IsLabel(CurrentSinglePressLabel)
+						If IsLabel(CurrentSinglePressLabel)
 							{
-							if XHotKeyTable[currentGroup,1,13]
-								if (A_TickCount > lastHoldLabelCall + LabelHoldCallDelay)
+							If XHotKeyTable[currentGroup,1,13]
+								If (A_TickCount > lastHoldLabelCall + LabelHoldCallDelay)
+								{			Log("2",3)
+
 									Gosub %CurrentSinglePressLabel%
+								}
 							LastGoSubTime := A_TickCount
 						}
 						XHotKeyTable[ActiveCurrentGroup,1,5] := 0 ; reset the count to prepare for the next series of presses
@@ -328,40 +338,47 @@ HotKeyModeProcess:
 Return
 
 checkHoldKeyUp:
-	if !(GetKeyState(currentHoldKeyPressed,"p"))
+	If !(GetKeyState(currentHoldKeyPressed,"p"))
 		SetTimer, checkHoldKeyUp, off
-return
+Return
 
-MultipleClickCheck: ;checking if the key group was pressed once, twice or more times.
+MultipleClickCheck: ;checking If the key group was pressed once, twice or more times.
 	SetTimer, MultipleClickCheck, off
 	CurrentSinglePressLabel := % XHotKeyTable[ActiveCurrentGroup,1,6]
 	CurrentDoubleClickLabel := % XHotKeyTable[ActiveCurrentGroup,1,9]
 	CurrentLabelForMoreThanTwoClicks := % XHotKeyTable[ActiveCurrentGroup,1,10]
-	if (XHotKeyTable[ActiveCurrentGroup,1,5] > 2) and (IsLabel(CurrentLabelForMoreThanTwoClicks)) { ; The key was pressed three or more times.
-		if XHotKeyTable[currentGroup,4,13]
-			if (A_TickCount > lastHoldLabelCall + LabelHoldCallDelay)
+	If (XHotKeyTable[ActiveCurrentGroup,1,5] > 2) and (IsLabel(CurrentLabelForMoreThanTwoClicks)) { ; The key was pressed three or more times.
+		If XHotKeyTable[currentGroup,4,13]
+			If (A_TickCount > lastHoldLabelCall + LabelHoldCallDelay) {
+				Log("3",3)
+
 				Gosub, %CurrentLabelForMoreThanTwoClicks%
+			}
 		LastGoSubTime := A_TickCount
-	} else if (XHotKeyTable[ActiveCurrentGroup,1,5] > 1) and (IsLabel(CurrentDoubleClickLabel)) { ; The key was pressed twice.
-		if XHotKeyTable[currentGroup,3,13]
-			if (A_TickCount > lastHoldLabelCall + LabelHoldCallDelay)
+	} Else If (XHotKeyTable[ActiveCurrentGroup,1,5] > 1) and (IsLabel(CurrentDoubleClickLabel)) { ; The key was pressed twice.
+		If XHotKeyTable[currentGroup,3,13]
+			If (A_TickCount > lastHoldLabelCall + LabelHoldCallDelay) {
+			Log("4",3)
 				Gosub, %CurrentDoubleClickLabel%
+			}
 		LastGoSubTime := A_TickCount
-	} else {
-		if IsLabel(CurrentSinglePressLabel)
-			if XHotKeyTable[currentGroup,1,13]
-				if (A_TickCount > lastHoldLabelCall + LabelHoldCallDelay)
+	} Else {
+		If IsLabel(CurrentSinglePressLabel)
+			If XHotKeyTable[currentGroup,1,13]
+				If (A_TickCount > lastHoldLabelCall + LabelHoldCallDelay) {
+					Log("5",3)
 					Gosub %CurrentSinglePressLabel%
+				}
 		LastGoSubTime := A_TickCount
 	}
 	XHotKeyTable[ActiveCurrentGroup,1,5] := 0 ; reset the count to prepare for the next series of presses
 Return
 
 
-AllKeysPressed(currentKeygroup) { ; function to check if the keys are pressed simultneously
+AllKeysPressed(currentKeygroup) { ; function to check If the keys are pressed simultneously
 	Global
 		ExitKeysPressed := true
-		loop, % XHotKeyTable[currentKeygroup,1,3]
+		Loop, % XHotKeyTable[currentKeygroup,1,3]
 		{
 			If XHotKeyTable[currentKeygroup,A_index,4]
 				If not (GetKeyState(XHotKeyTable[currentKeygroup,A_index,4],"p"))
@@ -387,7 +404,7 @@ ForceHoldKey(FullKeyHoldList,KeyHoldWait="1") { ; function to force hold press m
 	replace := {"~":"","*":"","$":""} ; removing modifiers before comparing keys
 	For what, with in replace
 		{
-		if InStr(TableKeysAux,what)
+		If InStr(TableKeysAux,what)
 			StringReplace, TableKeysAux, TableKeysAux, %what%, %with%, All
 	}
 	Loop, parse, FullKeyHoldList, |, %A_Space% 
@@ -408,16 +425,16 @@ ForceHoldKey(FullKeyHoldList,KeyHoldWait="1") { ; function to force hold press m
 		replace := {"~":"","*":"","$":""} ; removing modifiers before comparing keys
 		For what, with in replace
 			{
-			if InStr(KeyHoldListGroup,what)
+			If InStr(KeyHoldListGroup,what)
 				StringReplace, KeyHoldListGroup, KeyHoldListGroup, %what%, %with%, All
 		}
 		Loop, Parse, TableKeysAux, `,,%a_space%
 			{ 
-			if (KeyHoldListGroup = A_LoopField){ ; Key to force hold mode is in the keys defined by the user	
+			If (KeyHoldListGroup = A_LoopField){ ; Key to force hold mode is in the keys defined by the user	
 				currentComboKey := % KeysArray%A_Index%
-				if InStr(currentComboKey,"&")
+				If InStr(currentComboKey,"&")
 					StringReplace, currentComboKey, currentComboKey, &, %a_space%&%a_space% ;  KeyGroup with spaces between multiple keys to avoid autohotkey error in normal hotkey call
-				if not XHotKeyTable[A_index,1,12] ; disabling normal hotkey command if previously defined
+				If not XHotKeyTable[A_index,1,12] ; disabling normal hotkey command If previously defined
 					Hotkey, %currentComboKey%, Off
 				Loop, Parse, currentComboKey, &,%a_space%
 					{
@@ -428,14 +445,14 @@ ForceHoldKey(FullKeyHoldList,KeyHoldWait="1") { ; function to force hold press m
 				XHotKeyTable[A_index,2,13] := true ; enabling press and hold key
 				XHotKeyTable[A_index,3,13] := "" ; disabling double press key
 				XHotKeyTable[A_index,4,13] := "" ; disabling three or more presses key
-				if	XHotKeyTable[A_index,1,6] ; assigning single press label to press and hold if existent  
+				If	XHotKeyTable[A_index,1,6] ; assigning single press label to press and hold If existent  
 					XHotKeyTable[A_index,1,7] := XHotKeyTable[A_index,1,6]
-				else if XHotKeyTable[A_index,1,9] ; else assigning double press label to press and hold if existent  
+				Else If XHotKeyTable[A_index,1,9] ; Else assigning double press label to press and hold If existent  
 					XHotKeyTable[A_index,1,7] := XHotKeyTable[A_index,1,9]
-				else if XHotKeyTable[A_index,1,10] ; else assigning three or more presses label to press and hold if existent  
+				Else If XHotKeyTable[A_index,1,10] ; Else assigning three or more presses label to press and hold If existent  
 					XHotKeyTable[A_index,1,7] := XHotKeyTable[A_index,1,10]
 				XHotKeyTable[A_index,1,6] := "" ; erasing single press label
-				if not XHotKeyTable[A_index,1,8] ; determining hold wait time if not previously defined
+				If not XHotKeyTable[A_index,1,8] ; determining hold wait time If not previously defined
 					XHotKeyTable[A_index,1,8] := KeyHoldWait
 				XHotKeyTable[A_index,1,9] := "" ; erasing double press label
 				XHotKeyTable[A_index,1,10] := "" ; erasing three or more presses label	
@@ -459,7 +476,7 @@ xHotKeyVarEdit(KeyEditList,KeyEditListVar,Keymodifier="",action="") {
 		currentVarKeyGroup := A_LoopField
 		For what, with in replace
 			{
-			if InStr(currentVarKeyGroup,what)
+			If InStr(currentVarKeyGroup,what)
 				StringReplace, currentVarKeyGroup, currentVarKeyGroup, %what%, %with%, All
 		}
 		currentVarKeyGroup := RegexReplace( currentVarKeyGroup, "i)S:" ) ; removing options from keys
@@ -481,7 +498,7 @@ xHotKeyVarEdit(KeyEditList,KeyEditListVar,Keymodifier="",action="") {
 			KeyEditListGroup := A_LoopField
 			For what, with in replace
 				{
-				if InStr(KeyEditListGroup,what)
+				If InStr(KeyEditListGroup,what)
 					StringReplace, KeyEditListGroup, KeyEditListGroup, %what%, %with%, All
 			}
 			KeyEditListGroup := RegexReplace( KeyEditListGroup, "i)S:" ) ; removing options from keys
@@ -495,26 +512,26 @@ xHotKeyVarEdit(KeyEditList,KeyEditListVar,Keymodifier="",action="") {
 				Keys.append(A_LoopField)
 			}
 			KeyEditListGroup := Keys.sort().join("&")
-			if (KeyEditListGroup = currentVarKeyGroup){
+			If (KeyEditListGroup = currentVarKeyGroup){
 				currentEditKey :=
 				Loop, Parse, initialKeyEditListGroup, &,%a_space%
 					{
 					currentEditKey := A_LoopField
-					if(action="Remove"){
-						if InStr(currentEditKey,Keymodifier)
+					If(action="Remove"){
+						If InStr(currentEditKey,Keymodifier)
 							StringReplace, currentEditKey, currentEditKey, %Keymodifier%, , all
 					}
-					if(action="Add"){
+					If(action="Add"){
 						ReverseKeyEdit := DelimitedReversal(currentEditKey,"`:")
 						Loop, parse, ReverseKeyEdit, `:, %A_Space%
 							{
 							currentfield := A_LoopField
-							if (a_index = 1) {
-								if not InStr(currentfield,Keymodifier)
+							If (a_index = 1) {
+								If not InStr(currentfield,Keymodifier)
 									currentEditKey := Keymodifier . currentfield
-								else
+								Else
 									currentEditKey := currentfield
-							} else {
+							} Else {
 								currentEditKey := currentfield . ":" . currentEditKey
 							}
 						}
@@ -524,7 +541,7 @@ xHotKeyVarEdit(KeyEditList,KeyEditListVar,Keymodifier="",action="") {
 				}
 			}
 		}
-		if not groupChecked
+		If not groupChecked
 			currentKeyEditListVar := "&" . initialKeyEditListGroup
 		StringTrimLeft,currentKeyEditListVar,currentKeyEditListVar,1
 		FinalKeyEditListVar := FinalKeyEditListVar . "|" . currentKeyEditListVar
@@ -537,7 +554,7 @@ xHotKeyVarEdit(KeyEditList,KeyEditListVar,Keymodifier="",action="") {
 
 
 ; ---------------------------------------------
-; Check if all keys are pressed simultaneously (if all keys are pressed returns 1, else, returns 0)
+; Check If all keys are pressed simultaneously (If all keys are pressed returns 1, Else, returns 0)
 ; ---------------------------------------------
 XHotkeyAllKeysPressed(keysToBeChecked){
 	Loop, parse, keysToBeChecked, |, %A_Space% 
@@ -547,7 +564,7 @@ XHotkeyAllKeysPressed(keysToBeChecked){
 		keysToBeCheckedGroup := A_LoopField
 		For what, with in replace
 			{
-			if InStr(keysToBeCheckedGroup,what)
+			If InStr(keysToBeCheckedGroup,what)
 				StringReplace, keysToBeCheckedGroup, keysToBeCheckedGroup, %what%, %with%, All
 		}
 		keysToBeCheckedGroup := RegexReplace( keysToBeCheckedGroup, "i)S:" ) ; removing options from keys
@@ -572,7 +589,7 @@ XHotkeyAllKeysPressed(keysToBeChecked){
 ; ---------------------------------------------
 ; AUXILIAR FUNCTIONS
 ; ---------------------------------------------
-; Functions Needed for sorting (by some strange motive if i try to use the autohotkey sort, it not work for ~Z & ~X and ~X & ~Z keys. I was only able to do the sorte by using the array library at http://www.autohotkey.com/forum/viewtopic.php?t=49736
+; Functions Needed for sorting (by some strange motive If i try to use the autohotkey sort, it not work for ~Z & ~X and ~X & ~Z keys. I was only able to do the sorte by using the array library at http://www.autohotkey.com/forum/viewtopic.php?t=49736
 Array_Lib(p1="……", p2="……", p3="……", p4="……", p5="……", p6="……"){
 	static ArrBase
 	If !ArrBase
@@ -586,7 +603,7 @@ Array_Join(arr, sep="`n"){
 	Loop, % arr.len()
 		str .= arr[A_Index] sep
 	StringTrimRight, str, str, % StrLen(sep)
-	return str
+	Return str
 }
 Array_Append(arr, p1="……", p2="……", p3="……", p4="……", p5="……", p6="……"){
 	Return arr.insert(arr.len()+1, p1, p2, p3, p4, p5, p6)
@@ -602,7 +619,7 @@ Array_Sort(arr, func="Array_CompareFunc"){
 		swapped := false
 		Loop, % n-1 {
 			i := A_Index
-			if %func%(arr[i], arr[i+1], 1) > 0 ; standard ahk syntax for sort callout functions
+			If %func%(arr[i], arr[i+1], 1) > 0 ; standard ahk syntax for sort callout functions
 				arr.insert(i, arr[i+1]).delete(i+2), swapped := true
 		}
 		n--
@@ -610,7 +627,7 @@ Array_Sort(arr, func="Array_CompareFunc"){
 	Return arr
 }
 Array_CompareFunc(a, b, c){
-	return a > b ? 1 : a = b ? 0 : -1
+	Return a > b ? 1 : a = b ? 0 : -1
 }
 Array_Delete(arr, p1="……", p2="……", p3="……", p4="……", p5="……", p6="……"){
 	While (_:=p%A_Index%)!="……" && A_Index<=6

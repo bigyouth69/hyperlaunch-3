@@ -2,8 +2,8 @@ MEmu = Magic Engine
 MEmuV = v1.1.3
 MURL = http://www.magicengine.com/
 MAuthor = djvj
-MVersion = 2.0
-MCRC = 821018BC
+MVersion = 2.0.1
+MCRC = BECD8D5D
 iCRC = 7930CF86
 MID = 635038268901782138
 MSystem = "NEC PC Engine","NEC PC Engine-CD","NEC PC-FX","NEC SuperGrafx","NEC TurboGrafx-16","NEC TurboGrafx-CD"
@@ -89,7 +89,10 @@ Loop, Parse, iniLookup, `n
 		IniWrite, % split3, %MEINI%, %split1%, %split2%
 }
 
+hideEmuObj := Object("MagicEngine ahk_class MagicEngineWindowClass",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
+
+HideEmuStart()
 
 If systemName contains CD,pcfx,pc-fx	; your system name must have "CD" in it's name
 {
@@ -106,6 +109,7 @@ If UseNoMousy = true
 Else
 	MouseMove %A_ScreenWidth%,%A_ScreenHeight%
 
+HideEmuEnd()
 FadeInExit()
 Process("WaitClose", executable)
 

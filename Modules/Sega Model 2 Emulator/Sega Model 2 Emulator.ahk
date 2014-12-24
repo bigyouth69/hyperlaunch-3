@@ -2,8 +2,8 @@ MEmu = Sega Model 2 Emulator
 MEmuV = v1.0
 MURL = http://nebula.emulatronia.com/
 MAuthor = djvj & ghutch92
-MVersion = 2.0.6
-MCRC = DE4FC457
+MVersion = 2.0.7
+MCRC = F8CE6B9D
 iCRC = C842B2DD
 mId = 635175648125374429
 MSystem = "Sega Model 2"
@@ -50,9 +50,9 @@ If romName in daytona,daytonagtx,daytonam,daytonas,daytonat,indy500,indy500d,man
 
 If linkEnabledGame
 	If (romName = "von") or (romName = "vonj")
-		StartPlayersSelectionMenu(2)
+		SelectedNumberofPlayers := NumberOfPlayersSelectionMenu(2)
 	Else
-		StartPlayersSelectionMenu(4)
+		SelectedNumberofPlayers := NumberOfPlayersSelectionMenu(4)
 
 FadeInStart()
 
@@ -75,6 +75,7 @@ If SelectedNumberofPlayers > 1
 Else
 	BezelStart()
 
+hideEmuObj := Object("AHK_class MYWIN",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 ; Write settings to m2's ini file - this needs to change also
@@ -91,6 +92,8 @@ If (SelectedNumberofPlayers = 1 || !linkEnabledGame) {
 		FileCopy,%emupath%\NVDATA\Single\%romName%.DAT,%emupath%\NVDATA,1
 	}
 	
+	HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
+
 	Run(executable . A_Space . romName, emuPath, "Hide")	; Hides the emulator on launch. When bezel is enabled, this helps not show the emu before the rom is loaded
 	WinWait("ahk_class MYWIN",,,"Model 2 Emulator")
 	;WinWaitActive("ahk_class MYWIN",,,"Model 2 Emulator") ;this line only works if fade in is enabled
@@ -114,6 +117,8 @@ If (SelectedNumberofPlayers = 1 || !linkEnabledGame) {
 	Else
 		X1 := 0 , Y1 := 0 ,	W1 := A_ScreenWidth//2 , H1 := A_ScreenHeight//2 , X2 := A_ScreenWidth//2 , Y2 := 0 ,	W2 := A_ScreenWidth//2 , H2 := A_ScreenHeight//2 , X3 := 0 , Y3 := A_ScreenHeight//2 ,	W3 := A_ScreenWidth//2 , H3 := A_ScreenHeight//2 , X4 := A_ScreenWidth//2 , Y4 := A_ScreenHeight//2 ,	W4 := A_ScreenWidth//2 , H4 := A_ScreenHeight//2
 	
+	HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
+
 	;this loop is for error checking since this emulator needs multiple instances of the emulator starting from different locations to run
 	Loop, %SelectedNumberofPlayers%
 	{
@@ -170,6 +175,7 @@ If (SelectedNumberofPlayers = 1 || !linkEnabledGame) {
 }
 
 BezelDraw()
+HideEmuEnd()
 
 If (SelectedNumberofPlayers = 1 || !linkEnabledGame) {
 	WinShow, ahk_class MYWIN	; Show the emulator
@@ -197,152 +203,4 @@ CloseProcess:
 		}
 	} Else
 		WinClose("AHK_class MYWIN")
-Return
-
-
-
-;_______________Players Selection Menu Code__________________________
-
-StartPlayersSelectionMenu(maxPlayers=4) {
-	Global
-	NumberofPlayersonMenu := maxPlayers
-	If !pToken
-		pToken := Gdip_Startup()
-	Loop, 2 {
-		Gui, playersMenu_GUI%A_Index%: +Disabled -Caption +E0x80000 +OwnDialogs +LastFound +ToolWindow +AlwaysOnTop 
-		Gui, playersMenu_GUI%A_Index%: Margin,0,0
-		Gui, playersMenu_GUI%A_Index%: Show,, playersMenuLayer%A_Index%
-		playersMenu_hwnd%A_Index% := WinExist()
-		playersMenu_hbm%A_Index% := CreateDIBSection(A_ScreenWidth, A_ScreenHeight)
-		playersMenu_hdc%A_Index% := CreateCompatibleDC()
-		playersMenu_obm%A_Index% := SelectObject(playersMenu_hdc%A_Index%, playersMenu_hbm%A_Index%)
-		playersMenu_G%A_Index% := Gdip_GraphicsFromhdc(playersMenu_hdc%A_Index%)
-		Gdip_SetSmoothingMode(playersMenu_G%A_Index%, 4)
-	}
-	;menu scalling factor
-	playersMenuScallingFactor := A_ScreenWidth/1920
-	VplayersMenuScallingFactor := A_ScreenHeight/1080
-	If (playersMenuScallingFactor>VplayersMenuScallingFactor)
-		playersMenuScallingFactor := VplayersMenuScallingFactor
-	;Initializing parameters
-	playersMenuTextFont := "Bebas Neue" 
-	playersMenuSelectedTextSize := round(50*playersMenuScallingFactor)
-	playersMenuSelectedTextColor := "FFFFFFFF"
-	playersMenuDisabledTextColor := "FFAAAAAA"
-	playersMenuDisabledTextSize := round(30*playersMenuScallingFactor)
-	playersMenuMargin := round(50*playersMenuScallingFactor)
-	playersMenuSpaceBtwText := round(30*playersMenuScallingFactor)
-	playersMenuW := MeasureText(0,"X Players",playersMenuTextFont,playersMenuSelectedTextSize,"bold") + 2*playersMenuMargin
-	playersMenuH := NumberofPlayersonMenu*playersMenuSelectedTextSize + (NumberofPlayersonMenu-1)*playersMenuSpaceBtwText + 2*playersMenuMargin
-	playersMenuX := (a_screenWidth-playersMenuW)//2
-	playersMenuY := (a_screenHeight-playersMenuH)//2
-	playersMenuBackgroundBrush := Gdip_BrushCreateSolid("0xDD000000")
-	;Drawing Background
-	Gdip_FillRoundedRectangle(playersMenu_G1, playersMenuBackgroundBrush, 0, 0, playersMenuW, playersMenuH,5*playersMenuScallingFactor)
-	UpdateLayeredWindow(playersMenu_hwnd1, playersMenu_hdc1, playersMenuX, playersMenuY, playersMenuW, playersMenuH)
-    ;Drawing choice list   
-	SelectedNumberofPlayers := 1
-	DrawPlayersSelectionMenu(NumberofPlayersonMenu)
-	;Enabling Keys
-	If (keymapperEnabled = "true") and (keymapperHyperLaunchProfileEnabled = "true")
-        RunKeymapper%zz%("menu",keymapper)
-	If keymapperAHKMethod = "External"
-		RunAHKKeymapper%zz%("menu")
-	Gosub, EnablePlayersMenuKeys
-	;Waiting for menu to exit
-	Loop
-	{	If PlayersMenuExit
-			Break
-		Sleep, 100
-	}
-	Return
-}
-	
-DrawPlayersSelectionMenu(NumberofPlayersonMenu) {
-	Global
-	currentY := 0
-	Gdip_GraphicsClear(playersMenu_G2)
-	Loop, % NumberofPlayersonMenu
-	{
-		If (a_index=SelectedNumberofPlayers) {
-			currentTextSize := playersMenuSelectedTextSize
-			currentTextColor := playersMenuSelectedTextColor
-			currentTextStyle := "bold"
-		} Else {
-			currentTextSize := playersMenuDisabledTextSize
-			currentTextColor := playersMenuDisabledTextColor
-			currentTextStyle := "normal"
-		}
-		If (a_index=1)
-			currentText := "1 Player"
-		Else
-			currentText := a_index . " Players"
-		currentY := playersMenuMargin + (a_index-1)*(playersMenuSelectedTextSize+playersMenuSpaceBtwText)+(playersMenuSelectedTextSize-currentTextSize)//2
-		Gdip_TextToGraphics(playersMenu_G2, currentText, "x0 y" . currentY . " Center c" . currentTextColor . " r4 s" . currentTextSize . " " . currentTextStyle, playersMenuTextFont, playersMenuW, playersMenuSelectedTextSize)
-	}
-	UpdateLayeredWindow(playersMenu_hwnd2, playersMenu_hdc2, playersMenuX, playersMenuY, playersMenuW, playersMenuH)
-	Return	
-}
-
-EnablePlayersMenuKeys:
-	XHotKeywrapper(navSelectKey,"PlayersMenuSelect","ON") 
-	XHotKeywrapper(navUpKey,"PlayersMenuUP","ON")
-	XHotKeywrapper(navDownKey,"PlayersMenuDown","ON")
-	XHotKeywrapper(navP2SelectKey,"PlayersMenuSelect","ON") 
-	XHotKeywrapper(navP2UpKey,"PlayersMenuUP","ON")
-	XHotKeywrapper(navP2DownKey,"PlayersMenuDown","ON")
-	XHotKeywrapper(exitEmulatorKey,"CloseProcess","OFF")
-	XHotKeywrapper(exitEmulatorKey,"ClosePlayersMenu","ON")
-Return
-
-DisablePlayersMenuKeys:
-	XHotKeywrapper(navSelectKey,"PlayersMenuSelect","OFF") 
-	XHotKeywrapper(navUpKey,"PlayersMenuUP","OFF")
-	XHotKeywrapper(navDownKey,"PlayersMenuDown","OFF")
-	XHotKeywrapper(navP2SelectKey,"PlayersMenuSelect","OFF") 
-	XHotKeywrapper(navP2UpKey,"PlayersMenuUP","OFF")
-	XHotKeywrapper(navP2DownKey,"PlayersMenuDown","OFF")
-	XHotKeywrapper(exitEmulatorKey,"ClosePlayersMenu","OFF")
-	XHotKeywrapper(exitEmulatorKey,"CloseProcess","ON")
-Return
-
-PlayersMenuUP:
-	SelectedNumberofPlayers--
-	If (SelectedNumberofPlayers<1)
-		SelectedNumberofPlayers:=NumberofPlayersonMenu
-	DrawPlayersSelectionMenu(NumberofPlayersonMenu)
-Return
-
-PlayersMenuDown:
-	SelectedNumberofPlayers++
-	If (SelectedNumberofPlayers>NumberofPlayersonMenu)
-		SelectedNumberofPlayers:=1
-	DrawPlayersSelectionMenu(NumberofPlayersonMenu)
-Return
-
-PlayersMenuSelect:
-	If ClosedPlayerMenu = true
-		Log("User cancelled the launch at the Player Select Menu")
-	Else
-		Log("Number of Players Selected: " . SelectedNumberofPlayers)
-	Gosub, DisablePlayersMenuKeys
-	Gdip_DeleteBrush(playersMenuBackgroundBrush)
-	Loop, 2 {
-		SelectObject(playersMenu_hdc%A_Index%, playersMenu_obm%A_Index%)
-		DeleteObject(playersMenu_hbm%A_Index%)
-		DeleteDC(playersMenu_hdc%A_Index%)
-		Gdip_DeleteGraphics(playersMenu_G%A_Index%)
-		Gui, playersMenu_GUI%A_Index%: Destroy
-	}
-	If (keymapperEnabled = "true") and (keymapperHyperLaunchProfileEnabled = "true")
-		RunKeymapper%zz%("load", keymapper)
-	If keymapperAHKMethod = External
-		RunAHKKeymapper%zz%("load")
-	PlayersMenuExit := true
-Return
-
-ClosePlayersMenu:
-	ClosedPlayerMenu := true
-	Gosub, PlayersMenuSelect
-	ExitModule()
 Return

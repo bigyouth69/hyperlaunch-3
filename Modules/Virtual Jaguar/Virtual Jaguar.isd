@@ -11,9 +11,87 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
 						</KEY>
-						<KEY name="MouseClicks" required="false" nullable="false">
+						<KEY name="WindowZoom" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Configure how much zoom you want when running on windowed mode</DESCRIPTION>
+							<VALUES>
+								<VALUE description="1X">1</VALUE>
+								<VALUE description="2X">2</VALUE>
+								<VALUE description="3X">3</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Filter" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select the desirect graphics filter to use.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="No Filter">0</VALUE>
+								<VALUE description="Blur Filter">1</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="VideoMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select from PAL or NTSC.</DESCRIPTION>
+							<VALUES>
+								<VALUE>PAL</VALUE>
+								<VALUE>NTSC</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="GPUEnabled" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
-							<DESCRIPTION>By default this is true and the module clicks your mouse to hide the toolbar, but this may not be needed on all PCs. On win8, I do not need it.</DESCRIPTION>
+							<DESCRIPTION>The GPU is one of the three main processors in the Jaguar, and checking this option enables it. Most software will not work without this.</DESCRIPTION>
+						</KEY>
+						<KEY name="DSPEnabled" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>The DSP is one of the three main processors in the Jaguar, and checking this option enables it. Much software will work without it, however, there is some software that will not. Note that if the DSP is disabled, there will be no sound.</DESCRIPTION>
+						</KEY>
+						<KEY name="EnableJaguarBIOS" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you want to enable the Jaguar BIOS. Some games require it.</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Top_Offset" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you are using the emulator with fullscreen set to false and if you see part of the emulator window at the top of your playing screen increase this value. If your playing screen is hidden at the top decrease it.</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Bottom_Offset" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you are using the emulator with fullscreen set to false and fi you see part of the emulator window at the bottom of your playing screen increase this value. If your playing screen is hidden at the top decrease it.</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Left_Offset" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you are using the emulator with fullscreen set to false and if you see part of the emulator window at the left of your playing screen increase this value. If your playing screen is hidden at the top decrease it.</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Right_Offset" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you are using the emulator with fullscreen set to false and if you see part of the emulator window at the right of your playing screen increase this value. If your playing screen is hidden at the top decrease it.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="VideoMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select from PAL or NTSC.</DESCRIPTION>
+							<VALUES>
+								<VALUE>PAL</VALUE>
+								<VALUE>NTSC</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="GPUEnabled" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>The GPU is one of the three main processors in the Jaguar, and checking this option enables it. Most software will not work without this.</DESCRIPTION>
+						</KEY>
+						<KEY name="DSPEnabled" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>The DSP is one of the three main processors in the Jaguar, and checking this option enables it. Much software will work without it, however, there is some software that will not. Note that if the DSP is disabled, there will be no sound.</DESCRIPTION>
+						</KEY>
+						<KEY name="EnableJaguarBIOS" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you want to enable the Jaguar BIOS. Some games require it.</DESCRIPTION>
+						</KEY>
+						<KEY name="UseFastBlitter" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Checking this option will force Virtual Jaguar to use the older, less compatible yet faster blitter. Some games will not work properly with this option checked!</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>

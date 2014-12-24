@@ -18,19 +18,44 @@
 		<INIFILE name="%SystemName%" required="false">
 			<INITYPE>System</INITYPE>
 			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true emulator will run fullscreen.</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Top_Offset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Set top offset for bezel in pixels</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Bottom_Offset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Set bottom offset for bezel in pixels</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Right_Offset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Set right offset for bezel in pixels</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Left_Offset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Set left offset for bezel in pixels</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
 				<SECTION name="%RomName%" required="false">
 					<SECTIONTYPE>Rom</SECTIONTYPE>
 					<KEYS>
-						<KEY name="Mouse" required="false" nullable="false">
-							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>Turns mouse on or off</DESCRIPTION>
-							<VALUES>
-								<VALUE>on</VALUE>
-								<VALUE>off</VALUE>
-							</VALUES>
-						</KEY>
-						<KEY name="CartType" required="false" nullable="false" minLength="1" maxLength="59">
+						<KEY name="CartType" required="false" nullable="false" minLength="1" maxLength="59">						
 							<KEYTYPE>Integer</KEYTYPE>
+							<VALUES>
+								<VALUE description="Standard 8K">1</VALUE>
+								<VALUE description="Standard 16K">2</VALUE>
+								<VALUE description="32K XEGS">12</VALUE>
+								<VALUE description="128K XEGS">14</VALUE>
+								<VALUE description="Max Flash 1M">42</VALUE>
+								<VALUE description="Default">0</VALUE>
+							</VALUES>
 							<DESCRIPTION>Choices are 1-59 Info on what number is what type can be found in %emupath%\DOC\cart.txt</DESCRIPTION>
 						</KEY>
 						<KEY name="Basic" required="false" nullable="false">
@@ -38,8 +63,26 @@
 							<DESCRIPTION>Only used for Atari 8-Bit. Set to true if the rom is a BASIC rom. default is false.</DESCRIPTION>
 						</KEY>
 						<KEY name="OSType" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Only used for Atari 8-Bit. More information can be found in found in %emupath%\DOC\USAGE</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Osa">0</VALUE>							
+								<VALUE description="Osb">1</VALUE>
+								<VALUE description="Default">2</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="CassetteLoadingMethod" required="false" nullable="true">
 							<KEYTYPE>String</KEYTYPE>
 							<DESCRIPTION>Only used for Atari 8-Bit. More information can be found in found in %emupath%\DOC\USAGE</DESCRIPTION>
+							<VALUES>
+								<VALUE>Auto</VALUE>
+								<VALUE>Mount</VALUE>
+								<VALUE>CLOAD+RUN</VALUE>
+							</VALUES>							
+						</KEY>
+						<KEY name="DisableSIOPatch" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Only used for Atari 8-Bit. Disable SIO fast disk access.  Some games will not boot unless this is disabled.</DESCRIPTION>
 						</KEY>
 						<KEY name="VideoMode" required="false" nullable="false">
 							<KEYTYPE>String</KEYTYPE>
@@ -51,7 +94,7 @@
 						</KEY>
 						<KEY name="MachineType" required="false" nullable="false">
 							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>Only used for Atari 8-Bit. Define what machine you are using. default is xl. Descriptions can be found in module notes.</DESCRIPTION>
+							<DESCRIPTION>Only used for Atari 8-Bit. Define what machine you are using. default is xl.</DESCRIPTION>
 							<VALUES>
 								<VALUE>atari</VALUE>
 								<VALUE>1200</VALUE>
@@ -63,6 +106,26 @@
 								<VALUE>5200</VALUE>
 							</VALUES>
 						</KEY>
+						<KEY name="MouseMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Used if you want the mouse to emulate paddles or a lightgun.</DESCRIPTION>
+							<VALUES>
+								<VALUE>Paddle</VALUE>
+								<VALUE>Lightgun</VALUE>
+								<VALUE>Lightpen</VALUE>								
+							</VALUES>
+						</KEY>
+						<KEY name="LoadBasicAsCart" required="false" nullable="false">
+							<KEYTYPE>FolderPath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Used if game requires Basic loaded as a cartridge (rare). If needed, enter the path to the rom/cart. Path relative to the emulator folder.</DESCRIPTION>
+							<PATHTYPE>Relative</PATHTYPE>
+							<BASEPATH>%EmulatorPath%</BASEPATH>
+						</KEY>
+						<KEY name="Command" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Used if rom requires a command after loading is complete to start the game. Use standard AutoHotkey key names, use {Wait} to pause 500 milliseconds between words/characters. ie, "R{Wait}C" to press the R and C keys with a slight delay between them. Useful for navigating through menus.</DESCRIPTION>
+						</KEY>
 					</KEYS>
 				</SECTION>
 			</SECTIONS>
@@ -70,23 +133,50 @@
 		<INIFILE name="Atari 5200" required="false">
 			<INITYPE>System</INITYPE>
 			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true emulator will run fullscreen.</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Top_Offset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Set top offset for bezel in pixels</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Bottom_Offset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Set bottom offset for bezel in pixels</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Right_Offset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Set right offset for bezel in pixels</DESCRIPTION>
+						</KEY>
+						<KEY name="Bezel_Left_Offset" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Set left offset for bezel in pixels</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
 				<SECTION name="%RomName%" required="false">
 					<SECTIONTYPE>Rom</SECTIONTYPE>
 					<KEYS>
-						<KEY name="Mouse" required="false" nullable="false">
+						<KEY name="MouseMode" required="false" nullable="false">
 							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>Turns mouse on or off</DESCRIPTION>
+							<DESCRIPTION>Used if you want the mouse to emulate paddles or a lightgun.</DESCRIPTION>
 							<VALUES>
-								<VALUE>on</VALUE>
-								<VALUE>off</VALUE>
+								<VALUE>Paddle</VALUE>
+								<VALUE>Lightgun</VALUE>
+								<VALUE>Lightpen</VALUE>								
 							</VALUES>
 						</KEY>
 						<KEY name="CartType" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>Options are 6 and 16. 6 = Two chip 16 KB 5200 cartridge. 16 = One chip 16 KB 5200 cartridge. CartType=16 is the default.</DESCRIPTION>
 							<VALUES>
-								<VALUE>6</VALUE>
-								<VALUE>16</VALUE>
+								<VALUE description="One chip 16 KB 5200 cartridge">16</VALUE>
+								<VALUE description="Two chip 16 KB 5200 cartridge">6</VALUE>
+								<VALUE description="Bounty Bob Strikes Back 40 KB 5200 cartridge">7</VALUE>
 							</VALUES>
 						</KEY>
 					</KEYS>

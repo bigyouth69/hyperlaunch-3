@@ -2,9 +2,9 @@ MEmu = Daphne
 MEmuV =  v1.0.12
 MURL = http://www.daphne-emu.com/
 MAuthor = djvj
-MVersion = 2.0.4
-MCRC = F62539E6
-iCRC = C777A9D
+MVersion = 2.0.5
+MCRC = CE06F399
+iCRC = 9B67AACC
 MID = 635038268879753802
 MSystem = "Daphne","LaserDisc"
 ;----------------------------------------------------------------------------
@@ -21,6 +21,7 @@ MSystem = "Daphne","LaserDisc"
 ; First time users, please follow the guide found @ http://www.hyperspin-fe.com/forum/showthread.php?29410-Complete-Guide-for-Daphne-in-HyperSpin-and-HL3
 ;----------------------------------------------------------------------------
 StartModule()
+BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
@@ -42,19 +43,29 @@ version := IniReadCheck(settingsFile,romName,"version",romName,,1)
 
 frameFile = %romName% ; storing parent romName to send as the framefile name so we don't send wrong name when using an alternate version of a game
 
-fullscreen := If fullscreen = "true" ? "-fullscreen" : ""
-screenWidth := "-x " . screenWidth
-screenHeight := "-y " . screenHeight
-min_seek_delay := If min_seek_delay ? "-min_seek_delay " . min_seek_delay : ""
-seek_frames_per_ms := If seek_frames_per_ms ? "-seek_frames_per_ms " . seek_frames_per_ms : ""
-homedir := If homedir ? "-homedir " . homedir : ""
-bank0 := If bank0 ? "-bank 0 " . bank0 : ""
-bank1 := If bank1 ? "-bank 1 " . bank1 : ""
-bank2 := If bank2 ? "-bank 2 " . bank2 : ""
-bank3 := If bank3 ? "-bank 3 " . bank3 : ""
-sound_buffer := If sound_buffer ? "-sound_buffer " . sound_buffer : ""
+BezelStart()
+fullscreen := If fullscreen = "true" ? " -fullscreen" : ""
+
+If bezelPath	; this variable is only filled if bezel is enabled and a valid bezel image is found
+{	params:= params . " -ignore_aspect_ratio"
+	screenWidth := " -x " . Round(bezelScreenWidth)  ;bezelScreenWidth variable is defined on the BezelStart function and it gives the desired width that your game screen should have while using this bezel 
+	screenHeight := " -y " . Round(bezelScreenHeight) ;idem above
+} Else {
+	screenWidth := " -x " . screenWidth
+	screenHeight := " -y " . screenHeight
+}
+
+min_seek_delay := If min_seek_delay ? " -min_seek_delay " . min_seek_delay : ""
+seek_frames_per_ms := If seek_frames_per_ms ? " -seek_frames_per_ms " . seek_frames_per_ms : ""
+homedir := If homedir ? " -homedir " . homedir : ""
+bank0 := If bank0 ? " -bank 0 " . bank0 : ""
+bank1 := If bank1 ? " -bank 1 " . bank1 : ""
+bank2 := If bank2 ? " -bank 2 " . bank2 : ""
+bank3 := If bank3 ? " -bank 3 " . bank3 : ""
+sound_buffer := If sound_buffer ? " -sound_buffer " . sound_buffer : ""
 params := globalParams . " " . params
 
+hideEmuObj := Object("ahk_class SDL_app",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 ; If you have alternate controls for a specific game, this will overwrite the current dapinput.ini with your custom one
@@ -73,13 +84,17 @@ If FileExist(romControlIni) {	; if a romName control ini exists
 ; If launched game is an alternate version of a parent, this will send the alternate's name to daphne.
 romName = %version%
 
+HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
+
 ; This allows us to send variables, that when empty, are not sent to the Run command
-; msgbox % executable . A_Space . romName . A_Space . params . A_Space . fullscreen . A_Space . screenWidth . A_Space . screenHeight . A_Space . min_seek_delay . A_Space . seek_frames_per_ms . A_Space . homedir . A_Space . bank0 . A_Space . bank1 . A_Space . bank2 . A_Space . bank3 . A_Space . sound_buffer . A_Space . "-framefile """ . romPath . "\" . frameFile . romExtension . """"
-Run(executable . A_Space . romName . A_Space . params . A_Space . fullscreen . A_Space . screenWidth . A_Space . screenHeight . A_Space . min_seek_delay . A_Space . seek_frames_per_ms . A_Space . homedir . A_Space . bank0 . A_Space . bank1 . A_Space . bank2 . A_Space . bank3 . A_Space . sound_buffer . A_Space . "-framefile """ . romPath . "\" . frameFile . romExtension . """", emuPath)
+; msgbox % executable . A_Space . romName . A_Space . params . fullscreen . screenWidth . screenHeight . min_seek_delay . seek_frames_per_ms . homedir . bank0 . bank1 . bank2 . bank3 . sound_buffer . " -framefile """ . romPath . "\" . frameFile . romExtension . """"
+Run(executable . A_Space . romName . A_Space . params . fullscreen . screenWidth . screenHeight . min_seek_delay . seek_frames_per_ms . homedir . bank0 . bank1 . bank2 . bank3 . sound_buffer . " -framefile """ . romPath . "\" . frameFile . romExtension . """", emuPath)
 
 WinWait("ahk_class SDL_app")
 WinWaitActive("ahk_class SDL_app")
 
+BezelDraw()
+HideEmuEnd()
 FadeInExit()
 Process("WaitClose", executable)
 7zCleanUp()
@@ -97,6 +112,7 @@ Return
 
 CloseProcess:
 	FadeOutStart()
+	BezelExit()
 	If pauseOnExit = true
 	{	Send, {P}
 		Sleep, 100

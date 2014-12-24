@@ -1,8 +1,5 @@
-MCRC=2922442D
-MVersion=1.0.0
-
-#Include, %A_ScriptDir%\Module Extensions	; change all future includes to look in the Module Extensions folder
-#include,*i Control_AniGif.ahk
+MCRC=F4BE3E80
+MVersion=1.0.1
 
 If fadeInterruptKey != anykey
 	fadeInterruptKey := xHotKeyVarEdit(fadeInterruptKey,"fadeInterruptKey","~","Remove")

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="ShowOverlay" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables external Overlay support</DESCRIPTION>
+						</KEY>
+						<KEY name="OverlayToolExe" required="false" nullable="true">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Path to Overlay tool executable.</DESCRIPTION>
+							<PATHTYPE>Any</PATHTYPE>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>exe</FILEEXTENSION>
+							</FILEEXTENSIONS>
+						</KEY>
+						<KEY name="OverlayAlphaChannel" minLength="0" maxLength="255" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Sets the transparency level for the overlay image that will be displayed on top of the emulator screen.</DESCRIPTION>
+						</KEY>
+						<KEY name="Aspect" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Aspect Correction</DESCRIPTION>
+						</KEY>
+						<KEY name="Scaler" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select the scaler you want to use on DOSBox</DESCRIPTION>
+							<VALUES>
+								<VALUE>2xsai</VALUE>
+								<VALUE>advinterp2x</VALUE>
+								<VALUE>advinterp3x</VALUE>
+								<VALUE>advmame2x</VALUE>
+								<VALUE>advmame3x</VALUE>
+								<VALUE>hardware_none</VALUE>
+								<VALUE>hardware2x</VALUE>
+								<VALUE>hardware3x</VALUE>
+								<VALUE>hardware4x</VALUE>
+								<VALUE>hardware5x</VALUE>
+								<VALUE>hq2x</VALUE>
+								<VALUE>hq3x</VALUE>
+								<VALUE>none</VALUE>
+								<VALUE>normal2x</VALUE>
+								<VALUE>normal3x</VALUE>
+								<VALUE>normal4x</VALUE>
+								<VALUE>normal5x</VALUE>
+								<VALUE>rgb2x</VALUE>
+								<VALUE>rgb3x</VALUE>
+								<VALUE>scan2x</VALUE>
+								<VALUE>scan3x</VALUE>
+								<VALUE>super2xsai</VALUE>
+								<VALUE>supereagle</VALUE>
+								<VALUE>tv2x</VALUE>
+								<VALUE>tv3x</VALUE>
+								<VALUE>xbrz</VALUE>
+							</VALUES>							
+						</KEY>
+						<KEY name="AutoFit" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true best fits image to window</DESCRIPTION>
+						</KEY>
+						<KEY name="ConfigureKeys" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true instead the key configuration tool will be launched instead of the emulator</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="true">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="ShowScoreBoard" required="true" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if you want to see the scoreboard at the top during gameplay. Bare in mind that you'll need to manually change the score using the predefined keys for it during the game. Numpad7, Numpad4 and Numpad1 scores for Player 1 and Numpad8, Numpad5 and Numpad2 scores for Player 2</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

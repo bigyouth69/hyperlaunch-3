@@ -4,7 +4,7 @@
 		<INIFILE name="%ModuleName%" required="false">
 			<INITYPE>Module</INITYPE>
 			<SECTIONS>
-				<SECTION name="settings" required="false">
+				<SECTION name="Settings" required="false">
 					<SECTIONTYPE>Global</SECTIONTYPE>
 					<KEYS>
 						<KEY name="Fullscreen" required="false" nullable="false">
@@ -16,9 +16,291 @@
 							<DESCRIPTION>If true emulator will stretch to fill the screen.
 Helpful to widescreen users who don't want to see black bars on the sides of the emulator.</DESCRIPTION>
 						</KEY>
+						<KEY name="Joystick1" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select what type of controller do you have on joystick port 1</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">none</VALUE>
+								<VALUE description="2-button Joystick">joystick</VALUE>
+								<VALUE description="Mouse">mouse</VALUE>
+								<VALUE description="Tetris 2 Dongle">tetris2 dongle</VALUE>
+								<VALUE description="Gun Stick">gunstick</VALUE>
+								<VALUE description="MagicKey Dongle">magic key dongle</VALUE>
+								<VALUE description="ASCII Plus-X Terminator Laser">ascii laser</VALUE>
+								<VALUE description="Arkanoid Pad">arkanoid pad</VALUE>
+							</VALUES>							
+						</KEY>
+						<KEY name="Joystick2" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select what type of controller do you have on joystick port 2</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">none</VALUE>
+								<VALUE description="2-button Joystick">joystick</VALUE>
+								<VALUE description="Mouse">mouse</VALUE>
+								<VALUE description="Tetris 2 Dongle">tetris2 dongle</VALUE>
+								<VALUE description="Gun Stick">gunstick</VALUE>
+								<VALUE description="MagicKey Dongle">magic key dongle</VALUE>
+								<VALUE description="ASCII Plus-X Terminator Laser">ascii laser</VALUE>
+								<VALUE description="Arkanoid Pad">arkanoid pad</VALUE>
+							</VALUES>							
+						</KEY>
 					</KEYS>
 				</SECTION>
 			</SECTIONS>
 		</INIFILE>
+		<INIFILE name="%SystemName%" required="false">
+		<INITYPE>System</INITYPE>
+		<SYSTEMS>
+			<SYSTEM>Microsoft MSX</SYSTEM>
+			<SYSTEM>Microsoft MSX2</SYSTEM>
+			<SYSTEM>Microsoft MSX2+</SYSTEM>
+			<SYSTEM>Microsoft MSX Turbo-R</SYSTEM>
+		</SYSTEMS>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true emulator will run fullscreen.</DESCRIPTION>
+						</KEY>
+						<KEY name="Stretch" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true emulator will stretch to fill the screen.
+Helpful to widescreen users who don't want to see black bars on the sides of the emulator.</DESCRIPTION>
+						</KEY>
+						<KEY name="TapeLoadTime" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Loading Time in milliseconds to wait until the machine gets into the BASIC prompt. Increase this value if tape games aren't starting automatically</DESCRIPTION>
+						</KEY>
+						<KEY name="ColonKey" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Depending on your keyboard layout you might need to map the MSX DOS : key to whatever key you need to press in your keyboard in order to type : under MSX on tape loading.</DESCRIPTION>
+						</KEY>
+						<KEY name="DoubleQuoteKey" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Depending on your keyboard layout you might need to map the MSX DOS " key to whatever key you need to press in your keyboard in order to type " under MSX on tape loading.</DESCRIPTION>
+						</KEY>
+						<KEY name="Joystick1" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select what type of controller do you have on joystick port 1</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">none</VALUE>
+								<VALUE description="2-button Joystick">joystick</VALUE>
+								<VALUE description="Mouse">mouse</VALUE>
+								<VALUE description="Tetris 2 Dongle">tetris2 dongle</VALUE>
+								<VALUE description="Gun Stick">gunstick</VALUE>
+								<VALUE description="MagicKey Dongle">magic key dongle</VALUE>
+								<VALUE description="ASCII Plus-X Terminator Laser">ascii laser</VALUE>
+								<VALUE description="Arkanoid Pad">arkanoid pad</VALUE>
+							</VALUES>							
+						</KEY>
+						<KEY name="Joystick2" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select what type of controller do you have on joystick port 2</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">none</VALUE>
+								<VALUE description="2-button Joystick">joystick</VALUE>
+								<VALUE description="Mouse">mouse</VALUE>
+								<VALUE description="Tetris 2 Dongle">tetris2 dongle</VALUE>
+								<VALUE description="Gun Stick">gunstick</VALUE>
+								<VALUE description="MagicKey Dongle">magic key dongle</VALUE>
+								<VALUE description="ASCII Plus-X Terminator Laser">ascii laser</VALUE>
+								<VALUE description="Arkanoid Pad">arkanoid pad</VALUE>
+							</VALUES>							
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Machine" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Machine used to run the game, for a list of valid names check the sub-folders inside the Machines folder of your BlueMSX installation</DESCRIPTION>
+						</KEY>
+						<KEY name="TapeLoadingMethod" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Command required for tape loading. Default is RUN"CAS:"</DESCRIPTION>
+							<VALUES>
+								<VALUE>RUN"CAS:"</VALUE>
+								<VALUE>LOAD"CAS:",R</VALUE>
+								<VALUE>BLOAD"CAS:",R</VALUE>
+								<VALUE>CLOAD+RUN</VALUE>
+							</VALUES>							
+						</KEY>
+						<KEY name="CLoadWaitTime" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Some games might require a longer waiting period between the CLOAD and RUN commands, set that time here in milliseconds."</DESCRIPTION>
+						</KEY>
+						<KEY name="PositionTape" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if tape contains multiple games and you need to position it before loading. Mostly used in compilations</DESCRIPTION>
+						</KEY>
+						<KEY name="HoldKeyOnBoot" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>If a game requires a key to be pressed during boot set it here</DESCRIPTION>
+							<VALUES>
+								<VALUE>Ctrl</VALUE>
+								<VALUE>Shift</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="CartSlot1" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Special Cartridge that is required in Slot 1</DESCRIPTION>
+							<VALUES>
+								<VALUE description="SCC">scc</VALUE>
+								<VALUE description="SCC+">scc+</VALUE>
+								<VALUE description="PAC">pac</VALUE>
+								<VALUE description="FMPAC">fmpac</VALUE>
+								<VALUE description="External RAM 64KB">64KBexRAM</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="CartSlot2" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Special Cartridge that is required in Slot 2</DESCRIPTION>
+							<VALUES>
+								<VALUE description="SCC">scc</VALUE>
+								<VALUE description="SCC+">scc+</VALUE>
+								<VALUE description="PAC">pac</VALUE>
+								<VALUE description="FMPAC">fmpac</VALUE>
+								<VALUE description="External RAM 64KB">64KBexRAM</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="DualDiskLoad" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true and the game has more than 1 disk, the 2nd disk will be inserted in drive b at startup.</DESCRIPTION>
+						</KEY>
+						<KEY name="DiskSwapDrive" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Disk Drive to use for when inserting new disks in MultiGame.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Drive A">A</VALUE>
+								<VALUE description="Drive B">B</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Joystick1" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select what type of controller do you have on joystick port 1. Overrides the global configuration</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">none</VALUE>
+								<VALUE description="2-button Joystick">joystick</VALUE>
+								<VALUE description="Mouse">mouse</VALUE>
+								<VALUE description="Tetris 2 Dongle">tetris2 dongle</VALUE>
+								<VALUE description="Gun Stick">gunstick</VALUE>
+								<VALUE description="MagicKey Dongle">magic key dongle</VALUE>
+								<VALUE description="ASCII Plus-X Terminator Laser">ascii laser</VALUE>
+								<VALUE description="Arkanoid Pad">arkanoid pad</VALUE>
+							</VALUES>							
+						</KEY>
+						<KEY name="Joystick2" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select what type of controller do you have on joystick port 2. Overrides the global configuration</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">none</VALUE>
+								<VALUE description="2-button Joystick">joystick</VALUE>
+								<VALUE description="Mouse">mouse</VALUE>
+								<VALUE description="Tetris 2 Dongle">tetris2 dongle</VALUE>
+								<VALUE description="Gun Stick">gunstick</VALUE>
+								<VALUE description="MagicKey Dongle">magic key dongle</VALUE>
+								<VALUE description="ASCII Plus-X Terminator Laser">ascii laser</VALUE>
+								<VALUE description="Arkanoid Pad">arkanoid pad</VALUE>
+							</VALUES>							
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		
+		<INIFILE name="Spectravideo" required="false">
+		<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true emulator will run fullscreen.</DESCRIPTION>
+						</KEY>
+						<KEY name="Stretch" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true emulator will stretch to fill the screen.
+Helpful to widescreen users who don't want to see black bars on the sides of the emulator.</DESCRIPTION>
+						</KEY>
+						<KEY name="TapeLoadTime" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Loading Time in milliseconds to wait until the machine gets into the BASIC prompt. Increase this value if tape games aren't starting automatically</DESCRIPTION>
+						</KEY>
+						<KEY name="ColonKey" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Depending on your keyboard layout you might need to map the MSX DOS : key to whatever key you need to press in your keyboard in order to type : under MSX on tape loading.</DESCRIPTION>
+						</KEY>
+						<KEY name="DoubleQuoteKey" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Depending on your keyboard layout you might need to map the MSX DOS " key to whatever key you need to press in your keyboard in order to type " under MSX on tape loading.</DESCRIPTION>
+						</KEY>
+						<KEY name="Joystick1" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select what type of controller do you have on joystick port 1</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">none</VALUE>
+								<VALUE description="2-button Joystick">joystick</VALUE>
+							</VALUES>							
+						</KEY>
+						<KEY name="Joystick2" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select what type of controller do you have on joystick port 2</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">none</VALUE>
+								<VALUE description="2-button Joystick">joystick</VALUE>
+							</VALUES>							
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Machine" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Machine used to run the game, for a list of valid names check the sub-folders inside the Machines folder of your BlueMSX installation</DESCRIPTION>
+						</KEY>
+						<KEY name="TapeLoadingMethod" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Command required for tape loading. Default is RUN"CAS:"</DESCRIPTION>
+							<VALUES>
+								<VALUE>RUN"CAS:"</VALUE>
+								<VALUE>LOAD"CAS:",R</VALUE>
+								<VALUE>BLOAD"CAS:",R</VALUE>
+								<VALUE>CLOAD+RUN</VALUE>
+							</VALUES>							
+						</KEY>
+						<KEY name="CLoadWaitTime" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Some games might require a longer waiting period between the CLOAD and RUN commands, set that time here in milliseconds."</DESCRIPTION>
+						</KEY>
+						<KEY name="PositionTape" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true if tape contains multiple games and you need to position it before loading. Mostly used in compilations</DESCRIPTION>
+						</KEY>
+						<KEY name="Joystick1" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select what type of controller do you have on joystick port 1. Overrides the global configuration</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">none</VALUE>
+								<VALUE description="2-button Joystick">joystick</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Joystick2" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select what type of controller do you have on joystick port 2. Overrides the global configuration</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">none</VALUE>
+								<VALUE description="2-button Joystick">joystick</VALUE>
+							</VALUES>							
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		
 	</INIFILES>
 </INISCHEMA>

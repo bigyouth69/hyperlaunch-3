@@ -2,11 +2,11 @@ MEmu = MAME
 MEmuV =  v0.150
 MURL = http://www.mame.net/
 MAuthor = djvj
-MVersion = 2.1.2
-MCRC = 232140EB
-iCRC = 397D8196
+MVersion = 2.1.3
+MCRC = 9678FB18
+iCRC = D88577B3
 MID = 635038268903403479
-MSystem = "AAE","Cave","LaserDisc","MAME","Nintendo Arcade Systems","Sega Model 1","Sega ST-V","SNK Neo Geo","SNK Neo Geo AES"
+MSystem = "AAE","Cave","Capcom","LaserDisc","MAME","Nintendo Arcade Systems","Sega Model 1","Sega ST-V","SNK Neo Geo","SNK Neo Geo AES"
 ;----------------------------------------------------------------------------
 ; Notes:
 ; No need to edit mame.ini and set your rom folder, module sends the rompath for you.
@@ -14,18 +14,21 @@ MSystem = "AAE","Cave","LaserDisc","MAME","Nintendo Arcade Systems","Sega Model 
 ; High Scores DO NOT SAVE when cheats are enabled!
 ; HLSL Documentation: http://mamedev.org/source/docs/hlsl.txt.html
 ; If you use MAME for AAE, create a vector.ini in mame's ini subfolder and paste these HLSL settings in there: http://www.mameworld.info/ubbthreads/showflat.php?Cat=&Number=309968&page=&view=&sb=5&o=&vc=1
-; If you use bezel, it is recommended to set the module bezel mode to normal, and go to your mame.ini file, on your emulator folder, and choose these options: artwork_crop 1, use_backdrops 1, use_overlays 1, use_bezels 0, use_cpanels 0, use_marquees 0 
+;
+; Bezels:
+; Module settings control whether HyperLaunch or MAME bezels are shown
+; In the bezel normal mode only HyperLaunch Bezels will be show and the MAME use_bezels option will be forced disbaled
+; In the bezel layout mode, HyperLaunch Bezels will be drawn only when you do not have a layout file on your MAME folders for the current game
 ;----------------------------------------------------------------------------
 StartModule()
 BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
-
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
+legacyMode := IniReadCheck(settingsFile, "Settings|" . systemName . "|" . romName, "LegacyMode","false",,1)
+hlsl := IniReadCheck(settingsFile, "Settings|" . systemName . "|" . romName, "HLSL","false",,1)
 Videomode := IniReadCheck(settingsFile, "Settings", "Videomode","d3d",,1)
-hlsl := IniReadCheck(settingsFile, "Settings|" . systemName, "HLSL","false",,1)
-hideConsole := IniReadCheck(settingsFile, "Settings", "HideConsole","true",,1)	; Hides console window from view if it shows up
 pauseMethod := IniReadCheck(settingsFile, "Settings", "PauseMethod",1,,1)	; set the pause method that works better on your machine (preferred methods 1 and 2) 1 = Win7 and Win8 OK - Problems with Win XP, 2 = preferred method for WinXP - Problems in Win7, 3 and 4 = same as 1 and 2, 5 = only use If you have a direct input version of mame, 6 = suspend mame process method, it could crash mame in some computers
 bezelMode := IniReadCheck(settingsFile, "Settings", "BezelMode","layout",,1)	; "layout" or "normal"
 cheatMode := IniReadCheck(settingsFile, "Settings", "CheatMode","false",,1)
@@ -39,41 +42,47 @@ Use_Overlays := IniReadCheck(settingsFile, systemName . "|" . romName, "Use_Over
 Use_Backdrops := IniReadCheck(settingsFile, systemName . "|" . romName, "Use_Backdrops", "true",,1)
 Use_Cpanels := IniReadCheck(settingsFile, systemName . "|" . romName, "Use_Cpanels", "false",,1)
 Use_Marquees := IniReadCheck(settingsFile, systemName . "|" . romName, "Use_Marquees", "false",,1)
+volume := IniReadCheck(settingsFile, "Settings|" . systemName . "|" . romName, "Volume",,,1)
 autosave := IniReadCheck(settingsFile, systemName . "|" . romName, "Autosave", "false",,1)
 
-If bezelEnabled = true
-{	artworkCrop := If (Artwork_Crop = "true") ? "-artwork_crop" : "-noartwork_crop"
-	useBezels := If (Use_Bezels = "true") ? "-use_bezels" : "-nouse_bezels"
-	useOverlays := If (Use_Overlays = "true") ? "-use_overlays" : "-nouse_overlays"
-	useBackdrops := If (Use_Backdrops = "true") ? "-use_backdrops" : "-nouse_backdrops"
-	UseCpanels := If (Use_Cpanels = "true") ? "-use_cpanels" : "-nouse_cpanels"
-	UseMarquees := If (Use_Marquees = "true") ? "-use_marquees" : "-nouse_marquees"
+artworkCrop := If (Artwork_Crop = "true") ? " -artwork_crop" : " -noartwork_crop"
+useBezels := If (Use_Bezels = "true") ? " -use_bezels" : " -nouse_bezels"
+useOverlays := If (Use_Overlays = "true") ? " -use_overlays" : " -nouse_overlays"
+useBackdrops := If (Use_Backdrops = "true") ? " -use_backdrops" : " -nouse_backdrops"
+UseCpanels := If (Use_Cpanels = "true") ? " -use_cpanels" : " -nouse_cpanels"
+UseMarquees := If (Use_Marquees = "true") ? " -use_marquees" : " -nouse_marquees"
+
+hideEmuObj := Object(dialogOpen . " ahk_class ConsoleWindowClass",0,"ahk_class MAME",1)	;Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
+
+; Process mame's ListXMLtable for certain features
+If (bezelEnabled = "true" || servoStikEnabled != "false") {
 	ListXMLtable := []
 	ListXMLtable := ListXMLInfo(romName)
-	If bezelMode = layout
-		BezelStart(romName,ListXMLtable[1],ListXMLtable[2],ListXMLtable[3],ListXMLtable[4])
-	Else if !(Use_Bezels = "true")
-		BezelStart(,,ListXMLtable[2])
-} Else {
-	artworkCrop := "-artwork_crop"
-	useBezels := "-nouse_bezels"
-	useOverlays := "-nouse_overlays"
-	useBackdrops := "-nouse_backdrops"
-	UseCpanels := "-nouse_cpanels"
-	UseMarquees := "-nouse_marquees"	
+	If (bezelEnabled = "true") {
+		If (bezelMode = "layout"){
+			BezelStart("layout",ListXMLtable[1],ListXMLtable[2],romName)
+		} Else { ;bezel mode = normal
+			useBezels := " -nouse_bezels"   ; force disabling MAME built-in bezels
+			BezelStart(,,ListXMLtable[2])
+		}
+	}
+	If (servoStikEnabled != "false") {
+		ServoStik(If ListXMLtable[5] <= 4 ? 4 : 8)	; If "ways" in the xml is set to 4 or less, the servo will go into 4-way mode, else 8-way mode will be enabled
+	}
 }
 
 ; -romload part of 147u2 that shows what roms were checked when missing roms
 winstate := If (Fullscreen = "true") ? "Hide UseErrorLevel" : "UseErrorLevel"
-fullscreen := If (Fullscreen = "true") ? "-nowindow" : "-window"
-hlsl := If hlsl = "true" ? "-hlsl_enable" : "-nohlsl_enable"
-videomode := If (Videomode != "" ) ? "-video " . videomode : ""
-sysParams := If sysParams != ""  ? sysParams : ""
-romParams := If romParams != ""  ? romParams : ""
-autosave := If autosave = "true"  ? "-autosave" : ""
+fullscreen := If (Fullscreen = "true") ? " -nowindow" : " -window"
+hlsl := If hlsl = "true" ? " -hlsl_enable" : " -nohlsl_enable"
+videomode := If (Videomode != "" ) ? " -video " . videomode : ""
+sysParams := If sysParams != ""  ? A_Space . sysParams : ""
+romParams := If romParams != ""  ? A_Space . romParams : ""
+autosave := If autosave = "true"  ? " -autosave" : ""
+volume := If volume != ""  ? " -volume " . volume : ""
 
 StringReplace,mameRomPaths,romPathFromIni,|,`"`;`",1	; replace all instances of | to ; in the Rom_Path from Emulators.ini so mame knows where to find your roms
-mameRomPaths := "-rompath """ .  (If mameRomName ? romPath : mameRomPaths) . """"	; if using an alt rom, only supply mame with the path to that rom so it doesn't try to use the original rom
+mameRomPaths := " -rompath """ .  (If mameRomName ? romPath : mameRomPaths) . """"	; if using an alt rom, only supply mame with the path to that rom so it doesn't try to use the original rom
 
 If InStr(romParams,"-rompath")
 	ScriptError("""-rompath"" is defined as a parameter for " . romName . ". The MAME module fills this automatically so please remove this from Params in the module's settings.")
@@ -91,16 +100,20 @@ If mameRomName {
 }
 
 If cheatMode = true
-{	If cheatModeKey	; if user wants to use a key to enable CheatMode
-		cheatEnabled := If XHotkeyAllKeysPressed(cheatModeKey) ? "-cheat" : ""
+{	If (!FileExist(emuPath . "\cheat.zip") && !FileExist(emuPath . "\cheat.7z"))
+		ScriptError("You have cheats enabled for " . MEmu . " but could not locate a ""cheat.zip"" or ""cheat.7z"" in " . emuPath)
+	If cheatModeKey	; if user wants to use a key to enable CheatMode
+		cheatEnabled := If XHotkeyAllKeysPressed(cheatModeKey) ? " -cheat" : ""	; only enables cheatMode when key is held down on launch
 	Else	; no cheat mode key defined
-		cheatEnabled := "-cheat"
+		cheatEnabled := " -cheat"
 }
 
-If hideConsole = true
-	SetTimer, HideConsole, 10
+HideEmuStart()
 
-errLvl := Run(executable . A_Space . romName . A_Space . fullscreen . A_Space . hlsl . A_Space . cheatEnabled . A_Space . videomode . A_Space . artworkCrop . A_Space . useBezels . A_Space . useOverlays . A_Space . useBackdrops . A_Space . UseCpanels . A_Space . UseMarquees . A_Space . mameRomPaths . A_Space . sysParams . A_Space . romParams . A_Space . autosave, emuPath, winstate)
+If legacyMode = true
+	errLvl := Run(executable . A_Space . romName . fullscreen . cheatEnabled . volume . mameRomPaths . sysParams . romParams, emuPath, winstate)
+Else
+	errLvl := Run(executable . A_Space . romName . fullscreen . hlsl . cheatEnabled . volume . videomode . artworkCrop . useBezels . useOverlays . useBackdrops . UseCpanels . UseMarquees . mameRomPaths . sysParams . romParams . autosave, emuPath, winstate)
 
 If errLvl {
 	If (errLvl = 1)
@@ -126,6 +139,7 @@ WinWait("ahk_class MAME")
 WinWaitActive("ahk_class MAME")
 
 BezelDraw()
+HideEmuEnd()
 FadeInExit()
 Process("WaitClose", executable)
 BezelExit()
@@ -155,16 +169,15 @@ ListXMLInfo(rom){ ; returns MAME/MESS info about parent rom, orientation angle, 
 	RegExMatch(width,"[0-9]+", width, "-6")
 	RegExMatch(ListxmlContents, "s)<display.*height=" . """" . "[0-9]+" . """", Height)
 	RegExMatch(Height,"[0-9]+", Height, "-6")
+	RegExMatch(ListxmlContents, "s)<control.*ways=" . """" . "[0-9]+" . """", Ways)
+	RegExMatch(Ways,"[0-9]+", Ways, "-6")
 	ListXMLtable[1] := parent
 	ListXMLtable[2] := angle
-	If (ListXMLtable[2]<>0)
-		ListXMLtable[3] := height
-	Else
-		ListXMLtable[3] := width
-	If (ListXMLtable[2]<>0)
-		ListXMLtable[4] := width
-	Else
-		ListXMLtable[4] := height
+	ListXMLtable[3] := height
+	ListXMLtable[4] := width
+	ListXMLtable[5] := ways
+	if (ListXMLtable[3] > ListXMLtable[4])
+		ListXMLtable[2] := true
 	FileDelete, %emuPath%\tempBezel.txt
 	Return ListXMLtable	
 }
@@ -212,16 +225,6 @@ RestoreEmu:
 		WinActivate, ahk_class MAME
 	} Else If pauseMethod = 6
 		WinActivate, ahk_class MAME
-Return
-
-HideConsole:
-	hideConsoleTimer++
-	IfWinExist, ahk_class ConsoleWindowClass
-	{	Log("Module - HideConsole - Console window found, hiding it out of view.")
-		WinSet, Transparent, 0, ahk_class ConsoleWindowClass
-		SetTimer, HideConsole, Off
-	} Else If hideConsoleTimer >= 200
-		SetTimer, HideConsole, Off
 Return
 
 CloseProcess:

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set to true to enable fullscreen.</DESCRIPTION>
+						</KEY>
+						<KEY name="FullscreenResolution" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Select the resolution to use when in fullscreen mode. To find the resolution you want to use, open the emulator and go to the  Screen menu, the first Fullscreen resolution listed there is 8, the second is 9 and so on. These are the numbers you need to type here. A dropdown box can't be used for selection unfortunately since the available resolutions will vary from machine to machine so the list is variable.</DESCRIPTION>
+						</KEY>
+						<KEY name="WindowedResolution" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Select the window size for the bezel opening.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Window x1">0</VALUE>
+								<VALUE description="Window x2">1</VALUE>
+								<VALUE description="Window x3">2</VALUE>
+								<VALUE description="Window x4">3</VALUE>
+								<VALUE description="Window x5">4</VALUE>
+								<VALUE description="Window x6">5</VALUE>
+								<VALUE description="Window x7">6</VALUE>
+								<VALUE description="Window x8">7</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="StretchScreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true video image will stretch to fill the whole screen.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

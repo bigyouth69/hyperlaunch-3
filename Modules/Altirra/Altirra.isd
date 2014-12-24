@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true emulator will run fullscreen.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="%SystemName%" required="false">
+			<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true emulator will run fullscreen.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Mouse" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Turns mouse on or off</DESCRIPTION>
+							<VALUES>
+								<VALUE>on</VALUE>
+								<VALUE>off</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="CartType" required="false" nullable="false" minLength="1" maxLength="59">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Cartridge mapper to use for untagged images/roms</DESCRIPTION>
+						</KEY>
+						<KEY name="Basic" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Only used for Atari 8-Bit. Set to true if the rom is a BASIC rom. default is false.</DESCRIPTION>
+						</KEY>
+						<KEY name="MachineType" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Only used for Atari 8-Bit. Define what machine you are using. default is 800xl.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="400/800">800</VALUE>
+								<VALUE description="600XL/800XL">800xl</VALUE>
+								<VALUE description="65XE/130XE">130xe</VALUE>
+								<VALUE description="1200XL">1200xl</VALUE>
+								<VALUE description="XEGS">xegs</VALUE>
+								<VALUE description="5200">5200</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="OSType" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Only used for Atari 8-Bit. Defines what firmware/kernel to use, normally the default firmware should be used and Altirra will try to use the best firmware for the selected MachineType.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Default">default</VALUE>
+								<VALUE description="800 (OS-A)">osa</VALUE>
+								<VALUE description="800 (OS-B)">osb</VALUE>
+								<VALUE description="600XL/800XL">xl</VALUE>
+								<VALUE description="1200XL">1200xl</VALUE>
+								<VALUE description="XEGS">xegs</VALUE>
+								<VALUE description="Other">other</VALUE>
+								<VALUE description="HLE Kernel">hle</VALUE>
+								<VALUE description="LLE Kernel (OS-B Compatible)">lle</VALUE>
+								<VALUE description="LLE Kernel (XL/XE Compatible)">llexl</VALUE>
+								<VALUE description="5200">5200</VALUE>
+								<VALUE description="5200 LLE Kernel">5200lle</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="MemorySize" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Only used for Atari 8-Bit. Memory Size of the Machine.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="16K (400/800/600XL/5200)">16K</VALUE>
+								<VALUE description="48K (800)">48K</VALUE>
+								<VALUE description="64K (800XL/1200XL)">64K</VALUE>
+								<VALUE description="128K (130XE)">128K</VALUE>
+								<VALUE description="320K (Rambo)">320K</VALUE>
+								<VALUE description="320K (Compy)">320KCompy</VALUE>
+								<VALUE description="576K">576K</VALUE>
+								<VALUE description="576K (Compy)">576KCompy</VALUE>
+								<VALUE description="1088K">1088K</VALUE>
+								<VALUE description="8K (800)">8K</VALUE>
+								<VALUE description="24K (800)">24K</VALUE>
+								<VALUE description="32K (800)">32K</VALUE>
+								<VALUE description="40K (800)">40K</VALUE>
+								<VALUE description="52K (800)">52K</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="VideoMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Only used for Atari 8-Bit. Choices are pal and ntsc. default is pal.</DESCRIPTION>
+							<VALUES>
+								<VALUE>pal</VALUE>
+								<VALUE>ntsc</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="LoadBasicAsCart" required="false" nullable="false">
+							<KEYTYPE>FolderPath</KEYTYPE>
+							<FULLROW>true</FULLROW>
+							<DESCRIPTION>Used if game requires Basic loaded as a cartridge (rare). If needed, enter the path to the rom/cart. Path relative to the emulator folder.</DESCRIPTION>
+							<PATHTYPE>Relative</PATHTYPE>
+							<BASEPATH>%EmulatorPath%</BASEPATH>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="Atari 5200" required="false">
+			<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true emulator will run fullscreen.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Mouse" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Turns mouse on or off</DESCRIPTION>
+							<VALUES>
+								<VALUE>on</VALUE>
+								<VALUE>off</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="CartType" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Options are 6 and 16. 6 = Two chip 16 KB 5200 cartridge. 16 = One chip 16 KB 5200 cartridge. CartType=16 is the default.</DESCRIPTION>
+							<VALUES>
+								<VALUE>6</VALUE>
+								<VALUE>16</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

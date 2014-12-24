@@ -2,9 +2,9 @@ MEmu = Phoenix
 MEmuV = v1.1
 MURL = http://arts-union.my1.ru/
 MAuthor = djvj
-MVersion = 2.0.2
-MCRC = E217601D
-iCRC = 7C17F75F
+MVersion = 2.0.3
+MCRC = C07F4A93
+iCRC = 109E182B
 MID = 635038268914342592
 MSystem = "Panasonic 3DO"
 ;------------------------------------------------------------------------
@@ -23,49 +23,32 @@ FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
-SelectGameMode := IniReadCheck(settingsFile, "Settings", "SelectGameMode","1",,1)	; 1 = Uses a loop to detect the Edit Box has the romname and path in it. This doesn't work on all PCs, so if you get stuck at the open rom window, use mode 2. 2 = Uses a simple Ctrl+v to paste the romname and path, then press Enter to load the game.
 ControlDelay := IniReadCheck(settingsFile, "Settings", "ControlDelay","20",,1) ; raise this if the module is getting stuck somewhere
 KeyDelay := IniReadCheck(settingsFile, "Settings", "KeyDelay","-1",,1) ; raise this if the module is getting stuck using SelectGameMode 2
-MLanguage := IniReadCheck(settingsFile, "Settings", "MLanguage","English",,1)		; If English, dialog boxes look for the word "Open" and if Spanish/Portuguese, looks for "Abrir"
 
-mLang := Object("English","Open","Spanish/Portuguese","Abrir")
-winLang := mLang[MLanguage]	; search object for the MLanguage associated to the user's language
-If !winLang
-	ScriptError("Your chosen language is: """ . MLanguage . """. It is not one of the known supported languages for this module: " . moduleName)
+dialogOpen := i18n("dialog.open")	; Looking up local translation
 
 If bezelEnabled
 	BezelStart(If Fullscreen = "true" ? "" : "fixResMode")
 
+hideEmuObj := Object(dialogOpen . " ahk_class #32770",0,"Phoenix ahk_class Mainframe",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 SetControlDelay, %ControlDelay%
-SetKeyDelay, %KeyDelay%		
+SetKeyDelay(KeyDelay)
 
 If romExtension in .7z,.rar,.zip,.cue
 	ScriptError("Pheonix does not support archived or cue files. Only ""iso"" files can be loaded. Either enable 7z support, or extract your games first.")
+
+HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
 
 Run(executable, emuPath)
 
 WinWait("Phoenix ahk_class Mainframe")
 WinWaitActive("Phoenix ahk_class Mainframe")
 WinMenuSelectItem, Phoenix ahk_class Mainframe,, File, Open ISO
-WinWait(winLang . " ahk_class #32770")
-WinWaitActive(winLang . " ahk_class #32770")
 
-If ( SelectGameMode = 1 ) {
-	Loop {
-		ControlGetText, edit1Text, Edit1, %winLang% ahk_class #32770
-		If ( edit1Text = romPath . "\" . romName . romExtension )
-			Break
-		Sleep, 100
-		ControlSetText, Edit1, %romPath%\%romName%%romExtension%, %winLang% ahk_class #32770
-	}
-	ControlSend, Button1, {Enter}, AHK_class #32770 ; Select Open
-} Else If ( SelectGameMode = 2 ) {
-	Clipboard := romPath . "\" . romName . romExtension
-	Send, ^v{Enter}
-} Else
-	ScriptError("You did not choose a valid SelectGameMode.`nOpen the module and set the mode at the top.")
+OpenROM(dialogOpen . " ahk_class #32770", romPath . "\" . romName . romExtension)
 
 WinWait("Phoenix ahk_class Mainframe")
 WinWaitActive("Phoenix ahk_class Mainframe")
@@ -77,6 +60,7 @@ If Fullscreen = true
 Sleep, 1000
 
 BezelDraw()
+HideEmuEnd()
 FadeInExit()
 Process("WaitClose", executable)
 7zCleanUp()

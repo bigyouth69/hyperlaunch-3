@@ -11,6 +11,10 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
 						</KEY>
+						<KEY name="DriveErrorFix" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set this to true if you have a physical A: drive and you get a 'Drive Not Ready' error when you launch the emulator.</DESCRIPTION>
+						</KEY>
 						<KEY name="DiagCart" required="false" nullable="false" FULLROW="true">
 							<KEYTYPE>FilePath</KEYTYPE>
 							<DESCRIPTION>Make sure you have Arnold V Diagnostic Cartridge.cpr set as this value if you want to run No Exit. You can use any other CPCPlus cart if you prefer, in that case make sure you edit the variable to the correct name.</DESCRIPTION>
@@ -20,6 +24,102 @@
 								<FILEEXTENSION>cpr</FILEEXTENSION>
 							</FILEEXTENSIONS>
 						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Command" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Used if rom requires a command after loading is complete to start the game. Use standard AutoHotkey key names, use {Wait} to pause 500 milliseconds between words/characters. ie, "R{Wait}C" to press the R and C keys with a slight delay between them. Useful for navigating through menus.</DESCRIPTION>
+						</KEY>
+						<KEY name="SendCommandDelay" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Time in milliseconds to wait initially until commands/keystrokes are typed for those games that have the Command setting filled in</DESCRIPTION>
+						</KEY>												
+						<KEY name="MachineType" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<VALUES>
+								<VALUE>CPC</VALUE>
+								<VALUE>CPC+</VALUE>
+							</VALUES>							
+							<DESCRIPTION>Run game in CPC or CPC+ mode</DESCRIPTION>
+						</KEY>												
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="Amstrad GX4000" required="false">
+			<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="DriveErrorFix" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set this to true if you have a physical A: drive and you get a 'Drive Not Ready' error when you launch the emulator.</DESCRIPTION>
+						</KEY>
+						<KEY name="DiagCart" required="false" nullable="false" FULLROW="true">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<DESCRIPTION>Make sure you have Arnold V Diagnostic Cartridge.cpr set as this value if you want to run No Exit. You can use any other CPCPlus cart if you prefer, in that case make sure you edit the variable to the correct name.</DESCRIPTION>
+							<PATHTYPE>Any</PATHTYPE>
+							<BASEPATH>%HyperLaunchPath%</BASEPATH>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>cpr</FILEEXTENSION>
+							</FILEEXTENSIONS>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="%SystemName%" required="false">
+			<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="DriveErrorFix" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Set this to true if you have a physical A: drive and you get a 'Drive Not Ready' error when you launch the emulator.</DESCRIPTION>
+						</KEY>
+						<KEY name="DiagCart" required="false" nullable="false" FULLROW="true">
+							<KEYTYPE>FilePath</KEYTYPE>
+							<DESCRIPTION>Make sure you have Arnold V Diagnostic Cartridge.cpr set as this value if you want to run No Exit. You can use any other CPCPlus cart if you prefer, in that case make sure you edit the variable to the correct name.</DESCRIPTION>
+							<PATHTYPE>Any</PATHTYPE>
+							<BASEPATH>%HyperLaunchPath%</BASEPATH>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>cpr</FILEEXTENSION>
+							</FILEEXTENSIONS>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Command" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Used if rom requires a command after loading is complete to start the game. Use standard AutoHotkey key names, use {Wait} to pause 500 milliseconds between words/characters. ie, "R{Wait}C" to press the R and C keys with a slight delay between them. Useful for navigating through menus.</DESCRIPTION>
+						</KEY>
+						<KEY name="SendCommandDelay" required="false" nullable="false">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Time in milliseconds to wait initially until commands/keystrokes are typed for those games that have the Command setting filled in</DESCRIPTION>
+						</KEY>												
+						<KEY name="MachineType" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<VALUES>
+								<VALUE>CPC</VALUE>
+								<VALUE>CPC+</VALUE>
+							</VALUES>							
+							<DESCRIPTION>Run game in CPC or CPC+ mode</DESCRIPTION>
+						</KEY>												
 					</KEYS>
 				</SECTION>
 			</SECTIONS>

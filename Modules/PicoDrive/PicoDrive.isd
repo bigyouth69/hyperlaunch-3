@@ -15,6 +15,18 @@
 							<KEYTYPE>String</KEYTYPE>
 							<DESCRIPTION>If you want to restore the screen to a different resolution from the one automatically detected one while ChangeRes is set to true, please fill the variable desired ScreenRes with the width|height|quality|frequency info (for example: 1280|1024|32|60 for 1280x1024 pixels with 32 bit colors and 60Hz frequency).</DESCRIPTION>
 						</KEY>
+						<KEY name="Bezel_Top_Offset_Screen_1" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you see part of the emulator window at the top of your playing screen increase this value. If your playing screen is hidden at the top decrease it.</DESCRIPTION>
+						</KEY>
+						<KEY name="Storyware_Page_UP_Key" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>Key for changing one page up the storywave book.</DESCRIPTION>
+						</KEY>
+						<KEY name="Storyware_Page_Down_Key" required="false" nullable="false">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>Key for changing one page down the storywave book.</DESCRIPTION>
+						</KEY>						
 					</KEYS>
 				</SECTION>
 			</SECTIONS>
