@@ -1,9 +1,9 @@
 MEmu = ScummVM
 MEmuV = v1.5.0
 MURL = http://scummvm.org/
-MAuthor = djvj
+MAuthor = djvj, brolly
 MVersion = 2.0.6
-MCRC = B713DD84
+MCRC = 8D08D806
 iCRC = 3ADCD646
 MID = 635038268922749586
 MSystem = "ScummVM","Microsoft MS-DOS"
@@ -34,7 +34,7 @@ StartModule()
 BezelGUI()
 FadeInStart()
 
-settingsFile := modulePath . "\" . (If FileExist(modulePath . "\" . systemName . ".ini" ? systemName : moduleName) . ".ini"		; use a custom systemName ini If it exists
+settingsFile := modulePath . "\" . (If FileExist(modulePath . "\" . systemName . ".ini") ? systemName : moduleName) . ".ini"		; use a custom systemName ini If it exists
 scummDefaultConfigFile := A_AppData . "\ScummVM\scummvm.ini"	; ScummVM's default ini file it creates on first launch
 customConfigFile := IniReadCheck(settingsFile, "Settings", "CustomConfig","",,1)	; Set the path to a custom config file and the module will use this instead of the ScummVM's default one
 customConfigFile := GetFullName(customConfigFile)	; convert relative path to absolute
@@ -151,7 +151,7 @@ If (LaunchMode = "ParseIni")
 	romNameChanged := TargetName
 }
 
-options := "--no-console"
+options := " --no-console"
 configFile := If customConfigFile ? """ -c" . configFile . """" : ""		; If user set a path to a custom config file
 fullscreen := If Fullscreen = "true" ? " -f" : " -F"
 scummRomPath := If scummRomPath ? """ -p" . scummRomPath . """" : ""
