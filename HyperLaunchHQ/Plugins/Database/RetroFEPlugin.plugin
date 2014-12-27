@@ -102,7 +102,7 @@ namespace HyperEmu.Database
 
                             if (!cached_games.ContainsKey(name))
                             {
-                                GameXml game = new GameXml(name, title, "", "", system);
+                                GameXml game = new GameXml(name, title, "", "", "", system);
                                 cached_games.Add(name, game);
                             }
                         }
@@ -148,7 +148,7 @@ namespace HyperEmu.Database
                             readFromRomPath = false; //At least one entry found so all roms need to be listed on this file
                             if (!excluded_games.Contains(line.Trim()))
                             {
-                                GameXml gm = cached_games.ContainsKey(line.Trim()) ? cached_games[line.Trim()] : new GameXml(line.Trim(), line.Trim(), "", "", system);
+                                GameXml gm = cached_games.ContainsKey(line.Trim()) ? cached_games[line.Trim()] : new GameXml(line.Trim(), line.Trim(), "", "", "", system);
                                 gameList.Add(gm);
                             }
                         }
@@ -202,7 +202,7 @@ namespace HyperEmu.Database
                                     String name = Path.GetFileNameWithoutExtension(f);
                                     if (!excluded_games.Contains(name))
                                     {
-                                        GameXml gm = cached_games.ContainsKey(name) ? cached_games[name] : new GameXml(name, name, "", "", system);
+                                        GameXml gm = cached_games.ContainsKey(name) ? cached_games[name] : new GameXml(name, name, "", "", "", system);
                                         gameList.Add(gm);
                                     }
                                 }
