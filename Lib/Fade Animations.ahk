@@ -1,4 +1,4 @@
-MCRC=3FA1861E
+MCRC=DBD61470
 MVersion=1.0.5
 
 ; Default transition animation used for Fade_In
@@ -148,7 +148,7 @@ LegacyFadeOutTransition(direction,time){
 
 ; Bleasby's DefaultFadeAnimation included in HL - you can use it on both layer 3 animation and layer 3 7z animation
 DefaultFadeAnimation:
-;SetTimer, DetectFadeError, Off
+	;SetTimer, DetectFadeError, Off
 	Log("DefaultFadeAnimation - Started")
 	;====== Begin of menu code
 	fadeInActive=1	; As long as user did not press a key to exit fade, this var will be filled and fade will do its full animation	
@@ -309,26 +309,24 @@ DefaultFadeAnimation:
 		fadeLyr3CanvasW := fadeLyr3PicW
 		fadeLyr3CanvasH := fadeLyr3PicH
 	}
-	;====== Load database name
-	If !GameXMLInfo
-		Gosub ReadHyperSpinXML
 	;====== Rom Info Text
 	romInfoText := [] ; 1,1 - romInfoText ; 1,2 romInfoTextContent ; 1,3 - romInfoTextFormatedContent ; 1,4 - romInfoTextOptions ; 1,5 - romInfoBitmap ; 1,6 - romInfoBitmapX ; 1,7 - romInfoBitmapY ; 1,8 - romInfoBitmapW ; 1,9 - romInfoBitmapH
+	clearGameName := gameInfo["Name"].Value
+	stringSplit, clearGameName, clearGameName, (
+	clearGameName := clearGameName1
 	Displacement := 0
 	Loop, parse, fadeRomInfoOrder,|,
 		{
 		romInfoText[A_Index,1] := A_LoopField 
 		If (romInfoText[A_Index,1] = "Description") {
 			descriptionTextIndex := A_Index
-			romInfoText[A_Index,2] := XMLDescription
+			romInfoText[A_Index,2] := gameInfo["Name"].Value
 			If  (fadeRomInfoDescription="filtered text") {
-				stringSplit, clearXMLDescription, XMLDescription, (
-				romInfoText[A_Index,3] := clearXMLDescription1
+				romInfoText[A_Index,3] := clearGameName
 			} else if (fadeRomInfoDescription="text") {
 				romInfoText[A_Index,3] := romInfoText[A_Index,2]
 			} else if (fadeRomInfoDescription="filtered text with label") {
-				stringSplit, clearXMLDescription, XMLDescription, (
-				romInfoText[A_Index,3] := "Game: " . clearXMLDescription1
+				romInfoText[A_Index,3] := "Game: " . clearGameName
 			} else if (fadeRomInfoDescription="text with label") {
 				romInfoText[A_Index,3] := "Game: " . romInfoText[A_Index,2]
 			}	
@@ -340,26 +338,26 @@ DefaultFadeAnimation:
 				romInfoText[A_Index,3] := romInfoText[A_Index,2]
 		} Else If (romInfoText[A_Index,1] = "Year") {
 			yearTextIndex := A_Index
-			romInfoText[A_Index,2] := XMLYear
+			romInfoText[A_Index,2] := gameInfo["Year"].Value
 			If  (fadeRomInfoYear="text with label") {
 				romInfoText[A_Index,3] := "Year: " . romInfoText[A_Index,2]
 			} Else 
 				romInfoText[A_Index,3] := romInfoText[A_Index,2]
 		} Else If (romInfoText[A_Index,1] = "Manufacturer") {
 			manufacturerTextIndex := A_Index		
-			romInfoText[A_Index,2] := XMLManufacturer
+			romInfoText[A_Index,2] := gameInfo["Manufacturer"].Value
 			If  (fadeRomInfoManufacturer="text with label") {
 				romInfoText[A_Index,3] := "Manufacturer: " . romInfoText[A_Index,2]
 			 } Else 
 				romInfoText[A_Index,3] := romInfoText[A_Index,2]
 		} Else If (romInfoText[A_Index,1] = "Genre") {
-			romInfoText[A_Index,2] := XMLGenre
+			romInfoText[A_Index,2] := gameInfo["Genre"].Value
 			If  (fadeRomInfoGenre="text with label") {
 				romInfoText[A_Index,3] := "Genre: " . romInfoText[A_Index,2]
 			} Else 
 				romInfoText[A_Index,3] := romInfoText[A_Index,2]
 		} Else If (romInfoText[A_Index,1] = "Rating") {
-			romInfoText[A_Index,2] := XMLRating
+			romInfoText[A_Index,2] := gameInfo["Rating"].Value
 			If  (fadeRomInfoRating="text with label") {
 				romInfoText[A_Index,3] := "Rating: " . romInfoText[A_Index,2]
 			} Else 
@@ -569,7 +567,7 @@ DefaultFadeAnimation:
 			If (Totaldiscsofcurrentgame>1) 
 				DescriptionNameWithoutDisc := romTable[1,4]
 			Else
-				DescriptionNameWithoutDisc := XMLDescription 
+				DescriptionNameWithoutDisc := gameInfo["Name"].Value 
 			stringsplit, DescriptionNameSplit, DescriptionNameWithoutDisc, "(", ;Only game  description name
 			ClearDescriptionName := RegexReplace( DescriptionNameSplit1, "^\s+|\s+$" ) ; Statistics cleared game name
 			IniRead, Number_of_Times_Played, % HLDataPath . "\Statistics\" . systemName . ".ini", % dbName, Number_of_Times_Played, 0
@@ -725,8 +723,8 @@ DefaultFadeAnimation:
 		SetTimer, FadeLayer4Anim, -1
 	Else If (FadeLayer4AnimFilesAr.MaxIndex() > 0)
 		SetTimer, FadeLayer4Anim, %fadeLyr4FPS%
-	timeToMax := fadeLyr3Speed / fadeLyr3Repeat 	; calculate how long layer 3 needs to take to show 100% of the image
 	;====== Defining Progress Bar Update for non 7z 
+	timeToMax := fadeLyr3Speed / fadeLyr3Repeat ; calculate how long layer 3 needs to take to show 100% of the image
 	; update fadeInExitDelay value to assure that the fadeLyr3 animation finishes before exiting fade
 	If (((fadeLyr3Type = "Image") or (fadeLyr3Type = "ImageAndBar")) and (fadeInLyr3File) and (fadeLyr3Repeat))
 		if (fadeLyr3Speed>fadeInDelay+fadeInExitDelay)
@@ -760,10 +758,10 @@ DefaultFadeAnimation:
 			SoundPlay, %loadingSound%
 		}
 	}
-	;======Draw fade animation to the screen
+	;==== Create timer to update layer 3
+	SetTimer, _DefaultFadeAnimationLoop, 50
 	startTime := A_TickCount
 	layer3startTime := A_TickCount
-	SetTimer, _DefaultFadeAnimationLoop, 50
 	If fadeInActive
 		GoSub, FadeInDelay	; This must always be at the end of all animation functions. It's a simple timer that will force the GUI to stay up the defined amount of delay If the animation was shorter then said delay.
 Return
@@ -1006,4 +1004,6 @@ MyFirstAnimation:
 	Log("MyFirstAnimation - Started")
 	Log("MyFirstAnimation - Ended")
 Return
+
+
 

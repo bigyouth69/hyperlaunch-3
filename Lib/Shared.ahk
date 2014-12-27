@@ -1,4 +1,4 @@
-MCRC=C99FBF08
+MCRC=AC2DAF33
 MVersion=1.1.7
 
 StartModule(){
@@ -1653,7 +1653,6 @@ DaemonTools(action,file="",type="",drive=0){
 	Global fadeIn,fadeLyr37zAnimation,fadeLyr3Animation ,fadeLyr3Type,HLObject,7zTempRomExists,use7zAnimation,romExSize,7z1stRomPath,7zRomPath,7zPID,7zStatus
 	Global romMapTable,romMappingFirstMatchingExt,romMenuRomName ;,romMappingEnabled
 	Global altArchiveNameOnly,altRomNameOnly,altArchiveAndRomName,altArchiveAndManyRomNames,altRomNamesOnly
-	Global fadeAnimationLoopLoaded
 	Static 7z1stUse
 	If 7zEnabled = true
 	{	old7zP:=7zP,old7zN:=7zN,old7zE:=7zE	; store values sent to 7z for logging
@@ -1844,8 +1843,8 @@ DaemonTools(action,file="",type="",drive=0){
 			If (fadeIn = "true" && !call)
 			{	Log("7z - FadeIn is true, starting timer to update Layer 3 animation with 7z.exe statistics",4)
 				use7zAnimation = true	; this will tell the Fade animation (so progress bar is shown) that 7z is being used to extract a rom
-				SetTimer, UpdateFadeFor7z%zz%, -1	; Create a new timer to start updating Layer 3 of fade. This needs to be a settimer otherwise progress bar gets stuck at 0 during extraction because the thread is waiting for that loop to finish and 7z never starts.
-				; Gosub, UpdateFadeFor7z%zz%	; Create a new timer to start updating Layer 3 of fade
+				;SetTimer, UpdateFadeFor7z%zz%, -1	; Create a new timer to start updating Layer 3 of fade. This needs to be a settimer otherwise progress bar gets stuck at 0 during extraction because the thread is waiting for that loop to finish and 7z never starts.
+				Gosub, UpdateFadeFor7z%zz%	; Create a new timer to start updating Layer 3 of fade
 			} Else if (call="mg") {	; If 7z was called from MG, we need start updating its progress bar
 				Log("7z - MG triggered 7z, starting the MG Progress Bar",4)
 				SetTimer, UpdateMGFor7z%zz%, -1
@@ -1856,20 +1855,6 @@ DaemonTools(action,file="",type="",drive=0){
 			If (logLevel >= 4) {	; all debug levels will dump extraction info to log
 				Log("7z - Logging is debug or higher, dumping 7z Extraction info to log",4)
 				SetTimer, DumpExtractionToLog, -1
-			}
-			; Wait for at most three seconds to the fade animation timer creation  
-			Log("7z - Starting Fade loop check",4)
-			timeout := A_TickCount
-			Loop
-				{
-				If fadeAnimationLoopLoaded {
-					Log("7z - Fade animation detected, ending loop",4)
-					Break
-				}
-				If (timeout < A_TickCount - 3000) {
-					Log("7z - Fade animation not detected, timing out of loop",4)
-					Break
-				}
 			}
 			Log("7z - Starting 7z extraction of " . 7zP . "\" . 7zN . 7zE . "  to " . 7zExSizeCheck,4)
 			7zRunning := 1
@@ -1931,7 +1916,7 @@ DaemonTools(action,file="",type="",drive=0){
 	}
 	Return
 	
-	DumpExtractionToLog:
+	DumpExtractionToLog:			
 	Process("Wait", "7z.exe", 2)
 		Loop {
 			; Updating 7z extraction info
