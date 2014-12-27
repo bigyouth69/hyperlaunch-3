@@ -10,6 +10,65 @@
                                        Release History                                       
 =============================================================================================
 
+v1.1.1 (December 27th, 2014):
+  * Made text MG artworl label text field editable under Settings->Plugins
+  * Fixed a bug in the HLHQ Plugin which was making the XML creation fail when adding a new system
+  * Fixed bug where the IC Enable option was updating the wrong setting
+  * Fixed issue with relative paths when launching the active frontend directly from HLHQ
+
+v1.1.0 (December 23rd, 2014):
+  * Added Panic hotkey. This will allow you to always be able to kill HyperLaunch if by some reason 
+    it blocks you out from task manager and your exit script key won't work. Press Ctrl+Alt+Q to kill 
+    it, you can enabled/disable this option in the HLHQ settings tab. Make sure you only enable it when 
+    testing
+  * In the module info panel it's now possible to see if a module has multi-game support implemented or not
+  * Added support for new bezel/IC ini keys : IC_Display_Random_Card_on_Startup, IC_Random_Slide_Show_Timer
+  * Fixed bug that was causing the creation of new game keymapper profiles not to work after you have audited a 
+    system
+  * Added new SYSTEMS tag to ISD files. This allows ini files declared as %SystemName% to be valid for 
+    certain systems only
+  * DataGrid listing the emulators is now sortable by any column
+  * Added new button to run HyperPause directly to a specific game without actually launching it (Games tab)
+  * Added new buttons to test MultiGame and Fade screens for a specific game without launching them (Games tab)
+  * Also added new buttons for launching default fade screens at a system level (Settings/Fade - General tab)
+  * Added support for all new keys added to the current version of HyperLaunch
+  * New form to configure your launch locking password
+  * Ability to browse to rompaths from the emulators tab, simply right click on a line in the rom path table and 
+    select Browse
+  * Added support to per game configurations (7zCleanup and Lock Launch) through Game Options.ini file. This can be 
+    done through the Games tab
+  * Automatic database generation based on rom paths and default emulator file extensions. Simply add a system, set 
+    the rom paths and the its default emulator and press the generate database button in the emulators tab
+  * Warning is now issued whenever a duplicate system or game is found in any database
+  * Use Global checkbox is now hidden on all editors unless you are under the context of a system
+  * Added global settings overlay support for the HyperPause tabs
+  * Added support and validators for all fields that support values in the new portrait|landscape format
+  * Support for multiple frontends with a single HyperLaunch/HyperLaunchHQ install, launch HyperLaunchHQ using 
+    HyperLaunchHQ.exe -fp "PATH_TO_FRONTEND_EXE" to override the setting in the HyperLaunch.ini file
+  * Added plugin for PinballX
+  * Default database file for HyperLanchHQ is now Databases\Systems.xml (format is still the same)
+  * Added new form to create and maintain multiple frontends. HL and HLHQ are now completely frontend independent. You 
+    can setup multiple frontends within HLHQ and switch between them with a click of a button
+  * Added new option to minimize HLHQ to the system tray
+  * Module Info Panel - Support for multiple URLs on the Module's MURL header tag
+  * Any http links in the module's notes are now clickable from within the Module Notes window
+  * Added button to launch games directly from the Alternate Emulators tab
+  * Added support to browse to the different media folders for each game from the audit panel. Access it by right 
+    clicking on the selected game
+  * Added File Size column to the Game Audit grid (you can hide it by right clicking on the table header)
+  * Added support to launch games on different emulators directly from the Game Audit grid (Right click on selected game)
+  * Adding new systems directly from HLHQ through a wizard. Plugin must support this feature, right now only HLHQ and 
+    HyperSpin plugins support it
+  * Deletion of systems directly from HLHQ
+  * Added support for editing Global Plugins.ini and Plugins.ini. New tab named Plugins inside the Settings section, this tab 
+    works in context with the currently active plugin in HLHQ
+  * Removed all frontend related ini keys from the GUI. HyperLaunch and HyperLaunchHQ code is now fully frontend independent
+  * Added visual notification for when checking for errors in the alternate emulators section
+  * Added column with line number on the Log Viewer
+  * Added buttons to browse to the emulator folder through Explorer on the Emulators and Alternate Emulators screens
+  * Added button to browse to 7z Extract Path so you can clean it if needed
+  * Some other minor corrections
+
 v1.0.13 (January 18th, 2014):
   * Added support for the new Keymapper_FrontEnd_Profile key which has been moved to the main 
     HyperLaunch.ini file
