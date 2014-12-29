@@ -1,5 +1,5 @@
-MCRC=361BCA40
-MVersion=1.1.8
+MCRC=9C6DC25A
+MVersion=1.1.9
 
 StartModule(){
 	Global gameSectionStartTime,gameSectionStartHour,skipChecks,dbName,romPath,romName,romExtension,systemName,moduleName,MEmu,MEmuV,MURL,MAuthor,MVersion,MCRC,iCRC,MSystem,romMapTable,romMappingLaunchMenuEnabled,romMenuRomName,7zEnabled,hideCursor,toggleCursorKey,winVer,zz
@@ -2646,59 +2646,61 @@ BuildAssetsTable(list,label,AssetType,extensions=""){
 	stringSplit, AssetTypeArray, AssetType, |,
 	loop, parse, list,|, 
 	{
-		Log("BuildAssetsTable - Searching for: " . A_LoopField,4)
-		currentLabel := labelArray%A_index%
-		currentAssetType := AssetTypeArray%A_index% 
-		RASHNDOCT := FileExist(A_LoopField)
-		if InStr(RASHNDOCT, "D") { ; it is a folder
-			folderName := A_LoopFileName
-			Loop, % A_LoopField . "\*.*"
-			{   If A_LoopFileExt in %extensions%
-				{	currentobj := {}
-					if (currentLabel="keepFileName")
-						currentobj["Label"] := folderName
-					else
-						currentobj["Label"] := currentLabel
-					if obj[currentLabel].Label
-					{   currentobj := obj[currentLabel]
-						currentobj.TotalItems := currentobj.TotalItems+1
-					} else {
-						currentobj.TotalItems := 1
-						obj.TotalLabels := if obj.TotalLabels ? obj.TotalLabels + 1 : 1
-						obj[obj.TotalLabels] := currentobj.Label
+		if !(labelArray%A_index% = "#disabled#")
+		{
+			Log("BuildAssetsTable - Searching for: " . A_LoopField,4)
+			currentLabel := labelArray%A_index%
+			currentAssetType := AssetTypeArray%A_index% 
+			RASHNDOCT := FileExist(A_LoopField)
+			if InStr(RASHNDOCT, "D") { ; it is a folder
+				folderName := A_LoopFileName
+				Loop, % A_LoopField . "\*.*"
+				{   If A_LoopFileExt in %extensions%
+					{	currentobj := {}
+						if (currentLabel="keepFileName")
+							currentobj["Label"] := folderName
+						else
+							currentobj["Label"] := currentLabel
+						if obj[currentLabel].Label
+						{   currentobj := obj[currentLabel]
+							currentobj.TotalItems := currentobj.TotalItems+1
+						} else {
+							currentobj.TotalItems := 1
+							obj.TotalLabels := if obj.TotalLabels ? obj.TotalLabels + 1 : 1
+							obj[obj.TotalLabels] := currentobj.Label
+						}
+						currentobj["Path" . currentobj.TotalItems] := A_LoopFileLongPath
+						currentobj["Ext" . currentobj.TotalItems] := A_LoopFileExt
+						currentobj["AssetType"] := currentAssetType
+						currentobj["Type"] := "ImageGroup"
+						obj.Insert(currentobj["Label"], currentobj)
 					}
-					currentobj["Path" . currentobj.TotalItems] := A_LoopFileLongPath
-					currentobj["Ext" . currentobj.TotalItems] := A_LoopFileExt
-					currentobj["AssetType"] := currentAssetType
-					currentobj["Type"] := "ImageGroup"
-					obj.Insert(currentobj["Label"], currentobj)
 				}
-			}
-		} else if InStr(RASHNDOCT, "A") { ; it is a file
-			SplitPath, A_LoopField, , currentDir,, FileNameWithoutExtension
-			loop, parse, extensions,`,, 
-			{
-				If FileExist(currentDir . "\" . FileNameWithoutExtension . "." . A_LoopField)
-				{	currentobj := {}
-					if (currentLabel="keepFileName")
-						currentobj["Label"] := FileNameWithoutExtension
-					else
-						currentobj["Label"] := currentLabel
-					if obj[FileNameWithoutExtension].Label
-					{   currentobj := obj[FileNameWithoutExtension]
-						currentobj.TotalItems := currentobj.TotalItems+1
-					} else {
-						currentobj.TotalItems := 1
-						obj.TotalLabels := if obj.TotalLabels ? obj.TotalLabels + 1 : 1
-						obj[obj.TotalLabels] := currentobj.Label
-					}
-					currentobj["Path" . currentobj.TotalItems] := currentDir . "\" . FileNameWithoutExtension . "." . A_LoopField
-					currentobj["Ext" . currentobj.TotalItems] := A_LoopField
-					currentobj["AssetType"] := currentAssetType
-					obj.Insert(currentobj["Label"], currentobj)  
-				}	
-			}
-		}			
+			} else if InStr(RASHNDOCT, "A") { ; it is a file
+				SplitPath, A_LoopField, , currentDir,, FileNameWithoutExtension
+				loop, parse, extensions,`,, 
+				{
+					If FileExist(currentDir . "\" . FileNameWithoutExtension . "." . A_LoopField)
+					{	currentobj := {}
+						if (currentLabel="keepFileName")
+							currentobj["Label"] := FileNameWithoutExtension
+						else
+							currentobj["Label"] := currentLabel
+						if obj[FileNameWithoutExtension].Label
+						{   currentobj := obj[FileNameWithoutExtension]
+							currentobj.TotalItems := currentobj.TotalItems+1
+						} else {
+							currentobj.TotalItems := 1
+							obj.TotalLabels := if obj.TotalLabels ? obj.TotalLabels + 1 : 1
+							obj[obj.TotalLabels] := currentobj.Label
+						}
+						currentobj["Path" . currentobj.TotalItems] := currentDir . "\" . FileNameWithoutExtension . "." . A_LoopField
+						currentobj["Ext" . currentobj.TotalItems] := A_LoopField
+						currentobj["AssetType"] := currentAssetType
+						obj.Insert(currentobj["Label"], currentobj)  
+					}	
+				}
+		}	}			
 	}		
 	if (logLevel>=5){
 		for index, element in obj
