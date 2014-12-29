@@ -1,5 +1,5 @@
-MCRC=264ED3BB
-MVersion=1.0.5
+MCRC=79F94ED1
+MVersion=1.0.6
 
 FadeInStart(){
 	Gosub, FadeInStart
@@ -170,8 +170,22 @@ FadeInStart:
 		If FileExist(fadeInLyr2File)	; If a layer 2 image exists, let's get its dimensions
 		{	fadeLyr2Pic := Gdip_CreateBitmapFromFile(fadeInLyr2File)
 			Gdip_GetImageDimensions(fadeLyr2Pic, fadeLyr2PicW, fadeLyr2PicH)
-			fadeLyr2PicW := fadeLyr2PicW * fadeLyr2Adjust
-			fadeLyr2PicH := fadeLyr2PicH * fadeLyr2Adjust
+			; find Width and Height
+			If (fadeLyr2Pos = "Stretch and Lose Aspect"){
+				fadeLyr2PicW := baseScreenWidth
+				fadeLyr2PicH := baseScreenHeight
+				fadeLyr2PicPadX := 0 , fadeLyr2PicPadY := 0
+			} else if (fadeLyr2Pos = "Stretch and Keep Aspect"){	
+				widthMaxPercent := ( baseScreenWidth / fadeLyr2PicW )	; get the percentage needed to maximumise the image so it reaches the screen's width
+				heightMaxPercent := ( baseScreenHeight / fadeLyr2PicH )
+				percentToEnlarge := If (widthMaxPercent < heightMaxPercent) ? widthMaxPercent : heightMaxPercent	; this basicallys says if the width's max reaches the screen's width first, use the width's percentage instead of the height's
+				fadeLyr2PicW := Round(fadeLyr2PicW * percentToEnlarge)	
+				fadeLyr2PicH := Round(fadeLyr2PicH * percentToEnlarge)	
+				fadeLyr2PicPadX := 0 , fadeLyr2PicPadY := 0
+			} else {
+				fadeLyr2PicW := fadeLyr2PicW * fadeLyr2Adjust
+				fadeLyr2PicH := fadeLyr2PicH * fadeLyr2Adjust
+			}
 			GetFadePicPosition(fadeLyr2PicX,fadeLyr2PicY,fadeLyr2X,fadeLyr2Y,fadeLyr2PicW,fadeLyr2PicH,fadeLyr2Pos)
 			; figure out what quadrant the layer 2 image is in, so we know to apply a + or - pad value so the user does not have to
 			If fadeLyr2Pos in No Alignment,Center,Top Left Corner
@@ -193,7 +207,10 @@ FadeInStart:
 			fadeLyr2CanvasX := fadeLyr2PicX + fadeLyr2PicPadX , fadeLyr2CanvasY := fadeLyr2PicY + fadeLyr2PicPadY
 			fadeLyr2CanvasW := fadeLyr2PicW, fadeLyr2CanvasH := fadeLyr2PicH
 			pGraphUpd(Fade_G2,fadeLyr2CanvasW,fadeLyr2CanvasH)
-			Gdip_Alt_DrawImage(Fade_G2, fadeLyr2Pic, 0, 0, fadeLyr2PicW, fadeLyr2PicH, 0, 0, fadeLyr2PicW//fadeLyr2Adjust, fadeLyr2PicH//fadeLyr2Adjust)
+			if ((fadeLyr2Pos = "Stretch and Lose Aspect") or (fadeLyr2Pos = "Stretch and Keep Aspect"))
+				Gdip_Alt_DrawImage(Fade_G2, fadeLyr2Pic, 0, 0, fadeLyr2PicW, fadeLyr2PicH)
+			else
+				Gdip_Alt_DrawImage(Fade_G2, fadeLyr2Pic, 0, 0, fadeLyr2PicW, fadeLyr2PicH, 0, 0, fadeLyr2PicW//fadeLyr2Adjust, fadeLyr2PicH//fadeLyr2Adjust)
 		}
 
 		%fadeInTransitionAnimation%("in",fadeInDuration)
@@ -203,9 +220,15 @@ FadeInStart:
 		fadeOptionsScale() ; scale fade options to adjust for user resolution
 		
 		; Create canvas for all remaining fade in screens
-		Loop, 5 { 
-        CurrentGUI := A_Index+2
+		Loop, 6 { 
 			OwnerGUI := CurrentGUI - 1
+			if (A_Index=1) {
+				CurrentGUI := "3Static"   ; creating layer 3 static
+			} else if  (A_Index=2) {
+				OwnerGUI := "3Static"
+				CurrentGUI := A_Index+1   ; creating layer 3
+			} else 
+				CurrentGUI := A_Index+1   ; creating layer 4 to 7
 			Gui, Fade_GUI%CurrentGUI%: +OwnerFade_GUI%OwnerGUI% -Caption +E0x80000 +LastFound +ToolWindow +AlwaysOnTop
 			Gui, Fade_GUI%CurrentGUI%: Margin,0,0
             Gui, Fade_GUI%CurrentGUI%: Show,, fadeLayer%CurrentGUI%
@@ -647,6 +670,9 @@ AnimateWindow(Hwnd,Direction,Type,Time=100){
 
 fadeOptionsScale(){
 	global
+	OptionScale(fadeLyr3StaticX, fadeXScale)
+	OptionScale(fadeLyr3StaticY, fadeYScale)
+	OptionScale(fadeLyr3StaticPicPad, fadeXScale) ;could be Y also
 	OptionScale(fadeLyr3X, fadeXScale)
 	OptionScale(fadeLyr3Y, fadeYScale)
 	OptionScale(fadeLyr3PicPad, fadeXScale) ;could be Y also

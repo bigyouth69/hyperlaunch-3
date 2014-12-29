@@ -1,5 +1,5 @@
-MCRC=AC2DAF33
-MVersion=1.1.7
+MCRC=361BCA40
+MVersion=1.1.8
 
 StartModule(){
 	Global gameSectionStartTime,gameSectionStartHour,skipChecks,dbName,romPath,romName,romExtension,systemName,moduleName,MEmu,MEmuV,MURL,MAuthor,MVersion,MCRC,iCRC,MSystem,romMapTable,romMappingLaunchMenuEnabled,romMenuRomName,7zEnabled,hideCursor,toggleCursorKey,winVer,zz
@@ -708,9 +708,15 @@ GetBGPicPosition(ByRef retX,ByRef retY,ByRef retW,ByRef retH,w,h,pos){
 ; Usage, params 1&2 are byref so supply the var you want to be filled with the calculated positions. Next 4 are the original pics xy,w,h. Last is the position the user wants.
 GetFadePicPosition(ByRef retX, ByRef retY,x,y,w,h,pos){
 	Global baseScreenWidth, baseScreenHeight 
-	If (pos = "Center") {
-		retX := ( baseScreenWidth / 2 ) - ( w / 2 )
-		retY := ( baseScreenHeight / 2 ) - ( h / 2 )
+	If (pos = "Stretch and Lose Aspect"){   ; image is stretched to screen, loosing aspect
+		retX := 0
+		retY := 0
+	} Else If (pos = "Stretch and Keep Aspect")  {	; image is stretched to screen, keeping aspect
+		retX := round(( baseScreenWidth / 2 ) - ( w / 2 ))	
+		retY := round(( baseScreenHeight / 2 ) - ( h / 2 ))
+	} Else If (pos = "Center") {
+		retX := round(( baseScreenWidth / 2 ) - ( w / 2 ))
+		retY := round(( baseScreenHeight / 2 ) - ( h / 2 ))
 	} Else If (pos = "Top Left Corner") {
 		retX := 0
 		retY := 0
@@ -724,17 +730,17 @@ GetFadePicPosition(ByRef retX, ByRef retY,x,y,w,h,pos){
 		retX := baseScreenWidth - w
 		retY := baseScreenHeight - h
 	} Else If (pos = "Top Center") {
-		retX := ( baseScreenWidth / 2 ) - ( w / 2 )
+		retX := round(( baseScreenWidth / 2 ) - ( w / 2 ))
 		retY := 0
 	} Else If (pos = "Bottom Center") {
-		retX := ( baseScreenWidth / 2 ) - ( w / 2 )
+		retX := round(( baseScreenWidth / 2 ) - ( w / 2 ))
 		retY := baseScreenHeight - h
 	} Else If (pos = "Left Center") {
 		retX := 0
-		retY := ( baseScreenHeight / 2 ) - ( h / 2 )
+		retY := round(( baseScreenHeight / 2 ) - ( h / 2 ))
 	} Else If (pos = "Right Center") {
 		retX := baseScreenWidth - w
-		retY := ( baseScreenHeight / 2 ) - ( h / 2 )
+		retY := round(( baseScreenHeight / 2 ) - ( h / 2 ))
 	} Else {
 		retX := x
 		retY := y

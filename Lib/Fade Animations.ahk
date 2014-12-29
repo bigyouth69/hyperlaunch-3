@@ -1,10 +1,11 @@
-MCRC=DBD61470
-MVersion=1.0.5
+MCRC=F3214186
+MVersion=1.0.6
 
 ; Default transition animation used for Fade_In
 DefaultAnimateFadeIn(direction,time){
 	Global Fade_hwnd1,Fade_hdc1,fadeLyr1CanvasX,fadeLyr1CanvasY,fadeLyr1CanvasW,fadeLyr1CanvasH
 	Global Fade_hwnd2,Fade_hdc2,fadeLyr2CanvasX,fadeLyr2CanvasY,fadeLyr2CanvasW,fadeLyr2CanvasH
+	Global Fade_hwnd3Static,Fade_hdc3Static,fadeLyr3StaticCanvasX,fadeLyr3StaticCanvasY,fadeLyr3StaticCanvasW,fadeLyr3StaticCanvasH
 	Global Fade_hwnd3,Fade_hdc3,fadeLyr3CanvasX,fadeLyr3CanvasY,fadeLyr3CanvasW,fadeLyr3CanvasH
 	Global Fade_hwnd4,Fade_hdc4,fadeLyr4CanvasX,fadeLyr4CanvasY,fadeLyr4CanvasW,fadeLyr4CanvasH,FadeLayer4AnimFilesAr
 	Global Fade_hwnd5,Fade_hdc5,fadeLyr5CanvasX,fadeLyr5CanvasY,fadeLyr5CanvasW,fadeLyr5CanvasH
@@ -22,6 +23,8 @@ DefaultAnimateFadeIn(direction,time){
 			Alt_UpdateLayeredWindow(Fade_hwnd2,Fade_hdc2,fadeLyr2CanvasX,fadeLyr2CanvasY,fadeLyr2CanvasW,fadeLyr2CanvasH, t)
 		If direction = out
 		{
+			if fadeLyr3StaticCanvasW
+				Alt_UpdateLayeredWindow(Fade_hwnd3Static, Fade_hdc3Static,fadeLyr3StaticCanvasX,fadeLyr3StaticCanvasY, fadeLyr3StaticCanvasW, fadeLyr3StaticCanvasH, t)
 			if fadeLyr3CanvasW
 				Alt_UpdateLayeredWindow(Fade_hwnd3, Fade_hdc3,fadeLyr3CanvasX,fadeLyr3CanvasY, fadeLyr3CanvasW, fadeLyr3CanvasH, t)
 			if fadeLyr5CanvasW
@@ -65,6 +68,7 @@ DefaultAnimateFadeOut(direction,time){
 LegacyFadeInTransition(direction,time){
 	Global Fade_hwnd1,Fade_hdc1,Fade_G1,fadeLyr1CanvasX,fadeLyr1CanvasY,fadeLyr1CanvasW,fadeLyr1CanvasH
 	Global Fade_hwnd2,Fade_hdc2,fadeLyr2CanvasX,fadeLyr2CanvasY,fadeLyr2CanvasW,fadeLyr2CanvasH
+	Global Fade_hwnd3Static,Fade_hdc3Static,fadeLyr3StaticCanvasX,fadeLyr3StaticCanvasY,fadeLyr3StaticCanvasW,fadeLyr3StaticCanvasH
 	Global Fade_hwnd3,Fade_hdc3,fadeLyr3CanvasX,fadeLyr3CanvasY,fadeLyr3CanvasW,fadeLyr3CanvasH
 	Global Fade_hwnd4,Fade_hdc4,fadeLyr4CanvasX,fadeLyr4CanvasY,fadeLyr4CanvasW,fadeLyr4CanvasH
 	Global Fade_hwnd5,Fade_hdc5,fadeLyr5CanvasX,fadeLyr5CanvasY,fadeLyr5CanvasW,fadeLyr5CanvasH
@@ -93,12 +97,14 @@ LegacyFadeInTransition(direction,time){
 	If direction = out
 	{	SetTimer, FadeLayer4Anim, Off
 		Gdip_GraphicsClear(Fade_G2)
+		Gdip_GraphicsClear(Fade_G3Static)
 		Gdip_GraphicsClear(Fade_G3)
 		Gdip_GraphicsClear(Fade_G4)
 		Gdip_GraphicsClear(Fade_G5)
 		Gdip_GraphicsClear(Fade_G6)
 		Gdip_GraphicsClear(Fade_G7)
 		Alt_UpdateLayeredWindow(Fade_hwnd2, Fade_hdc2, fadeLyr2CanvasX, fadeLyr2CanvasY, fadeLyr2CanvasW, fadeLyr2CanvasH)
+		Alt_UpdateLayeredWindow(Fade_hwnd3Static, Fade_hdc3Static,fadeLyr3StaticCanvasX,fadeLyr3StaticCanvasY, fadeLyr3StaticCanvasW, fadeLyr3StaticCanvasH)
 		Alt_UpdateLayeredWindow(Fade_hwnd3, Fade_hdc3, fadeLyr3CanvasX, fadeLyr3CanvasY, fadeLyr3CanvasW, fadeLyr3CanvasH)
 		Alt_UpdateLayeredWindow(Fade_hwnd4, Fade_hdc4, fadeLyr4CanvasX, fadeLyr4CanvasY, fadeLyr4CanvasW, fadeLyr4CanvasH)
 		Alt_UpdateLayeredWindow(Fade_hwnd5, Fade_hdc5, fadeLyr5CanvasX, fadeLyr5CanvasY, fadeLyr5CanvasW, fadeLyr5CanvasH)
@@ -152,6 +158,54 @@ DefaultFadeAnimation:
 	Log("DefaultFadeAnimation - Started")
 	;====== Begin of menu code
 	fadeInActive=1	; As long as user did not press a key to exit fade, this var will be filled and fade will do its full animation	
+	;====== Loading info about layer 3 image
+	if fadeLyr3StaticPrefix
+		fadeInLyr3StaticFile := GetFadePicFile(fadeLyr3StaticPrefix)
+	If FileExist(fadeInLyr3StaticFile)	; If a layer 3 static image exists, let's get its dimensions
+	{	fadeLyr3StaticPic := Gdip_CreateBitmapFromFile(fadeInLyr3StaticFile)
+		Gdip_GetImageDimensions(fadeLyr3StaticPic, fadeLyr3StaticPicW, fadeLyr3StaticPicH)
+		; find Width and Height
+		If (fadeLyr3StaticPos = "Stretch and Lose Aspect"){
+			fadeLyr3StaticPicW := baseScreenWidth
+			fadeLyr3StaticPicH := baseScreenHeight
+			fadeLyr3StaticPicPadX := 0 , fadeLyr3StaticPicPadY := 0
+		} else if (fadeLyr3StaticPos = "Stretch and Keep Aspect"){	
+			widthMaxPercent := ( baseScreenWidth / fadeLyr3StaticPicW )	; get the percentage needed to maximumise the image so it reaches the screen's width
+			heightMaxPercent := ( baseScreenHeight / fadeLyr3StaticPicH )
+			percentToEnlarge := If (widthMaxPercent < heightMaxPercent) ? widthMaxPercent : heightMaxPercent	; this basicallys says if the width's max reaches the screen's width first, use the width's percentage instead of the height's
+			fadeLyr3StaticPicW := Round(fadeLyr3StaticPicW * percentToEnlarge)	
+			fadeLyr3StaticPicH := Round(fadeLyr3StaticPicH * percentToEnlarge)	
+			fadeLyr3StaticPicPadX := 0 , fadeLyr3StaticPicPadY := 0
+		} else {
+			fadeLyr3StaticPicW := fadeLyr3StaticPicW * fadeLyr3StaticAdjust
+			fadeLyr3StaticPicH := fadeLyr3StaticPicH * fadeLyr3StaticAdjust
+		}
+		GetFadePicPosition(fadeLyr3StaticPicX,fadeLyr3StaticPicY,fadeLyr3StaticX,fadeLyr3StaticY,fadeLyr3StaticPicW,fadeLyr3StaticPicH,fadeLyr3StaticPos)
+		; figure out what quadrant the layer 3 Static image is in, so we know to apply a + or - pad value so the user does not have to
+		If fadeLyr3StaticPos in No Alignment,Center,Top Left Corner
+			fadeLyr3StaticPicPadX:=fadeLyr3StaticPicPad, fadeLyr3StaticPicPadY:=fadeLyr3StaticPicPad
+		Else If fadeLyr3StaticPos = Top Center
+			fadeLyr3StaticPicPadX:=0, fadeLyr3StaticPicPadY:=fadeLyr3StaticPicPad
+		Else If fadeLyr3StaticPos = Left Center
+			fadeLyr3StaticPicPadX:=fadeLyr3StaticPicPad, fadeLyr3StaticPicPadY:=0
+		Else If fadeLyr3StaticPos = Top Right Corner
+			fadeLyr3StaticPicPadX:=fadeLyr3StaticPicPad*-1, fadeLyr3StaticPicPadY:=fadeLyr3StaticPicPad
+		Else If fadeLyr3StaticPos = Right Center
+			fadeLyr3StaticPicPadX:=fadeLyr3StaticPicPad*-1, fadeLyr3StaticPicPadY:=0
+		Else If fadeLyr3StaticPos = Bottom Left Corner
+			fadeLyr3StaticPicPadX:=fadeLyr3StaticPicPad, fadeLyr3StaticPicPadY:=fadeLyr3StaticPicPad*-1
+		Else If fadeLyr3StaticPos = Bottom Center
+			fadeLyr3StaticPicPadX:=0, fadeLyr3StaticPicPadY:=fadeLyr3StaticPicPad*-1
+		Else If fadeLyr3StaticPos = Bottom Right Corner
+			fadeLyr3StaticPicPadX:=fadeLyr3StaticPicPad*-1, fadeLyr3StaticPicPadY:=fadeLyr3StaticPicPad*-1
+		fadeLyr3StaticCanvasX := fadeLyr3StaticPicX + fadeLyr3StaticPicPadX , fadeLyr3StaticCanvasY := fadeLyr3StaticPicY + fadeLyr3StaticPicPadY
+		fadeLyr3StaticCanvasW := fadeLyr3StaticPicW, fadeLyr3StaticCanvasH := fadeLyr3StaticPicH
+		pGraphUpd(Fade_G3Static,fadeLyr3StaticCanvasW,fadeLyr3StaticCanvasH)
+		if ((fadeLyr3StaticPos = "Stretch and Lose Aspect") or (fadeLyr3StaticPos = "Stretch and Keep Aspect"))
+			Gdip_Alt_DrawImage(Fade_G3Static, fadeLyr3StaticPic, 0, 0, fadeLyr3StaticPicW, fadeLyr3StaticPicH)
+		else
+			Gdip_Alt_DrawImage(Fade_G3Static, fadeLyr3StaticPic, 0, 0, fadeLyr3StaticPicW, fadeLyr3StaticPicH, 0, 0, fadeLyr3StaticPicW//fadeLyr3StaticAdjust, fadeLyr3StaticPicH//fadeLyr3StaticAdjust)
+	}
 	;====== Loading info about layer 3 image
 	fadeInLyr3File := GetFadePicFile("Layer 3")
 	IfExist, % fadeInLyr3File
@@ -695,6 +749,8 @@ DefaultFadeAnimation:
 	fadeLyr5CanvasX := 0 , fadeLyr5CanvasY := 0
 	fadeLyr5CanvasW := baseScreenWidth, fadeLyr5CanvasH := baseScreenHeight
 	pGraphUpd(Fade_G5,fadeLyr5CanvasW,fadeLyr5CanvasH)
+	;====== Defining Layer 3 Static
+	Alt_UpdateLayeredWindow(Fade_hwnd3Static, Fade_hdc3Static,fadeLyr3StaticCanvasX,fadeLyr3StaticCanvasY, fadeLyr3StaticCanvasW, fadeLyr3StaticCanvasH)
 	;====== Drawing text info
 	Loop, 6
 		{
