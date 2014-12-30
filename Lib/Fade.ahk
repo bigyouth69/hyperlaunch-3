@@ -1,5 +1,5 @@
-MCRC=79F94ED1
-MVersion=1.0.6
+MCRC=B578DC50
+MVersion=1.0.7
 
 FadeInStart(){
 	Gosub, FadeInStart
@@ -265,6 +265,7 @@ FadeInExit:
 				fadeInExitDelayStart := A_TickCount
 				fadeInExitDelayEnd := fadeInExitDelay + fadeInExitDelayStart	; when the sleep should end
 			}
+			Log("FadeInExit - fadeInExitDelay started",4)
 			Loop {
 				If ((A_TickCount >= fadeInExitDelayEnd) Or fadeInterrupted ) {	; if delay has been met or user cancelled by pressing a fade interrupt key break out and continue
 					fadeInterrupted:=	; reset var so we know not to start another sleep
@@ -272,6 +273,7 @@ FadeInExit:
 				}
 				Sleep, 100
 			}
+			Log("FadeInExit - fadeInExitDelay ended",4)
 		}
 		XHotKeywrapper(exitEmulatorKey,"CloseFadeIn","OFF")
 		If fadeInterruptKey = anykey	; if user wants anykey to be able to disrupt fade, use this label

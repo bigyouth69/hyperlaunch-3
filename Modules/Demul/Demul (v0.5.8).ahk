@@ -2,8 +2,8 @@ MEmu = Demul
 MEmuV =  v0.5.8.2
 MURL = http://demul.emulation64.com/
 MAuthor = djvj
-MVersion = 2.0.3
-MCRC = EFEE7501
+MVersion = 2.0.4
+MCRC = 9B5AD892
 iCRC = F43FB746
 mId = 635211874656892855
 MSystem = "Sammy Atomiswave","Sega Dreamcast","Sega Naomi","Gaelco"
@@ -283,6 +283,7 @@ Process("WaitClose", executable)
 
 Gui 2: Destroy
 
+7zCleanup()
 FadeOutExit()
 
 If (Max = "true" and maxHideTaskbar = "true") {

@@ -2,9 +2,9 @@ MEmu = WinVICE
 MEmuV = v2.4
 MURL = http://vice-emu.sourceforge.net/
 MAuthor = djvj,wahoobrian,brolly
-MVersion = 2.0.3
+MVersion = 2.0.4
 MCRC = 2C342847
-iCRC = 66093D07
+iCRC = DF0B4867
 MID = 635038268966170754
 MSystem = "Commodore 64","Commodore 16 & Plus4","Commodore VIC-20","Commodore 128"
 ;----------------------------------------------------------------------------

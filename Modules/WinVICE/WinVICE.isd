@@ -145,7 +145,7 @@
 								<VALUE>PAL</VALUE>
 							</VALUES>							
 						</KEY>
-						<KEY name="Default Joyport" required="false" nullable="false">
+						<KEY name="DefaultJoyport" required="false" nullable="false">
 							<KEYTYPE>String</KEYTYPE>
 							<DESCRIPTION>Used if rom requires a command after loading is complete to start the game.</DESCRIPTION>
 						</KEY>

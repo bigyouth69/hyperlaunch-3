@@ -2,8 +2,8 @@ MEmu = MESS
 MEmuV =  v0.154
 MURL = http://www.mess.org/
 MAuthor = djvj & faahrev & brolly
-MVersion = 2.2.4
-MCRC = 9FA7BBEE
+MVersion = 2.2.5
+MCRC = 1CE95379
 iCRC = FAF9D0F2
 MID = 635038268905515239
 MSystem = "Amstrad GX4000","APF Imagination Machine","Apple IIGS","Atari 8-bit","Atari 2600","Atari 5200","Atari 7800","Atari Jaguar","Atari Lynx","Bally Astrocade","Bandai WonderSwan","Bandai WonderSwan Color","Casio PV-1000","Casio PV-2000","Coleco ADAM","ColecoVision","Creatronic Mega Duck","Emerson Arcadia 2001","Entex Adventure Vision","Epoch Game Pocket Computer","Epoch Super Cassette Vision","Exidy Sorcerer","Fairchild Channel F","Funtech Super Acan","GCE Vectrex","Hartung Game Master","Interton VC 4000","JungleTac Sport Vii","Magnavox Odyssey 2","Matra & Hachette Alice","Mattel Aquarius","Mattel Intellivision","NEC PC Engine","NEC PC Engine-CD","NEC SuperGrafx","NEC TurboGrafx-16","NEC TurboGrafx-CD","Nintendo 64","Nintendo Entertainment System","Nintendo Famicom Disk System","Nintendo Game Boy","Nintendo Game Boy Advance","Nintendo Game Boy Color","Nintendo Virtual Boy","Philips CD-i","RCA Studio II","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","Sega SG-1000","Sinclair ZX81","SNK Neo Geo AES","SNK Neo Geo CD","SNK Neo Geo Pocket","SNK Neo Geo Pocket Color","Sony PlayStation","Sony PocketStation","Sord M5","Super Nintendo Entertainment System","Tandy TRS-80 Color Computer","Texas Instruments TI 99-4A","Tiger Game.com","Tomy Tutor","VTech CreatiVision","Watara Supervision"
@@ -293,6 +293,9 @@ If UseSoftwareList != true
 
 If ident = vectrex	; GCE Vectrex
 	param2 := " -view "  . (If (FileExist(emuPath . "\artwork\Vectrex\" . romName . ".png"))?("""" . romName . """"):"standard")	; need overlays extracted in the artwork\vectres folder. PNGs must match romName
+
+If userparams
+	userparams := " " . userparams	; tacking on a space in case user forgot to add one
 
 ; use a custom cfg file if it exists and append it to param1
 IfExist, % emuPath . "\cfg\" . ident . "\" . dbName

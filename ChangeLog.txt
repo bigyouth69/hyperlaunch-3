@@ -1,4 +1,48 @@
+===========================================================================
+                                      __                             _     
+    /\  /\ _   _  _ __    ___  _ __  / /   __ _  _   _  _ __    ___ | |__  
+   / /_/ /| | | || '_ \  / _ \| '__|/ /   / _` || | | || '_ \  / __|| '_ \ 
+  / __  / | |_| || |_) ||  __/| |  / /___| (_| || |_| || | | || (__ | | | |
+  \/ /_/   \__, || .__/  \___||_|  \____/ \__,_| \__,_||_| |_| \___||_| |_|
+           |___/ |_|                                                       
+
+===========================================================================
+                               Release History                             
+===========================================================================
+
+
+v3.1.0.1 BETA
+
+
+Rom Extension are now allowed to have a period in the middle of an extension, but will still error if it starts with one
+Added new settings:
+Fade_Layer_3_Static_Alignment
+Fade_Layer_3_Static_X
+Fade_Layer_3_Static_Y
+Fade_Layer_3_Static_Adjust
+Fade_Layer_3_Static_Padding
+Fade_Layer_3_Static_Prefix
+New Feature - HyperLaunch Daemon - See Wiki http://www.hyperlaunch.net/wiki/index.php?title=HyperLaunch_Daemon
+
+Fade
+Added logs to show when fadeInExitDelay starts and stops
+
+Modules
+Demul (v0.5.8) (updated to v2.0.4)
+Added missing 7zCleanup()
+
+Mednafen
+Removed extra Mednafen module in folder
+
+MESS (updated to v2.2.5)
+userparams now tacks on a space in case user forgot one
+
+WinVICE (updated to v2.0.4)
+Fixed typo in ISD
+
+
 v3.1.0.0 Beta
+
 
 HyperLaunch (updated to v3.1.0.0 BETA):
 Add support for different screen orientations for vertical games, rotating monitors and cocktail cabs. HyperPause, fade, instruction cards, password, multigame and rom mapping launch menu works on 0º, 90º, 180º and 270º.
