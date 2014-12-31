@@ -23,10 +23,6 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Hides mouse cursor in the emu options</DESCRIPTION>
 						</KEY>
-						<KEY name="PairKey" required="false" nullable="true">
-							<KEYTYPE>xHotkey</KEYTYPE>
-							<DESCRIPTION>Hotkey to "Pair Up" Wiimotes, delete the key to disable it</DESCRIPTION>
-						</KEY>
 						<KEY name="RefreshKey" required="false" nullable="true">
 							<KEYTYPE>xHotkey</KEYTYPE>
 							<DESCRIPTION>Hotkey to "Refresh" Wiimotes, delete the key to disable it</DESCRIPTION>

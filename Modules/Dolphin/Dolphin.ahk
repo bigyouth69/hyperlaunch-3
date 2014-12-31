@@ -1,16 +1,15 @@
 MEmu = Dolphin
-MEmuV =  v4.0
+MEmuV =  v4.0 r4875
 MURL = https://dolphin-emu.org/
 MAuthor = djvj
-MVersion = 2.0.5
-MCRC = E5909EF9
-iCRC = 33A87511
+MVersion = 2.0.6
+MCRC = 2BC942D7
+iCRC = 870A906B
 MID = 635038268884477733
 MSystem = "Nintendo Gamecube","Nintendo Wii","Nintendo WiiWare"
 ;----------------------------------------------------------------------------
 ; Notes:
-; Be sure you are running at least Dolphin v3.0-589 or greater.
-; To set fullscreen, set the variabe below
+; Be sure you are running at least Dolphin v4.0 or greater.
 ; If you get an error that you are missing a vcomp100.dll, install Visual C++ 2010: http://www.microsoft.com/download/en/details.aspx?id=14632
 ; Also make sure you are running latest directx: http://www.microsoft.com/downloads/details.aspx?FamilyID=2da43d38-db71-4c1b-bc6a-9b6652cd92a3
 ; Dolphin will sometimes crash when connnecting a Wiimote, then going back to the game. After all Wiimotes are connected that you want to use, it shouldn't have anymore issues.
@@ -33,10 +32,10 @@ MSystem = "Nintendo Gamecube","Nintendo Wii","Nintendo WiiWare"
 ; Any game not added will use the "_Default_(WiimoteNew or GCPadNew).ini" profile HL makes on first launch.
 ;
 ; To Pair a Wiimote:
-; Press 1 + 2 on the wiimote
-; Immediately press your PairKey to start pairing and wait for the countdown to finish
-; When the countdown reaches 0, your wiimote should have linked to show what player it is
-; If it did not link, press your RefreshKey before the wiimote stops flashing
+; Make sure all your wiimotes have already been paired with your PC's bluetooth adapter
+; All 4 leds on the wiimote should be flashing
+; Press your Refresh key (set in HLHQ for this module) or enable continuous scanning in Dolphin
+; Press 1 + 2 on the wiimote and one led should go solid designating the player number
 ;----------------------------------------------------------------------------
 StartModule()
 BezelGui()
@@ -47,7 +46,6 @@ Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 UseCustomWiimoteProfiles := IniReadCheck(settingsFile, "Settings", "UseCustomWiimoteProfiles","false",,1)	; set to true if you want to setup custom Wiimote profiles for games
 UseCustomGCPadProfiles := IniReadCheck(settingsFile, "Settings", "UseCustomGCPadProfiles","false",,1)	; set to true if you want to setup custom GCPad profiles for games
 HideMouse := IniReadCheck(settingsFile, "Settings", "HideMouse","true",,1)					; hides mouse cursor in the emu options
-PairKey := IniReadCheck(settingsFile, "Settings", "PairKey","",,1)							; hotkey to "Pair Up" Wiimotes, delete the key to disable it
 RefreshKey := IniReadCheck(settingsFile, "Settings", "RefreshKey","",,1)						; hotkey to "Refresh" Wiimotes, delete the key to disable it
 Timeout := IniReadCheck(settingsFile, "Settings", "Timeout","5",,1)							; amount in seconds we should wait for the above hotkeys to timeout
 
@@ -64,7 +62,7 @@ IfExist % dolphinININewPath
 	Log("Module - Dolphin's base settings folder is portable and found in: " . dolphinBasePath)
 } Else
 	ScriptError("Could not find your Dolphin.ini in either of these folders. Please run Dolphin manually first to create it.`n" . dolphinINIOldPath . "`n" . dolphinININewPath)
-dolphinINI := dolphinBasePath . "Config\Dolphin.ini"
+dolphinINI := dolphinBasePath . "\Config\Dolphin.ini"
 
 hideEmuObj := Object("Dolphin Wiimote Configuration ahk_class #32770",0,"Dolphin ahk_class wxWindowNR",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
@@ -84,11 +82,16 @@ If RefreshKey {
 Fullscreen := (If ( Fullscreen = "true" ) ? ("True") : ("False"))
 HideMouse := (If ( HideMouse = "true" ) ? ("True") : ("False"))
 
+gcSerialPort = 5	; this puts the BBA network adapter into the serial port. If previous launch was Triforce, AM-Baseboard would be set here and would result in Unknown DVD command errors
+
 iniLookup =
 ( ltrim c
 	Display, Fullscreen, %Fullscreen%
 	Display, RenderToMain, False
 	Interface, HideCursor, %HideMouse%
+	Interface, ConfirmStop, False
+	Interface, UsePanicHandlers, False
+	Core, SerialPort1, %gcSerialPort%
 )
 Loop, Parse, iniLookup, `n
 {
@@ -156,33 +159,17 @@ ChangeDolphinProfile(profileType) {
 
 ConnectWiimote(key) {
 	Global Timeout
-	wiimoteClass := "Dolphin Wiimote Configuration ahk_class #32770"
-	Timeout := (10*Timeout) ; adjusting timeout to match loop sleep timer
+	wiimoteClass := "Dolphin Controller Configuration ahk_class #32770"
 	IfWinNotExist, %wiimoteClass%
 	{
 		DetectHiddenWindows, OFF ; this needs to be off otherwise WinMenuSelectItem doesn't work for some odd reason
 		WinActivate, Dolphin ahk_class wxWindowNR,,,FPS
-		WinMenuSelectItem, ahk_class wxWindowNR,, Options, Wiimote Settings,,,,,,FPS
+		WinMenuSelectItem, ahk_class wxWindowNR,, Options, Controller Settings,,,,,,FPS
 		WinWait(wiimoteClass)
 		WinWaitActive(wiimoteClass)
 	}
 	;WinActivate, %wiimoteClass% ; test if window needs to be active
 	ControlClick, %key%, %wiimoteClass%
-	SetFormat, float, 0
-	Loop {
-		timeLeft := (50-A_Index)/10
-		ToolTip, Waiting for at least one Wiimote to be connected...`nTiming out in %timeLeft%, 20, 20
-		ControlGetText, connMotes, Static5, %wiimoteClass%
-		StringLeft, numOfMotes, connMotes, 1
-		If ( numOfMotes > 0 ) or ( A_Index >= Timeout )
-			Break ; exit loop if a wiimote is detected or set Timeout elapsed
-		IfWinNotExist, %wiimoteClass%
-			Break ; exit loop if user closed the window manually
-		Sleep, 100
-	}
-	ToolTip
-	If ( key = "Pair Up" )
-		ControlClick, Refresh, %wiimoteClass% ; clicking refresh once after pairing so the wiimotes get link
 	ControlClick, OK, %wiimoteClass%
 	; WinActivate, FPS ahk_class wxWindowClassNR ; for older dolphins
 	WinActivate, FPS ahk_class wxWindowNR
