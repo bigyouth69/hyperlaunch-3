@@ -1,11 +1,12 @@
-MCRC = 724BA095
-MVersion=1.0.0
+MCRC = D108080B
+MVersion=1.0.1
 
 MultiPlayerMenu(ByRef lastIP=false, ByRef lastPort=false, ByRef networkType=false, ByRef networkPlayers=0, setupNetwork=false, keyboardControl=true) {
 	Log("MultiPlayerMenu - Started")
 	Global screenRotationAngle,baseScreenWidth,baseScreenHeight,xTranslation,yTranslation
-	Global HLMediaPath,networkSession, networkProtocol, networkPort, localIP, publicIP, networkRequiresSetup
-	Global navSelectKey, navUpKey, navDownKey, navLeftKey, navRightKey, navP2SelectKey, navP2UpKey, navP2DownKey, navP2LeftKey, navP2RightKey, exitEmulatorKey, exitEmulatorKey
+	Global HLMediaPath,networkSession,networkProtocol,networkPort,localIP,publicIP,networkRequiresSetup
+	Global navSelectKey,navUpKey,navDownKey,navLeftKey,navRightKey,navP2SelectKey,navP2UpKey,navP2DownKey,navP2LeftKey,navP2RightKey,exitEmulatorKey,exitEmulatorKey
+	Global keymapper,keymapperEnabled,keymapperHyperLaunchProfileEnabled
 	If !pToken
 		pToken := Gdip_Startup()
 	Gdip_Alt_GetRotatedDimensions(A_ScreenWidth, A_ScreenHeight, screenRotationAngle, baseScreenWidth, baseScreenHeight)

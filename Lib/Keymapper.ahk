@@ -1,5 +1,5 @@
-MCRC=BBE65FBE
-MVersion=1.0.7
+MCRC=FFA937DA
+MVersion=1.0.8
 
 RunAHKKeymapper(method) {
 	Global ahkDefaultProfile,ahkFEProfile,ahkRomProfile,ahkEmuProfile,ahkSystemProfile,ahkHyperLaunchProfile,ahkLauncherPath,ahkLauncherExe,keymapperFrontEndProfile
@@ -139,7 +139,7 @@ RunKeymapper(keymapperLoad_Or_Unload,Keymapper) {
 	Global keymapperFullPath 
 	Global KeymapperHyperLaunchProfileEnabled, keymapperEnabled
 	;Global keymapperLoad_Or_Unload
-	Log("RunKeymapper - Started")
+	Log("RunKeymapper - Started, using method """ . keymapperLoad_Or_Unload . """")
 	
 	If ((KeymapperHyperLaunchProfileEnabled = "false") OR (keymapperEnabled = "false")) AND (keymapperLoad_Or_Unload = "menu")
 		Return

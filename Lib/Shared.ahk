@@ -1,5 +1,5 @@
-MCRC=9C6DC25A
-MVersion=1.1.9
+MCRC=77AFC55D
+MVersion=1.2.0
 
 StartModule(){
 	Global gameSectionStartTime,gameSectionStartHour,skipChecks,dbName,romPath,romName,romExtension,systemName,moduleName,MEmu,MEmuV,MURL,MAuthor,MVersion,MCRC,iCRC,MSystem,romMapTable,romMappingLaunchMenuEnabled,romMenuRomName,7zEnabled,hideCursor,toggleCursorKey,winVer,zz
@@ -2043,7 +2043,8 @@ StdoutToVar_CreateProcess(sCmd, bStream = False, sDir = "", sInput = "")
 ; function to create a small menu with the number of players option
 NumberOfPlayersSelectionMenu(maxPlayers=4) {
 	Global screenRotationAngle,baseScreenWidth,baseScreenHeight,xTranslation,yTranslation
-	Global navSelectKey, navUpKey, navDownKey, navP2SelectKey, navP2UpKey, navP2DownKey, exitEmulatorKey, exitEmulatorKey
+	Global navSelectKey,navUpKey,navDownKey,navP2SelectKey,navP2UpKey,navP2DownKey,exitEmulatorKey,exitEmulatorKey
+	Global keymapper,keymapperEnabled,keymapperHyperLaunchProfileEnabled
 	If !pToken
 		pToken := Gdip_Startup()
 	Gdip_Alt_GetRotatedDimensions(A_ScreenWidth, A_ScreenHeight, screenRotationAngle, baseScreenWidth, baseScreenHeight)

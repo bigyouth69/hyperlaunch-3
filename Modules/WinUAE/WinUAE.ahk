@@ -2,11 +2,11 @@ MEmu = WinUAE
 MEmuV =  v2.6.0
 MURL = http://www.winuae.net/
 MAuthor = brolly
-MVersion = 2.1.0
-MCRC = 8A45B402
-iCRC = 16B46231
+MVersion = 2.1.1
+MCRC = 36AB306
+iCRC = 3AD1E334
 mId = 635138307631183750
-MSystem = "Commodore Amiga","Commodore Amiga CD32","Commodore CDTV","Commodore Amiga CD"
+MSystem = "Commodore Amiga","Commodore Amiga CD32","Commodore CDTV","Commodore Amiga CD","Commodore Amiga Demos"
 ;----------------------------------------------------------------------------
 ; Notes:
 ; You can have specific configuration files inside a Configurations folder on WinUAE main dir.
@@ -72,7 +72,7 @@ bezelRightOffset := IniReadCheck(settingsFile, "Settings", "Bezel_Right_Offset",
 bezelLeftOffset := IniReadCheck(settingsFile, "Settings", "Bezel_Left_Offset", "0",,1)
 
 ; This object controls how the module reacts to different systems. MESS can play a lot of systems, but needs to know what system you want to run, so this module has to adapt.
-mType := Object("Commodore Amiga","a500","Commodore Amiga CD32","cd32","Commodore CDTV","cdtv","Commodore Amiga CD","amigacd")
+mType := Object("Commodore Amiga","a500","Commodore Amiga CD32","cd32","Commodore CDTV","cdtv","Commodore Amiga CD","amigacd","Commodore Amiga Demos","a500")
 ident := mType[systemName]	; search object for the systemName identifier MESS uses
 If !ident
 	ScriptError("Your systemName is: " . systemName . "`nIt is not one of the known supported systems for this WinUAE module: " . moduleName)
@@ -334,6 +334,7 @@ BezelExit()
 FadeOutExit()
 ExitModule()
 
+
 MultiGame:
 	If currentButton = 10
 		diskslot = 0
@@ -346,7 +347,7 @@ MultiGame:
 		Send, {End Down}{Shift Down}%diskslot%{Shift Up}{End Up}
 	Else
 		Send, {End Down}%diskslot%{End Up}
-return
+Return
 
 CloseProcess:
 	If (ident = "a500" or ident = "a1200") {
