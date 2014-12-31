@@ -2,9 +2,9 @@ MEmu = WinUAE
 MEmuV =  v2.6.0
 MURL = http://www.winuae.net/
 MAuthor = brolly
-MVersion = 2.1.1
+MVersion = 2.1.2
 MCRC = 36AB306
-iCRC = 3AD1E334
+iCRC = EEA3289D
 mId = 635138307631183750
 MSystem = "Commodore Amiga","Commodore Amiga CD32","Commodore CDTV","Commodore Amiga CD","Commodore Amiga Demos"
 ;----------------------------------------------------------------------------

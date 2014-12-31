@@ -15,6 +15,10 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables Hiding of the Console Window</DESCRIPTION>
 						</KEY>
+						<KEY name="MESS_BIOS_Roms_Folder" required="false" nullable="true">
+							<KEYTYPE>FolderPath</KEYTYPE>
+							<DESCRIPTION>This needs to point to the folder with all your MESS BIOS roms. RetroArch needs these to use the MESS core.</DESCRIPTION>
+						</KEY>
 						<KEY name="LibRetroFolder" required="false" nullable="true">
 							<KEYTYPE>FolderPath</KEYTYPE>
 							<DESCRIPTION>By default this points to your EmuPath folder. The module will search all subfolders for the dll you define. Should you need to define a folder for whatever reason, set it here.</DESCRIPTION>
@@ -33,15 +37,67 @@
 						</KEY>
 						<KEY name="LibRetro_32X" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Sega 32X. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is genesis_plus_gx_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Sega 32X. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is picodrive_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_3DO" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Panasonic 3DO. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is 4do_libretro</DESCRIPTION>
 						</KEY>
+						<KEY name="LibRetro_A2001" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Emerson Arcadia 2001. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_ALICE" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Matra &amp; Hachette Alice. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_APF" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for APF Imagination Machine. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_AQUA" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Mattel Aquarius. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_AVISION" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Entex Adventure Vision. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_BAST" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Bally Astrocade. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_CAS1K" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Casio PV-1000. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_CAS2K" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Casio PV-2000. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_CDI" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Philips CD-i. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_CHANF" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Fairchild Channel F. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_COLEC" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for ColecoVision. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_CPC" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Amstrad CPC. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
 						<KEY name="LibRetro_DS" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Nintendo DS. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is desmume_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_DUCK" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Creatronic Mega Duck. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_FBA" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
@@ -55,6 +111,10 @@
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Nintendo Game Boy Color. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is gambatte_libretro</DESCRIPTION>
 						</KEY>
+						<KEY name="LibRetro_GBJ" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Nintendo Game Boy Japan. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is gambatte_libretro</DESCRIPTION>
+						</KEY>
 						<KEY name="LibRetro_GBA" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Nintendo Game Boy Advance. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is vba_next_libretro</DESCRIPTION>
@@ -67,13 +127,33 @@
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Sega GameGear. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is genesis_plus_gx_libretro</DESCRIPTION>
 						</KEY>
+						<KEY name="LibRetro_GMASTR" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Hartung Game Master. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_GP32" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for GamePark 32. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_GPCKET" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Epoch Game Pocket Computer. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_GX4K" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Amstrad GX4000. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_INTV" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Mattel Intellivision. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
 						<KEY name="LibRetro_JAG" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Atari Jaguar. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is virtualjaguar_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_LYNX" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for Atari Lynx. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mupen64plus_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for Atari Lynx. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is handy_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_MAME" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
@@ -83,6 +163,10 @@
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Microsoft MSX. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is bluemsx_libretro</DESCRIPTION>
 						</KEY>
+						<KEY name="LibRetro_MSX2" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Microsoft MSX2. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is bluemsx_libretro</DESCRIPTION>
+						</KEY>
 						<KEY name="LibRetro_N64" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Nintendo 64. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mupen64plus_libretro</DESCRIPTION>
@@ -90,6 +174,14 @@
 						<KEY name="LibRetro_NEO" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for SNK Neo Geo. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is fb_alpha_libretro</DESCRIPTION>
+						</KEY>	
+						<KEY name="LibRetro_NEOCD" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for SNK Neo Geo AES. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>	
+						<KEY name="LibRetro_NEOAES" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for SNK Neo Geo AES. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
 						</KEY>	
 						<KEY name="LibRetro_NES" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
@@ -105,31 +197,55 @@
 						</KEY>
 						<KEY name="LibRetro_NGP" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for SNK Neo Geo Pocket. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_vb_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for SNK Neo Geo Pocket. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_ngp_libretro </DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_NGPC" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for SNK Neo Geo Pocket Color. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_vb_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for SNK Neo Geo Pocket Color. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_ngp_libretro </DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_NINARC" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Nintendo Arcade Systems. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mame_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_NSF" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Nintendo Super Famicom. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is bsnes_balanced_libretro</DESCRIPTION>
 						</KEY>
+						<KEY name="LibRetro_NSFS" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Nintendo Super Famicom Satellaview. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is snes9x_libretro</DESCRIPTION>
+						</KEY>
 						<KEY name="LibRetro_NVB" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Nintendo Virtual Boy. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_vb_libretro</DESCRIPTION>
 						</KEY>
+						<KEY name="LibRetro_ODYS2" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Magnavox Odyssey 2. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
 						<KEY name="LibRetro_PCE" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for NEC PC Engine. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_vb_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for NEC PC Engine. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_pce_fast_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_PCECD" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for NEC PC Engine-CD. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_vb_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for NEC PC Engine-CD. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_pce_fast_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_PCFX" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for NEC PC-FX. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_pcfx_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_PICO" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Sega Pico. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is picodrive_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_POCKS" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Sony PocketStation. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_POKE" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Nintendo Pokemon Mini. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mame_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_PSP" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
@@ -139,13 +255,33 @@
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Sony Playstation. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_psx_libretro</DESCRIPTION>
 						</KEY>
+						<KEY name="LibRetro_SACAN" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Funtech Super Acan. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_SAMCP" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for MGT Sam Coupe. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
 						<KEY name="LibRetro_SAT" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Sega Saturn. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting.  Default is yabause_libretro</DESCRIPTION>
 						</KEY>
+						<KEY name="LibRetro_SC3K" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Sega SC-3000. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting.  Default is mame_libretro</DESCRIPTION>
+						</KEY>
 						<KEY name="LibRetro_SCD" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Sega CD. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting.  Default is genesis_plus_gx_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_SCV" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Epoch Super Cassette Vision. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_SCUMM" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for SCUMMVM. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is scummvm_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_SG1K" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
@@ -157,11 +293,27 @@
 						</KEY>
 						<KEY name="LibRetro_SGFX" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for NEC SuperGrafx. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_vb_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for NEC SuperGrafx. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_supergrafx_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_SMS" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Sega Master System. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is genesis_plus_gx_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_SORCR" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Exidy Sorcerer. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_SORD" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Sord M5. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_SPECZX" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Sinclair ZX Spectrum. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_SPORTV" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for JungleTac Sport Vii. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_SNES" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
@@ -171,13 +323,45 @@
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Atari ST. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is hatari_libretro</DESCRIPTION>
 						</KEY>
+						<KEY name="LibRetro_STUD2" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for RCA Studio II. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_SVMU" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Sega VMU. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_SUPRV" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Watara Supervision. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
 						<KEY name="LibRetro_TG16" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for NEC TuboGrafx-16. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_vb_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for NEC TuboGrafx-16. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_pce_fast_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_TGCD" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
-							<DESCRIPTION>The name of the dll for NEC TuboGrafx-CD. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_vb_libretro</DESCRIPTION>
+							<DESCRIPTION>The name of the dll for NEC TuboGrafx-CD. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_pce_fast_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_TI99" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Texas Instruments TI 99-4A. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_TOMY" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Tomy Tutor. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_TRS80" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Tandy TRS-80 Color Computer 3. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_VECTX" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for GCE Vectrex. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_VTECH" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for VTech CreatiVision. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_WSAN" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
@@ -186,6 +370,10 @@
 						<KEY name="LibRetro_WSANC" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Bandai WonderSwan Color. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_wswan_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_ZXSPEC" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Sinclair ZX Spectrum. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>
