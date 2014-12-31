@@ -11,6 +11,24 @@
 ===========================================================================
 
 
+v3.1.0.2 BETA
+
+
+Will now error when user does not have a Daemon Tools Path set yet has suppot for it enabled
+
+MultiPlayer.ahk (updated to v1.0.1)
+Fixed Keymapper not switching to HyperLaunch profiles when Player Select Menu was used
+
+Keymapper.ahk (updated to v1.0.8)
+
+Shared.ahk (updated to v1.2.0)
+Fixed Keymapper not switching to HyperLaunch profiles when Player Select Menu was used (thanks Ghutch)
+
+Modules
+WinUAE (updated to v2.1.1)
+Added support for Commodore Amiga Demos (thanks rfancella & Turranius)
+
+
 v3.1.0.1 BETA
 
 
