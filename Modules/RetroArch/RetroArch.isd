@@ -255,6 +255,10 @@
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Sony Playstation. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_psx_libretro</DESCRIPTION>
 						</KEY>
+						<KEY name="LibRetro_PVID" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Philips Videopac. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
 						<KEY name="LibRetro_SACAN" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Funtech Super Acan. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
@@ -475,6 +479,7 @@
 								<VALUE>low</VALUE>
 								<VALUE>medium</VALUE>
 								<VALUE>high</VALUE>
+								<VALUE>veryhigh</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Mupen_Disable_Exp_Memory" required="false" nullable="false">
@@ -582,11 +587,12 @@
 						</KEY>
 						<KEY name="Mupen_Gfx_Accuracy" required="false" nullable="false">
 							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>Set this to the graphics accuracy you would like to use for this rom.</DESCRIPTION>
+							<DESCRIPTION>ffSet this to the graphics accuracy you would like to use for this rom.</DESCRIPTION>
 							<VALUES>
 								<VALUE>low</VALUE>
 								<VALUE>medium</VALUE>
 								<VALUE>high</VALUE>
+								<VALUE>veryhigh</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Mupen_Disable_Exp_Memory" required="false" nullable="false">
