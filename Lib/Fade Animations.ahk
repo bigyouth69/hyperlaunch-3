@@ -1,5 +1,5 @@
-MCRC=F3214186
-MVersion=1.0.6
+MCRC=80467078
+MVersion=1.0.7
 
 ; Default transition animation used for Fade_In
 DefaultAnimateFadeIn(direction,time){
@@ -860,7 +860,7 @@ _DefaultFadeAnimationLoop:
 	;====== Begin of animation Loop
 		Gdip_GraphicsClear(Fade_G3)
 		;====== Updating 7z extraction info
-		If (((found7z="true") and (7zEnabled = "true") and (7zSounds = "true") and !(7zTempRomExists) and (use7zAnimation)) and !(hlmode="fade7z")) {
+		If (((found7z="true") and (7zEnabled = "true") and !(7zTempRomExists) and (use7zAnimation)) and !(hlmode="fade7z")) {
 			If not (fadeLyr3Type = image and fadeLyr3ImgFollow7zProgress = false) {
 				romExPercentageAndFile := COM_Invoke(HLObject, "getExtractionSize", 7zRomPath, 0)	; Get the current file being extracted and size of the 7z Extract Path - (Extraction Size\Progress (0=Accurate Method, 1=Fast Detection Method))
 				Loop, Parse, romExPercentageAndFile, |	; StringSplit oddly doesn't work for some unknown reason, must resort to a parsing Loop instead
