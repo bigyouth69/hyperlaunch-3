@@ -1,5 +1,5 @@
-MCRC=62688AC3
-MVersion=1.0.8
+MCRC=C5D271EB
+MVersion=1.0.9
 
 ; Default transition animation used for Fade_In
 DefaultAnimateFadeIn(direction,time){
@@ -213,9 +213,9 @@ DefaultFadeAnimation:
 	IfExist, % fadeInLyr3File
 		{
 		fadeLyr3Pic := Gdip_CreateBitmapFromFile(fadeInLyr3File)
-		Gdip_GetImageDimensions(fadeLyr3Pic, fadeLyr3PicW, fadeLyr3PicH)
-		fadeLyr3PicW := Round(fadeLyr3PicW * fadeXScale * fadeLyr3Adjust)
-		fadeLyr3PicH := Round(fadeLyr3PicH * fadeYScale * fadeLyr3Adjust)
+		Gdip_GetImageDimensions(fadeLyr3Pic, fadeLyr3PicOrigW, fadeLyr3PicOrigH)
+		fadeLyr3PicW := Round(fadeLyr3PicOrigW * fadeXScale * fadeLyr3Adjust)
+		fadeLyr3PicH := Round(fadeLyr3PicOrigH * fadeYScale * fadeLyr3Adjust)
 		GetFadePicPosition(fadeLyr3PicX,fadeLyr3PicY,fadeLyr3X,fadeLyr3Y,fadeLyr3PicW,fadeLyr3PicH,fadeLyr3Pos)
 	}
 	;Layer 3 padding
@@ -232,8 +232,8 @@ DefaultFadeAnimation:
 	If GifAnimation
 		{
 		AnimatedGifControl_GetImageDimensions(GifAnimation, GifWidth, GifHeight)
-		fadeLyr4PicW := GifWidth
-		fadeLyr4PicH := GifHeight
+		fadeLyr4PicW := Round(GifWidth * fadeXScale)
+		fadeLyr4PicH := Round(GifHeight * fadeYScale)
 		If (fadeLyr4Pos = "Above Layer 3 - Left") {
 			fadeLyr4PicX := fadeLyr3PicX
 			fadeLyr4PicY := fadeLyr3PicY-fadeLyr4PicH
@@ -891,9 +891,9 @@ _DefaultFadeAnimationLoop:
 				If fadeLyr3Repeat != 0	; Only Loop animation If user does not want a static image
 					{
 					if fadeLyr3BackImageTransparency
-						Gdip_Alt_DrawImage(Fade_G3, fadeLyr3Pic, fadeLyr3PicX-fadeLyr3CanvasX, fadeLyr3PicY-fadeLyr3CanvasY, fadeLyr3PicW, fadeLyr3PicH, 0, 0, fadeLyr3PicW//fadeLyr3Adjust, fadeLyr3PicH//fadeLyr3Adjust, fadeLyr3BackImageTransparency/100) ; draw layer 3 image with transparency
+						Gdip_Alt_DrawImage(Fade_G3, fadeLyr3Pic, fadeLyr3PicX-fadeLyr3CanvasX, fadeLyr3PicY-fadeLyr3CanvasY, fadeLyr3PicW, fadeLyr3PicH, , , , , fadeLyr3BackImageTransparency/100) ; draw layer 3 image with transparency
 					If (found7z="true") and (7zEnabled = "true") and (fadeLyr3ImgFollow7zProgress="true") and !7zTempRomExists and use7zAnimation {
-						Gdip_Alt_DrawImage(Fade_G3, fadeLyr3Pic, fadeLyr3PicX-fadeLyr3CanvasX, fadeLyr3PicY-fadeLyr3CanvasY, round(fadeLyr3PicW*layer3Percentage/100), fadeLyr3PicH, 0, 0, Round((fadeLyr3PicW/fadeLyr3Adjust)*layer3Percentage/100), fadeLyr3PicH//fadeLyr3Adjust)	; draw layer 3 image onto screen on layer 3 and adjust the size If set
+						Gdip_Alt_DrawImage(Fade_G3, fadeLyr3Pic, fadeLyr3PicX-fadeLyr3CanvasX, fadeLyr3PicY-fadeLyr3CanvasY, round(fadeLyr3PicW*layer3Percentage/100), fadeLyr3PicH, 0, 0, Round(fadeLyr3PicOrigW*layer3Percentage/100), fadeLyr3PicOrigH)	; draw layer 3 image onto screen on layer 3 and adjust the size If set
 						If (layer3Percentage >= 100){
 							If 7zEnded
 								fadeLyr3Drawn := true
@@ -902,19 +902,19 @@ _DefaultFadeAnimationLoop:
 					} Else {
 						If (t1 < 100 and fadeLyr3DrawnTimes<fadeLyr3Repeat) {
 							t1 := ((timeElapsed := A_TickCount - layer3startTime) < timeToMax) ? timeElapsed / timeToMax : 100
-							Gdip_Alt_DrawImage(Fade_G3, fadeLyr3Pic, fadeLyr3PicX-fadeLyr3CanvasX, fadeLyr3PicY-fadeLyr3CanvasY, fadeLyr3PicW*t1, fadeLyr3PicH, 0, 0, fadeLyr3PicW//fadeLyr3Adjust*t1, fadeLyr3PicH//fadeLyr3Adjust)	; draw layer 3 image onto screen on layer 3 and adjust the size If set
+							Gdip_Alt_DrawImage(Fade_G3, fadeLyr3Pic, fadeLyr3PicX-fadeLyr3CanvasX, fadeLyr3PicY-fadeLyr3CanvasY, fadeLyr3PicW*t1, fadeLyr3PicH, 0, 0, fadeLyr3PicOrigW*t1, fadeLyr3PicOrigH)	; draw layer 3 image onto screen on layer 3 and adjust the size If set
 						} Else {
 							layer3startTime := A_TickCount	; reset on each Loop
 							fadeLyr3DrawnTimes++
 							t1 := 0
 							If (fadeLyr3DrawnTimes>=fadeLyr3Repeat) {
 								fadeLyr3Drawn := true
-								Gdip_Alt_DrawImage(Fade_G3, fadeLyr3Pic, fadeLyr3PicX-fadeLyr3CanvasX, fadeLyr3PicY-fadeLyr3CanvasY, fadeLyr3PicW, fadeLyr3PicH, 0, 0, fadeLyr3PicW//fadeLyr3Adjust, fadeLyr3PicH//fadeLyr3Adjust)	; draw layer 3 image onto screen on layer 3 and adjust the size If set
+								Gdip_Alt_DrawImage(Fade_G3, fadeLyr3Pic, fadeLyr3PicX-fadeLyr3CanvasX, fadeLyr3PicY-fadeLyr3CanvasY, fadeLyr3PicW, fadeLyr3PicH)	; draw layer 3 image onto screen on layer 3 and adjust the size If set
 							}
 						}
 					}
 				} Else If !fadeLyr3Drawn {	; If fadeLyr3Repeat is set to 0 (a static image), just show it, rather then animate
-					Gdip_Alt_DrawImage(Fade_G3, fadeLyr3Pic, fadeLyr3PicX-fadeLyr3CanvasX, fadeLyr3PicY-fadeLyr3CanvasY, fadeLyr3PicW, fadeLyr3PicH, 0, 0, fadeLyr3PicW//fadeLyr3Adjust, fadeLyr3PicH//fadeLyr3Adjust)	; draw layer 3 image onto screen on layer 3 and adjust the size If set
+					Gdip_Alt_DrawImage(Fade_G3, fadeLyr3Pic, fadeLyr3PicX-fadeLyr3CanvasX, fadeLyr3PicY-fadeLyr3CanvasY, fadeLyr3PicW, fadeLyr3PicH)	; draw layer 3 image onto screen on layer 3 and adjust the size If set
 					fadeLyr3Drawn := true
 				}
 			} Else {
