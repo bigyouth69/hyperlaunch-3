@@ -1,5 +1,5 @@
-MCRC=80467078
-MVersion=1.0.7
+MCRC=62688AC3
+MVersion=1.0.8
 
 ; Default transition animation used for Fade_In
 DefaultAnimateFadeIn(direction,time){
@@ -164,6 +164,8 @@ DefaultFadeAnimation:
 	If FileExist(fadeInLyr3StaticFile)	; If a layer 3 static image exists, let's get its dimensions
 	{	fadeLyr3StaticPic := Gdip_CreateBitmapFromFile(fadeInLyr3StaticFile)
 		Gdip_GetImageDimensions(fadeLyr3StaticPic, fadeLyr3StaticPicW, fadeLyr3StaticPicH)
+		fadeLyr3StaticPicW := Round(fadeLyr3StaticPicW * fadeXScale)
+		fadeLyr3StaticPicH := Round(fadeLyr3StaticPicH * fadeYScale)
 		; find Width and Height
 		If (fadeLyr3StaticPos = "Stretch and Lose Aspect"){
 			fadeLyr3StaticPicW := baseScreenWidth
@@ -177,8 +179,8 @@ DefaultFadeAnimation:
 			fadeLyr3StaticPicH := Round(fadeLyr3StaticPicH * percentToEnlarge)	
 			fadeLyr3StaticPicPadX := 0 , fadeLyr3StaticPicPadY := 0
 		} else {
-			fadeLyr3StaticPicW := fadeLyr3StaticPicW * fadeLyr3StaticAdjust
-			fadeLyr3StaticPicH := fadeLyr3StaticPicH * fadeLyr3StaticAdjust
+			fadeLyr3StaticPicW := Round(fadeLyr3StaticPicW * fadeLyr3StaticAdjust)
+			fadeLyr3StaticPicH := Round(fadeLyr3StaticPicH * fadeLyr3StaticAdjust)
 		}
 		GetFadePicPosition(fadeLyr3StaticPicX,fadeLyr3StaticPicY,fadeLyr3StaticX,fadeLyr3StaticY,fadeLyr3StaticPicW,fadeLyr3StaticPicH,fadeLyr3StaticPos)
 		; figure out what quadrant the layer 3 Static image is in, so we know to apply a + or - pad value so the user does not have to
@@ -212,8 +214,8 @@ DefaultFadeAnimation:
 		{
 		fadeLyr3Pic := Gdip_CreateBitmapFromFile(fadeInLyr3File)
 		Gdip_GetImageDimensions(fadeLyr3Pic, fadeLyr3PicW, fadeLyr3PicH)
-		fadeLyr3PicW := fadeLyr3PicW * fadeLyr3Adjust
-		fadeLyr3PicH := fadeLyr3PicH * fadeLyr3Adjust
+		fadeLyr3PicW := Round(fadeLyr3PicW * fadeXScale * fadeLyr3Adjust)
+		fadeLyr3PicH := Round(fadeLyr3PicH * fadeYScale * fadeLyr3Adjust)
 		GetFadePicPosition(fadeLyr3PicX,fadeLyr3PicY,fadeLyr3X,fadeLyr3Y,fadeLyr3PicW,fadeLyr3PicH,fadeLyr3Pos)
 	}
 	;Layer 3 padding
@@ -263,8 +265,8 @@ DefaultFadeAnimation:
 				FadeLayer4AnimTotal := a_index
 			}
 			Gdip_GetImageDimensions(FadeLayer4Anim1Pic, fadeLyr4PicW, fadeLyr4PicH)
-			fadeLyr4PicW := fadeLyr4PicW * fadeLyr4Adjust
-			fadeLyr4PicH := fadeLyr4PicH * fadeLyr4Adjust
+			fadeLyr4PicW := Round(fadeLyr4PicW * fadeXScale * fadeLyr4Adjust)
+			fadeLyr4PicH := Round(fadeLyr4PicH * fadeYScale * fadeLyr4Adjust)
 			If (fadeLyr4Pos = "Above Layer 3 - Left") {
 				fadeLyr4PicX := fadeLyr3PicX
 				fadeLyr4PicY := fadeLyr3PicY-fadeLyr4PicH
@@ -749,7 +751,7 @@ DefaultFadeAnimation:
 	fadeLyr5CanvasX := 0 , fadeLyr5CanvasY := 0
 	fadeLyr5CanvasW := baseScreenWidth, fadeLyr5CanvasH := baseScreenHeight
 	pGraphUpd(Fade_G5,fadeLyr5CanvasW,fadeLyr5CanvasH)
-	;====== Defining Layer 3 Static
+	;====== Drawing Layer 3 Static
 	Alt_UpdateLayeredWindow(Fade_hwnd3Static, Fade_hdc3Static,fadeLyr3StaticCanvasX,fadeLyr3StaticCanvasY, fadeLyr3StaticCanvasW, fadeLyr3StaticCanvasH)
 	;====== Drawing text info
 	Loop, 6

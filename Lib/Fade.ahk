@@ -1,5 +1,5 @@
-MCRC=B578DC50
-MVersion=1.0.7
+MCRC=33AAEADF
+MVersion=1.0.8
 
 FadeInStart(){
 	Gosub, FadeInStart
@@ -153,6 +153,8 @@ FadeInStart:
 		If FileExist(fadeInLyr1File)	; If a layer 1 image exists, let's get its dimensions
 		{	fadeLyr1Pic := Gdip_CreateBitmapFromFile(fadeInLyr1File)
 			Gdip_GetImageDimensions(fadeLyr1Pic, fadeLyr1PicW, fadeLyr1PicH)
+			fadeLyr1PicW := Round(fadeLyr1PicW * fadeXScale)
+			fadeLyr1PicH := Round(fadeLyr1PicH * fadeYScale)
 			GetBGPicPosition(fadeLyr1PicXNew,fadeLyr1PicYNew,fadeLyr1PicWNew,fadeLyr1PicHNew,fadeLyr1PicW,fadeLyr1PicH,fadeLyr1AlignImage)	; get the background pic's new position and size
 			If (fadeLyr1AlignImage = "Stretch and Lose Aspect") {	; 
 				Gdip_Alt_DrawImage(Fade_G1, fadeLyr1Pic, fadeLyr1PicXNew,fadeLyr1PicYNew,fadeLyr1PicWNew+1,fadeLyr1PicHNew+1)
@@ -170,6 +172,8 @@ FadeInStart:
 		If FileExist(fadeInLyr2File)	; If a layer 2 image exists, let's get its dimensions
 		{	fadeLyr2Pic := Gdip_CreateBitmapFromFile(fadeInLyr2File)
 			Gdip_GetImageDimensions(fadeLyr2Pic, fadeLyr2PicW, fadeLyr2PicH)
+			fadeLyr2PicW := Round(fadeLyr2PicW * fadeXScale)
+			fadeLyr2PicH := Round(fadeLyr2PicH * fadeYScale)
 			; find Width and Height
 			If (fadeLyr2Pos = "Stretch and Lose Aspect"){
 				fadeLyr2PicW := baseScreenWidth
@@ -221,14 +225,14 @@ FadeInStart:
 		
 		; Create canvas for all remaining fade in screens
 		Loop, 6 { 
-			OwnerGUI := CurrentGUI - 1
-			if (A_Index=1) {
-				CurrentGUI := "3Static"   ; creating layer 3 static
-			} else if  (A_Index=2) {
-				OwnerGUI := "3Static"
-				CurrentGUI := A_Index+1   ; creating layer 3
-			} else 
-				CurrentGUI := A_Index+1   ; creating layer 4 to 7
+			OwnerGUI := CurrentGUI
+			if (A_Index=1) { ; creating layer 3 static
+				OwnerGUI := 2
+				CurrentGUI := "3Static"   
+			} else if  (A_Index=2) { ; creating layer 3
+				CurrentGUI := A_Index+1   
+			} else ; creating layer 4 to 7
+				CurrentGUI := A_Index+1   
 			Gui, Fade_GUI%CurrentGUI%: +OwnerFade_GUI%OwnerGUI% -Caption +E0x80000 +LastFound +ToolWindow +AlwaysOnTop
 			Gui, Fade_GUI%CurrentGUI%: Margin,0,0
             Gui, Fade_GUI%CurrentGUI%: Show,, fadeLayer%CurrentGUI%
@@ -366,6 +370,8 @@ FadeOutStart:
 		IfExist, % lyr1OutFile
 		{	lyr1OutPic := Gdip_CreateBitmapFromFile(lyr1OutFile)
 			Gdip_GetImageDimensions(lyr1OutPic, lyr1OutPicW, lyr1OutPicH)	; get the width and height of the background image
+			lyr1OutPicW := Round(lyr1OutPicW * fadeXScale)
+			lyr1OutPicH := Round(lyr1OutPicH * fadeYScale)
 		}		
 		;Acquiring screen info for dealing with rotated menu drawings
 		if !(If fadeIn = true)
