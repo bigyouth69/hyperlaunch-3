@@ -11,6 +11,35 @@
 ===========================================================================
 
 
+v3.1.0.3 BETA
+
+
+HyperLaunch (updated to v3.1.0.3)
+Rom names with [ or ] in them will no longer error, but instead give a warning in the log
+Warning logs added when showing and logging command window settings are enabled
+Added a few more res batch files for nircmd in module extensions
+
+Fade Animations.ahk (updated to v1.1.0)
+Removed 7zSounds from a conditional it wasn't needed on
+
+Keymapper.ahk (updated to v1.0.9)
+xpadder and joytokey automatically have command windows skipped if they are enabled because they do not work right with them
+This fixes some users have posted when having this window enabled and getting stuck when xpadder was launched
+
+Shared.ahk (updated to v1.2.1)
+Run() added ability to bypass command windows if enabled
+rIniIndex was not global, preventing default plugin key values from being written to plugin inis
+Rewrote handling and fixed command windows not closing properly
+
+Modules
+
+ScummVM (updated to v2.0.7)
+Fixed some improper placement of dbl quotes on paths causing scummvm to reject them in CLI
+
+Daphne (updated to v2.0.6)
+Added new hwAccel module setting for controlling use of opengl (thanks rfancella)
+
+
 v3.1.0.2 BETA
 
 
