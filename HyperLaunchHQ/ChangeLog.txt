@@ -10,13 +10,18 @@
                                        Release History                                       
 =============================================================================================
 
-v1.1.1 (December 27th, 2014):
+v1.1.1.1 (January 6th, 2015):
+  * Exporting your audit list will not proceed until you have set an export format under HLHQ Settings
+  * Added support for the 6 settings needed to configure the new layer 3 static fade image
+  * Minor adjustments on some GUI fields
+
+v1.1.1.0 (December 27th, 2014):
   * Made text MG artworl label text field editable under Settings->Plugins
   * Fixed a bug in the HLHQ Plugin which was making the XML creation fail when adding a new system
   * Fixed bug where the IC Enable option was updating the wrong setting
   * Fixed issue with relative paths when launching the active frontend directly from HLHQ
 
-v1.1.0 (December 23rd, 2014):
+v1.1.0.0 (December 23rd, 2014):
   * Added Panic hotkey. This will allow you to always be able to kill HyperLaunch if by some reason 
     it blocks you out from task manager and your exit script key won't work. Press Ctrl+Alt+Q to kill 
     it, you can enabled/disable this option in the HLHQ settings tab. Make sure you only enable it when 
@@ -69,7 +74,7 @@ v1.1.0 (December 23rd, 2014):
   * Added button to browse to 7z Extract Path so you can clean it if needed
   * Some other minor corrections
 
-v1.0.13 (January 18th, 2014):
+v1.0.13.0 (January 18th, 2014):
   * Added support for the new Keymapper_FrontEnd_Profile key which has been moved to the main 
     HyperLaunch.ini file
   * Removed toolbars from inside the scrollviewers so that they will be always visible even at 
@@ -91,7 +96,7 @@ v1.0.13 (January 18th, 2014):
   * Added new setting to change the size of the icons in the main tabs (Change it under the HLHQ Settings 
     tab). These last 2 features should help those users in lower resolution monitors a bit
 
-v1.0.12 (October 2nd, 2013):
+v1.0.12.0 (October 2nd, 2013):
   * Added support for fully configuring Bezel.ini and Global Bezel.ini files (Bezel and Instruction 
     Card configurations)
   * Added support for Bezel and Instruction Card profiles
