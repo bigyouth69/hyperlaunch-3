@@ -1,9 +1,9 @@
 MEmu = ScummVM
-MEmuV = v1.5.0
+MEmuV = v1.7.0
 MURL = http://scummvm.org/
 MAuthor = djvj, brolly
-MVersion = 2.0.6
-MCRC = 8D08D806
+MVersion = 2.0.7
+MCRC = 94CC13AF
 iCRC = 3ADCD646
 MID = 635038268922749586
 MSystem = "ScummVM","Microsoft MS-DOS"
@@ -116,7 +116,8 @@ xHotKeywrapper(LoadKey,"ScummvmLoad")
 xHotKeywrapper(MenuKey,"ScummvmMenu")
 
 If (LaunchMode = "ParseIni")
-{	;Try parsing the scummvm config ini file for the path
+{	Log("Module - Launch mode: ParseIni")
+	;Try parsing the scummvm config ini file for the path
 	StringReplace, romNameChanged, TargetName, %A_Space%, _, All	; replace all spaces in the name we lookup in ScummVM's ini because ScummVM does not support spaces in the section name
 	romNameChanged := RegExReplace(romNameChanged, "\(|\)", "_")	; replaces all parenthesis with underscores
 	If (TargetName != romNameChanged)
@@ -128,11 +129,11 @@ If (LaunchMode = "ParseIni")
 		StringTrimRight, scummRomPath, scummRomPath, 1
 	; msgbox % scummRomPath
 	If !scummRomPath {
-		Log("Module - Could not locate a path in ScummVM's ini for section """ . romNameChanged . """. Checking If a path exists for the dbName instead: """ . dbName . """")
+		Log("Module - Could not locate a path in ScummVM's ini for section """ . romNameChanged . """. Checking If a path exists for the dbName instead: """ . dbName . """",2)
 		scummRomPath := IniReadCheck(configFile, dbName, "path",,,1)	; If the romName, after removing all unsupporting characters to meet ScummVM's section name requirements, could not be found, try looking up the dbName instead
 	}
 	If !FileExist(scummRomPath)	; If user does not have a path set to this game in the ScummVM ini or the path does not exist that is set, attempt to send a proper one in CLI
-	{	Log("Module - " . (If !scummRomPath ? "No path defined in ScummVM's ini" : ("The path defined in ScummVM's ini does not exist : " . scummRomPath)) . ". Attempting to find a correct path to your rom and sending that to ScummVM.")
+	{	Log("Module - " . (If !scummRomPath ? "No path defined in ScummVM's ini" : ("The path defined in ScummVM's ini does not exist : " . scummRomPath)) . ". Attempting to find a correct path to your rom and sending that to ScummVM.",2)
 		If (InStr(romPath, romName) && FileExist(romPath)) {	; If the romName is already in the path of the romPath and that path exists, attempt to set that as the path we send to ScummVM
 			scummRomPath := romPath
 			Log("Module - Changing " . romName . " path to: " . scummRomPath,2)
@@ -143,18 +144,20 @@ If (LaunchMode = "ParseIni")
 			ScriptError("The path to """ . romName . """ was not found. Please set it correctly by manually launching ScummVM and editing this rom's path to where it can be found.")
 	}
 } Else If (LaunchMode = "eXoDOS") {
+	Log("Module - Launch mode: eXoDOS")
 	;On eXoDOS sets game MUST be at this folder
 	scummRomPath := CheckFile(romPath . "\" . romName)
 	romNameChanged := TargetName
 } Else {
+	Log("Module - Launch mode: Standard")
 	;Auto mode, scummRomPath will be empty here as everything will be read from the scummvm config ini file
 	romNameChanged := TargetName
 }
 
 options := " --no-console"
-configFile := If customConfigFile ? """ -c" . configFile . """" : ""		; If user set a path to a custom config file
+configFile := If customConfigFile ? " -c""" . configFile . """" : ""		; If user set a path to a custom config file
 fullscreen := If Fullscreen = "true" ? " -f" : " -F"
-scummRomPath := If scummRomPath ? """ -p" . scummRomPath . """" : ""
+scummRomPath := If scummRomPath ? " -p""" . scummRomPath . """" : ""
 
 HideEmuStart()
 Run(executable . options . fullscreen . configFile . scummRomPath . " " . romNameChanged, emuPath)

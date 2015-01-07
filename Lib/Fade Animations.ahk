@@ -1,5 +1,5 @@
-MCRC=C5D271EB
-MVersion=1.0.9
+MCRC=7C4363D3
+MVersion=1.1.0
 
 ; Default transition animation used for Fade_In
 DefaultAnimateFadeIn(direction,time){
@@ -991,7 +991,7 @@ _DefaultFadeAnimationLoop:
 			Gdip_Alt_FillRoundedRectangle(Fade_G3, fadeBrushBar, xTopLeft+fadeBarX-fadeLyr3CanvasX, yTopLeft+yBar-fadeLyr3CanvasY, fadeBarW*percentage/100, fadeBarH,currentRBar)
 			Process, Exist, 7z.exe	; This breaks out of 7z.exe If it's no longer running. Sometimes an extraction was very quick or there was an error and we don't want to be stuck in an infinite Loop
 			If !ErrorLevel and fadeLyr3Drawn ; bar is at 100% or 7z is already closed or user interrupted fade, so break out
-				If (((found7z="true") and (7zEnabled = "true") and (7zSounds = "true") and !(7zTempRomExists) and (use7zAnimation)) and !(hlmode="fade7z"))
+				If (((found7z="true") and (7zEnabled = "true") and !(7zTempRomExists) and (use7zAnimation)) and !(hlmode="fade7z"))
 					AnimationLoopFinished := true
 			If fadeLyr3Drawn and (finishedBar or !fadeInActive)
 				AnimationLoopFinished := true
@@ -1062,6 +1062,3 @@ MyFirstAnimation:
 	Log("MyFirstAnimation - Started")
 	Log("MyFirstAnimation - Ended")
 Return
-
-
-

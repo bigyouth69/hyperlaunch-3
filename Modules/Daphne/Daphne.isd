@@ -28,6 +28,10 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>If true, will pause Daphne before exiting by sending "P". If your monitor is not the same resolution as daphne, Fade_Out will not display correctly. Pausing Daphne tries to prevent this.</DESCRIPTION>
 						</KEY>
+						<KEY name="hwAccel" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Should Daphne use hardware acceleration? Default is true, which uses OpenGL.</DESCRIPTION>
+						</KEY>
 					</KEYS>
 				</SECTION>
 				<SECTION name="%RomName%" required="false">

@@ -1,0 +1,1 @@
+nircmd.exe setdisplay 2560 1440 32

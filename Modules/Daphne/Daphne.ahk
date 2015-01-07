@@ -1,10 +1,10 @@
 MEmu = Daphne
-MEmuV =  v1.0.12
+MEmuV =  v1.0.13
 MURL = http://www.daphne-emu.com/
 MAuthor = djvj
-MVersion = 2.0.5
-MCRC = CE06F399
-iCRC = 9B67AACC
+MVersion = 2.0.6
+MCRC = F8545233
+iCRC = 7FCE1920
 MID = 635038268879753802
 MSystem = "Daphne","LaserDisc"
 ;----------------------------------------------------------------------------
@@ -25,11 +25,12 @@ BezelGUI()
 FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
-globalParams := IniReadCheck(settingsFile,"settings","globalParams","vldp -blank_searches -prefer_samples -noissues -opengl -fastboot",,1)
+globalParams := IniReadCheck(settingsFile,"settings","globalParams","vldp -blank_searches -prefer_samples -noissues -fastboot",,1)
 fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 screenWidth := IniReadCheck(settingsFile, "Settings", "ScreenWidth",A_ScreenWidth,,1)
 screenHeight := IniReadCheck(settingsFile, "Settings", "ScreenHeight",A_ScreenHeight,,1)
 pauseOnExit := IniReadCheck(settingsFile,"settings","pauseOnExit","false",,1)
+hwAccel := IniReadCheck(settingsFile,"settings","hwAccel","true",,1)
 min_seek_delay := IniReadCheck(settingsFile,romName,"min_seek_delay",A_Space,,1)
 seek_frames_per_ms := IniReadCheck(settingsFile,romName,"seek_frames_per_ms",A_Space,,1)
 homedir := IniReadCheck(settingsFile,romName,"homedir",".",,1)
@@ -63,6 +64,7 @@ bank1 := If bank1 ? " -bank 1 " . bank1 : ""
 bank2 := If bank2 ? " -bank 2 " . bank2 : ""
 bank3 := If bank3 ? " -bank 3 " . bank3 : ""
 sound_buffer := If sound_buffer ? " -sound_buffer " . sound_buffer : ""
+hwAccel := If hwAccel = "true" ? " -opengl" : " -nohwaccel"
 params := globalParams . " " . params
 
 hideEmuObj := Object("ahk_class SDL_app",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
@@ -88,7 +90,7 @@ HideEmuStart()	; This fully ensures windows are completely hidden even faster th
 
 ; This allows us to send variables, that when empty, are not sent to the Run command
 ; msgbox % executable . A_Space . romName . A_Space . params . fullscreen . screenWidth . screenHeight . min_seek_delay . seek_frames_per_ms . homedir . bank0 . bank1 . bank2 . bank3 . sound_buffer . " -framefile """ . romPath . "\" . frameFile . romExtension . """"
-Run(executable . A_Space . romName . A_Space . params . fullscreen . screenWidth . screenHeight . min_seek_delay . seek_frames_per_ms . homedir . bank0 . bank1 . bank2 . bank3 . sound_buffer . " -framefile """ . romPath . "\" . frameFile . romExtension . """", emuPath)
+Run(executable . A_Space . romName . A_Space . params . hwAccel . fullscreen . screenWidth . screenHeight . min_seek_delay . seek_frames_per_ms . homedir . bank0 . bank1 . bank2 . bank3 . sound_buffer . " -framefile """ . romPath . "\" . frameFile . romExtension . """", emuPath)
 
 WinWait("ahk_class SDL_app")
 WinWaitActive("ahk_class SDL_app")

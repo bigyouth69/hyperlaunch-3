@@ -1,5 +1,5 @@
-MCRC=FFA937DA
-MVersion=1.0.8
+MCRC=92FE1C3C
+MVersion=1.0.9
 
 RunAHKKeymapper(method) {
 	Global ahkDefaultProfile,ahkFEProfile,ahkRomProfile,ahkEmuProfile,ahkSystemProfile,ahkHyperLaunchProfile,ahkLauncherPath,ahkLauncherExe,keymapperFrontEndProfile
@@ -455,7 +455,7 @@ RunXpadder(keymapperPath,keymapperExe,ProfilesInIdOrder,joystickArray) {
 	
 	; Close xpadder to refresh controllers
 	Log("RunXpadder - Closing xpadder to refresh controllers seen by xpadder",5)
-	Run(keymapperExe . " /C", keymapperPath)
+	Run(keymapperExe . " /C", keymapperPath,,,,1)	; enabling bypassCmdWindow
 	
 	StringSplit,Profiles,ProfilesInIdOrder,|
 	Log("RunXpadder - Creating an array of connected controllers and profiles to arrange according to the order found in " . keymapperPath . "\xpadder.ini",5)
@@ -553,7 +553,7 @@ RunXpadder(keymapperPath,keymapperExe,ProfilesInIdOrder,joystickArray) {
 	}
 	StringReplace, ProfilesInXpadderOrder, ProfilesInXpadderOrder, ?, " ", All
 	If ProfilesInXpadderOrder
-		Run(keymapperExe . " """ . ProfilesInXpadderOrder . """ /M", keymapperPath, "Hide")
+		Run(keymapperExe . " """ . ProfilesInXpadderOrder . """ /M", keymapperPath, "Hide",,,1)	; enabling bypassCmdWindow)
 	Else
 		Log("RunXpadder - No profiles found and nothing to tell Xpadder to load",2)
 	Log("RunXpadder - Ended")
@@ -568,7 +568,7 @@ RunJoyToKey(keymapperPath,keymapperExe,Profile="") {
 		errLvl := Process("Exist", xpadderexe)
 		If errLvl
 		{	Log("RunJoyToKey - Closing xpadder to avoid dual keymapper conflict",2)
-			Run(xpadderexe . " /C", xpadderdir)
+			Run(xpadderexe . " /C", xpadderdir,,,,1)	; enabling bypassCmdWindow)
 			errLvl := Process("Exist", xpadderexe)
 			If errLvl
 				Process("Close", xpadderexe)
@@ -595,7 +595,7 @@ RunJoyToKey(keymapperPath,keymapperExe,Profile="") {
 		IniWrite, 1, %keymapperPath%\JoyToKey.ini, LastStatus, StartIconified
 	; Finally we start the keymapper with the cfg profile we found
 	If Profile
-		Run(keymapperExe . " """ . Profile . """", keymapperPath)
+		Run(keymapperExe . " """ . Profile . """", keymapperPath,,,,1)	; enabling bypassCmdWindow)
 	Log("RunJoyToKey - Ended")
 }
 

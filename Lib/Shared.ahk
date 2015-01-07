@@ -1,9 +1,10 @@
-MCRC=77AFC55D
-MVersion=1.2.0
+MCRC=6B4F9212
+MVersion=1.2.1
 
 StartModule(){
 	Global gameSectionStartTime,gameSectionStartHour,skipChecks,dbName,romPath,romName,romExtension,systemName,moduleName,MEmu,MEmuV,MURL,MAuthor,MVersion,MCRC,iCRC,MSystem,romMapTable,romMappingLaunchMenuEnabled,romMenuRomName,7zEnabled,hideCursor,toggleCursorKey,winVer,zz
 	Global mgEnabled,mgOnLaunch,mgCandidate,mgLaunchMenuActive,MultiGame_Running
+	Global rIniIndex,globalPluginsFile,sysPluginsFile
 	Log("StartModule - Started")
 	Log("StartModule - MEmu: " . MEmu . "`r`n`t`t`t`t`tMEmuV: " . MEmuV . "`r`n`t`t`t`t`tMURL: " . MURL . "`r`n`t`t`t`t`tMAuthor: " . MAuthor . "`r`n`t`t`t`t`tMVersion: " . MVersion . "`r`n`t`t`t`t`tMCRC: " . MCRC . "`r`n`t`t`t`t`tiCRC: " . iCRC . "`r`n`t`t`t`t`tMID: " . MID . "`r`n`t`t`t`t`tMSystem: " . MSystem)
 	If InStr(MSystem,systemName)
@@ -81,7 +82,7 @@ StartModule(){
 
 ; ExitModule function in case we need to call anything on the module's exit routine, like UpdateStatistics for HyperPause or UnloadKeymapper
 ExitModule(){
-	Global statisticsEnabled,keymapperEnabled,keymapper,keymapperAHKMethod,logShowCommandWindow,pToken,cmdWindowTable,mouseCursorHidden,cursor,hideCursor,hyperlaunchIsExiting,servoStikEnabled,zz
+	Global statisticsEnabled,keymapperEnabled,keymapper,keymapperAHKMethod,logShowCommandWindow,pToken,cmdWindowObj,mouseCursorHidden,cursor,hideCursor,hyperlaunchIsExiting,servoStikEnabled,zz
 	Log("ExitModule - Started")
 	hyperlaunchIsExiting := 1	; notifies rest of the thread that the exit routine was triggered
 	If statisticsEnabled = true
@@ -97,9 +98,13 @@ ExitModule(){
 	If (servoStikEnabled = 4 || servoStikEnabled = 8)
 		ServoStik(servoStikEnabled)	; handle servostiks on exit
 	If logShowCommandWindow = true
-		for index, element in cmdWindowTable
-		{	Log("ExitModule - Closing command window: " . cmdWindowTable[A_Index,1] . " PID: " . cmdWindowTable[A_Index,2],4)
-			Process("Close", cmdWindowTable[A_Index,1])	; close each opened cmd.exe
+		Loop {
+			If !cmdWindowObj[A_Index,"Name"]
+				Break
+			Else {
+				Log("ExitModule - Closing command window: " . cmdWindowObj[A_Index,"Name"] . " PID: " . cmdWindowObj[A_Index,"PID"],4)
+				Process("Close", cmdWindowObj[A_Index,"Name"])	; close each opened cmd.exe
+			}
 		}
 	Gdip_Shutdown(pToken)	; gdi+ may now be shutdown on exiting the thread
 	Log("ExitModule - Ended")
@@ -165,10 +170,10 @@ WinClose(winTitle,winText="",secondsToWait="",excludeTitle="",excludeText=""){
 
 ; To disable inputBlocker on a specific Run call, set inputBlocker to 0, or to force it a specified amount of seconds (upto 30), set it to that amount.
 ; By default, options will enable all calls of Run() to return errorlevel within the function. However, it will only be returned if errorLevelReporting is true
-Run(target,workingDir="",options=1,ByRef outputVarPID="", inputBlocker=1){
-	Static targetCount
-	Global logShowCommandWindow,logCommandWindow,cmdWindowTable,blockInputTime,blockInputFile,errorLevelReporting
-	targetCount++
+; bypassCmdWindow - some apps will never work with the command window, like xpadder. enable this argument on these Run calls so it doesn't get caught here
+Run(target,workingDir="",options=1,ByRef outputVarPID="",inputBlocker=1,bypassCmdWindow=0){
+	Static cmdWindowCount
+	Global logShowCommandWindow,logCommandWindow,cmdWindowObj,blockInputTime,blockInputFile,errorLevelReporting
 	options := If useErrorLevel = 1 ? "useErrorLevel" : options	; enable or disable error level
 	Log("Run - Running: " . workingDir . "\" . target)
 	If (blockInputTime && inputBlocker = 1)	; if user set a block time, use the user set length
@@ -181,10 +186,10 @@ Run(target,workingDir="",options=1,ByRef outputVarPID="", inputBlocker=1){
 	{	Log("Run - Blocking Input for: " . blockTime . " seconds")
 		Run, %blockInputFile% %blockTime%
 	}
-	If !cmdWindowTable
-		cmdWindowTable := []	; initialize array, this is used so all the windows can be properly closed on exit
-	If logShowCommandWindow = true
-	{	Run, %ComSpec% /k, %workingDir%, %options%, outputVarPID	; open a command window (cmd.exe), starting in the directory of the target executable
+	If !cmdWindowObj
+		cmdWindowObj := Object()	; initialize object, this is used so all the command windows can be properly closed on exit
+	If (logShowCommandWindow = "true" && !bypassCmdWindow) {
+		Run, %ComSpec% /k, %workingDir%, %options%, outputVarPID	; open a command window (cmd.exe), starting in the directory of the target executable
 		curErr := ErrorLevel	; store error level immediately
 		If errorLevelReporting = true
 		{	Log("Run - Error Level for " . ComSpec . " reported as: " . curErr, 4)
@@ -202,10 +207,12 @@ Run(target,workingDir="",options=1,ByRef outputVarPID="", inputBlocker=1){
 				ScriptError("Could not put focus onto the command window. Please try turning off Fade In if you have it enabled in order to see it")
 		}
 		WinGet, procName, ProcessName, ahk_pid %outputVarPID%	; get the name of the process (which should usually be cmd.exe)
-		cmdWindowTable[targetCount,1] := procName	; store the ProcessName being ran in column 1
-		cmdWindowTable[targetCount,2] := outputVarPID	; store the PID of the application being ran in column 2
+		mapObjects[currentObj,"type"] := "database"
+		cmdWindowCount++
+		cmdWindowObj[cmdWindowCount,"Name"] := procName	; store the ProcessName being ran
+		cmdWindowObj[cmdWindowCount,"PID"] := outputVarPID	; store the PID of the application being ran
 		If logCommandWindow = true
-			SendInput, {Raw}%target% 1>"%A_ScriptDir%\command_%targetCount%_output.log" 2>"%A_ScriptDir%\command_%targetCount%_error.log"	; send the text to the command window and log the output to file
+			SendInput, {Raw}%target% 1>"%A_ScriptDir%\command_%cmdWindowCount%_output.log" 2>"%A_ScriptDir%\command_%cmdWindowCount%_error.log"	; send the text to the command window and log the output to file
 		Else
 			SendInput, {Raw}%target%	; send the text to the command window and run it
 		Send, {Enter}
@@ -358,7 +365,7 @@ CheckFolder(folder,msg="",timeout=6,crc="",crctype="",logerror="") {
 ; h = height of error box
 ; txt = font size
 ScriptError(error,timeout=6,w=800,h=225,txt=20){
-	Global HLMediaPath,exitScriptKey,HLFile,HLErrSoundPath,logShowCommandWindow,cmdWindowTable
+	Global HLMediaPath,exitScriptKey,HLFile,HLErrSoundPath,logShowCommandWindow,cmdWindowObj
 	Global screenRotationAngle,baseScreenWidth,baseScreenHeight,xTranslation,yTranslation,XBaseRes,YBaseRes
 
 	XHotKeywrapper(exitEmulatorKey,"CloseProcess","OFF")
@@ -461,8 +468,8 @@ ScriptError(error,timeout=6,w=800,h=225,txt=20){
 		ExitModule()	; attempting to use this method which has the small chance to cause an infinite ScriptError loop, but no need to duplicate code to clean up on errors
 		; Below cleanup exists because we can't call other functions that may cause additional scripterrors and put the thread in an infinite loop
 		; If logShowCommandWindow = true
-		; {	for index, element in cmdWindowTable
-				; Process, Close, % cmdWindowTable[A_Index,1]	; close each opened cmd.exe
+		; {	for index, element in cmdWindowObj
+				; Process, Close, % cmdWindowObj[A_Index,1]	; close each opened cmd.exe
 		; }
 		; ExitApp
 }
