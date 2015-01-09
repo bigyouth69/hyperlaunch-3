@@ -2,9 +2,9 @@ MEmu = Daphne Singe
 MEmuV =  v1.14
 MURL = http://www.singeengine.com/cms/
 MAuthor = djvj
-MVersion = 2.0.2
-MCRC = B49ED9DC
-iCRC = 25195A9C
+MVersion = 2.0.3
+MCRC = D73E9B2
+iCRC = 727919E9
 MID = 635038268880264228
 MSystem = "American Laser Games","WoW Action Max"
 ;----------------------------------------------------------------------------
@@ -59,6 +59,7 @@ settingsFile := modulePath . "\" . moduleName . ".ini"
 fullscreen := IniReadCheck(settingsFile, "settings", "Fullscreen","true",,1)
 daphneWidth := IniReadCheck(settingsFile, "settings", "daphneWidth","1024",,1)
 daphneHeight := IniReadCheck(settingsFile, "settings", "daphneHeight","768",,1)
+singePathUpdate := IniReadCheck(settingsFile, "settings", "SingePathUpdate","true",,1)
 forcePathUpdate := IniReadCheck(settingsFile, "settings", "ForcePathUpdate","false",,1)
 
 BezelStart()
@@ -77,7 +78,8 @@ If bezelPath   ; this variable is only filled if bezel is enabled and a valid be
 hideEmuObj := Object("DAPHNE ahk_class SDL_app",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
 
-SingePathUpdate()
+If singePathUpdate = true
+	SingePathUpdate()
 
 HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
 

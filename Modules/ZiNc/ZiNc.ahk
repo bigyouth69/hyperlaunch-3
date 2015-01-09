@@ -2,7 +2,7 @@ MEmu = ZiNc
 MEmuV = v1.1
 MURL = http://www.emulator-zone.com/doc.php/arcade/zinc.html
 MAuthor = djvj
-MVersion = 2.0.2
+MVersion = 2.0.3
 MCRC = 21A07033
 iCRC = DD494A5C
 MID = 635038268938302527
@@ -12,6 +12,8 @@ MSystem = "ZiNc"
 ; Script relies on a zinc.cfg in the emu dir which contains all the parameters sent to the emu
 ; This is made for you by using Aldo's ZiNc Front-End v2.2.
 ; Zinc uses numbers, not romnames to choose what game to load. The module does the remapping for you so your database should consist of proper short rom names, not numbers.
+; This module uses this database: http://pastebin.com/xSWdwTaq
+; If your Front End doesn't use xml, you will have to adapt your FE's db to match thpse names.
 ;----------------------------------------------------------------------------
 StartModule()
 FadeInStart()
