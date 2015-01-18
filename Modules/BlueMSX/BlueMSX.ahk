@@ -2,8 +2,8 @@ MEmu = BlueMSX
 MEmuV = v2.8.2
 MURL = http://www.bluemsx.com/
 MAuthor = djvj & brolly
-MVersion = 2.1.0
-MCRC = 3162CE42
+MVersion = 2.1.1
+MCRC = E0AFD6D8
 iCRC = 646E01AA
 MID = 635038268875990669
 MSystem = "ColecoVision","Microsoft MSX","Microsoft MSX2","Microsoft MSX2+","Microsoft MSX Turbo-R","Sega SG-1000","Spectravideo"
@@ -49,6 +49,7 @@ Joystick2 := IniReadCheck(settingsFile, romName, "Joystick2",GlobalJoystick2,,1)
 
 BezelStart("fixResMode")
 
+Machine := ident
 If ident contains MSX
 {
 	TapeLoadTime := IniReadCheck(settingsFile, "Settings", "TapeLoadTime","8000",,1)
@@ -79,8 +80,6 @@ DoubleQuoteKey := IniReadCheck(settingsFile, "Settings", "DoubleQuoteKey","""",,
 
 bluemsxINI := CheckFile(emuPath . "\bluemsx.ini")
 
-params := " /machine """ . Machine . """"
-
 IniRead, currentFullscreen, %bluemsxINI%, config, video.windowSize
 IniRead, currentStretch, %bluemsxINI%, config, video.horizontalStretch
 
@@ -106,14 +105,12 @@ If ( Joystick1 != currentJoystick1 )
 If ( Joystick2 != currentJoystick2 )
 	IniWrite, %Joystick2%, %bluemsxINI%, config, joy2.type
 
-params := params . " /theme """ . (If bezelPath ? "Classic" : "DIGIblue_SuiteX2") .  """"
+params := " /theme """ . (If bezelPath ? "Classic" : "DIGIblue_SuiteX2") . """"
 
 hideEmuObj := Object("blueMSX ahk_class blueMSX",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
 
-If romExtension in .rom,.bin,.sg
-	params := params . " /rom1 """ . romPath . "\" . romName . romExtension . """"
-Else If romExtension = .dsk
+If romExtension = .dsk ;Disk games
 {
 	params := params . " /diskA """ . romPath . "\" . romName . romExtension . """"
 	If (DualDiskLoad = "true")
@@ -129,9 +126,10 @@ Else If romExtension = .dsk
 		}
 	}
 }
-Else If romExtension = .cas
+Else If romExtension = .cas ;Cassette games
 	params := params . " /cas """ . romPath . "\" . romName . romExtension . """"
-
+Else ;Cart games
+	params := params . " /rom1 """ . romPath . "\" . romName . romExtension . """"
 If CartSlot1
 	If (CartSlot1 != "64KBexRAM")
 		params := params . " /romtype1 """ . CartSlot1
@@ -139,6 +137,7 @@ If CartSlot2
 	If (CartSlot2 != "64KBexRAM")
 		params := params . " /romtype2 """ . CartSlot2
 
+params := params . " /machine """ . Machine . """" ;CLI order matters for some machines like ColecoVision, rom must be set before the machine
 HideEmuStart()
 Run(executable . params, emuPath)
 

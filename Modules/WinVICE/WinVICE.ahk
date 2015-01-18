@@ -2,9 +2,9 @@ MEmu = WinVICE
 MEmuV = v2.4
 MURL = http://vice-emu.sourceforge.net/
 MAuthor = djvj,wahoobrian,brolly
-MVersion = 2.0.4
-MCRC = 2C342847
-iCRC = DF0B4867
+MVersion = 2.0.5
+MCRC = A915BD1
+iCRC = 4A31A54A
 MID = 635038268966170754
 MSystem = "Commodore 64","Commodore 16 & Plus4","Commodore VIC-20","Commodore 128"
 ;----------------------------------------------------------------------------
@@ -15,6 +15,8 @@ MSystem = "Commodore 64","Commodore 16 & Plus4","Commodore VIC-20","Commodore 12
 ;
 ; Default Joyport setting for C64 requires that you configure "Keyset A" as the default for JoyPort 1 and "Keyset B" as the 
 ; default for JoyPort 2.  This allows the module to use the ini settings and set the default joystick to Player 1 at startup
+; This can be disabled by setting the disableAutoControllerSwapping to true.  That is helpful for users who do not wish to use 
+; "KeySet A" and "KeySet B" as the controller configurations.
 ;
 ; If you want to use the StartTape and StopTape hotkeys make sure you edit the files C64\win_shortcuts.vsc or VIC20\win_shortcuts.vsc 
 ; (paths relative to the emulator install folder) and assign Alt+F7 as the StartTape shortcut and Alt+F8 as the StopTape shortcut, like this:
@@ -58,6 +60,7 @@ bezelTopOffset := IniReadCheck(settingsFile, "Settings", "bezelTopOffset",16,,1)
 bezelBottomOffset := IniReadCheck(settingsFile, "Settings", "bezelBottomOffset",46,,1)
 bezelLeftOffset := IniReadCheck(settingsFile, "Settings", "bezelLeftOffset",7,,1)
 bezelRightOffset := IniReadCheck(settingsFile, "Settings", "bezelRightOffset",7,,1)
+disableAutoControllerSwapping := IniReadCheck(settingsFile, "Settings", "DisableAutoControllerSwapping","false",,1)
 
 UsePaddles := IniReadCheck(settingsFile, romName, "UsePaddles", "false",,1)
 AutostartPrgMode := IniReadCheck(settingsFile, romName, "AutostartPrgMode", "2",,1)
@@ -163,24 +166,26 @@ If (ident = "C64") {
 	}
 	; Setting TrueDriveEmulation setting in ini If it doesn't match what user wants above
 	If ( TrueDriveEmulation != "true" And currentDriveTrueEmulation = 1 ) {
-		;MsgBox, update ini = 0
+
 		IniWrite, 0, %viceINI%, %ident%, DriveTrueEmulation
 		IniWrite, 0, %viceINI%, %ident%, Drive8Type
 	}
 	Else If ( TrueDriveEmulation = "true" And currentDriveTrueEmulation = 0 ) {
-		;MsgBox, update ini = 1
+
 		IniWrite, 1, %viceINI%, %ident%, DriveTrueEmulation
 		IniWrite, 1541, %viceINI%, %ident%, Drive8Type
 	}
-	
-	; Setting Default JoyPort to Player 1 If needed
-	If ( DefaultJoyPort = "1" And currentJoyDevice1 != 2 ) {
-		IniWrite, 2, %viceINI%, %ident%, JoyDevice1
-		IniWrite, 3, %viceINI%, %ident%, JoyDevice2
-	}
-	Else If ( DefaultJoyPort = "2" And currentJoyDevice1 != 3 ) {
-		IniWrite, 3, %viceINI%, %ident%, JoyDevice1
-		IniWrite, 2, %viceINI%, %ident%, JoyDevice2
+
+	If ( disableAutoControllerSwapping = "false" ) {
+		; Setting Default JoyPort to Player 1 If needed
+		If ( DefaultJoyPort = "1" And currentJoyDevice1 != 2 ) {
+			IniWrite, 2, %viceINI%, %ident%, JoyDevice1
+			IniWrite, 3, %viceINI%, %ident%, JoyDevice2
+		}
+		Else If ( DefaultJoyPort = "2" And currentJoyDevice1 != 3 ) {
+			IniWrite, 3, %viceINI%, %ident%, JoyDevice1
+			IniWrite, 2, %viceINI%, %ident%, JoyDevice2
+		}
 	}
 	
 	HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait

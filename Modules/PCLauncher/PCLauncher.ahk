@@ -2,11 +2,11 @@ MEmu = PCLauncher
 MEmuV =  N/A
 MURL = https://sites.google.com/site/hyperlaunch2/additional-features/pclauncher
 MAuthor = djvj
-MVersion = 2.1.2
+MVersion = 2.1.3
 MCRC = 8DB1EE8A
 iCRC = D78DBEE9
 mId = 635243126483565041
-MSystem = "Fan Remakes","Games for Windows","Microsoft Windows","PCLauncher","PC Games","Steam","Steam Big Picture","Taito Type X","Touhou","Touhou Project"
+MSystem = "Arcade PC","Doujin Soft","Examu eX-BOARD","Fan Remakes","Games for Windows","Konami e-Amusement","Konami Bemani","Microsoft Windows","PCLauncher","PC Games","Steam","Steam Big Picture","Taito Type X","Touhou","Touhou Project"
 ;----------------------------------------------------------------------------
 ; Notes:
 ; Use the examples in the ini, in your Modules\PCLauncher\ folder, to add more applications.

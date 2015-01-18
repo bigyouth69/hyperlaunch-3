@@ -8,15 +8,81 @@
 					<SECTIONTYPE>Global</SECTIONTYPE>
 					<KEYS>
 						<KEY name="Fullscreen" required="false" nullable="false">
-							<KEYTYPE>Boolean</KEYTYPE>
-							<DESCRIPTION>If true emulator will run fullscreen.</DESCRIPTION>
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Default is Windowed. This setting controls fullscreen method for all games. </DESCRIPTION>
+							<VALUES>
+								<VALUE description="Windowed Fullscreen">true</VALUE>
+								<VALUE description="Windowed">false</VALUE>
+								<VALUE description="True Fullscreen (Not compatible with HyperPause)">fullscreen</VALUE>
+							</VALUES>
 						</KEY>
+						<KEY name="BezelMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Choices are Layout or FixResMode. If left blank, layout will be used by default. "Layout" allows AAE to use it's built-in layout support, where-as "FixResMode" only uses HyperLaunch bezels. Can be overwritten by the per-rom setting.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Use AAE built-in Bezels">Layout</VALUE>
+								<VALUE description="Use HyperLaunch Bezels">FixResMode</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Artwork_Crop" required="false" nullable="false">
+							<KEYTYPE>Binary</KEYTYPE>
+							<DESCRIPTION>Enables/Disables cropping of artwork to the game screen area only for the entire system. Can be overwritten by the per-rom setting</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Off">0</VALUE>
+								<VALUE description="On">1</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Use_Artwork" required="false" nullable="false">
+							<KEYTYPE>Binary</KEYTYPE>
+							<DESCRIPTION>Enables/Disables AAE built-in Bezels for the entire system. HyperLaunch bezels will take precedence over AAE bezels if you have them enabled. Can be overwritten by the per-rom setting</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Off">0</VALUE>
+								<VALUE description="On">1</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Use_Overlays" required="false" nullable="false">
+							<KEYTYPE>Binary</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Overlay for the entire system. Can be overwritten by the per-rom setting</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Off">0</VALUE>
+								<VALUE description="On">1</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
 						<KEY name="BezelMode" required="false" nullable="false">
 							<KEYTYPE>String</KEYTYPE>
 							<DESCRIPTION>Choices are Layout or FixResMode. If left blank, layout will be used by default. "Layout" allows AAE to use it's built-in layout support, where-as "FixResMode" only uses HyperLaunch bezels.</DESCRIPTION>
 							<VALUES>
-								<VALUE>Layout</VALUE>
-								<VALUE>FixResMode</VALUE>
+								<VALUE description="Use AAE built-in Bezels">Layout</VALUE>
+								<VALUE description="Use HyperLaunch Bezels">FixResMode</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Artwork_Crop" required="false" nullable="false">
+							<KEYTYPE>Binary</KEYTYPE>
+							<DESCRIPTION>Enables/Disables cropping of artwork to the game screen area only for the entire system.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Off">0</VALUE>
+								<VALUE description="On">1</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Use_Artwork" required="false" nullable="false">
+							<KEYTYPE>Binary</KEYTYPE>
+							<DESCRIPTION>Enables/Disables AAE built-in Bezels for the entire system. HyperLaunch bezels will take precedence over AAE bezels if you have them enabled.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Off">0</VALUE>
+								<VALUE description="On">1</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Use_Overlays" required="false" nullable="false">
+							<KEYTYPE>Binary</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Overlay for the entire system.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Off">0</VALUE>
+								<VALUE description="On">1</VALUE>
 							</VALUES>
 						</KEY>
 					</KEYS>
