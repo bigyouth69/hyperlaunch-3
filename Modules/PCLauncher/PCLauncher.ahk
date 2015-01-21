@@ -2,8 +2,8 @@ MEmu = PCLauncher
 MEmuV =  N/A
 MURL = https://sites.google.com/site/hyperlaunch2/additional-features/pclauncher
 MAuthor = djvj
-MVersion = 2.1.3
-MCRC = 8DB1EE8A
+MVersion = 2.1.4
+MCRC = 969D048A
 iCRC = D78DBEE9
 mId = 635243126483565041
 MSystem = "Arcade PC","Doujin Soft","Examu eX-BOARD","Fan Remakes","Games for Windows","Konami e-Amusement","Konami Bemani","Microsoft Windows","PCLauncher","PC Games","Steam","Steam Big Picture","Taito Type X","Touhou","Touhou Project"
@@ -38,6 +38,8 @@ Loop, Parse, iniLookup, |
 hideCursor := IniReadCheck(settingsFile, "Settings|" . dbName, "HideCursor",,,1)
 bezelEnabled := IniReadCheck(settingsFile, "Settings|" . dbName, "BezelEnabled",,,1)
 
+If hideCursor = true
+	SystemCursor("Off")
 If bezelEnabled = true
 	BezelGUI()
 FadeInStart()
