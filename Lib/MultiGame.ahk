@@ -1,5 +1,5 @@
-MCRC = 76CD8F5C
-MVersion=1.0.5
+MCRC = 754F60CA
+MVersion=1.0.6
 
 StartMulti:
 	Log("StartMulti - Started",4)
@@ -218,15 +218,12 @@ StartMulti:
 		}
 		foundDefaultMGArt:=	; empty for next loop
 	}
-
 	;Defining the scalling factor
-	XBaseRes := 1920, YBaseRes := 1080
-    if (((A_screenWidth < A_screenHeight) and ((screenRotationAngle=0) or (screenRotationAngle=180))) or ((A_screenWidth > A_screenHeight) and ((screenRotationAngle=90) or (screenRotationAngle=270))))
-        XBaseRes := 1080, YBaseRes := 1920
-	if !mgXScale 
-		mgXScale := baseScreenWidth/XBaseRes
-	if !mgYScale
-		mgYScale := baseScreenHeight/YBaseRes
+	if (((A_screenWidth < A_screenHeight) and ((screenRotationAngle=0) or (screenRotationAngle=180))) or ((A_screenWidth > A_screenHeight) and ((screenRotationAngle=90) or (screenRotationAngle=270)))){
+        temp := mgWidthBaseRes , mgWidthBaseRes := mgHeightBaseRes , mgHeightBaseRes := temp
+    }
+    mgXScale := baseScreenWidth/mgWidthBaseRes
+    mgYScale := baseScreenHeight/mgHeightBaseRes
 	OptionScale(mgYOffset, mgYScale)	
 	OptionScale(mgText2Offset, mgYScale)	
 	TextOptionScale(mgText1Options, mgXScale, mgYScale)	

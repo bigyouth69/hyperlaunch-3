@@ -1,0 +1,280 @@
+﻿using HyperEmu.Entity;
+using HyperEmu.Util;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Xml;
+
+namespace HyperEmu.Database
+{
+    [DisplayName("HyperPin")]
+    [FrontendExecutable("hyperpin.exe")]
+    [PluginDescription("Loads from HyperPin databases")]
+    [HyperLaunchPluginName("HyperPin")]
+    public class HyperPinPlugin : DefaultDatabasePlugin
+    {
+
+        List<ArtworkLabel> artworkFolders = new List<ArtworkLabel>();
+        List<ArtworkLabel> logoFolders = new List<ArtworkLabel>();
+        List<ArtworkLabel> videoFolders = new List<ArtworkLabel>();
+
+        public HyperPinPlugin(String HLpath)
+            : base(HLpath)
+        {
+            initArtworkFolders();
+        }
+
+        private void initArtworkFolders()
+        {
+            //These must follow the exact same order as defined in the HL Plugin file
+            logoFolders.Add(new ArtworkLabel("Wheel Images", "Game Logo"));
+
+            artworkFolders.Add(new ArtworkLabel("Table Images", "Table"));
+            artworkFolders.Add(new ArtworkLabel("Backglass Images", "Backglass"));
+
+            videoFolders.Add(new ArtworkLabel("Table Videos", "Table"));
+        }
+
+        protected override String getMainDBsubPath()
+        {
+            return @"\\Databases\Visual Pinball\Visual Pinball.xml"; //HP doesn't have a systems list
+        }
+
+        protected override String getSystemDBsubPath(String system)
+        {
+            if (system.Equals("Visual Pinball",StringComparison.InvariantCultureIgnoreCase))
+                return @"\Databases\" + system + @"\" + system + ".xml";
+            else
+                return @"\Databases\Future Pinball\Future Pinball.xml";
+        }
+
+        public override List<ArtworkLabel> getArtworkLabels(ArtworkType type)
+        {
+            if (type == ArtworkType.Logo)
+                return logoFolders;
+            else if (type == ArtworkType.Artwork)
+                return artworkFolders;
+            else if (type == ArtworkType.Video)
+                return videoFolders;
+            else
+                return new List<ArtworkLabel>();
+        }
+
+        public override void renameFrontendSystem(String old_system_name, String new_system_name, String new_system_description)
+        {
+            //Renaming systems isn't supported yet
+            return;
+        }
+
+        //CREATING XML FILE FOR SYSTEM BASED ON ROMPATH AND ROMEXTENSION SET ON HL
+        public override bool canCreateSystemDatabase()
+        {
+            return true;
+        }
+        public override void createSystemDatabase(String system, List<GameXml> games, bool overwrite)
+        {
+            //Creating databases isn't supported yet
+            return;
+        }
+
+        //LOADING SYSTEMS FROM MAIN MENU INI FILE
+        public override List<String> loadSystems()
+        {
+            //This list will hold the name of all configured systems
+            List<String> systemsList = new List<String>();
+
+            String vpXml = getMainDBFullPath();
+            String fpXml = getSystemDBFullPath("Future Pinball");
+
+            if (File.Exists(vpXml))
+            {
+                systemsList.Add("Visual Pinball");
+            }
+
+            if (File.Exists(fpXml))
+            {
+                systemsList.Add("Future Pinball");
+
+                //Parse XML searching for more systems
+                XmlReaderSettings settings = new XmlReaderSettings();
+                settings.IgnoreWhitespace = true;
+                settings.IgnoreComments = true;
+                XmlReader reader = XmlReader.Create(fpXml, settings);
+
+                using (reader)
+                {
+                    GameXml gx = null;
+                    String name = "";
+                    String system = "";
+
+                    bool firstOne = true;
+
+                    int gameCount = 0;
+
+                    while (reader.Read())
+                    {
+                        // Only detect start elements.
+                        if (reader.IsStartElement())
+                        {
+                            // Get element name and switch on it.
+                            switch (reader.Name)
+                            {
+                                case "game":
+                                    if (!firstOne)
+                                    {
+                                        if (!systemsList.Contains(system))
+                                            systemsList.Add(system);
+                                    }
+                                    name = reader["name"];
+                                    system = "Future Pinball"; //Default if system tag is ommited
+                                    firstOne = false;
+                                    gameCount++;
+                                    break;
+                                case "system":
+                                    // Next read will contain text.
+                                    if (reader.Read())
+                                    {
+                                        system = reader.Value.Trim();
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                    if (gx != null || gameCount == 1)
+                    {
+                        //Add the last one
+                        if (!systemsList.Contains(system))
+                            systemsList.Add(system);
+                    }
+                }
+            }
+            return systemsList;
+        }
+
+        //LOADING GAMES FROM SYSTEM XML FILE
+        public override ObservableCollection<GameXml> loadGames(String system, out bool loaded)
+        {
+            ObservableCollection<GameXml> gameList = new ObservableCollection<GameXml>();
+            loaded = true;
+
+            if (system.Equals("Visual Pinball", StringComparison.InvariantCultureIgnoreCase))
+            {
+                gameList = loadGamesDefault(system, out loaded);
+            }
+            else
+            {
+                String xmlfile = getSystemDBFullPath(system);
+                if (File.Exists(xmlfile))
+                {
+                    List<GameXml> lst = new List<GameXml>();
+
+                    XmlReaderSettings settings = new XmlReaderSettings();
+                    settings.IgnoreWhitespace = true;
+                    settings.IgnoreComments = true;
+                    XmlReader reader = XmlReader.Create(xmlfile, settings);
+
+                    using (reader)
+                    {
+                        GameXml gx = null;
+                        String name = "";
+                        String desc = "";
+                        String manufacturer = "";
+                        String cloneof = "";
+                        String systemname = "";
+
+                        bool firstOne = true;
+
+                        int gameCount = 0;
+
+                        while (reader.Read())
+                        {
+                            // Only detect start elements.
+                            if (reader.IsStartElement())
+                            {
+                                // Get element name and switch on it.
+                                switch (reader.Name)
+                                {
+                                    case "game":
+                                        if (!firstOne && systemname.Equals(system,StringComparison.InvariantCultureIgnoreCase))
+                                        {
+                                            gx = new GameXml(name, desc, "Pinball", manufacturer, cloneof, system);
+                                            lst.Add(gx);
+                                        }
+                                        name = reader["name"];
+                                        desc = "";
+                                        systemname = "Future Pinball";
+                                        manufacturer = "";
+                                        cloneof = "";
+                                        firstOne = false;
+                                        gameCount++;
+                                        break;
+                                    case "description":
+                                        // Next read will contain text.
+                                        if (reader.Read())
+                                        {
+                                            desc = reader.Value.Trim();
+                                        }
+                                        break;
+                                    case "cloneof":
+                                        // Next read will contain text.
+                                        if (reader.Read())
+                                        {
+                                            cloneof = reader.Value.Trim();
+                                        }
+                                        break;
+                                    case "system":
+                                        // Next read will contain text.
+                                        if (reader.Read())
+                                        {
+                                            systemname = reader.Value.Trim();
+                                        }
+                                        break;
+                                    case "manufacturer":
+                                        // Next read will contain text.
+                                        if (reader.Read())
+                                        {
+                                            manufacturer = reader.Value.Trim();
+                                        }
+                                        break;
+                                }
+                            }
+                        }
+                        if ((gx != null || gameCount == 1) && systemname.Equals(system,StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            //Add the last one
+                            gx = new GameXml(name, desc, "Pinball", manufacturer, cloneof, system);
+                            lst.Add(gx);
+                        }
+                    }
+                    lst.Sort();
+
+                    foreach (GameXml g in lst)
+                    {
+                        if (!gameList.Contains(g))
+                        {
+                            gameList.Add(g);
+                        }
+                        else
+                        {
+                            duplicateGameFound(g.name, system);
+                        }
+                    }
+                }
+                else
+                {
+                }
+            }
+            return gameList;
+        }
+
+        //PATH TO WHEEL IMAGE RELATIVE TO THE FRONTEND FOLDER
+        public override String getSystemLogoSubPath(String system)
+        {
+            return null;
+        }
+
+    }
+}

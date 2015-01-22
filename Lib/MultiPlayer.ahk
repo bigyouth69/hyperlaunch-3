@@ -1,12 +1,14 @@
-MCRC = D108080B
-MVersion=1.0.1
+MCRC = A9E46982
+MVersion=1.0.2
 
-MultiPlayerMenu(ByRef lastIP=false, ByRef lastPort=false, ByRef networkType=false, ByRef networkPlayers=0, setupNetwork=false, keyboardControl=true) {
+MultiPlayerMenu(lastIP=false, lastPort=false, ByRef networkType=false, ByRef networkPlayers=0, setupNetwork=false, keyboardControl=true, severUseNetworkIP=true, disableSeverInfoMenu=false, textMessage=false) {   ; severUseNetworkIP=true -> networkIP=publicIP / severUseNetworkIP=false -> networkIP=localIP
 	Log("MultiPlayerMenu - Started")
 	Global screenRotationAngle,baseScreenWidth,baseScreenHeight,xTranslation,yTranslation
-	Global HLMediaPath,networkSession,networkProtocol,networkPort,localIP,publicIP,networkRequiresSetup
+	Global HLMediaPath,networkSession,networkIP,networkProtocol,networkPort,localIP,publicIP,networkRequiresSetup
 	Global navSelectKey,navUpKey,navDownKey,navLeftKey,navRightKey,navP2SelectKey,navP2UpKey,navP2DownKey,navP2LeftKey,navP2RightKey,exitEmulatorKey,exitEmulatorKey
 	Global keymapper,keymapperEnabled,keymapperHyperLaunchProfileEnabled
+	Global multiplayerMenuExit
+	XHotKeywrapper(exitEmulatorKey,"CloseProcess","OFF")
 	If !pToken
 		pToken := Gdip_Startup()
 	Gdip_Alt_GetRotatedDimensions(A_ScreenWidth, A_ScreenHeight, screenRotationAngle, baseScreenWidth, baseScreenHeight)
@@ -98,6 +100,7 @@ MultiPlayerMenu(ByRef lastIP=false, ByRef lastPort=false, ByRef networkType=fals
 	SetupNetworkMenuTextColor := "DD999999"
 	SetupNetworkMenuTextFont := "Bebas Neue"
 	CheckFont(SetupNetworkMenuTextFont)
+	IPSlotSelectedPenWidth := 2
 	;menu scalling factor
 	XBaseRes := 1920, YBaseRes := 1080
     If (((A_screenWidth < A_screenHeight) and ((screenRotationAngle=0) or (screenRotationAngle=180))) or ((A_screenWidth > A_screenHeight) and ((screenRotationAngle=90) or (screenRotationAngle=270))))
@@ -135,9 +138,12 @@ MultiPlayerMenu(ByRef lastIP=false, ByRef lastPort=false, ByRef networkType=fals
 	OptionScale(SetupNetworkMenuMarginBetweenOptionAndText, multiplayerMenuXScale)
 	OptionScale(SetupNetworkMenuSlotTextSize, multiplayerMenuYScale)
 	OptionScale(SetupNetworkMenuTextSize, multiplayerMenuYScale)
+	OptionScale(IPSlotSelectedPenWidth, multiplayerMenuXScale)
+	IPSlotSelectedPenWidth := (IPSlotSelectedPenWidth<1) ? 1 : IPSlotSelectedPenWidth
 	;Create Pens
 	multiplayerMenuContourSelectedPen := Gdip_CreatePen("0x" . multiplayerMenuSelectedContourColor, multiplayerMenuSelectedContourPenW)
 	multiplayerMenuContourDisabledPen := Gdip_CreatePen("0x" . multiplayerMenuDisabledContourColor, multiplayerMenuSelectedContourPenW) 
+	IPSlotSelectedPen := Gdip_CreatePen("0x" . multiplayerMenuSelectedContourColor, IPSlotSelectedPenWidth)
 	;Initializing menu parameters
 	SelectedMultiPlayerOption := 1
 	MultiPlayerOption := []
@@ -171,27 +177,62 @@ MultiPlayerMenu(ByRef lastIP=false, ByRef lastPort=false, ByRef networkType=fals
 	Gdip_Alt_FillRoundedRectangle(multiplayerMenu_G1, multiplayerMenuBackgroundBrush, 0, 0, multiplayerMenuW, multiplayerMenuH,multiplayerMenuCornerRadius)
 	Alt_UpdateLayeredWindow(multiplayerMenu_hwnd1, multiplayerMenu_hdc1, multiplayerMenuX, multiplayerMenuY, multiplayerMenuW, multiplayerMenuH)
 	;Drawing Images and Texts
-	Gosub, DrawMultiPlayerSelectionMenu
+	If textMessage ; Drawing simple text message
+		Gosub, DrawMultiPlayerTextMessage
+	Else ; Drawing Menu
+		Gosub, DrawMultiPlayerSelectionMenu
 	;Enabling Menu Navigation Keys
 	If (keymapperEnabled = "true") and (keymapperHyperLaunchProfileEnabled = "true")
-        RunKeymapper%zz%("menu",keymapper)
+		RunKeymapper%zz%("menu",keymapper)
 	If keymapperAHKMethod = External
 		RunAHKKeymapper%zz%("menu")
-	Gosub, EnableMultiplayerMenuKeys
+	If textMessage ; Drawing simple text message
+		Gosub, EnableMultiplayerTextMessageKeys
+	Else
+		Gosub, EnableMultiplayerMenuKeys
 	;Waiting for menu to exit
 	Loop
 	{	If multiplayerMenuExit
 			Break
 		Sleep, 100
 	}
-	If (keymapperEnabled = "true") and (keymapperHyperLaunchProfileEnabled = "true")
-		RunKeymapper%zz%("load", keymapper)
-	If keymapperAHKMethod = External
-		RunAHKKeymapper%zz%("load")
-	networkType := MultiPlayerOption[SelectedMultiPlayerOption,"networkType"]
+	If !(textMessage) 
+	{
+		If (keymapperEnabled = "true") and (keymapperHyperLaunchProfileEnabled = "true")
+			RunKeymapper%zz%("load", keymapper)
+		If keymapperAHKMethod = External
+			RunAHKKeymapper%zz%("load")
+		networkType := MultiPlayerOption[SelectedMultiPlayerOption,"networkType"]
+	}
+	multiplayerMenuExit := false
 	Log("MultiPlayerMenu - Ended")
-	Return 
+	XHotKeywrapper(exitEmulatorKey,"CloseProcess","ON")
+	If forcedCloseMultiPlayerMenu
+		Return -1
+	Else
+		Return
 	;Multiplayer Selection Labels
+	EnableMultiplayerTextMessageKeys:
+		Log("MultiPlayer - EnableMultiplayerTextMessageKeys",5)
+		XHotKeywrapper(navSelectKey,"MultiplayerTextMessageSelect","ON")  
+		XHotKeywrapper(navP2SelectKey,"MultiplayerTextMessageSelect","ON") 
+		XHotKeywrapper(exitEmulatorKey,"CloseMultiplayerTextMessage","ON")
+	Return
+	DisableMultiplayerTextMessageKeys:
+		Log("MultiPlayer - EnableMultiplayerTextMessageKeys",5)
+		XHotKeywrapper(navSelectKey,"MultiplayerTextMessageSelect","OFF")  
+		XHotKeywrapper(navP2SelectKey,"MultiplayerTextMessageSelect","OFF") 
+		XHotKeywrapper(exitEmulatorKey,"CloseMultiplayerTextMessage","OFF")
+	Return
+    CloseMultiplayerTextMessage:
+        Log("MultiPlayer - User canceled the text message.",5)
+        forcedCloseMultiPlayerMenu := true
+    MultiplayerTextMessageSelect:
+        If !forcedCloseMultiPlayerMenu 
+               Log("MultiPlayer - User accepted the text message.",5)
+        Gosub, DisableMultiplayerTextMessageKeys
+        multiplayerMenuExit := true
+    Return
 	EnableMultiplayerMenuKeys:
 		Log("MultiPlayer - EnableMultiplayerMenuKeys",5)
 		XHotKeywrapper(navSelectKey,"MultiplayerMenuSelect","ON")  
@@ -204,7 +245,6 @@ MultiPlayerMenu(ByRef lastIP=false, ByRef lastPort=false, ByRef networkType=fals
 		XHotKeywrapper(navP2LeftKey,"MultiplayerMenuLeft","ON")
 		XHotKeywrapper(navP2RightKey,"MultiplayerMenuRight","ON")
 		XHotKeywrapper(navP2SelectKey,"MultiplayerMenuSelect","ON") 
-		XHotKeywrapper(exitEmulatorKey,"CloseProcess","OFF")
 		XHotKeywrapper(exitEmulatorKey,"CloseMultiplayerMenu","ON")
 	Return
 	DisableMultiplayerMenuKeys:
@@ -219,9 +259,14 @@ MultiPlayerMenu(ByRef lastIP=false, ByRef lastPort=false, ByRef networkType=fals
 		XHotKeywrapper(navP2LeftKey,"MultiplayerMenuLeft","OFF")
 		XHotKeywrapper(navP2RightKey,"MultiplayerMenuRight","OFF")
 		XHotKeywrapper(navP2SelectKey,"MultiplayerMenuSelect","OFF") 
-		XHotKeywrapper(exitEmulatorKey,"CloseProcess","OFF")
 		XHotKeywrapper(exitEmulatorKey,"CloseMultiplayerMenu","OFF")
-		XHotKeywrapper(exitEmulatorKey,"CloseProcess","ON")
+	Return
+	DrawMultiPlayerTextMessage:
+		Log("MultiPlayerMenu - Multiplayer Text Message.")
+		InfoH := MeasureText(textMessage, "w" . multiplayerMenuW-2*multiplayerMenuMargin . " Center c" . serverInfoMenuTextColor . " r4 s" . serverInfoMenuTextSize . " Bold", serverInfoMenuTextFont,,,"H")
+		Gdip_Alt_TextToGraphics(multiplayerMenu_G2, textMessage, "x" . multiplayerMenuMargin . " y" . (multiplayerMenuH-InfoH)//2 . "w" . multiplayerMenuW-2*multiplayerMenuMargin . " Center c" . serverInfoMenuTextColor . " r4 s" . serverInfoMenuTextSize . " Bold", serverInfoMenuTextFont)	
+		Alt_UpdateLayeredWindow(multiplayerMenu_hwnd2, multiplayerMenu_hdc2, multiplayerMenuX, multiplayerMenuY, multiplayerMenuW, multiplayerMenuH)
+		XHotKeywrapper(exitEmulatorKey,"CloseMultiplayerMenu","ON")
 	Return
 	DrawMultiPlayerSelectionMenu:
 		Log("MultiPlayer - DrawMultiPlayerSelectionMenu was drawn",5)
@@ -266,20 +311,19 @@ MultiPlayerMenu(ByRef lastIP=false, ByRef lastPort=false, ByRef networkType=fals
 	Return
 	CloseMultiplayerMenu:
 		Log("MultiPlayer - User canceled the menu",5)
-		ClosedPlayerMenu := true
+		forcedCloseMultiPlayerMenu := true
 	MultiplayerMenuSelect:
 		Log("MultiPlayer - MultiplayerMenuSelect",5)
 		Gosub, DisableMultiplayerMenuKeys
-		If ClosedPlayerMenu		; user canceled
-		{	Log("User cancelled the Multiplayer Select Menu")
+		If forcedCloseMultiPlayerMenu		; user canceled
+		{	Log("MultiPlayer - User cancelled the Multiplayer Select Menu")
 			Gosub, CleanMultiplayerMenuMemory
 			multiplayerMenuExit := true
-			ExitModule()
 		} Else		; user made a choice
-			Log("Multiplayer option Selected: " . MultiPlayerOption[SelectedMultiPlayerOption,"text"])	
-		If (SelectedMultiPlayerOption=3)	; If user selected client
+			Log("MultiPlayer - Multiplayer option Selected: " . MultiPlayerOption[SelectedMultiPlayerOption,"text"])	
+		If (SelectedMultiPlayerOption=3){	; If user selected client
 			Gosub, DrawIPSelectionMenu
-		Else If (SelectedMultiPlayerOption=2) {	; If user selected server
+		} Else If (SelectedMultiPlayerOption=2) {	; If user selected server
 			If (networkPlayers>1) 
 				Gosub, DrawPlayerSelectionMenu	; choose the amount of players
 			Else
@@ -379,6 +423,7 @@ MultiPlayerMenu(ByRef lastIP=false, ByRef lastPort=false, ByRef networkType=fals
 				currentTextSize := IPSlotSelectedTextSize
 				currentTextColor := IPSlotSelectedTextColor
 				currentTextStyle := "bold"
+				Gdip_Alt_DrawRectangle(multiplayerMenu_G3, IPSlotSelectedPen, (a_index-1)*IPSlotWidth + (Floor((a_index+2)/3)-1)*IPDistanceBetweenImages - Floor((a_index/16))*IPDistanceBetweenImages, 0, IPSlotWidth, Round(IPBackgroundBitmapH*IPImageWidth/IPBackgroundBitmapW))
 			} Else {
 				currentTextSize := IPSlotDisabledTextSize
 				currentTextColor := IPSlotDisabledTextColor
@@ -419,7 +464,6 @@ MultiPlayerMenu(ByRef lastIP=false, ByRef lastPort=false, ByRef networkType=fals
 		XHotKeywrapper(navP2LeftKey,"IPMenuLeft","ON")
 		XHotKeywrapper(navP2RightKey,"IPMenuRight","ON")
 		XHotKeywrapper(navP2SelectKey,"IPMenuSelect","ON") 
-		XHotKeywrapper(exitEmulatorKey,"CloseProcess","OFF")
 		XHotKeywrapper(exitEmulatorKey,"CloseIPMenu","ON")
 		If keyboardControl
 			{
@@ -443,7 +487,6 @@ MultiPlayerMenu(ByRef lastIP=false, ByRef lastPort=false, ByRef networkType=fals
 		XHotKeywrapper(navP2RightKey,"IPMenuRight","OFF")
 		XHotKeywrapper(navP2SelectKey,"IPMenuSelect","OFF") 
 		XHotKeywrapper(exitEmulatorKey,"CloseIPMenu","OFF")
-		XHotKeywrapper(exitEmulatorKey,"CloseProcess","ON")
 		If keyboardControl
 			{
 			Loop, 10
@@ -511,16 +554,15 @@ MultiPlayerMenu(ByRef lastIP=false, ByRef lastPort=false, ByRef networkType=fals
 		Gosub, UpdateIPNumbers
 	Return
 	CloseIPMenu:
-		ClosedIPMenu := true
+		forcedCloseMultiPlayerMenu := true
 	IPMenuSelect:
 		Log("MultiPlayer - IPMenuSelect",5)
-		If ClosedIPMenu
-		{	Log("User cancelled the IP Select Menu")
+		If 	forcedCloseMultiPlayerMenu
+		{	Log("MultiPlayer - User cancelled the IP Select Menu")
 			Gosub, DisableIPMenuKeys
 			Gdip_DisposeImage(IPBackgroundBitmap),Gdip_DisposeImage(PortBackgroundBitmap)
 			Gosub, CleanMultiplayerMenuMemory
 			multiplayerMenuExit := true
-			ExitModule()
 		} Else {
 			IPSelectedDigit := []
 			Loop, 17
@@ -528,23 +570,25 @@ MultiPlayerMenu(ByRef lastIP=false, ByRef lastPort=false, ByRef networkType=fals
 			IPSelected := % IPSelectedDigit[1] . IPSelectedDigit[2] . IPSelectedDigit[3] . "." . IPSelectedDigit[4] . IPSelectedDigit[5] . IPSelectedDigit[6] . "." . IPSelectedDigit[7] . IPSelectedDigit[8] . IPSelectedDigit[9] . "." . IPSelectedDigit[10] . IPSelectedDigit[11] . IPSelectedDigit[12] 
 			PortSelected := % IPSelectedDigit[13] . IPSelectedDigit[14] . IPSelectedDigit[15] . IPSelectedDigit[16] . IPSelectedDigit[17]
 			If !(ValidIP(IPSelected)){
-				Log("Invalid IP Port Selected: " . IPSelected . ". Please try again.")
+				Log("MultiPlayer - CAREFUL WHEN POSTING THIS LOG PUBLICALY AS IT CONTAINS YOUR IP ON THE NEXT LINE",2)
+				Log("MultiPlayer - Invalid IP Port Selected: " . IPSelected . ". Please try again.")
 				Gdip_GraphicsClear(multiplayerMenu_G4)
 				Gdip_Alt_TextToGraphics(multiplayerMenu_G4, "IP number must be lower or equal to 255.255.255.255. Please try again!", "x" . multiplayerMenuW-multiplayerMenuMargin . " y" . multiplayerMenuH-multiplayerMenuMargin . " Right c" . errorTextColor . " r4 s" . errorTextSize . " " . currentTextStyle, errorTextFont)	
 				Alt_UpdateLayeredWindow(multiplayerMenu_hwnd4, multiplayerMenu_hdc4, multiplayerMenuX, multiplayerMenuY, multiplayerMenuW, multiplayerMenuH)
 				SetTimer, clearErrorMessage, %errorShowTime%
 				Return
 			} Else If !(ValidPort(PortSelected)){
-				Log("Invalid Server Port Selected: " . PortSelected . ". Please try again.")
+				Log("MultiPlayer - Invalid Server Port Selected: " . PortSelected . ". Please try again.")
 				Gdip_GraphicsClear(multiplayerMenu_G4)
 				Gdip_Alt_TextToGraphics(multiplayerMenu_G4, "Port number must be lower or equal to 65535. Please try again!", "x" . multiplayerMenuW-multiplayerMenuMargin . " y" . multiplayerMenuH-multiplayerMenuMargin . " Right c" . errorTextColor . " r4 s" . errorTextSize . " " . currentTextStyle, errorTextFont)	
 				Alt_UpdateLayeredWindow(multiplayerMenu_hwnd4, multiplayerMenu_hdc4, multiplayerMenuX, multiplayerMenuY, multiplayerMenuW, multiplayerMenuH)
 				SetTimer, clearErrorMessage, %errorShowTime%
 				Return
 			} Else {
-				Log("IP Selected: " . IPSelected . ". Port Selected: " . PortSelected)
-				LastIP := IPSelected
-				lastPort := PortSelected
+				Log("MultiPlayer - CAREFUL WHEN POSTING THIS LOG PUBLICALY AS IT CONTAINS YOUR IP ON THE NEXT LINE",2)
+				Log("MultiPlayer - IP Selected: " . IPSelected . ". Port Selected: " . PortSelected)
+				networkIP := IPSelected
+				networkPort := PortSelected
 				networkSession := true
 			}
 		}
@@ -620,7 +664,6 @@ MultiPlayerMenu(ByRef lastIP=false, ByRef lastPort=false, ByRef networkType=fals
 		XHotKeywrapper(navP2LeftKey,"PlayerNumberMenuLeft","ON")
 		XHotKeywrapper(navP2RightKey,"PlayerNumberMenuRight","ON")
 		XHotKeywrapper(navP2SelectKey,"PlayerNumberMenuSelect","ON") 
-		XHotKeywrapper(exitEmulatorKey,"CloseProcess","OFF")
 		XHotKeywrapper(exitEmulatorKey,"ClosePlayerNumberMenu","ON")
 		If keyboardControl
 			Loop, 9
@@ -639,7 +682,6 @@ MultiPlayerMenu(ByRef lastIP=false, ByRef lastPort=false, ByRef networkType=fals
 		XHotKeywrapper(navP2RightKey,"PlayerNumberMenuRight","OFF")
 		XHotKeywrapper(navP2SelectKey,"PlayerNumberMenuSelect","OFF") 
 		XHotKeywrapper(exitEmulatorKey,"ClosePlayerNumberMenu","OFF")
-		XHotKeywrapper(exitEmulatorKey,"CloseProcess","ON")
 		If keyboardControl
 			Loop, 9
 				Hotkey, % a_index, % "PlayerNumber" . a_index, off
@@ -672,20 +714,19 @@ MultiPlayerMenu(ByRef lastIP=false, ByRef lastPort=false, ByRef networkType=fals
 		Gosub, UpdatePlayerNumber
 	Return
 	ClosePlayerNumberMenu:
-		ClosedPlayerNumberMenu := true
+		forcedCloseMultiPlayerMenu := true
 	PlayerNumberMenuSelect:
 		Log("MultiPlayer - PlayerNumberMenuSelect",5)
 		Gosub, DisablePlayerSelectionMenuKeys
 		Gdip_DisposeImage(PlayerBackgroundBitmap)
 		Loop, % networkPlayers
 			Gdip_DisposeImage(NumberOfPlayers[a_index,"Bitmap"])
-		If ClosedPlayerNumberMenu
-		{	Log("User cancelled the Number of Players Selection Menu.")
+		If forcedCloseMultiPlayerMenu
+		{	Log("MultiPlayer - User cancelled the Number of Players Selection Menu.")
 			Gosub, CleanMultiplayerMenuMemory
 			multiplayerMenuExit := true
-			ExitModule()
 		} Else {	
-			Log("User selected the number of players equal to: " . currentNumberOfPlayers)
+			Log("MultiPlayer - User selected the number of players equal to: " . currentNumberOfPlayers)
 			networkPlayers := currentNumberOfPlayers
 			Gosub, DrawServerPortMenu
 		}
@@ -740,6 +781,7 @@ MultiPlayerMenu(ByRef lastIP=false, ByRef lastPort=false, ByRef networkType=fals
 				currentTextSize := serverPortSlotSelectedTextSize
 				currentTextColor := serverPortSlotSelectedTextColor
 				currentTextStyle := "bold"
+				Gdip_Alt_DrawRectangle(multiplayerMenu_G3, IPSlotSelectedPen, (a_index-1)*PortSlotWidth, 0, PortSlotWidth, PortBackgroundBitmapH)
 			} Else {
 				currentTextSize := serverPortSlotDisabledTextSize
 				currentTextColor := serverPortSlotDisabledTextColor
@@ -776,7 +818,6 @@ MultiPlayerMenu(ByRef lastIP=false, ByRef lastPort=false, ByRef networkType=fals
 		XHotKeywrapper(navP2LeftKey,"ServerPortMenuLeft","ON")
 		XHotKeywrapper(navP2RightKey,"ServerPortMenuRight","ON")
 		XHotKeywrapper(navP2SelectKey,"ServerPortMenuSelect","ON") 
-		XHotKeywrapper(exitEmulatorKey,"CloseProcess","OFF")
 		XHotKeywrapper(exitEmulatorKey,"CloseServerPortMenu","ON")
 		If keyboardControl
 			{
@@ -800,7 +841,6 @@ MultiPlayerMenu(ByRef lastIP=false, ByRef lastPort=false, ByRef networkType=fals
 		XHotKeywrapper(navP2RightKey,"ServerPortMenuRight","OFF")
 		XHotKeywrapper(navP2SelectKey,"ServerPortMenuSelect","OFF") 
 		XHotKeywrapper(exitEmulatorKey,"CloseServerPortMenu","OFF")
-		XHotKeywrapper(exitEmulatorKey,"CloseProcess","ON")
 		If keyboardControl
 			{
 			Loop, 10
@@ -864,40 +904,35 @@ MultiPlayerMenu(ByRef lastIP=false, ByRef lastPort=false, ByRef networkType=fals
 		Gosub, UpdateServerPortNumbers
 	Return
 	CloseServerPortMenu:
-		ClosedServerPortMenu := true
+		forcedCloseMultiPlayerMenu := true
 	ServerPortMenuSelect:
 		Log("MultiPlayer - ServerPortMenuSelect",5)
-		If ClosedServerPortMenu
-		{	Log("User cancelled the Server Port Select Menu")
+		If forcedCloseMultiPlayerMenu
+		{	Log("MultiPlayer - User cancelled the Server Port Select Menu")
 			Gosub, DisableServerPortMenuKeys
 			Gdip_DisposeImage(PortBackgroundBitmap)
 			Gosub, CleanMultiplayerMenuMemory
 			multiplayerMenuExit := true
-			ExitModule()
 		} Else {
 			ServerPortSelectedDigit := []
 			Loop, 5
 				ServerPortSelectedDigit[a_index] := If (ServerDigit[a_index]=-1) ? "" : ServerDigit[a_index]
 			ServerPortSelected := % ServerPortSelectedDigit[1] . ServerPortSelectedDigit[2] . ServerPortSelectedDigit[3] . ServerPortSelectedDigit[4] . ServerPortSelectedDigit[5]
 			If !(ValidPort(ServerPortSelected)){
-				Log("Invalid Server Port Selected: " . ServerPortSelected . ". Please try again.")
+				Log("MultiPlayer - Invalid Server Port Selected: " . ServerPortSelected . ". Please try again.")
 				Gdip_GraphicsClear(multiplayerMenu_G4)
 				Gdip_Alt_TextToGraphics(multiplayerMenu_G4, "Port number must be lower or equal to 65535. Please try again!", "x" . multiplayerMenuW-multiplayerMenuMargin . " y" . multiplayerMenuH-multiplayerMenuMargin . " Right c" . errorTextColor . " r4 s" . errorTextSize . " " . currentTextStyle, errorTextFont)	
 				Alt_UpdateLayeredWindow(multiplayerMenu_hwnd4, multiplayerMenu_hdc4, multiplayerMenuX, multiplayerMenuY, multiplayerMenuW, multiplayerMenuH)
 				SetTimer, clearErrorMessage, %errorShowTime%
 				Return
 			} Else {
-				Log("Server Port Selected: " . ServerPortSelected)
+				Log("MultiPlayer - Server Port Selected: " . ServerPortSelected)
 				networkPort := ServerPortSelected
 				networkSession := true
 			}
 		}
 		Gosub, DisableServerPortMenuKeys
 		Gdip_DisposeImage(PortBackgroundBitmap)
-		Gosub, DrawServerInfoMenu	
-	Return
-	DrawServerInfoMenu:
-		Log("MultiPlayer - Server Info Menu.",5)
 		Gdip_GraphicsClear(multiplayerMenu_G4)
 		Alt_UpdateLayeredWindow(multiplayerMenu_hwnd4, multiplayerMenu_hdc4, multiplayerMenuX, multiplayerMenuY, multiplayerMenuW, multiplayerMenuH)
 		Gdip_GraphicsClear(multiplayerMenu_G3)
@@ -911,17 +946,27 @@ MultiPlayerMenu(ByRef lastIP=false, ByRef lastPort=false, ByRef networkType=fals
 			If !publicIP
 				publicIP := GetPublicIP()
 		}
+		If severUseNetworkIP
+			networkIP := publicIP
+		Else
+			networkIP := localIP		
+		If !(disableSeverInfoMenu)
+			Gosub, DrawServerInfoMenu	
+		Gosub, EnableServerInfoMenuKeys
+		If (disableSeverInfoMenu)
+			multiplayerMenuExit := true
+	Return
+	DrawServerInfoMenu:
+		Log("MultiPlayer - Server Info Menu.",5)
 		Gdip_GraphicsClear(multiplayerMenu_G2)
 		InfoH := MeasureText("Tell your LAN clients to connect using the IP " . localIP[1,2] . "`r`nTell your WAN clients to connect using the IP " . publicIP . "`r`n`r`nBoth will use Port " . networkPort . "`r`n`r`nDo not forget to forward this port in your router to your LAN IP!!", "w" . multiplayerMenuW-2*multiplayerMenuMargin . " Center c" . serverInfoMenuTextColor . " r4 s" . serverInfoMenuTextSize . " Bold", serverInfoMenuTextFont,,,"H")
 		Gdip_Alt_TextToGraphics(multiplayerMenu_G2, "Tell your LAN clients to connect using the IP " . localIP[1,2] . "`r`nTell your WAN clients to connect using the IP " . publicIP . "`r`n`r`nBoth will use Port " . networkPort . "`r`n`r`nDo not forget to forward this port in your router to your LAN IP!!", "x" . multiplayerMenuMargin . " y" . (multiplayerMenuH-InfoH)//2 . "w" . multiplayerMenuW-2*multiplayerMenuMargin . " Center c" . serverInfoMenuTextColor . " r4 s" . serverInfoMenuTextSize . " Bold", serverInfoMenuTextFont)	
 		Alt_UpdateLayeredWindow(multiplayerMenu_hwnd2, multiplayerMenu_hdc2, multiplayerMenuX, multiplayerMenuY, multiplayerMenuW, multiplayerMenuH)
-		Gosub, EnableServerInfoMenuKeys
 	Return
 	EnableServerInfoMenuKeys:
 		Log("MultiPlayer - EnablePlayerSelectionMenuKeys",5)
 		XHotKeywrapper(navSelectKey,"ServerInfoSelect","ON") 
 		XHotKeywrapper(navP2SelectKey,"ServerInfoSelect","ON") 
-		XHotKeywrapper(exitEmulatorKey,"CloseProcess","OFF")
 		XHotKeywrapper(exitEmulatorKey,"CloseServerInfoMenu","ON")
 	Return
 	DisableServerInfoMenuKeys:
@@ -929,18 +974,16 @@ MultiPlayerMenu(ByRef lastIP=false, ByRef lastPort=false, ByRef networkType=fals
 		XHotKeywrapper(navSelectKey,"ServerInfoSelect","OFF") 
 		XHotKeywrapper(navP2SelectKey,"ServerInfoSelect","OFF") 
 		XHotKeywrapper(exitEmulatorKey,"CloseServerInfoMenu","OFF")
-		XHotKeywrapper(exitEmulatorKey,"CloseProcess","ON")
 	Return
 	CloseServerInfoMenu:
-		ClosedServerInfoMenu := true
+		forcedCloseMultiPlayerMenu := true
 	ServerInfoSelect:
 		Log("MultiPlayer - ServerInfoSelect",5)
-		If ClosedServerInfoMenu
-		{	Log("User cancelled the Server Info Select Menu")
+		If forcedCloseMultiPlayerMenu
+		{	Log("MultiPlayer - User cancelled the Server Info Select Menu")
 			Gosub, DisableServerInfoMenuKeys
 			Gosub, CleanMultiplayerMenuMemory
 			multiplayerMenuExit := true
-			ExitModule()
 		} Else {
 			Gosub, DisableServerInfoMenuKeys
 			Gosub, DrawSetupNetworkMenu
@@ -993,7 +1036,6 @@ MultiPlayerMenu(ByRef lastIP=false, ByRef lastPort=false, ByRef networkType=fals
 		XHotKeywrapper(navP2LeftKey,"SetupNetworkMenuLeft","ON")
 		XHotKeywrapper(navP2RightKey,"SetupNetworkMenuRight","ON")
 		XHotKeywrapper(navP2SelectKey,"SetupNetworkMenuSelect","ON") 
-		XHotKeywrapper(exitEmulatorKey,"CloseProcess","OFF")
 		XHotKeywrapper(exitEmulatorKey,"CloseSetupNetworkMenu","ON")
 	Return
 	DisableSetupNetworkMenuKeys:
@@ -1009,7 +1051,6 @@ MultiPlayerMenu(ByRef lastIP=false, ByRef lastPort=false, ByRef networkType=fals
 		XHotKeywrapper(navP2RightKey,"SetupNetworkMenuRight","OFF")
 		XHotKeywrapper(navP2SelectKey,"SetupNetworkMenuSelect","OFF") 
 		XHotKeywrapper(exitEmulatorKey,"CloseSetupNetworkMenu","OFF")
-		XHotKeywrapper(exitEmulatorKey,"CloseProcess","ON")
 	Return
 	SetupNetworkMenuLeft:
 	SetupNetworkMenuDown:
@@ -1022,22 +1063,21 @@ MultiPlayerMenu(ByRef lastIP=false, ByRef lastPort=false, ByRef networkType=fals
 		Gosub, UpdateSetupNetworkOption
 	Return
 	CloseSetupNetworkMenu:
-		ClosedSetupNetworkMenu := true
+		forcedCloseMultiPlayerMenu := true
 	SetupNetworkMenuSelect:
 		Log("MultiPlayer - SetupNetworkMenuSelect",5)
 		Gosub, DisableSetupNetworkMenuKeys
 		Gdip_DisposeImage(SetupNetworkBackgroundBitmap)
-		If ClosedSetupNetworkMenu
-		{	Log("User cancelled the Setup Network Menu.")
+		If forcedCloseMultiPlayerMenu
+		{	Log("MultiPlayer - User cancelled the Setup Network Menu.")
 			Gosub, CleanMultiplayerMenuMemory
 			multiplayerMenuExit := true
-			ExitModule()
 		} Else {	
 			If (currentSetupNetworkOption=1){
-				Log("User selected to run the multiplayer network setup.")
+				Log("MultiPlayer - User selected to run the multiplayer network setup.")
 				networkRequiresSetup := true
 			} Else {
-				Log("User selected to not run the multiplayer network setup.")
+				Log("MultiPlayer - User selected to not run the multiplayer network setup.")
 				networkRequiresSetup := false
 			}
 			Gosub, CleanMultiplayerMenuMemory

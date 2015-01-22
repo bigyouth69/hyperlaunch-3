@@ -1,5 +1,5 @@
-MCRC=C098BF8E
-mVersion=1.0.6
+MCRC=219E7381
+mVersion=1.0.7
 
 ;Author: bleasby
 ;Thanks to djvj and brolly for helping in the development of HyperPause (without them this would be impossible to achieve)
@@ -125,10 +125,6 @@ HyperPause_Main:
         HyperPause_MainMenu_Labels := RIniHyperPauseLoadVar(3,4, "Main Menu Appearance Options", "Main_Menu_Items", "Controller|Change Disc|Save State|Load State|HighScore|Artwork|Guides|Manuals|Videos|Sound|Statistics|Moves List|History|Settings|Shutdown")
     ; Reading HyperPause menu disable option for canceling HyperPause drawn
     HyperPause_Disable_Menu := RIniHyperPauseLoadVar(3,4, "General Options", "Disable_HyperPause_Menu", "true") 
-    ;Acquiring screen info for dealing with rotated menu drawings
-    Gdip_Alt_GetRotatedDimensions(A_ScreenWidth, A_ScreenHeight, screenRotationAngle, baseScreenWidth, baseScreenHeight)
-    Gdip_GetRotatedTranslation(baseScreenWidth, baseScreenHeight, screenRotationAngle, xTranslation, yTranslation)
-    xTranslation:=round(xTranslation), yTranslation:=round(yTranslation)
     If !disableLoadScreen 
         gosub, HideFrontEnd ; Creating HP_GUI21 non activated Black Screen to Hide FrontEnd 
     Log("HyperPause Started: current rom: " dbName ", current system Name: " systemName,1)
@@ -138,16 +134,18 @@ HyperPause_Main:
     If !disableLoadScreen ;activating HP_GUI21 Black Screen for hidding FrontEnd If not disabled in the module 
         If !(disableActivateBlackScreen and HyperPause_Disable_Menu="true")
             WinActivate, HyperPauseBlackScreen
+    ;Acquiring screen info for dealing with rotated menu drawings
+    Gdip_Alt_GetRotatedDimensions(A_ScreenWidth, A_ScreenHeight, screenRotationAngle, baseScreenWidth, baseScreenHeight)
+    Gdip_GetRotatedTranslation(baseScreenWidth, baseScreenHeight, screenRotationAngle, xTranslation, yTranslation)
+    xTranslation:=round(xTranslation), yTranslation:=round(yTranslation)
     ;Setting Scale Res Factors
-    HyperPause_XScale := RIniHyperPauseLoadVar(3,4, "Main Menu Appearance Options", "HyperPause_Horizontal_Scale_Factor", "") 
-    HyperPause_YScale := RIniHyperPauseLoadVar(3,4, "Main Menu Appearance Options", "HyperPause_Vertical_Scale_Factor", "") 
-    XBaseRes := 1920, YBaseRes := 1080
-    if (((A_screenWidth < A_screenHeight) and ((screenRotationAngle=0) or (screenRotationAngle=180))) or ((A_screenWidth > A_screenHeight) and ((screenRotationAngle=90) or (screenRotationAngle=270))))
-        XBaseRes := 1080, YBaseRes := 1920
-    if !HyperPause_XScale 
-		HyperPause_XScale := baseScreenWidth/XBaseRes
-    if !HyperPause_YScale
-		HyperPause_YScale := baseScreenHeight/YBaseRes
+    hyperpauseWidthBaseRes := RIniHyperPauseLoadVar(3,4, "Main Menu Appearance Options", "HyperPause_Base_Resolution_Width", "1920") 
+    hyperpauseHeightBaseRes := RIniHyperPauseLoadVar(3,4, "Main Menu Appearance Options", "HyperPause_Base_Resolution_Height", "1080") 
+    if (((A_screenWidth < A_screenHeight) and ((screenRotationAngle=0) or (screenRotationAngle=180))) or ((A_screenWidth > A_screenHeight) and ((screenRotationAngle=90) or (screenRotationAngle=270)))){
+        temp := hyperpauseWidthBaseRes , hyperpauseWidthBaseRes := hyperpauseHeightBaseRes , hyperpauseHeightBaseRes := temp
+    }
+    HyperPause_XScale := baseScreenWidth/hyperpauseWidthBaseRes
+    HyperPause_YScale := baseScreenHeight/hyperpauseHeightBaseRes
     Log("HyperPause screen scale factor: X=" . HyperPause_XScale . ", Y= " . HyperPause_YScale,5)
     If !disableSuspendEmu { ;Suspending emulator process while in HyperPause (pauses the emulator If halemu does not contain pause controls)
 		If (hlMode != "hp")	; On hp mode, emulatorProcessName = HyperLaunch.exe and obviously can't be suspended
@@ -258,20 +256,20 @@ HideFrontEnd: ;Hide FrontEnd with a black Gui
     HyperPause_Load_Background_Color = ff000000
     HyperPause_Load_Background_Brush := Gdip_BrushCreateSolid("0x" . HyperPause_Load_Background_Color)
     Gui, HP_GUI21: New, +HwndHP_hwnd21 +E0x80000 +ToolWindow -Caption +AlwaysOnTop +OwnDialogs, HyperPauseBlackScreen
-    HP_hbm21 := CreateDIBSection(A_ScreenWidth, A_ScreenHeight)
+    HP_hbm21 := CreateDIBSection(originalWidth, originalHeight)
     HP_hdc21 := CreateCompatibleDC()
     HP_obm21 := SelectObject(HP_hdc21, HP_hbm21)
     HP_G21 := Gdip_GraphicsFromhdc(HP_hdc21)
-    Gdip_TranslateWorldTransform(HP_G21, xTranslation, yTranslation)
-    Gdip_RotateWorldTransform(HP_G21, screenRotationAngle)
-    pGraphUpd(HP_G21,baseScreenWidth,baseScreenHeight)
-    Gdip_FillRectangle(HP_G21, HyperPause_Load_Background_Brush, -1, -1, XRes+1, YRes+1)   
+    Gdip_FillRectangle(HP_G21, HyperPause_Load_Background_Brush, -1, -1, originalWidth+1, originalHeight+1)   
     Gui, HP_GUI21: Show, na
-    UpdateLayeredWindow(HP_hwnd21, HP_hdc21, 0, 0, XRes, YRes)
+    UpdateLayeredWindow(HP_hwnd21, HP_hdc21, 0, 0, originalWidth, originalHeight)
 Return
 
 LoadingHyperPauseScreen: ;Drawning Loading HyperPause Message
     Gdip_GraphicsClear(HP_G21)
+    Gdip_TranslateWorldTransform(HP_G21, xTranslation, yTranslation)
+    Gdip_RotateWorldTransform(HP_G21, screenRotationAngle)
+    pGraphUpd(HP_G21,baseScreenWidth,baseScreenHeight)
     Gdip_Alt_FillRectangle(HP_G21, HyperPause_Load_Background_Brush, 0, 0, baseScreenWidth, baseScreenHeight)   
     HyperPause_AuxiliarScreen_StartText := RIniHyperPauseLoadVar(3,4, "Start and Exit Screen", "Loading_Text", "Loading HyperPause")
     HyperPause_AuxiliarScreen_ExitText := RIniHyperPauseLoadVar(3,4, "Start and Exit Screen", "Exiting_Text", "Exiting HyperPause")
@@ -388,10 +386,19 @@ FirstTimeHyperPauseRun: ;Loading pause menu variables (first time run only)
     Log("Starting Creating HyperPause Contents Object.",5)
     ;loading background image paths
     HPBackground := []
+    if (((A_screenWidth < A_screenHeight) and ((screenRotationAngle=0) or (screenRotationAngle=180))) or ((A_screenWidth > A_screenHeight) and ((screenRotationAngle=90) or (screenRotationAngle=270))))
+		screenVerticalOrientation:="true"
+	
     If FileExist(HyperPause_BackgroundsPath . systemName . "\"  . dbName . "\*.*")
         Loop, parse, Supported_Images,`,,
             Loop, %HyperPause_BackgroundsPath%%systemName%\%dbName%\*.%A_LoopField%
                 HPBackground.Insert(A_LoopFileFullPath)
+    If !HPBackground[1]
+        If dbCloneOf
+            If FileExist(HyperPause_BackgroundsPath . systemName . "\"  . dbCloneOf . "\*.*")
+                Loop, parse, Supported_Images,`,,
+                    Loop, %HyperPause_BackgroundsPath%%systemName%\%dbCloneOf%\*.%A_LoopField%
+                        HPBackground.Insert(A_LoopFileFullPath)
     If !HPBackground[1]
         If FileExist(HyperPause_BackgroundsPath . systemName . "\"  . DescriptionNameWithoutDisc . "\*.*")
             Loop, parse, Supported_Images,`,,
@@ -410,6 +417,19 @@ FirstTimeHyperPauseRun: ;Loading pause menu variables (first time run only)
         }
     }
     If !HPBackground[1]
+    {   if (screenVerticalOrientation)
+        {   If FileExist(HyperPause_BackgroundsPath . systemName . "\_Default\Vertical\*.*")
+                Loop, parse, Supported_Images,`,,
+                    Loop, %HyperPause_BackgroundsPath%%systemName%\_Default\Vertical\*.%A_LoopField%
+                        HPBackground.Insert(A_LoopFileFullPath)
+        } else {
+           If FileExist(HyperPause_BackgroundsPath . systemName . "\_Default\Horizontal\*.*")
+                Loop, parse, Supported_Images,`,,
+                    Loop, %HyperPause_BackgroundsPath%%systemName%\_Default\Horizontal\*.%A_LoopField%
+                        HPBackground.Insert(A_LoopFileFullPath)
+        }
+    }
+    If !HPBackground[1]
         If FileExist(HyperPause_BackgroundsPath . systemName . "\_Default\*.*")
             Loop, parse, Supported_Images,`,,
                 Loop, %HyperPause_BackgroundsPath%%systemName%\_Default\*.%A_LoopField%
@@ -424,6 +444,19 @@ FirstTimeHyperPauseRun: ;Loading pause menu variables (first time run only)
                     }
                 }
             }
+        }
+    }
+    If !HPBackground[1]
+    {   if (screenVerticalOrientation)
+        {   If FileExist(HyperPause_BackgroundsPath . "_Default\Vertical\*.*")
+                Loop, parse, Supported_Images,`,,
+                    Loop, %HyperPause_BackgroundsPath%_Default\Vertical\*.%A_LoopField%
+                        HPBackground.Insert(A_LoopFileFullPath)
+        } else {
+           If FileExist(HyperPause_BackgroundsPath . "_Default\Horizontal\*.*")
+                Loop, parse, Supported_Images,`,,
+                    Loop, %HyperPause_BackgroundsPath%_Default\Horizontal\*.%A_LoopField%
+                        HPBackground.Insert(A_LoopFileFullPath)
         }
     }
     If !HPBackground[1]
@@ -2446,8 +2479,9 @@ Return
 
 ;-----------------COMMANDS-------------
 MoveRight:
-    If FunctionRunning
+    If DirectionCommandRunning
         Return   
+    DirectionCommandRunning := true
     If(VSubMenuItem=0){
         If (SelectedMenuOption:="Video"){
             AnteriorFilePath:=
@@ -2497,12 +2531,10 @@ MoveRight:
         If((FullScreenView = 1) and (ZoomLevel <> 100)){
             HorizontalPanFullScreen := HorizontalPanFullScreen-HyperPause_SubMenu_FullScreenPanSteps
             gosub, DrawSubMenu            
-            Return
         } Else If ((FullScreenView = 1) and (SelectedMenuOption="MovesList")){
             V2SubMenuItem := V2SubMenuItem+1
             Gosub SubMenuSwap 
             gosub, DrawSubMenu   
-            Return
         } Else If ((FullScreenView = 1) and ((SelectedMenuOption="Guides") or (SelectedMenuOption="Manuals") or (SelectedMenuOption="History") or (SelectedMenuOption="Controller") or (SelectedMenuOption="Artwork")) and (CurrentFileExtension = "txt")){
             V2SubMenuItem := V2SubMenuItem+1
             If  V2SubMenuItem < 1 
@@ -2512,12 +2544,10 @@ MoveRight:
             Gosub SubMenuSwap 
             HSubmenuitem%SelectedMenuOption%V2Submenuitem%VSubmenuitem% = % V2SubMenuItem
             gosub, DrawSubMenu
-            Return   
         } Else If ((FullScreenView = 1) and (SelectedMenuOption="HighScore")){
             VSubMenuItem := VSubMenuItem+1
             Gosub SubMenuSwap   
             gosub, DrawSubMenu
-            Return   
         } Else If ((SelectedMenuOption="Controller") and (VSubMenuItem = -1) and (FullScreenView=1)){   
             If (V2SubMenuItem > 2)
                 HSubMenuItem := HSubMenuItem+1
@@ -2537,12 +2567,14 @@ MoveRight:
         settimer, UpdateMusicPlayingInfo, off
     If (SelectedMenuOption<>"Videos")
         settimer, UpdateVideoPlayingInfo, off
+    DirectionCommandRunning := false   
 Return
 
 
 MoveLeft:
-    If FunctionRunning
-        Return 
+    If DirectionCommandRunning
+        Return   
+    DirectionCommandRunning := true
     If(VSubMenuItem=0){
         If (SelectedMenuOption:="Video"){
             AnteriorFilePath:=
@@ -2592,12 +2624,10 @@ MoveLeft:
         If((FullScreenView = 1) and (ZoomLevel <> 100)){
             HorizontalPanFullScreen := HorizontalPanFullScreen+HyperPause_SubMenu_FullScreenPanSteps
             gosub, DrawSubMenu            
-            Return
         } Else If ((FullScreenView = 1) and (SelectedMenuOption="MovesList")){
             V2SubMenuItem := V2SubMenuItem-1
             Gosub SubMenuSwap 
             gosub, DrawSubMenu   
-            Return
         } Else If ((FullScreenView = 1) and ((SelectedMenuOption="Guides") or (SelectedMenuOption="Manuals") or (SelectedMenuOption="History") or (SelectedMenuOption="Controller") or (SelectedMenuOption="Artwork")) and (CurrentFileExtension = "txt")){
             V2SubMenuItem := V2SubMenuItem-1
             If  V2SubMenuItem < 1 
@@ -2607,12 +2637,10 @@ MoveLeft:
             Gosub SubMenuSwap 
             HSubmenuitem%SelectedMenuOption%V2Submenuitem%VSubmenuitem% = % V2SubMenuItem
             gosub, DrawSubMenu
-            Return   
         } Else If ((FullScreenView = 1) and (SelectedMenuOption="HighScore")){
             VSubMenuItem := VSubMenuItem-1
             Gosub SubMenuSwap   
             gosub, DrawSubMenu
-            Return  
         } Else If ((SelectedMenuOption="Controller") and (VSubMenuItem = -1) and (FullScreenView=1)){   
             If (V2SubMenuItem > 2)
                 HSubMenuItem := HSubMenuItem-1
@@ -2632,16 +2660,21 @@ MoveLeft:
         settimer, UpdateMusicPlayingInfo, off
     If (SelectedMenuOption<>"Videos")
         settimer, UpdateVideoPlayingInfo, off
+    DirectionCommandRunning := false   
 Return
 
 MoveUp:
-    If FunctionRunning
-        Return 
-    If (SelectedMenuOption="Shutdown")
+    If DirectionCommandRunning
+        Return   
+    DirectionCommandRunning := true
+    If (SelectedMenuOption="Shutdown"){
+        DirectionCommandRunning := false   
         Return
+    }
     If((FullScreenView = 1) and (ZoomLevel <> 100)){
         VerticalPanFullScreen := VerticalPanFullScreen+HyperPause_SubMenu_FullScreenPanSteps       
         gosub, DrawSubMenu
+        DirectionCommandRunning := false   
         Return
     }
     Previous_VSubMenuItem := VSubMenuItem
@@ -2671,17 +2704,19 @@ MoveUp:
             V2SubMenuItem = 1
     }
     If(((SelectedMenuOption="Guides") or (SelectedMenuOption="Manuals") or (SelectedMenuOption="History") or (SelectedMenuOption="Controller") or (SelectedMenuOption="Artwork"))and(HSubMenuItem>1)and (VSubMenuItem>=0)){
-        If((CurrentFileExtension <> "pdf") and (!(HPMediaObj[SelectedMenuOption][CurrentLabelName].Type="ImageGroup")) and (CurrentCompressedFileExtension<> "true")){
+        If((!(CurrentFileExtension ="pdf")) and (!(HPMediaObj[SelectedMenuOption][CurrentLabelName].Type="ImageGroup")) and (!(CurrentCompressedFileExtension="true"))){
             VSubMenuItem := VSubMenuItem+1
         }
-        if (TotaltxtPages>1)
-        {   V2SubMenuItem := V2SubMenuItem-1
-            If  V2SubMenuItem < 1 
-                V2SubMenuItem = % TotaltxtPages
-            If  V2SubMenuItem > % TotaltxtPages
-                V2SubMenuItem = 1
-        } else
-            VSubMenuItem := VSubMenuItem-1
+        If(CurrentFileExtension ="txt")
+        {   if (TotaltxtPages>1)
+            {   V2SubMenuItem := V2SubMenuItem-1
+                If  V2SubMenuItem < 1 
+                    V2SubMenuItem = % TotaltxtPages
+                If  V2SubMenuItem > % TotaltxtPages
+                    V2SubMenuItem = 1
+            } else
+                VSubMenuItem := VSubMenuItem-1
+        }
         If (VSubMenuItem>=0)
             HSubmenuitem%SelectedMenuOption%V2Submenuitem%VSubmenuitem% = % V2SubMenuItem
     }
@@ -2718,16 +2753,21 @@ MoveUp:
         }
     }
     gosub, DrawSubMenu  
+    DirectionCommandRunning := false  
 Return
 
 MoveDown:
-    If FunctionRunning
-        Return 
-    If (SelectedMenuOption="Shutdown")
+    If DirectionCommandRunning
+        Return   
+    DirectionCommandRunning := true
+    If (SelectedMenuOption="Shutdown"){
+        DirectionCommandRunning := false   
         Return
+    }
     If((FullScreenView = 1) and (ZoomLevel <> 100)){
         VerticalPanFullScreen := VerticalPanFullScreen-HyperPause_SubMenu_FullScreenPanSteps     
         gosub, DrawSubMenu
+        DirectionCommandRunning := false   
         Return
     }
     Previous_VSubMenuItem := VSubMenuItem
@@ -2760,14 +2800,16 @@ MoveDown:
         If((CurrentFileExtension <> "pdf") and (!(HPMediaObj[SelectedMenuOption][CurrentLabelName].Type="ImageGroup")) and (CurrentCompressedFileExtension<> "true")){
             VSubMenuItem := VSubMenuItem-1
         }
-        if (TotaltxtPages>1)
-        {   V2SubMenuItem := V2SubMenuItem+1
-            If  V2SubMenuItem < 1 
-                V2SubMenuItem = % TotaltxtPages
-            If  V2SubMenuItem > % TotaltxtPages
-                V2SubMenuItem = 1
-        } else
-            VSubMenuItem := VSubMenuItem+1
+        If(CurrentFileExtension ="txt")
+        {   if (TotaltxtPages>1)
+            {   V2SubMenuItem := V2SubMenuItem+1
+                If  V2SubMenuItem < 1 
+                    V2SubMenuItem = % TotaltxtPages
+                If  V2SubMenuItem > % TotaltxtPages
+                    V2SubMenuItem = 1
+            } else
+                VSubMenuItem := VSubMenuItem+1
+        }
         If (VSubMenuItem>=0)
             HSubmenuitem%SelectedMenuOption%V2Submenuitem%VSubmenuitem% = % V2SubMenuItem
     }
@@ -2805,6 +2847,7 @@ MoveDown:
         }
     }
     gosub, DrawSubMenu  
+    DirectionCommandRunning := false   
 Return
 
 
@@ -3944,11 +3987,9 @@ PostProcessingMediaObject(feMedia, ByRef HPMediaObj){
     {   for index, element in element2
         {   if element.Label
             {   currentobj := feMedia[SubMenuLabel][element.Label]
-                if HPMediaObj[SubMenuLabel][element.Label].Label
-                {   currentobj := HPMediaObj[SubMenuLabel][element.Label]
+				if (HPMediaObj[SubMenuLabel][element.Label].Label)
+                {   currentobj.Insert(currentobj["Label"], HPMediaObj[SubMenuLabel][element.Label]) 
                     currentobj.TotalItems := currentobj.TotalItems+1
-                } else {
-                    currentobj.TotalItems := 1
                 }
                 HPMediaObj[SubMenuLabel].Insert(currentobj["Label"], currentobj) 
             }
@@ -4129,8 +4170,7 @@ Return
 
       
 TextImagesAndPDFMenu(SubMenuName)
-{
-    Global
+{   Global
     FunctionRunning := true ;error check function running (necessary to avoid exiting hyperpause in the middle of function running)
     CurrentLabelNumber := VSubMenuItem ;initializing variables
     If(VSubMenuItem < 1){
@@ -4160,6 +4200,7 @@ TextImagesAndPDFMenu(SubMenuName)
     ;MaxFontListWidth := % %SubMenuName%MaxFontListWidth
     posPageX := HMargin+MaxFontListWidth+HdistBetwLabelsandPages
     posPageY := VMargin
+    showItemLabel := % HyperPause_%SubMenuName%_Item_Labels
     Loop, % HPMediaObj[SubMenuName].TotalLabels
     {
         posSubMenuX1 := round(HMargin+MaxFontListWidth/2)
@@ -4386,10 +4427,12 @@ TextImagesAndPDFMenu(SubMenuName)
                         Gdip_Alt_FillRoundedRectangle(HP_G27, HyperPause_SubMenu_%SubMenuName%SelectedBrushV, posPageX, round((HyperPause_SubMenu_Height-resizedBitmapH)/2-HyperPause_SubMenu_AdditionalTextMarginContour), resizedBitmapW+2*HyperPause_SubMenu_AdditionalTextMarginContour, resizedBitmapH+2*HyperPause_SubMenu_AdditionalTextMarginContour,HyperPause_SubMenu_RadiusofRoundedCorners)
                     }
                     Gdip_Alt_DrawImage(HP_G27, CurrentBitmap, posPageX+HyperPause_SubMenu_AdditionalTextMarginContour, round((HyperPause_SubMenu_Height-resizedBitmapH)/2), resizedBitmapW, resizedBitmapH)
-                    posPageTextX := posPageX+round((resizedBitmapW+2*HyperPause_SubMenu_AdditionalTextMarginContour)/2)
-                    posPageTextY := HyperPause_SubMenu_Height-VMargin-HyperPause_SubMenu_AdditionalTextMarginContour-2*HyperPause_SubMenu_SmallFontSize
-                    OptionsPage1 = x%posPageTextX% y%posPageTextY% Center c%PageNumberFontColor% r4 s%HyperPause_SubMenu_SmallFontSize% bold
-                    Gdip_Alt_TextToGraphics(HP_G27, "Page " . a_index, OptionsPage1, HyperPause_SubMenu_Font, 0, 0)
+                    if (showItemLabel = "true")
+                    {   posPageTextX := posPageX+round((resizedBitmapW+2*HyperPause_SubMenu_AdditionalTextMarginContour)/2)
+                        posPageTextY := HyperPause_SubMenu_Height-VMargin-HyperPause_SubMenu_AdditionalTextMarginContour-2*HyperPause_SubMenu_SmallFontSize
+                        OptionsPage1 = x%posPageTextX% y%posPageTextY% Center c%PageNumberFontColor% r4 s%HyperPause_SubMenu_SmallFontSize% bold
+                        Gdip_Alt_TextToGraphics(HP_G27, "Page " . a_index, OptionsPage1, HyperPause_SubMenu_Font, 0, 0)
+                    }
                     If(VSubMenuItem = 0){
                         Gdip_Alt_FillRoundedRectangle(HP_G27, HyperPause_SubMenu_DisabledBrushV, posPageX, round((HyperPause_SubMenu_Height-resizedBitmapH)/2-HyperPause_SubMenu_AdditionalTextMarginContour), resizedBitmapW+2*HyperPause_SubMenu_AdditionalTextMarginContour, resizedBitmapH+2*HyperPause_SubMenu_AdditionalTextMarginContour,HyperPause_SubMenu_RadiusofRoundedCorners)
                     }
@@ -4457,11 +4500,13 @@ TextImagesAndPDFMenu(SubMenuName)
                     Gdip_Alt_FillRoundedRectangle(HP_G27, HyperPause_SubMenu_%SubMenuName%SelectedBrushV, posPageX, round((HyperPause_SubMenu_Height-resizedBitmapH)/2-HyperPause_SubMenu_AdditionalTextMarginContour), resizedBitmapW+2*HyperPause_SubMenu_AdditionalTextMarginContour, resizedBitmapH+2*HyperPause_SubMenu_AdditionalTextMarginContour,HyperPause_SubMenu_RadiusofRoundedCorners)
                 }
                 Gdip_Alt_DrawImage(HP_G27, CurrentBitmap, posPageX+HyperPause_SubMenu_AdditionalTextMarginContour, round((HyperPause_SubMenu_Height-resizedBitmapH)/2), resizedBitmapW, resizedBitmapH)
-                SplitPath, CurrentImage%a_index%, , , , FileNameText
-                posPageTextX := posPageX+HyperPause_SubMenu_AdditionalTextMarginContour
-                posPageTextY := HyperPause_SubMenu_Height-VMargin-HyperPause_SubMenu_AdditionalTextMarginContour-1.3*HyperPause_SubMenu_SmallFontSize-HyperPause_SubMenu_SmallFontSize*(ceil(MeasureText(FileNameText, "Left r4 s" . HyperPause_SubMenu_SmallFontSize . " bold",HyperPause_SubMenu_Font)/resizedBitmapW))
-                OptionsPage1 = x%posPageTextX% y%posPageTextY% w%resizedBitmapW% Center c%PageNumberFontColor% r4 s%HyperPause_SubMenu_SmallFontSize% bold
-                Gdip_Alt_TextToGraphics(HP_G27, FileNameText, OptionsPage1, HyperPause_SubMenu_Font, 0, 0)
+                if (showItemLabel = "true")
+                {   SplitPath, CurrentImage%a_index%, , , , FileNameText
+                    posPageTextX := posPageX+HyperPause_SubMenu_AdditionalTextMarginContour
+                    posPageTextY := HyperPause_SubMenu_Height-VMargin-HyperPause_SubMenu_AdditionalTextMarginContour-1.3*HyperPause_SubMenu_SmallFontSize-HyperPause_SubMenu_SmallFontSize*(ceil(MeasureText(FileNameText, "Left r4 s" . HyperPause_SubMenu_SmallFontSize . " bold",HyperPause_SubMenu_Font)/resizedBitmapW))
+                    OptionsPage1 = x%posPageTextX% y%posPageTextY% w%resizedBitmapW% Center c%PageNumberFontColor% r4 s%HyperPause_SubMenu_SmallFontSize% bold
+                    Gdip_Alt_TextToGraphics(HP_G27, FileNameText, OptionsPage1, HyperPause_SubMenu_Font, 0, 0)
+                }
                 If(VSubMenuItem <= 0){
                     Gdip_Alt_FillRoundedRectangle(HP_G27, HyperPause_SubMenu_DisabledBrushV, posPageX, round((HyperPause_SubMenu_Height-resizedBitmapH)/2-HyperPause_SubMenu_AdditionalTextMarginContour), resizedBitmapW+2*HyperPause_SubMenu_AdditionalTextMarginContour, resizedBitmapH+2*HyperPause_SubMenu_AdditionalTextMarginContour,HyperPause_SubMenu_RadiusofRoundedCorners)
                 }
@@ -4554,12 +4599,14 @@ TextImagesAndPDFMenu(SubMenuName)
                 posFullScreenTextY := round(baseScreenHeight-2*HyperPause_SubMenu_FullScreenMargin-7*HyperPause_SubMenu_FullScreenFontSize-HyperPause_SubMenu_FullScreenFontSize/2)
                 OptionsFullScreenText = x%posFullScreenTextX% y%posFullScreenTextY% Center c%HyperPause_SubMenu_FullScreenFontColor% r4 s%HyperPause_SubMenu_FullScreenFontSize% bold
                 Gdip_Alt_TextToGraphics(HP_G29, "Press Select Key to Exit Full Screen`nPress Left or Right to Change Pages while 100% Zoom`nZoom Level: " . ZoomLevel . "%`n(Press Zoom In or Zoom Out Keys to Change Zoom Level)`n(Press Up, Down Left or Right to Pan in Zoom Mode)", OptionsFullScreenText, HyperPause_SubMenu_Font, 0, 0)
-                SplitPath, SelectedImage, , , , FileNameText
-                posPageTextX := (baseScreenWidth-2*HyperPause_SubMenu_FullScreenMargin) //2
-                posPageTextY := HyperPause_SubMenu_FullScreenMargin > round((baseScreenHeight-resizedBitmapH)/2-HyperPause_SubMenu_FullScreenMargin+VerticalPanFullScreen+(resizedBitmapH-resizedBitmapH*ZoomLevel/100)/2)+HyperPause_SubMenu_SmallFontSize//2 ? HyperPause_SubMenu_FullScreenMargin : round((baseScreenHeight-resizedBitmapH)/2-HyperPause_SubMenu_FullScreenMargin+VerticalPanFullScreen+(resizedBitmapH-resizedBitmapH*ZoomLevel/100)/2)+HyperPause_SubMenu_SmallFontSize//2
-                OptionsPage1 = x%posPageTextX% y%posPageTextY% Center c%HyperPause_SubMenu_FullScreenFontColor% r4 s%HyperPause_SubMenu_SmallFontSize% bold
-                Gdip_Alt_FillRectangle(HP_G29, HyperPause_SubMenu_FullScreenBrushV, posPageTextX-(round( MeasureText(FileNameText, "Left r4 s" . HyperPause_SubMenu_SmallFontSize . " bold",HyperPause_SubMenu_Font)+HyperPause_SubMenu_AdditionalTextMarginContour))//2, posPageTextY-HyperPause_SubMenu_SmallFontSize//2, round( MeasureText(FileNameText, "Left r4 s" . HyperPause_SubMenu_SmallFontSize . " bold",HyperPause_SubMenu_Font)+HyperPause_SubMenu_AdditionalTextMarginContour), HyperPause_SubMenu_SmallFontSize+HyperPause_SubMenu_AdditionalTextMarginContour)
-                Gdip_Alt_TextToGraphics(HP_G29, FileNameText, OptionsPage1, HyperPause_SubMenu_Font, 0, 0)
+                if (showItemLabel = "true")
+                {   SplitPath, SelectedImage, , , , FileNameText
+                    posPageTextX := (baseScreenWidth-2*HyperPause_SubMenu_FullScreenMargin) //2
+                    posPageTextY := HyperPause_SubMenu_FullScreenMargin > round((baseScreenHeight-resizedBitmapH)/2-HyperPause_SubMenu_FullScreenMargin+VerticalPanFullScreen+(resizedBitmapH-resizedBitmapH*ZoomLevel/100)/2)+HyperPause_SubMenu_SmallFontSize//2 ? HyperPause_SubMenu_FullScreenMargin : round((baseScreenHeight-resizedBitmapH)/2-HyperPause_SubMenu_FullScreenMargin+VerticalPanFullScreen+(resizedBitmapH-resizedBitmapH*ZoomLevel/100)/2)+HyperPause_SubMenu_SmallFontSize//2
+                    OptionsPage1 = x%posPageTextX% y%posPageTextY% Center c%HyperPause_SubMenu_FullScreenFontColor% r4 s%HyperPause_SubMenu_SmallFontSize% bold
+                    Gdip_Alt_FillRectangle(HP_G29, HyperPause_SubMenu_FullScreenBrushV, posPageTextX-(round( MeasureText(FileNameText, "Left r4 s" . HyperPause_SubMenu_SmallFontSize . " bold",HyperPause_SubMenu_Font)+HyperPause_SubMenu_AdditionalTextMarginContour))//2, posPageTextY-HyperPause_SubMenu_SmallFontSize//2, round( MeasureText(FileNameText, "Left r4 s" . HyperPause_SubMenu_SmallFontSize . " bold",HyperPause_SubMenu_Font)+HyperPause_SubMenu_AdditionalTextMarginContour), HyperPause_SubMenu_SmallFontSize+HyperPause_SubMenu_AdditionalTextMarginContour)
+                    Gdip_Alt_TextToGraphics(HP_G29, FileNameText, OptionsPage1, HyperPause_SubMenu_Font, 0, 0)
+                }
                 if !(HyperPause_SubMenu_FullSCreenHelpTextTimer="always"){
                     savedHSubMenuItem := HSubMenuItem
                     savedVSubMenuItem := VSubMenuItem
@@ -5071,6 +5118,7 @@ LoadExternalVariables:
     HyperPause_Guides_VdistBetwLabels := RIniHyperPauseLoadVar(3,4, "SubMenu Guides Appearance Options", "Vertical_Distance_Between_Labels", "75") 
     HyperPause_Guides_HdistBetwLabelsandPages := RIniHyperPauseLoadVar(3,4, "SubMenu Guides Appearance Options", "Horizontal_Distance_Between_Labels_and_Pages", "65") 
     HyperPause_Guides_PageNumberFontColor := RIniHyperPauseLoadVar(3,4, "SubMenu Guides Appearance Options", "Page_Number_Font_Color", "00000000") 
+    HyperPause_Guides_Item_Labels := RIniHyperPauseLoadVar(3,4, "SubMenu Guides Appearance Options", "Show_Item_Labels", "true") 
     ;Manuals Menu Options
     HyperPause_Manuals_VMargin := RIniHyperPauseLoadVar(3,4, "SubMenu Manuals Appearance Options", "Vertical_Margin", "45") 
     HyperPause_Manuals_HMargin := RIniHyperPauseLoadVar(3,4, "SubMenu Manuals Appearance Options", "Horizontal_Margin", "40") 
@@ -5079,6 +5127,7 @@ LoadExternalVariables:
     HyperPause_Manuals_VdistBetwLabels := RIniHyperPauseLoadVar(3,4, "SubMenu Manuals Appearance Options", "Vertical_Distance_Between_Labels", "75") 
     HyperPause_Manuals_HdistBetwLabelsandPages := RIniHyperPauseLoadVar(3,4, "SubMenu Manuals Appearance Options", "Horizontal_Distance_Between_Labels_and_Pages", "65") 
     HyperPause_Manuals_PageNumberFontColor := RIniHyperPauseLoadVar(3,4, "SubMenu Manuals Appearance Options", "Page_Number_Font_Color", "00000000") 
+    HyperPause_Manuals_Item_Labels := RIniHyperPauseLoadVar(3,4, "SubMenu Manuals Appearance Options", "Show_Item_Labels", "true") 
     ;History Menu Options
     HyperPause_History_VMargin := RIniHyperPauseLoadVar(3,4, "SubMenu History Appearance Options", "Vertical_Margin", "45") 
     HyperPause_History_HMargin := RIniHyperPauseLoadVar(3,4, "SubMenu History Appearance Options", "Horizontal_Margin", "40") 
@@ -5095,6 +5144,7 @@ LoadExternalVariables:
     HyperPause_Controller_VdistBetwLabels := RIniHyperPauseLoadVar(3,4, "SubMenu Controller Appearance Options", "Vertical_Distance_Between_Labels", "75") 
     HyperPause_Controller_HdistBetwLabelsandPages := RIniHyperPauseLoadVar(3,4, "SubMenu Controller Appearance Options", "Horizontal_Distance_Between_Labels_and_Pages", "65") 
     HyperPause_Controller_PageNumberFontColor := RIniHyperPauseLoadVar(3,4, "SubMenu Controller Appearance Options", "Page_Number_Font_Color", "00000000") 
+    HyperPause_Controller_Item_Labels := RIniHyperPauseLoadVar(3,4, "SubMenu Controller Appearance Options", "Show_Item_Labels", "true") 
     HyperPause_ControllerBannerHeight := RIniHyperPauseLoadVar(3,4, "SubMenu Controller Appearance Options", "Controller_Banner_Height", "60") 
     HyperPause_vDistanceBetweenButtons := RIniHyperPauseLoadVar(3,4, "SubMenu Controller Appearance Options", "Vertical_Distance_Between_Buttons", "120") 
     HyperPause_vDistanceBetweenBanners := RIniHyperPauseLoadVar(3,4, "SubMenu Controller Appearance Options", "Vertical_Distance_Between_Banners", "45") 
@@ -5108,6 +5158,7 @@ LoadExternalVariables:
     HyperPause_Artwork_VdistBetwLabels := RIniHyperPauseLoadVar(3,4, "SubMenu Artwork Appearance Options", "Vertical_Distance_Between_Labels", "75") 
     HyperPause_Artwork_HdistBetwLabelsandPages := RIniHyperPauseLoadVar(3,4, "SubMenu Artwork Appearance Options", "Horizontal_Distance_Between_Labels_and_Pages", "65") 
     HyperPause_Artwork_PageNumberFontColor := RIniHyperPauseLoadVar(3,4, "SubMenu Artwork Appearance Options", "Page_Number_Font_Color", "00000000") 
+    HyperPause_Artwork_Item_Labels := RIniHyperPauseLoadVar(3,4, "SubMenu Artwork Appearance Options", "Show_Item_Labels", "true") 
     ;Videos Menu Options
     HyperPause_SupportedVideos := RIniHyperPauseLoadVar(3,4, "SubMenu Videos Appearance Options", "Supported_Videos", "avi|wmv|mp4")
     HyperPause_Videos_VMargin := RIniHyperPauseLoadVar(3,4, "SubMenu Videos Appearance Options", "Vertical_Margin", "45") 

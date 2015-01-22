@@ -154,6 +154,10 @@
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>how long to gather data before sending a packet. Default: 12 (reduces Network overhead).</DESCRIPTION>
 						</KEY>
+						<KEY name="Get_WAN_IP" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Will retrieve your WAN IP automatically, which is different than your LAN IP when behind a router. If you get a windows firewall prompt to allow HyperLaunch or Autohotkey to talk out, please allow it. You only really need this enabled if you are acting as a server and need to tell your clients your IP. Default is true.</DESCRIPTION>
+						</KEY>
 					</KEYS>
 				</SECTION>
 				<SECTION name="%RomName%" required="false">

@@ -2,9 +2,9 @@ MEmu = DOSBox
 MEmuV = v0.74
 MURL = http://www.dosbox.com/
 MAuthor = brolly, djvj
-MVersion = 2.0
-MCRC = 616AEEC2
-iCRC = EEFBA82B
+MVersion = 2.0.1
+MCRC = F4FABAEC
+iCRC = 3EE88055
 mId = 635535818862708645
 MSystem = "Microsoft MS-DOS","Microsoft Windows 3.x"
 ;----------------------------------------------------------------------------
@@ -14,6 +14,7 @@ MSystem = "Microsoft MS-DOS","Microsoft Windows 3.x"
 ; This enhanced DOSBox is needed for full Microsoft Windows 3.x support. So just stick with that one version for both systems.
 ; This module is oriented to work with the  eXoDOS sets, but it can work with any DOSBox configured game if you follow some guidelines.
 ; - Make sure you set Skip Checks to Rom Only
+; - Rom Extensions should only be 7z|zip. Do not include any extensions that HyperLaunch will think is a rom, like bat|txt|exe.
 ; - Rom Path should point to the folder where you have all the .zip files if you have 7z enabled and the folder where you keep your extracted games 
 ; if you keep your games extracted. If the games are extracted make sure you keep each game inside it's own sub-folder named after the romName
 ; - In your Rom Path you should also have the !dos folder that keeps your DOSBox conf files, but you can change the path to this folder in HLHQ, but 
@@ -214,9 +215,10 @@ networkSession :=
 If (enableNetworkPlay = "true") {
 	Log("Module - Network Multi-Player is an available option for " . dbName,4)
 	networkProtocol := IniReadCheck(settingsFile, dbName, "Network_Protocol","IPX",,1)
-	onlineEnable := IniReadCheck(settingsFile, "Network", "","false",,1)
+	getWANIP := IniReadCheck(settingsFile, "Network", "Get_WAN_IP","false",,1)
 	networkRequiresSetup := IniReadCheck(settingsFile, dbName, "Network_Requires_Setup",,,1)
-	If (onlineEnable = "true")
+	maxPlayers := IniReadCheck(settingsFile, dbName, "Maximum_Players",,,1)
+	If (getWANIP = "true")
 		myPublicIP := GetPublicIP()
 	defaultServer%networkProtocol%IP := IniReadCheck(settingsFile, "Network", "Default_Server_" . networkProtocol . "_IP", myPublicIP,,1)
 	defaultServer%networkProtocol%Port := IniReadCheck(settingsFile, "Network", "Default_Server_" . networkProtocol . "_Port", (If networkProtocol = "IPX" || networkProtocol = "NetBios" ? 213 : 23),,1)
@@ -224,9 +226,11 @@ If (enableNetworkPlay = "true") {
 	last%networkProtocol%Port := IniReadCheck(settingsFile, "Network", "Last_" . networkProtocol . "_Port", defaultServer%networkProtocol%Port,,1)	; does not need to be on the ISD
 
 	; Gosub, QuestionUserTemp
-	MultiplayerMenu(last%networkProtocol%IP, last%networkProtocol%Port, networkType,, (If networkRequiresSetup = "true" ? 1 : 0))	; supplying the networkRequiresSetup here tells the MP menu to give the user a choice to setup the network first
-	networkIP := last%networkProtocol%IP	; for easier reading
-	networkPort := last%networkProtocol%Port
+	mpMenuStatus := MultiplayerMenu(last%networkProtocol%IP, last%networkProtocol%Port, networkType, maxPlayers, (If networkRequiresSetup = "true" ? 1 : 0))	; supplying the networkRequiresSetup here tells the MP menu to give the user a choice to setup the network first
+	If (mpMenuStatus = -1) {	; if user exited menu early
+		Log("Module - Cancelled MultiPlayer Menu. Exiting module.",2)
+		ExitModule()
+	}
 
 	If networkSession {
 		Log("Module - Using an " . networkProtocol . " Network for " . dbName,4)
@@ -450,6 +454,15 @@ BezelExit()
 FadeOutExit()
 ExitModule()
 
+
+HaltEmu:
+	If (fullscreen = " -fullscreen")
+		WinMinimize, DOSBox ahk_class SDL_app
+Return
+RestoreEmu:
+	If (fullscreen = " -fullscreen")
+		WinMenuSelectItem, DOSBox ahk_class SDL_app, , Video, Fullscreen
+Return
 
 CloseProcess:
 	FadeOutStart()

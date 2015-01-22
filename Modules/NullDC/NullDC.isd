@@ -23,30 +23,114 @@
 						<KEY name="autoStart" required="false">
 							<KEYTYPE>Binary</KEYTYPE>
 							<DESCRIPTION>Enables/Disables autoStart</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Off">0</VALUE>
+								<VALUE description="On">1</VALUE>
+							</VALUES>
 						</KEY>
 						<KEY name="noConsole" required="false">
 							<KEYTYPE>Binary</KEYTYPE>
 							<DESCRIPTION>Enables/Disables noConsole</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Off">0</VALUE>
+								<VALUE description="On">1</VALUE>
+							</VALUES>
 						</KEY>
 						<KEY name="autoHideMenu" required="false">
 							<KEYTYPE>Binary</KEYTYPE>
 							<DESCRIPTION>Enables/Disables autoHideMenu</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Off">0</VALUE>
+								<VALUE description="On">1</VALUE>
+							</VALUES>
 						</KEY>
 						<KEY name="alwaysOnTop" required="false">
 							<KEYTYPE>Binary</KEYTYPE>
 							<DESCRIPTION>Enables/Disables alwaysOnTop</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Off">0</VALUE>
+								<VALUE description="On">1</VALUE>
+							</VALUES>
 						</KEY>
 						<KEY name="showVMU" required="false">
 							<KEYTYPE>Binary</KEYTYPE>
 							<DESCRIPTION>Enables/Disables showVMU</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Off">0</VALUE>
+								<VALUE description="On">1</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="VMU1Pos" required="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>VMU1 Position. Default is topLeft.</DESCRIPTION>
+							<VALUES>
+								<VALUE>topRight</VALUE>
+								<VALUE>topCenter</VALUE>
+								<VALUE>topLeft</VALUE>
+								<VALUE>leftCenter</VALUE>
+								<VALUE>bottomLeft</VALUE>
+								<VALUE>bottomCenter</VALUE>
+								<VALUE>bottomRight</VALUE>
+								<VALUE>rightCenter</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="VMU2Pos" required="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>VMU2 Position. Default is topRight.</DESCRIPTION>
+							<VALUES>
+								<VALUE>topRight</VALUE>
+								<VALUE>topCenter</VALUE>
+								<VALUE>topLeft</VALUE>
+								<VALUE>leftCenter</VALUE>
+								<VALUE>bottomLeft</VALUE>
+								<VALUE>bottomCenter</VALUE>
+								<VALUE>bottomRight</VALUE>
+								<VALUE>rightCenter</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="VMU3Pos" required="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>VMU3 Position. Default is bottomLeft.</DESCRIPTION>
+							<VALUES>
+								<VALUE>topRight</VALUE>
+								<VALUE>topCenter</VALUE>
+								<VALUE>topLeft</VALUE>
+								<VALUE>leftCenter</VALUE>
+								<VALUE>bottomLeft</VALUE>
+								<VALUE>bottomCenter</VALUE>
+								<VALUE>bottomRight</VALUE>
+								<VALUE>rightCenter</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="VMU4Pos" required="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>VMU4 Position. Default is bottomRight.</DESCRIPTION>
+							<VALUES>
+								<VALUE>topRight</VALUE>
+								<VALUE>topCenter</VALUE>
+								<VALUE>topLeft</VALUE>
+								<VALUE>leftCenter</VALUE>
+								<VALUE>bottomLeft</VALUE>
+								<VALUE>bottomCenter</VALUE>
+								<VALUE>bottomRight</VALUE>
+								<VALUE>rightCenter</VALUE>
+							</VALUES>
 						</KEY>
 						<KEY name="loadDefaultImage" required="false">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>loadDefaultImage</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Off">0</VALUE>
+								<VALUE description="On">1</VALUE>
+							</VALUES>
 						</KEY>
 						<KEY name="patchRegion" required="false">
 							<KEYTYPE>Integer</KEYTYPE>
-							<DESCRIPTION>patchRegion</DESCRIPTION>
+							<DESCRIPTION>patchRegion. Default is true.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Off">0</VALUE>
+								<VALUE description="On">1</VALUE>
+							</VALUES>
 						</KEY>
 					</KEYS>
 				</SECTION>
@@ -57,10 +141,10 @@
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>Games can have a custom Cable Type (per game). Not all games work on VGA, so use this option to choose the correct cable for your game. Cable can be 0 (VGA(0)(RGB)), 1 (VGA(1)(RGB)), 2 (TV(RGB)) or 3 (TV(VBS/Y+S/C)), default is 0.</DESCRIPTION>
 							<VALUES>
-								<VALUE>0</VALUE>
-								<VALUE>1</VALUE>
-								<VALUE>2</VALUE>
-								<VALUE>3</VALUE>
+								<VALUE description="VGA(0)(RGB)">0</VALUE>
+								<VALUE description="VGA(1)(RGB)">1</VALUE>
+								<VALUE description="TV(RGB)">2</VALUE>
+								<VALUE description="TV(VBS/Y+S/C)">3</VALUE>
 							</VALUES>
 						</KEY>
 					</KEYS>

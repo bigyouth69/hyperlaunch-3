@@ -11,6 +11,167 @@
 ===========================================================================
 
 
+v3.1.0.4 BETA
+
+
+Instructions prior to getting this update:
+1 Backup your current HyperLaunch\Settings folder.
+2 Start HyperLaunchQ and under General Settings -> HyperLaunch tab, press the new "Fix Ini Files" button. This will default all new keys and delete unused ones.
+3 Going forward, its a good idea to do this whenever new keys are added to ini files.
+
+Instructions for Fade users:
+1 Open HyperLaunchHQ, with Global as your selected system, go to Settings -> Fade - General and click the Load Profile button.
+2 Select the Default.ini file for the Zero Dreams fade animation or the Legacy.ini file for the old hyperlaunch fade animation.
+
+For Zero Dreams Fade users:
+1 For the Zero Dreams fade animation to be complete, make sure that you at least have these files in your HyperLaunch\Media\Fade folder:
+[CODE]HyperLaunch\Media\Fade\_Default\Layer 1.png
+HyperLaunch\Media\Fade\_Default\Info Bar.png
+HyperLaunch\Media\Fade\_Default\Layer 3.png
+HyperLaunch\Media\Fade\_Default\Progress Bar.png
+HyperLaunch\Media\Fade\_Default\layer 4 (#).png[/CODE]
+2 The "Extra Layer 1 - Console" image is usually placed in the system folder
+[CODE]HyperLaunch\Media\Fade\MAME\_Default\Extra Layer 1 - Console.png[/CODE]
+
+Instructions for those who use their own Custom Fade Animations:
+Your custom animations are no longer placed inside Lib\Fade Animations.ahk. You now have your own file to place them in called User Fade Animations.ahk
+If your animation requires settings, the file Lib\User Fade Animations.ini should be used
+
+
+Key Name Changes
+Removed:
+Fade_Options_Horizontal_Scale_Factor
+Fade_Options_Vertical_Scale_Factor
+MultiGame_Horizontal_Scale_Factor
+MultiGame_Vertical_Scale_Factor
+
+Added
+Fade_Base_Resolution_Width
+Fade_Base_Resolution_Height
+MultiGame_Base_Resolution_Width
+MultiGame_Base_Resolution_Height
+
+New default values for these keys
+Fade_Layer_2_Adjust: Width Resolution Resize
+Fade_Layer_3_Adjust: Width Resolution Resize
+Fade_Layer_3_Static_Adjust: Width Resolution Resize
+Fade_Layer_4_Adjust: Width Resolution Resize
+Fade_Bar_Window_Height: no default value
+
+
+HyperLaunch (updated to v3.1.0.3)
+Rom names with [ or ] in them will no longer error, but instead give a warning in the log
+Warning logs added when showing and logging command window settings are enabled
+Added a few more res batch files for nircmd in module extensions
+New method of creating default inis and writing missing settings, which allows far less disk writes than before
+Daemon Tools is now set to false by default to keep it in line with other 3rd party tools support
+ServoStik support was not mentioned in prior update notes (oops), but it is there now and allows adjusting your Ultimarc ServoStiks automatically. Latest MAME module already has automatic support when this is enabled.
+ServoStik support can now be set on a per-game basis as well as global and per-system.
+LEDBlinky support was another one I forgot to mention and support for it was added when launching any of the HL features, like HyperPause, MultiGame, etc, when Navigational keys are used. The ledblinky dev was supposed to add support for directly switching to profiles w/o using all the animations but I don't think this has been added yet.
+JoyIDs_Preferred_Controllers key now sets use_global for the system HyperLaunch.ini when the key is created.
+Custom user fade animations should now be placed in the file Lib\User Fade Animations.ahk. They will no longer be looked for at the bottom of Fade Animations.ahk. This is to be more consistent with how User Functions works. Also Fade Animations.ini was renamed to User Fade Animations.ini
+HyperLaunch.dll updated to reflect the above change
+HyperLaunchHQ also updated to reflect the above change
+
+Fade Animations.ahk (updated to v1.1.0)
+Removed 7zSounds from a conditional it wasn't needed on
+
+Keymapper.ahk (updated to v1.0.9)
+xpadder and joytokey automatically have command windows skipped if they are enabled because they do not work right with them
+This fixes some users have posted when having this window enabled and getting stuck when xpadder was launched
+
+Shared.ahk (updated to v1.2.1)
+Run() added ability to bypass command windows if enabled
+rIniIndex was not global, preventing default plugin key values from being written to plugin inis
+Rewrote handling and fixed command windows not closing properly
+Fixed SendCommand Up never working (wahoobrian)
+Fixed SendCommand when spaces inside commands were used, command would become invalid (wahoobrian)
+Fixed ExitEmulatorKey from working when a ScriptError was triggered
+7z now logs when system name was attached to your extract path
+Added logging for cursor changing
+
+Bezel (updated to v1.0.8)
+Improved bezel GUI destroy code that was not being called in certain cases, what could cause a very small memory leak if the user had bezel enabled and no bezel image.
+Added three functions to handle a extra fixed resolution bezel image (used on the VMU draw on NullDC and demul modules).
+Fixed bug with initialization of instruction cards (thanks dustind900 http://www.hyperlaunch.net/forum/showthread.php?432-Help-displaying-single-IC)
+Added support for _Default\Vertical and _Default\Horizontal folder use on system and global search for bezels and backgrounds.
+Removed unnecessary functions from the code.
+
+HyperPause (updated to v1.0.7)
+Added code to avoid moving the menu is last rendering is not complete
+Fixed bug showing only the first of multiple images originated from the frontend media 
+Fixed bug in menu up and down navigation for multiple images and pdf files
+Changed resolution scaling to improve profile sharing between different resolutions
+Added support for four new hyperpause options to disable the extra label for displaying the file name or page number on the artwork, controller, manuals and guides menu while displaying multiple images, pdfs, CBR and CBZ files (requested by brolly).
+Fixed HP hide FE code. Hides FE even if the monitor resolution changes.
+Added support for _Default\Vertical and _Default\Horizontal folder use on system and global image search for the cases where the user choose a screen portrait or landscape rotation.
+
+Fade animations.ahk (updated to v1.1.1)
+Fixed scaling bugs on layer 3, layer 3 static image and layer 4 
+Added width and height settings to layer 3, static 3 and 4.
+
+Fade.ahk (updated to v1.0.9)
+Changed resolution scaling to improve profile sharing between different resolutions
+Fixed scaling bugs on layer 2
+Fixed fade out resize bug
+Added width and height settings to layer 2.
+Added support for _Default\Vertical and _Default\Horizontal folder use on system and global image search for the cases where the user choose a screen portrait or landscape rotation.
+
+MultiGame.ahk (updated to v1.0.6)
+Changed resolution scaling to improve profile sharing between different resolutions
+
+MultiPlayer.ahk (updated to v1.0.2)
+Currently selected field now has a highlight around it to make it easier to see what number you are currently editing
+Added a wait screen used on modules when a server needs to wait for clients to connect so the host is aware what's going on. For now only used in Retroarch
+Modified what variables are filled when using multiplayer
+gdip_alt.ahk module extension updated to support the above change
+
+Fade Profiles
+default.ini and legacy.ini fade profiles updated (need to be revised after HLHQ has being updated to include the new keys)
+
+Plugins:
+Added HyperPin plugin (bleasby)
+
+
+HyperLaunchHQ (updated to v1.1.1.2)
+
+v1.1.1.2 (January 21th, 2015):
+  * Added new button in the General Settings panel that will fix all your HyperLaunch settings files 
+    by deleting any unneeded keys and adding default values for any missing settings
+  * Loading Fade Animations from the newly created User Fade Animations.ahk file
+  * Corrected CRC calculation method on the Fade Animations.ahk file
+  * Removed old settings and added all the new ones needed for the HyperLaunch changes on screen 
+    redraw to support sharing profiles between different resolution screens
+  * Automatic generation of empty Systems.xml if one doesn't exist
+  * Added support to the new LEDBlinky and ServoStik settings
+  * Fixed default settings on several ini settings
+  * Removed and added new settings due to more fade screen changes
+  * Added plugin for HyperPin
+
+
+Modules
+
+DOSBox (updated to v2.0.1)
+Updated to support MultiPlayer changes
+Added ability to turn off grabbing your WAN IP in case you never plan to be online and only setup for local multiplayer LAN play
+Fixed HyperPause support when fullscreen is used (bleasby)
+
+MAME (updated to v2.1.4)
+Updated notes on how ServoStik support works on this system
+
+NullDC (updated to v2.0.4)
+Moved ini settings to be read before 7z is called which standardizes and helps avoid issues with rom names inside archive containing []
+Added upto 4-player VMU support to be displayed on screen (bleasby)
+
+OpenBOR (updated to v2.0.1)
+Added Bezels support
+Added HideEmu support
+Added Fullscreen setting to module
+Added AlternateExitKey setting to module 
+Rewrote logic to finding your OpenBOR.exe
+Updated notes to reflect these changes
+
+
 v3.1.0.3 BETA
 
 

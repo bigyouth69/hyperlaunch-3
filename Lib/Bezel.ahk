@@ -1,5 +1,5 @@
-MCRC=6842990E
-MVersion=1.0.7
+MCRC=23DE82D6
+MVersion=1.0.8
 
 BezelGUI(){
 	Global
@@ -191,9 +191,16 @@ BezelStart(Mode="",parent="",angle="",rom=""){
 				bezelBackgroundfile := % bezelPath . "\Background" . SubStr(bezelImageFileName,6)
 				Log("Bezel - Loading Background image with the same name of the bezel image: " . bezelBackgroundFile,1)
 			} Else {
-				bezelBackgroundfile := RndBezelFilePath("Background",false,if (bezelUseBackgrounds="true") ? true : false)
-				If FileExist(bezelBackgroundFile)
+				bezelBackgroundPath := BezelFilesPath("Background",bezelFileExtensions,false,if (bezelUseBackgrounds="true") ? true : false)
+				if (bezelBackgroundPath)
+				{ 	bezelBackgroundfileList := []
+					Loop, Parse, bezelFileExtensions,|
+						Loop, % bezelBackgroundPath . "\" . "Background*." . A_LoopField
+							bezelBackgroundfileList.Insert(A_LoopFileFullPath)
+					Random, RndBezelBackground, 1, % bezelBackgroundfileList.MaxIndex()
+					bezelBackgroundfile := bezelBackgroundfileList[RndBezelBackground]
 					Log("Bezel - Loading Background image: " . bezelBackgroundFile,1)
+				}
 			}
 			;Setting overlay aleatory choosed file (only searches overlays at the bezel.png folder)
 			bezelOverlaysList := []
@@ -714,9 +721,6 @@ BezelDraw(){
 		}
 		if bezelICPath
 			{
-			Loop, 8
-				if maxICimage[a_index]
-					selectedICimage[a_index] := 1
 			if ((ICSaveSelected="true") and (FileExist(Bezel_RomFile))) {
 				loop, 8
 					if maxICimage[a_index]
@@ -728,9 +732,10 @@ BezelDraw(){
 			if (displayICOnStartup = "true") {
 				loop, 8
 					{
+					if !(selectedICimage[a_index]) 
+						selectedICimage[a_index] := 1
 					if maxICimage[a_index]
 						{
-
 						DrawIC()
 					}
 				}
@@ -750,17 +755,17 @@ BezelExit(){
 	Global
 	if (bezelEnabled = "true"){
 		Log("BezelExit - Started")
+		;Deleting pointers and destroying GUis
+		loop, 8 {
+			SelectObject(Bezel_hdc%A_Index%, Bezel_obm%A_Index%)
+			DeleteObject(Bezel_hbm%A_Index%)
+			DeleteDC(Bezel_hdc%A_Index%)
+			Gdip_DeleteGraphics(Bezel_G%A_Index%)
+			Gui, Bezel_GUI%A_Index%: Destroy
+		}
 		If bezelPath 
 			{
 			log("Bezel - Removing bezel image components to exit HyperLaunch.",1)
-			;Deleting pointers and destroying GUis
-			loop, 8 {
-				SelectObject(Bezel_hdc%A_Index%, Bezel_obm%A_Index%)
-				DeleteObject(Bezel_hbm%A_Index%)
-				DeleteDC(Bezel_hdc%A_Index%)
-				Gdip_DeleteGraphics(Bezel_G%A_Index%)
-				Gui, Bezel_GUI%A_Index%: Destroy
-			}
 			if bezelBitmap
 				Gdip_DisposeImage(bezelBitmap)
 			if bezelBackgroundFile
@@ -898,106 +903,43 @@ BezelCoordinates(CoordinatesMode){
 Return
 }
 
-
-RndBezelFilePath(filename,excludeScreens=false,useBkgdPath=false){
-	Global HLMediaPath, systemName, dbName, vertical, dbCloneOf, feMedia
-	bezelFileList := []
-	bezelFileList := GetRndBezelFile(HLMediaPath . "\Bezels\" . systemName . "\" . dbName . "\" . filename,excludeScreens)
-	If !bezelFileList[1]
-		bezelFileList := GetRndBezelFile(HLMediaPath . "\Bezels\" . systemName . "\" . dbCloneOf . "\" . filename,excludeScreens)
-	If !bezelFileList[1]
-	{ If (vertical = "true")
-		bezelFileList := GetRndBezelFile(HLMediaPath . "\Bezels\" . systemName . "\_Default\Vertical\" . filename,excludeScreens)
-		else
-		bezelFileList := GetRndBezelFile(HLMediaPath . "\Bezels\" . systemName . "\_Default\Horizontal\" . filename,excludeScreens)	
-	}
-	If ((useBkgdPath) and (!(bezelFileList[1])))
-		bezelFileList := GetRndBezelFile(HLMediaPath . "\Backgrounds\" . systemName . "\" . dbName . "\",false)
-	If ((useBkgdPath) and (!(bezelFileList[1])))
-	{	for index, element in feMedia["Backgrounds"]
-		{   if element.Label
-			{   if (element.AssetType="game")
-				{   loop, % element.TotalItems    
-					{    bezelFileList.Insert(element["Path" . a_index])
-					}
-				}
-			}
-		}
-	}
-	If !bezelFileList[1]
-		bezelFileList := GetRndBezelFile(HLMediaPath . "\Bezels\" . systemName . "\_Default\" . filename,excludeScreens)
-	If ((useBkgdPath) and (!(bezelFileList[1])))
-		bezelFileList := GetRndBezelFile(HLMediaPath . "\Backgrounds\" . systemName . "\_Default\",false)
-	If ((useBkgdPath) and (!(bezelFileList[1])))
-	{	for index, element in feMedia["Backgrounds"]
-		{   if element.Label
-			{   if (element.AssetType="system")
-				{   loop, % element.TotalItems    
-					{    bezelFileList.Insert(element["Path" . a_index])
-					}
-				}
-			}
-		}
-	}
-	If !bezelFileList[1]
-		bezelFileList := GetRndBezelFile(HLMediaPath . "\Bezels\_Default\" . filename,excludeScreens)
-	If ((useBkgdPath) and (!(bezelFileList[1])))
-		bezelFileList := GetRndBezelFile(HLMediaPath . "\Backgrounds\_Default\",false)
-	
-	If bezelFileList[1]
-	{	Random, RndmBezelBackground, 1, % bezelFileList.MaxIndex()
-		file := bezelFileList[RndmBezelBackground]
-		Log("Bezel - Random " . filename . " art choosen in path: " . file,4)
-		Return file
-	} Else {
-		Log("Bezel - Bezels are enabled, however none of the below valid " . filename . " files, with extensions " . fileextension . " exist: " . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . systemName . "\" . dbName . "\" . filename  . "*.ext`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . systemName . "\_Default\Vertical\" . filename  . "*.ext`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . systemName . "\_Default\Horizontal\" . filename  . "*.ext`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . systemName . "\_Default\" . filename  . "*.ext`n`t`t`t`t`t" . HLMediaPath . "\Bezels\_Default\" . filename  . "*.ext",2)
-	}
-				
-}
-
-
-GetRndBezelFile(path,excludeScreens){
-	Global bezelFileExtensions
-	bezelPicList := []
-	If (FileExist(path . "*.*")) {
-		Loop, Parse, bezelFileExtensions,|
-		{	Log("Bezel - Looking for Bezel pic: " . path . "*." . A_LoopField,4)
-			Loop, % path . "*." . A_LoopField
-			{	If excludeScreens
-					{
-					If !RegExMatch(A_LoopFileName, "i)\[[0-9]+S\]")
-						{
-						Log("Bezel - Found Bezel pic: " . A_LoopFileFullPath,4)
-						bezelPicList.Insert(A_LoopFileFullPath)
-					}
-				} Else {
-					Log("Bezel - Found Bezel pic: " . A_LoopFileFullPath,4)
-					bezelPicList.Insert(A_LoopFileFullPath)
-				}
-			}
-		}
-	}
-	Return bezelPicList
-}
-
-
-
-			
-BezelFilesPath(filename,fileextension,excludeScreens=false)
+BezelFilesPath(filename,fileextension,excludeScreens=false,useBkgdPath=false)
 {
 	Global HLMediaPath, systemName, dbName, vertical
 	Global dbCloneOf
 	bezelpath1 := HLMediaPath . "\Bezels\" . systemName . "\" . dbName
 	If dbCloneOf
 		bezelpath2 := HLMediaPath . "\Bezels\" . systemName . "\" . dbCloneOf
+	If (useBkgdPath){
+		bezelpath3 := HLMediaPath . "\Backgrounds\" . systemName . "\" . dbName
+		If dbCloneOf
+			bezelpath4 := HLMediaPath . "\Backgrounds\" . systemName . "\" . dbCloneOf
+	}
 	If (vertical = "true")
-		bezelpath3 := HLMediaPath . "\Bezels\" . systemName . "\_Default\Vertical"
+		bezelpath5 := HLMediaPath . "\Bezels\" . systemName . "\_Default\Vertical"
 	Else
-		bezelpath3 := HLMediaPath . "\Bezels\" . systemName . "\_Default\Horizontal"
-	bezelpath4 := HLMediaPath . "\Bezels\" . systemName . "\_Default"
-	bezelpath5 := HLMediaPath . "\Bezels\_Default"
-	bezelpath6 := HLMediaPath . "\Bezels\" . systemName . "\" . dbName
-	Loop, 6 {
+		bezelpath6 := HLMediaPath . "\Bezels\" . systemName . "\_Default\Horizontal"
+	bezelpath7 := HLMediaPath . "\Bezels\" . systemName . "\_Default"
+	If (useBkgdPath){
+		If (vertical = "true")
+			bezelpath8 := HLMediaPath . "\Backgrounds\" . systemName . "\_Default\Vertical"
+		else
+			bezelpath9 := HLMediaPath . "\Backgrounds\" . systemName . "\_Default\Horizontal"
+		bezelpath10 := HLMediaPath . "\Backgrounds\" . systemName . "\_Default"
+	}
+	If (vertical = "true")
+		bezelpath11 := HLMediaPath . "\Bezels\_Default\Vertical"
+	Else
+		bezelpath12 := HLMediaPath . "\Bezels\_Default\Horizontal"
+	bezelpath13 := HLMediaPath . "\Bezels\_Default"
+	If (useBkgdPath){
+		If (vertical = "true")
+			bezelpath14 := HLMediaPath . "\Backgrounds\_Default\Vertical"
+		else
+			bezelpath15 := HLMediaPath . "\Backgrounds\_Default\Horizontal"
+		bezelpath16 := HLMediaPath . "\Backgrounds\_Default"
+	}
+	Loop, 16 {
 		If bezelpath%a_index%
 			{
 			Log("Bezel - Looking for " . filename . " in: " . bezelpath%A_Index%,4)
@@ -1026,7 +968,7 @@ BezelFilesPath(filename,fileextension,excludeScreens=false)
 		}
 	}
 	If !bezelPathFound
-		log("Bezel - Bezels are enabled, however none of the below valid " . filename . " files, with extensions " . fileextension . " exist: " . "`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . systemName . "\" . dbName . "\" . filename  . "*.ext`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . systemName . "\_Default\Vertical\" . filename  . "*.ext`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . systemName . "\_Default\Horizontal\" . filename  . "*.ext`n`t`t`t`t`t" . HLMediaPath . "\Bezels\" . systemName . "\_Default\" . filename  . "*.ext`n`t`t`t`t`t" . HLMediaPath . "\Bezels\_Default\" . filename  . "*.ext",2)
+		log("Bezel - Bezels are enabled, however none of the " . filename . " files, with extensions " . fileextension . " exist on the bezel folders.",2)
 	Return bezelPathFound
 }		
 
@@ -1905,3 +1847,125 @@ DisableICLeftMenuKeys:
 	XHotKeywrapper(navUpKey,"leftICMenuUp","OFF")
 	XHotKeywrapper(navDownKey,"leftICMenuDown","OFF")
 return
+
+
+ExtraFixedResBezelGUI(){
+	Global bezelEnabled, extraFixedRes_Bezel_hbm, extraFixedRes_Bezel_hdc, extraFixedRes_Bezel_hwnd, extraFixedRes_Bezel_G
+	if (bezelEnabled = "true"){
+		;Gui, extraFixedRes_Bezel_GUI: +OwnerBezel_GUI8 +Disabled -Caption +E0x80000 +OwnDialogs +LastFound +ToolWindow +AlwaysOnTop 
+		Gui, extraFixedRes_Bezel_GUI: +Disabled -Caption +E0x80000 +OwnDialogs +LastFound +ToolWindow +AlwaysOnTop 
+		Gui, extraFixedRes_Bezel_GUI: Margin,0,0
+		Gui, extraFixedRes_Bezel_GUI: Show,, BezelLayer9
+		extraFixedRes_Bezel_hwnd := WinExist()
+		extraFixedRes_Bezel_hbm := CreateDIBSection(A_ScreenWidth, A_ScreenHeight)
+		extraFixedRes_Bezel_hdc := CreateCompatibleDC()
+		extraFixedRes_Bezel_obm := SelectObject(extraFixedRes_Bezel_hdc, extraFixedRes_Bezel_hbm)
+		extraFixedRes_Bezel_G := Gdip_GraphicsFromhdc(extraFixedRes_Bezel_hdc)
+		Gdip_SetSmoothingMode(extraFixedRes_Bezel_G, 4)
+	}
+}
+
+
+ExtraFixedResBezelDraw(extraFixedResScreenID, filePreffix="VMU", extraFixedResPosition="TopRight",extraFixedResBezelScreenWidth=80,extraFixedResBezelScreenHeight=60,extraFixedResBezelRightOffset=0,extraFixedResBezelLeftOffset=0,extraFixedResBezelTopOffset=0,extraFixedResBezelBottomOffset=0){
+	Global bezelEnabled, bezelPath, extraFixedRes_Bezel_hbm, extraFixedRes_Bezel_hdc, extraFixedRes_Bezel_hwnd, extraFixedRes_Bezel_G, bezelFileExtensions
+	if ((bezelEnabled = "true") and (bezelPath)){
+		;Check for extraFixedRes bezel file:
+		extraFixedResBezelPath := BezelFilesPath(filePreffix . " Bezel",bezelFileExtensions)
+		If extraFixedResBezelPath 
+			{	;Setting bezel aleatory choosed file
+			extraFixedResbezelImagesList := []
+			Loop, Parse, bezelFileExtensions,|
+				Loop, % extraFixedResBezelPath . "\" . filePreffix . " Bezel*." . A_LoopField
+					if !RegExMatch(A_LoopFileName, "i)\[[0-9]+S\]")
+						extraFixedResBezelImagesList.Insert(A_LoopFileFullPath)
+			Random, RndmextraFixedResBezel, 1, % extraFixedResBezelImagesList.MaxIndex()
+			extraFixedResBezelImageFile := extraFixedResBezelImagesList[RndmextraFixedResBezel]
+			SplitPath, extraFixedResBezelImageFile, extraFixedResBezelImageFileName, extraFixedResBezelImageDir,,extraFixedResBezelImageFileNameNoExt
+			Log("Bezel - Loading extraFixedRes Bezel image: " . extraFixedResBezelImageFile,1)		
+			;Setting overlay aleatory choosed file (only searches overlays at the bezel.png folder)
+			If FileExist(extraFixedResBezelPath . "\" . filePreffix . " Overlay" . SubStr(extraFixedResBezelImageFileName,StrLen(filePreffix)+7)) {
+				extraFixedResBezelOverlaysList := []
+				extraFixedResBezelOverlaysList.Insert(extraFixedResBezelPath . "\" . filePreffix . " Overlay" . SubStr(extraFixedResBezelImageFileName,StrLen(filePreffix)+7))
+				extraFixedResBezelOverlayFile := % extraFixedResBezelPath . "\" . filePreffix . " Overlay" . SubStr(extraFixedResBezelImageFileName,StrLen(filePreffix)+7)
+				extraFixedResBezelOverlayBitmap := Gdip_CreateBitmapFromFile(extraFixedResBezelOverlayFile)
+				Log("Bezel - Loading extraFixedRes Overlay image with the same name of the extraFixedRes bezel image: " . extraFixedResBezelOverlayFile,1)
+			}
+			;Read extraFixedRes Bezel ini coordinates
+			extraFixedResBezelScreenX1 := IniReadCheck(extraFixedResBezelImageDir . "\" . extraFixedResBezelImageFileNameNoExt . ".ini", "General", "Bezel Screen Top Left X Coordinate", 0)
+			extraFixedResBezelScreenY1 := IniReadCheck(extraFixedResBezelImageDir . "\" . extraFixedResBezelImageFileNameNoExt . ".ini", "General", "Bezel Screen Top Left Y Coordinate", 0)
+			extraFixedResBezelScreenX2 := IniReadCheck(extraFixedResBezelImageDir . "\" . extraFixedResBezelImageFileNameNoExt . ".ini", "General", "Bezel Screen Bottom Right X Coordinate", 150)
+			extraFixedResBezelScreenY2 := IniReadCheck(extraFixedResBezelImageDir . "\" . extraFixedResBezelImageFileNameNoExt . ".ini", "General", "Bezel Screen Bottom Right Y Coordinate", 100)
+			; creating bitmap pointers
+			extraFixedResBezelBitmap := Gdip_CreateBitmapFromFile(extraFixedResBezelImageFile)
+			Gdip_GetImageDimensions(extraFixedResBezelBitmap, extraFixedResBezelImageW, extraFixedResBezelImageH)
+			xScaleFactor := (extraFixedResBezelScreenWidth)/(extraFixedResBezelScreenX2-extraFixedResBezelScreenX1)
+			yScaleFactor := (extraFixedResBezelScreenHeight)/(extraFixedResBezelScreenY2-extraFixedResBezelScreenY1)
+			extraFixedResBezelImageW := Round(extraFixedResBezelImageW * xScaleFactor)
+			extraFixedResBezelImageH := Round(extraFixedResBezelImageH * yScaleFactor) 
+			if (extraFixedResPosition="TopRight")
+				extraFixedResBezelImageX := A_ScreenWidth - extraFixedResBezelImageW , extraFixedResBezelImageY := 0
+			else if (extraFixedResPosition="TopCenter")
+				extraFixedResBezelImageX := (A_ScreenWidth - extraFixedResBezelImageW)//2 , extraFixedResBezelImageY := 0				
+			else if (extraFixedResPosition="TopLeft") 
+				extraFixedResBezelImageX := 0 , extraFixedResBezelImageY := 0	
+			else if (extraFixedResPosition="LeftCenter")
+				extraFixedResBezelImageX := 0 , extraFixedResBezelImageY := (A_ScreenHeight - extraFixedResBezelImageH)//2									
+			else if (extraFixedResPosition="BottomRight")
+				extraFixedResBezelImageX := A_ScreenWidth - extraFixedResBezelImageW , extraFixedResBezelImageY := A_ScreenHeight - extraFixedResBezelImageH	
+			else if (extraFixedResPosition="BottomCenter")
+				extraFixedResBezelImageX := (A_ScreenWidth - extraFixedResBezelImageW)//2 , extraFixedResBezelImageY := A_ScreenHeight - extraFixedResBezelImageH					
+			else if (extraFixedResPosition="BottomLeft")
+				extraFixedResBezelImageX := 0 , extraFixedResBezelImageY := A_ScreenHeight - extraFixedResBezelImageH					
+			else ; Right Center
+				extraFixedResBezelImageX := A_ScreenWidth - extraFixedResBezelImageW , extraFixedResBezelImageY := (A_ScreenHeight - extraFixedResBezelImageH)//2
+			extraFixedResBezelScreenX := extraFixedResBezelImageX + Round(extraFixedResBezelScreenX1*xScaleFactor)
+			extraFixedResBezelScreenY := extraFixedResBezelImageY + Round(extraFixedResBezelScreenY1*yScaleFactor) 
+			; Applying offsets to correctly place the emulator if the emulator has extra window components
+			extraFixedResBezelScreenX := if extraFixedResBezelLeftOffset ? extraFixedResBezelScreenX - extraFixedResBezelLeftOffset : extraFixedResBezelScreenX
+			extraFixedResBezelScreenY := if extraFixedResBezelTopOffset ? extraFixedResBezelScreenY - extraFixedResBezelTopOffset : extraFixedResBezelScreenY
+			; check if window moved (maximun 5 seconds)
+			X:="" , Y:="" , timeout := A_TickCount
+			sleep, 200
+			loop
+				{
+				sleep, 50
+				WinGetPos, X, Y, , , ahk_id %extraFixedResScreenID%
+				if (X=extraFixedResBezelScreenX) and (Y=extraFixedResBezelScreenY) 
+					break
+				if(timeout < A_TickCount - 5000)
+					break
+				sleep, 50
+				WinMove, ahk_id %extraFixedResScreenID%, , %extraFixedResBezelScreenX%, %extraFixedResBezelScreenY%
+			}
+			;Drawing extraFixedRes Bezel GUI
+			Gdip_DrawImage(extraFixedRes_Bezel_G, extraFixedResBezelBitmap, extraFixedResBezelImageX, extraFixedResBezelImageY,extraFixedResBezelImageW,extraFixedResBezelImageH)        
+			Log("Bezel - extraFixedRes Bezel Image Screen Position: left=" . extraFixedResBezelImageX . " top=" . extraFixedResBezelImageY . " right=" . (extraFixedResBezelImageX+extraFixedResBezelImageW) . " bottom=" . (extraFixedResBezelImageY+extraFixedResBezelImageH)  ,5)	
+			;Drawing Overlay Image above screen
+			If (extraFixedResBezelOverlayFile)
+			{	Gdip_DrawImage(extraFixedRes_Bezel_G, extraFixedResBezelOverlayBitmap, extraFixedResBezelImageX+Round(extraFixedResBezelScreenX1*xScaleFactor), extraFixedResBezelImageY+Round(extraFixedResBezelScreenY1*yScaleFactor) ,extraFixedResBezelScreenWidth,extraFixedResBezelScreenHeight)   
+				Log("Bezel - extraFixedRes Overlay Screen Position: left=" . extraFixedResBezelImageX+Round(extraFixedResBezelScreenX1*xScaleFactor) . " top=" . extraFixedResBezelImageY+Round(extraFixedResBezelScreenY1*yScaleFactor) . " right=" . extraFixedResBezelImageX+(Round(extraFixedResBezelScreenX1*xScaleFactor)+extraFixedResBezelScreenWidth) . " bottom=" . extraFixedResBezelImageY+Round(extraFixedResBezelScreenY1*yScaleFactor)+extraFixedResBezelScreenHeight ,5)	
+			}
+			UpdateLayeredWindow(extraFixedRes_Bezel_hwnd, extraFixedRes_Bezel_hdc,0,0, A_ScreenWidth, A_ScreenHeight)
+		}
+		Log("BezelDraw - Ended")
+	}
+Return
+}
+
+ExtraFixedResBezelExit(){
+	Global bezelEnabled, extraFixedResBezelPath, extraFixedRes_Bezel_hbm, extraFixedRes_Bezel_obm, extraFixedRes_Bezel_hdc, extraFixedRes_Bezel_hwnd, extraFixedRes_Bezel_G, extraFixedResBezelImageFile, extraFixedResBezelBitmap, extraFixedResBezelOverlayFile, extraFixedResBezelOverlayBitmap
+	if (bezelEnabled = "true"){
+		SelectObject(extraFixedRes_Bezel_hdc, extraFixedRes_Bezel_obm)
+		DeleteObject(extraFixedRes_Bezel_hbm)
+		DeleteDC(extraFixedRes_Bezel_hdc)
+		Gdip_DeleteGraphics(extraFixedRes_Bezel_G)
+		Gui, extraFixedRes_Bezel_GUI: Destroy
+		If extraFixedResBezelPath 
+		{	if extraFixedResBezelImageFile
+				Gdip_DisposeImage(extraFixedResBezelBitmap)
+			if extraFixedResBezelOverlayFile
+				Gdip_DisposeImage(extraFixedResBezelOverlayBitmap)	
+		}
+	}
+Return
+}

@@ -2,7 +2,7 @@ MEmu = MAME
 MEmuV =  v0.150
 MURL = http://www.mame.net/
 MAuthor = djvj
-MVersion = 2.1.3
+MVersion = 2.1.4
 MCRC = 9678FB18
 iCRC = D88577B3
 MID = 635038268903403479
@@ -19,6 +19,10 @@ MSystem = "AAE","Cave","Capcom","LaserDisc","MAME","Nintendo Arcade Systems","Se
 ; Module settings control whether HyperLaunch or MAME bezels are shown
 ; In the bezel normal mode only HyperLaunch Bezels will be show and the MAME use_bezels option will be forced disbaled
 ; In the bezel layout mode, HyperLaunch Bezels will be drawn only when you do not have a layout file on your MAME folders for the current game
+;
+; ServoStik:
+; The module will automatically control any connected ServoStiks found on the system.
+; It does this by reading the xml info from MAME. If that XML info has directional info at 4 or less, 4-way mode will be enabled. All others get 8-way mode.
 ;----------------------------------------------------------------------------
 StartModule()
 BezelGUI()

@@ -10,6 +10,19 @@
                                        Release History                                       
 =============================================================================================
 
+v1.1.1.2 (January 21th, 2015):
+  * Added new button in the General Settings panel that will fix all your HyperLaunch settings files 
+    by deleting any unneeded keys and adding default values for any missing settings
+  * Loading Fade Animations from the newly created User Fade Animations.ahk file
+  * Corrected CRC calculation method on the Fade Animations.ahk file
+  * Removed old settings and added all the new ones needed for the HyperLaunch changes on screen 
+    redraw to support sharing profiles between different resolution screens
+  * Automatic generation of empty Systems.xml if one doesn't exist
+  * Added support to the new LEDBlinky and ServoStik settings
+  * Fixed default settings on several ini settings
+  * Removed and added new settings due to more fade screen changes
+  * Added plugin for HyperPin
+
 v1.1.1.1 (January 6th, 2015):
   * Exporting your audit list will not proceed until you have set an export format under HLHQ Settings
   * Added support for the 6 settings needed to configure the new layer 3 static fade image

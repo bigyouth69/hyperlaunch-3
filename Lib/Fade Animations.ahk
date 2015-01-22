@@ -1,5 +1,5 @@
-MCRC=7C4363D3
-MVersion=1.1.0
+MCRC=F3154B6F
+MVersion=1.1.1
 
 ; Default transition animation used for Fade_In
 DefaultAnimateFadeIn(direction,time){
@@ -164,8 +164,6 @@ DefaultFadeAnimation:
 	If FileExist(fadeInLyr3StaticFile)	; If a layer 3 static image exists, let's get its dimensions
 	{	fadeLyr3StaticPic := Gdip_CreateBitmapFromFile(fadeInLyr3StaticFile)
 		Gdip_GetImageDimensions(fadeLyr3StaticPic, fadeLyr3StaticPicW, fadeLyr3StaticPicH)
-		fadeLyr3StaticPicW := Round(fadeLyr3StaticPicW * fadeXScale)
-		fadeLyr3StaticPicH := Round(fadeLyr3StaticPicH * fadeYScale)
 		; find Width and Height
 		If (fadeLyr3StaticPos = "Stretch and Lose Aspect"){
 			fadeLyr3StaticPicW := baseScreenWidth
@@ -179,8 +177,19 @@ DefaultFadeAnimation:
 			fadeLyr3StaticPicH := Round(fadeLyr3StaticPicH * percentToEnlarge)	
 			fadeLyr3StaticPicPadX := 0 , fadeLyr3StaticPicPadY := 0
 		} else {
-			fadeLyr3StaticPicW := Round(fadeLyr3StaticPicW * fadeLyr3StaticAdjust)
-			fadeLyr3StaticPicH := Round(fadeLyr3StaticPicH * fadeLyr3StaticAdjust)
+			if (!(fadeLyr3StaticW)) and (!(fadeLyr3StaticH)){
+				fadeLyr3StaticPicW := Round(fadeLyr3StaticPicW * fadeXScale * fadeLyr3StaticAdjust)
+				fadeLyr3StaticPicH := Round(fadeLyr3StaticPicH * fadeYScale * fadeLyr3StaticAdjust)
+			} else if (fadeLyr3StaticW) and (!(fadeLyr3StaticH)){
+				fadeLyr3StaticPicH := Round( fadeLyr3StaticPicH * (fadeLyr3StaticPicW / Round(fadeLyr3StaticPicW * fadeLyr3StaticAdjust)) )
+				fadeLyr3StaticPicW := Round(fadeLyr3StaticW * fadeLyr3StaticAdjust)
+			} else if (!(fadeLyr3StaticW)) and (fadeLyr3StaticH){
+				fadeLyr3StaticPicW := Round( fadeLyr3StaticPicW * (fadeLyr3StaticPicH / Round(fadeLyr3StaticH * fadeLyr3StaticAdjust)) )
+				fadeLyr3StaticPicH := Round(fadeLyr3StaticH * fadeLyr3StaticAdjust)
+			} else {
+				fadeLyr3StaticPicW := Round(fadeLyr3StaticW * fadeLyr3StaticAdjust)
+				fadeLyr3StaticPicH := Round(fadeLyr3StaticH * fadeLyr3StaticAdjust)	
+			}
 		}
 		GetFadePicPosition(fadeLyr3StaticPicX,fadeLyr3StaticPicY,fadeLyr3StaticX,fadeLyr3StaticY,fadeLyr3StaticPicW,fadeLyr3StaticPicH,fadeLyr3StaticPos)
 		; figure out what quadrant the layer 3 Static image is in, so we know to apply a + or - pad value so the user does not have to
@@ -203,37 +212,64 @@ DefaultFadeAnimation:
 		fadeLyr3StaticCanvasX := fadeLyr3StaticPicX + fadeLyr3StaticPicPadX , fadeLyr3StaticCanvasY := fadeLyr3StaticPicY + fadeLyr3StaticPicPadY
 		fadeLyr3StaticCanvasW := fadeLyr3StaticPicW, fadeLyr3StaticCanvasH := fadeLyr3StaticPicH
 		pGraphUpd(Fade_G3Static,fadeLyr3StaticCanvasW,fadeLyr3StaticCanvasH)
-		if ((fadeLyr3StaticPos = "Stretch and Lose Aspect") or (fadeLyr3StaticPos = "Stretch and Keep Aspect"))
-			Gdip_Alt_DrawImage(Fade_G3Static, fadeLyr3StaticPic, 0, 0, fadeLyr3StaticPicW, fadeLyr3StaticPicH)
-		else
-			Gdip_Alt_DrawImage(Fade_G3Static, fadeLyr3StaticPic, 0, 0, fadeLyr3StaticPicW, fadeLyr3StaticPicH, 0, 0, fadeLyr3StaticPicW//fadeLyr3StaticAdjust, fadeLyr3StaticPicH//fadeLyr3StaticAdjust)
+		Gdip_Alt_DrawImage(Fade_G3Static, fadeLyr3StaticPic, 0, 0, fadeLyr3StaticPicW, fadeLyr3StaticPicH)
 	}
 	;====== Loading info about layer 3 image
 	fadeInLyr3File := GetFadePicFile("Layer 3")
-	IfExist, % fadeInLyr3File
-		{
-		fadeLyr3Pic := Gdip_CreateBitmapFromFile(fadeInLyr3File)
+	If FileExist(fadeInLyr3File)
+	{	fadeLyr3Pic := Gdip_CreateBitmapFromFile(fadeInLyr3File)
 		Gdip_GetImageDimensions(fadeLyr3Pic, fadeLyr3PicOrigW, fadeLyr3PicOrigH)
-		fadeLyr3PicW := Round(fadeLyr3PicOrigW * fadeXScale * fadeLyr3Adjust)
-		fadeLyr3PicH := Round(fadeLyr3PicOrigH * fadeYScale * fadeLyr3Adjust)
+		if (!(fadeLyr3W)) and (!(fadeLyr3H)){
+			fadeLyr3PicW := Round(fadeLyr3PicOrigW * fadeXScale * fadeLyr3Adjust)
+			fadeLyr3PicH := Round(fadeLyr3PicOrigH * fadeYScale * fadeLyr3Adjust)
+		} else if (fadeLyr3W) and (!(fadeLyr3H)){
+			fadeLyr3PicH := Round( fadeLyr3PicH * (fadeLyr3PicW / Round(fadeLyr3PicW * fadeLyr3Adjust)) )
+			fadeLyr3PicW := Round(fadeLyr3W * fadeLyr3Adjust)
+		} else if (!(fadeLyr3W)) and (fadeLyr3H){
+			fadeLyr3PicW := Round( fadeLyr3PicW * (fadeLyr3PicH / Round(fadeLyr3H * fadeLyr3Adjust)) )
+			fadeLyr3PicH := Round(fadeLyr3H * fadeLyr3Adjust)
+		} else {
+			fadeLyr3PicW := Round(fadeLyr3W * fadeLyr3Adjust)
+			fadeLyr3PicH := Round(fadeLyr3H * fadeLyr3Adjust)	
+		}
 		GetFadePicPosition(fadeLyr3PicX,fadeLyr3PicY,fadeLyr3X,fadeLyr3Y,fadeLyr3PicW,fadeLyr3PicH,fadeLyr3Pos)
+		If fadeLyr3Pos in No Alignment,Center,Top Left Corner
+			fadeLyr3PicPadX:=fadeLyr3PicPad, fadeLyr3PicPadY:=fadeLyr3PicPad
+		Else If fadeLyr3Pos = Top Center
+			fadeLyr3PicPadX:=0, fadeLyr3PicPadY:=fadeLyr3PicPad
+		Else If fadeLyr3Pos = Left Center
+			fadeLyr3PicPadX:=fadeLyr3PicPad, fadeLyr3PicPadY:=0
+		Else If fadeLyr3Pos = Top Right Corner
+			fadeLyr3PicPadX:=fadeLyr3PicPad*-1, fadeLyr3PicPadY:=fadeLyr3PicPad
+		Else If fadeLyr3Pos = Right Center
+			fadeLyr3PicPadX:=fadeLyr3PicPad*-1, fadeLyr3PicPadY:=0
+		Else If fadeLyr3Pos = Bottom Left Corner
+			fadeLyr3PicPadX:=fadeLyr3PicPad, fadeLyr3PicPadY:=fadeLyr3PicPad*-1
+		Else If fadeLyr3Pos = Bottom Center
+			fadeLyr3PicPadX:=0, fadeLyr3PicPadY:=fadeLyr3PicPad*-1
+		Else If fadeLyr3Pos = Bottom Right Corner
+			fadeLyr3PicPadX:=fadeLyr3PicPad*-1, fadeLyr3PicPadY:=fadeLyr3PicPad*-1
+		fadeLyr3PicX := fadeLyr3PicX+fadeLyr3PicPadX
+		fadeLyr3PicY := fadeLyr3PicY+fadeLyr3PicPadY
 	}
-	;Layer 3 padding
-	If fadeLyr3PicX < baseScreenWidth//2
-		fadeLyr3PicX := fadeLyr3PicX+fadeLyr3PicPad
-	Else 
-		fadeLyr3PicX := fadeLyr3PicX-fadeLyr3PicPad
-	If fadeLyr3PicY < baseScreenHeight//2
-		fadeLyr3PicY := fadeLyr3PicY+fadeLyr3PicPad
-	Else 
-		fadeLyr3PicY := fadeLyr3PicY-fadeLyr3PicPad
 	;====== Loading Gif Files
 	GifAnimation := GetFadeGifFile("Anim")
 	If GifAnimation
 		{
 		AnimatedGifControl_GetImageDimensions(GifAnimation, GifWidth, GifHeight)
-		fadeLyr4PicW := Round(GifWidth * fadeXScale)
-		fadeLyr4PicH := Round(GifHeight * fadeYScale)
+		if (!(fadeLyr4W)) and (!(fadeLyr4H)){
+			fadeLyr4PicW := Round(GifWidth * fadeXScale * fadeLyr4Adjust)
+			fadeLyr4PicH := Round(GifHeight * fadeYScale * fadeLyr4Adjust)
+		} else if (fadeLyr4W) and (!(fadeLyr4H)){
+			fadeLyr4PicH := Round( GifHeight * (GifWidth / Round(GifWidth * fadeLyr4Adjust)) )
+			fadeLyr4PicW := Round(fadeLyr4W * fadeLyr4Adjust)
+		} else if (!(fadeLyr4W)) and (fadeLyr4H){
+			fadeLyr4PicW := Round( GifWidth * (GifHeight / Round(fadeLyr4H * fadeLyr4Adjust)) )
+			fadeLyr4PicH := Round(fadeLyr4H * fadeLyr4Adjust)
+		} else {
+			fadeLyr4PicW := Round(fadeLyr4W * fadeLyr4Adjust)
+			fadeLyr4PicH := Round(fadeLyr4H * fadeLyr4Adjust)	
+		}
 		If (fadeLyr4Pos = "Above Layer 3 - Left") {
 			fadeLyr4PicX := fadeLyr3PicX
 			fadeLyr4PicY := fadeLyr3PicY-fadeLyr4PicH
@@ -265,8 +301,19 @@ DefaultFadeAnimation:
 				FadeLayer4AnimTotal := a_index
 			}
 			Gdip_GetImageDimensions(FadeLayer4Anim1Pic, fadeLyr4PicW, fadeLyr4PicH)
-			fadeLyr4PicW := Round(fadeLyr4PicW * fadeXScale * fadeLyr4Adjust)
-			fadeLyr4PicH := Round(fadeLyr4PicH * fadeYScale * fadeLyr4Adjust)
+			if (!(fadeLyr4W)) and (!(fadeLyr4H)){
+				fadeLyr4PicW := Round(fadeLyr4PicW * fadeLyr4Adjust)
+				fadeLyr4PicH := Round(fadeLyr4PicH * fadeLyr4Adjust)
+			} else if (fadeLyr4W) and (!(fadeLyr4H)){
+				fadeLyr4PicH := Round( fadeLyr4PicH * (fadeLyr4PicW / Round(fadeLyr4PicW * fadeLyr4Adjust)) )
+				fadeLyr4PicW := Round(fadeLyr4W * fadeLyr4Adjust)
+			} else if (!(fadeLyr4W)) and (fadeLyr4H){
+				fadeLyr4PicW := Round( fadeLyr4PicW * (fadeLyr4PicH / Round(fadeLyr4H * fadeLyr4Adjust)) )
+				fadeLyr4PicH := Round(fadeLyr4H * fadeLyr4Adjust)
+			} else {
+				fadeLyr4PicW := Round(fadeLyr4W * fadeLyr4Adjust)
+				fadeLyr4PicH := Round(fadeLyr4H * fadeLyr4Adjust)	
+			}
 			If (fadeLyr4Pos = "Above Layer 3 - Left") {
 				fadeLyr4PicX := fadeLyr3PicX
 				fadeLyr4PicY := fadeLyr3PicY-fadeLyr4PicH
@@ -301,9 +348,20 @@ DefaultFadeAnimation:
 		if (fadeBarWindow="Image") {
 			fadeLyr3ProgressBarFile := GetFadePicFile("Progress Bar")
 			fadeLyr3ProgressBar := Gdip_CreateBitmapFromFile(fadeLyr3ProgressBarFile)
-			Gdip_GetImageDimensions(fadeLyr3ProgressBar, fadeBarWindowW, fadeBarWindowH)
-			fadeBarWindowW := Round(fadeBarWindowW*fadeXScale)
-			fadeBarWindowH := Round(fadeBarWindowH*fadeYScale)
+			Gdip_GetImageDimensions(fadeLyr3ProgressBar, fadeBarImageW, fadeBarImageH)
+			if (!(fadeBarWindowW)) and (!(fadeBarWindowH)){
+				fadeBarWindowW := fadeBarImageW
+				fadeBarWindowH := fadeBarImageH
+			} else if (fadeBarWindowW) and (!(fadeBarWindowH)){
+				fadeBarWindowW := Round(fadeBarImageW*fadeXScale)
+				fadeBarWindowH := Round(fadeBarImageH*fadeXScale)
+			} else if (!(fadeBarWindowW)) and (fadeBarWindowH){
+				fadeBarWindowW := Round(fadeBarImageW*fadeYScale)
+				fadeBarWindowH := Round(fadeBarImageH*fadeYScale)
+			} else {
+				fadeBarWindowW := Round(fadeBarImageW*fadeXScale)
+				fadeBarWindowH := Round(fadeBarImageH*fadeYScale)			
+			}
 		}
 		fadeBarW := fadeBarWindowW-2*fadeBarWindowM	; controls the bar's width, calculated from the bar window width and margin
 		;Progress Bar

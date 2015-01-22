@@ -1,4 +1,4 @@
-MCRC=6B4F9212
+MCRC=2D17DC31
 MVersion=1.2.1
 
 StartModule(){
@@ -365,7 +365,7 @@ CheckFolder(folder,msg="",timeout=6,crc="",crctype="",logerror="") {
 ; h = height of error box
 ; txt = font size
 ScriptError(error,timeout=6,w=800,h=225,txt=20){
-	Global HLMediaPath,exitScriptKey,HLFile,HLErrSoundPath,logShowCommandWindow,cmdWindowObj
+	Global HLMediaPath,exitEmulatorKey,HLFile,HLErrSoundPath,logShowCommandWindow,cmdWindowObj
 	Global screenRotationAngle,baseScreenWidth,baseScreenHeight,xTranslation,yTranslation,XBaseRes,YBaseRes
 
 	XHotKeywrapper(exitEmulatorKey,"CloseProcess","OFF")
@@ -964,8 +964,15 @@ RomTableCheck() {
 ; mode can be HL or Rom which tells LEDBlinky what profile to load
 LEDBlinky(mode) {
 	Global ledblinkyEnabled,ledblinkyFullPath,ledblinkyProfilePath,ledblinkyHLProfile,dbName
+	Static ledblinkyExists
 	If ledblinkyEnabled = true
 	{
+		If !ledblinkyExists	; Make sure LEDBlinky exists first before trying to use it
+			If FileExist(ledblinkyFullPath)
+				ledblinkyExists := 1
+			Else
+				ScriptError("You are trying to use LEDBlinky support but could not locate it here: " . ledblinkyFullPath)
+
 		Log("LEDBlinky - Started")
 		SplitPath,ledblinkyFullPath,ledblinkyExe,ledblinkyPath
 		
@@ -1227,7 +1234,7 @@ SendCommand(Command, SendCommandDelay=2000, WaitTime=500, WaitBetweenSends=0, De
 				continue
 			}
 		}
-		Else If elemnent contains Up}
+		Else If element contains Up}
 		{	If (element != "{Up}")
 			{	Send, %element%
 				Continue
@@ -1410,11 +1417,13 @@ SetSystemCursor( Cursor = "", cx = 0, cy = 0 ) {
 
 	If Cursor = ; empty, so create blank cursor
 	{
+		Log("SetSystemCursor - Creating blank cursor",4)
 		VarSetCapacity( AndMask, 32*4, 0xFF ), VarSetCapacity( XorMask, 32*4, 0 )
 		BlankCursor = 1 ; flag for later
 	}
 	Else If SubStr( Cursor,1,4 ) = "IDC_" ; load system cursor
 	{
+		Log("SetSystemCursor - Loading system cursor",4)
 		Loop, Parse, SystemCursors, `,
 		{
 			CursorName := SubStr( A_Loopfield, 6, 15 ) ; get the cursor name, no trailing space with substr
@@ -1427,12 +1436,14 @@ SetSystemCursor( Cursor = "", cx = 0, cy = 0 ) {
 		}   
 		If CursorHandle = ; invalid cursor name given
 		{
-			Msgbox,, SetCursor, Error: Invalid cursor name
+			Log("SetSystemCursor - Invalid cursor name supplied: """ . CursorHandle . """",2)
+			; Msgbox,, SetCursor, Error: Invalid cursor name
 			CursorHandle = Error
 		}
 	}   
 	Else If FileExist( Cursor )
 	{
+		Log("SetSystemCursor - Found this cursor: """ . Cursor . """",4)
 		SplitPath, Cursor,,, Ext ; auto-detect type
 		If Ext = ico
 			uType := 0x1   
@@ -1440,14 +1451,16 @@ SetSystemCursor( Cursor = "", cx = 0, cy = 0 ) {
 			uType := 0x2      
 		Else ; invalid file ext
 		{
-			Msgbox,, SetCursor, Error: Invalid file type
+			Log("SetSystemCursor - Invalid cursor extension: """ . Ext . """",2)
+			; Msgbox,, SetCursor, Error: Invalid file type
 			CursorHandle = Error
 		}      
 		FileCursor = 1
 	}
 	Else
 	{   
-		Msgbox,, SetCursor, Error: Invalid file path or cursor name
+		Log("SetSystemCursor - Invalid cursor name or path: """ . Cursor . """",2)
+		; Msgbox,, SetCursor, Error: Invalid file path or cursor name
 		CursorHandle = Error ; raise for later
 	}
 	If CursorHandle != Error
@@ -1772,6 +1785,8 @@ DaemonTools(action,file="",type="",drive=0){
 
 		If (romIn7z = "true" || (skipchecks != "false" && 7zUsed))
 		{	SplitPath, romFromDLL,,dllRomPath,dllExt,dllName
+			If 7zAttachSystemName = true
+				Log("7z - Attaching the system name """ . systemName . """ to the extracted path",4)
 			7zRomPath := 7zExP . (If 7zAttachSystemName = "true" ? "\" . systemName : "") . (If AttachRomName ? "\" . 7zN : "")	; 7zRomPath reflects the 7zExtractPath + the rom folder our rom will be extracted into. This is used for cleanup later so HL knows what folder to remove
 			7zExPCheck := 7zRomPath . (If dllRomPath ? "\" . dllRomPath : "")	; If the archive contains a path/subfolder to the rom we are looking for, add that to the path to check
 			romExSize := COM_Invoke(HLObject, "getZipExtractedSize", 7zP . "\" . 7zN . 7zE)	; Get extracted Size of rom for Fade so we know when it's done being extracted or so we can verify the rom size of extracted folders with multiple roms

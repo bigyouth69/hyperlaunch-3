@@ -1,5 +1,5 @@
-MCRC=33AAEADF
-MVersion=1.0.8
+MCRC=77D1CFA
+MVersion=1.0.9
 
 FadeInStart(){
 	Gosub, FadeInStart
@@ -107,16 +107,16 @@ FadeInStart:
 		Gdip_Alt_GetRotatedDimensions(A_ScreenWidth, A_ScreenHeight, screenRotationAngle, baseScreenWidth, baseScreenHeight)
 		Gdip_GetRotatedTranslation(baseScreenWidth, baseScreenHeight, screenRotationAngle, xTranslation, yTranslation)
 		xTranslation:=round(xTranslation), yTranslation:=round(yTranslation)
-		XBaseRes := 1920, YBaseRes := 1080
-		if (((A_screenWidth < A_screenHeight) and ((screenRotationAngle=0) or (screenRotationAngle=180))) or ((A_screenWidth > A_screenHeight) and ((screenRotationAngle=90) or (screenRotationAngle=270))))
-			XBaseRes := 1080, YBaseRes := 1920
-		if !fadeXScale 
-			fadeXScale := baseScreenWidth/XBaseRes
-		if !fadeYScale
-			fadeYScale := baseScreenHeight/YBaseRes
+		if (((A_screenWidth < A_screenHeight) and ((screenRotationAngle=0) or (screenRotationAngle=180))) or ((A_screenWidth > A_screenHeight) and ((screenRotationAngle=90) or (screenRotationAngle=270)))){
+			temp := fadeWidthBaseRes , fadeWidthBaseRes := fadeHeightBaseRes , fadeHeightBaseRes := temp
+		}
+		fadeXScale := baseScreenWidth/fadeWidthBaseRes
+		fadeYScale := baseScreenHeight/fadeHeightBaseRes
 		Log("Fade screen scale factor: X=" . fadeXScale . ", Y= " . fadeYScale,5)
 		OptionScale(fadeLyr2X, fadeXScale)
 		OptionScale(fadeLyr2Y, fadeYScale)
+		OptionScale(fadeLyr2W, fadeXScale)
+		OptionScale(fadeLyr2H, fadeYScale)
 		OptionScale(fadeLyr2PicPad, fadeXScale) ;could be Y also
 	
 		fadeInLyr1File := GetFadePicFile("Layer 1",if (fadeUseBackgrounds="true") ? true : false)
@@ -172,8 +172,6 @@ FadeInStart:
 		If FileExist(fadeInLyr2File)	; If a layer 2 image exists, let's get its dimensions
 		{	fadeLyr2Pic := Gdip_CreateBitmapFromFile(fadeInLyr2File)
 			Gdip_GetImageDimensions(fadeLyr2Pic, fadeLyr2PicW, fadeLyr2PicH)
-			fadeLyr2PicW := Round(fadeLyr2PicW * fadeXScale)
-			fadeLyr2PicH := Round(fadeLyr2PicH * fadeYScale)
 			; find Width and Height
 			If (fadeLyr2Pos = "Stretch and Lose Aspect"){
 				fadeLyr2PicW := baseScreenWidth
@@ -187,8 +185,19 @@ FadeInStart:
 				fadeLyr2PicH := Round(fadeLyr2PicH * percentToEnlarge)	
 				fadeLyr2PicPadX := 0 , fadeLyr2PicPadY := 0
 			} else {
-				fadeLyr2PicW := fadeLyr2PicW * fadeLyr2Adjust
-				fadeLyr2PicH := fadeLyr2PicH * fadeLyr2Adjust
+				if (!(fadeLyr2W)) and (!(fadeLyr2H)){
+					fadeLyr2PicW := Round(fadeLyr2PicW * fadeXScale * fadeLyr2Adjust)
+					fadeLyr2PicH := Round(fadeLyr2PicH * fadeYScale * fadeLyr2Adjust)
+				} else if (fadeLyr2W) and (!(fadeLyr2H)){
+					fadeLyr2PicH := Round( fadeLyr2PicH * (fadeLyr2PicW / Round(fadeLyr2PicW * fadeLyr2Adjust)) )
+					fadeLyr2PicW := Round(fadeLyr2W * fadeLyr2Adjust)
+				} else if (!(fadeLyr2W)) and (fadeLyr2H){
+					fadeLyr2PicW := Round( fadeLyr2PicW * (fadeLyr2PicH / Round(fadeLyr2H * fadeLyr2Adjust)) )
+					fadeLyr2PicH := Round(fadeLyr2H * fadeLyr2Adjust)
+				} else {
+					fadeLyr2PicW := Round(fadeLyr2W * fadeLyr2Adjust)
+					fadeLyr2PicH := Round(fadeLyr2H * fadeLyr3Adjust)	
+				}
 			}
 			GetFadePicPosition(fadeLyr2PicX,fadeLyr2PicY,fadeLyr2X,fadeLyr2Y,fadeLyr2PicW,fadeLyr2PicH,fadeLyr2Pos)
 			; figure out what quadrant the layer 2 image is in, so we know to apply a + or - pad value so the user does not have to
@@ -211,10 +220,7 @@ FadeInStart:
 			fadeLyr2CanvasX := fadeLyr2PicX + fadeLyr2PicPadX , fadeLyr2CanvasY := fadeLyr2PicY + fadeLyr2PicPadY
 			fadeLyr2CanvasW := fadeLyr2PicW, fadeLyr2CanvasH := fadeLyr2PicH
 			pGraphUpd(Fade_G2,fadeLyr2CanvasW,fadeLyr2CanvasH)
-			if ((fadeLyr2Pos = "Stretch and Lose Aspect") or (fadeLyr2Pos = "Stretch and Keep Aspect"))
-				Gdip_Alt_DrawImage(Fade_G2, fadeLyr2Pic, 0, 0, fadeLyr2PicW, fadeLyr2PicH)
-			else
-				Gdip_Alt_DrawImage(Fade_G2, fadeLyr2Pic, 0, 0, fadeLyr2PicW, fadeLyr2PicH, 0, 0, fadeLyr2PicW//fadeLyr2Adjust, fadeLyr2PicH//fadeLyr2Adjust)
+			Gdip_Alt_DrawImage(Fade_G2, fadeLyr2Pic, 0, 0, fadeLyr2PicW, fadeLyr2PicH)
 		}
 
 		%fadeInTransitionAnimation%("in",fadeInDuration)
@@ -394,15 +400,15 @@ FadeOutStart:
 		If lyr1OutFile {
 			GetBGPicPosition(fadeLyr1OutPicXNew,fadeLyr1OutPicYNew,fadeLyr1OutPicWNew,fadeLyr1OutPicHNew,lyr1OutPicW,lyr1OutPicH,fadeLyr1AlignImage)	; get the background pic's new position and size
 			If (fadeLyr1AlignImage = "Stretch and Lose Aspect") {	; 
-				Gdip_Alt_DrawImage(FadeOut_G1, lyr1OutPic, 0, 0, baseScreenWidth+3, baseScreenHeight+3, 0, 0, lyr1OutPicW, lyr1OutPicH)	; adding a few pixels to avoid showing background on some pcs
+				Gdip_Alt_DrawImage(FadeOut_G1, lyr1OutPic, 0, 0, baseScreenWidth+3, baseScreenHeight+3)	; adding a few pixels to avoid showing background on some pcs
 			} Else If (fadeLyr1AlignImage = "Stretch and Keep Aspect" Or fadeLyr1AlignImage = "Center Width" Or fadeLyr1AlignImage = "Center Height" Or fadeLyr1AlignImage = "Align to Bottom Left" Or fadeLyr1AlignImage = "Align to Bottom Right") {
-				Gdip_Alt_DrawImage(FadeOut_G1, lyr1OutPic, fadeLyr1OutPicXNew, fadeLyr1OutPicYNew, fadeLyr1OutPicWNew+1, fadeLyr1OutPicHNew+1, 0, 0, lyr1OutPicW, lyr1OutPicH)
+				Gdip_Alt_DrawImage(FadeOut_G1, lyr1OutPic, fadeLyr1OutPicXNew, fadeLyr1OutPicYNew, fadeLyr1OutPicWNew+1, fadeLyr1OutPicHNew+1)
 			} Else If (fadeLyr1AlignImage = "Center") {	; original image size and aspect
-				Gdip_Alt_DrawImage(FadeOut_G1, lyr1OutPic, fadeLyr1OutPicXNew, fadeLyr1OutPicYNew, lyr1OutPicW+1, lyr1OutPicH+1, 0, 0, lyr1OutPicW, lyr1OutPicH)
+				Gdip_Alt_DrawImage(FadeOut_G1, lyr1OutPic, fadeLyr1OutPicXNew, fadeLyr1OutPicYNew, lyr1OutPicW+1, lyr1OutPicH+1)
 			} Else If (fadeLyr1AlignImage = "Align to Top Right") {	; place the pic so the top right corner matches the screen's top right corner
-				Gdip_Alt_DrawImage(FadeOut_G1, lyr1OutPic, fadeLyr1OutPicXNew, 0,fadeLyr1OutPicWNew+1,fadeLyr1OutPicHNew+1, 0, 0, lyr1OutPicW, lyr1OutPicH)
+				Gdip_Alt_DrawImage(FadeOut_G1, lyr1OutPic, fadeLyr1OutPicXNew, 0,fadeLyr1OutPicWNew+1,fadeLyr1OutPicHNew+1)
 			} Else {	; place the pic so the top left corner matches the screen's top left corner, also the default
-				Gdip_Alt_DrawImage(FadeOut_G1, lyr1OutPic, 0, 0,fadeLyr1OutPicWNew+1,fadeLyr1OutPicHNew+1, 0, 0, lyr1OutPicW, lyr1OutPicH)
+				Gdip_Alt_DrawImage(FadeOut_G1, lyr1OutPic, 0, 0,fadeLyr1OutPicWNew+1,fadeLyr1OutPicHNew+1)
 			}
 		}
 		;Alt_UpdateLayeredWindow(FadeOut_hwnd1, FadeOut_hdc1, fadeOutLyr1CanvasX,fadeOutLyr1CanvasY,fadeOutLyr1CanvasW,fadeOutLyr1CanvasH)
@@ -539,45 +545,56 @@ DetectFadeError:
 Return
 
 
-GetFadePicFile(name,useBkgdPath=false){
-	Global fadeImgPath,dbName,systemName, HLMediaPath, feMedia
-	fadePicPath1 := fadeImgPath . "\" . systemName . "\" . dbName . "\" . name	; rom file
-	fadePicPath2 := fadeImgPath . "\" . systemName . "\_Default\" . name	; system file
-	fadePicPath3 := fadeImgPath . "\_Default\" . name	; global file
-	bkgdPicPath1 := HLMediaPath . "\Backgrounds\" . systemName . "\" . dbName . "\"	; rom file
-	bkgdPicPath2 := HLMediaPath . "\Backgrounds\" . systemName . "\_Default\"	; system file
-	bkgdPicPath3 := HLMediaPath . "\Backgrounds\_Default\"	; global file
+GetFadePicFile(preffix,useBkgdPath=false){
+	Global HLMediaPath,dbName,systemName, HLMediaPath, feMedia, screenRotationAngle, dbCloneOf
+	if (((A_screenWidth < A_screenHeight) and ((screenRotationAngle=0) or (screenRotationAngle=180))) or ((A_screenWidth > A_screenHeight) and ((screenRotationAngle=90) or (screenRotationAngle=270))))
+		vertical:="true"
+	fadePicPath1 := HLMediaPath . "\Fade\" . systemName . "\" . dbName . "\" . preffix	
+	If dbCloneOf
+		fadePicPath2 := HLMediaPath . "\Fade\" . systemName . "\" . dbCloneOf . "\" . preffix
+	If (useBkgdPath){
+		fadePicPath3 := HLMediaPath . "\Backgrounds\" . systemName . "\" . dbName . "\" . preffix
+		If dbCloneOf
+			fadePicPath4 := HLMediaPath . "\Backgrounds\" . systemName . "\" . dbCloneOf . "\" . preffix
+	}
+	If (vertical = "true")
+		fadePicPath5 := HLMediaPath . "\Fade\" . systemName . "\_Default\Vertical" . "\" . preffix
+	Else
+		fadePicPath6 := HLMediaPath . "\Fade\" . systemName . "\_Default\Horizontal" . "\" . preffix
+	fadePicPath7 := HLMediaPath . "\Fade\" . systemName . "\_Default" . "\" . preffix
+	If (useBkgdPath){
+		If (vertical = "true")
+			fadePicPath8 := HLMediaPath . "\Backgrounds\" . systemName . "\_Default\Vertical" . "\" . preffix
+		else
+			fadePicPath9 := HLMediaPath . "\Backgrounds\" . systemName . "\_Default\Horizontal" . "\" . preffix
+		fadePicPath10 := HLMediaPath . "\Backgrounds\" . systemName . "\_Default" . "\" . preffix
+	}
+	If (vertical = "true")
+		fadePicPath11 := HLMediaPath . "\Fade\_Default\Vertical" . "\" . preffix
+	Else
+		fadePicPath12 := HLMediaPath . "\Fade\_Default\Horizontal" . "\" . preffix
+	fadePicPath13 := HLMediaPath . "\Fade\_Default" . "\" . preffix
+	If (useBkgdPath){
+		If (vertical = "true")
+			fadePicPath14 := HLMediaPath . "\Backgrounds\_Default\Vertical" . "\" . preffix
+		else
+			fadePicPath15 := HLMediaPath . "\Backgrounds\_Default\Horizontal" . "\" . preffix
+		fadePicPath16 := HLMediaPath . "\Backgrounds\_Default" . "\" . preffix
+	}
 	fadePicList := []	; initialize array
-	loop, 3 {
-		If !fadePicList[1]
-			fadePicList := GetFadeDirPicFile(name,fadePicPath%a_index%) 
-		If ((useBkgdPath) and (!(fadePicList[1]))){
-			fadePicList := GetFadeDirPicFile(name,bkgdPicPath%a_index%) 
-			If (!(fadePicList[1]))
-			{	if (a_index=1)
-					currentAssetType := "game"
-				else if (a_index=2)
-					currentAssetType := "system"
-				if ((a_index=1) or (a_index=2))
-				{	for index, element in feMedia["Backgrounds"]
-					{   if element.Label
-						{   if (element.AssetType=currentAssetType)
-							{   loop, % element.TotalItems    
-								{    fadePicList.Insert(element["Path" . a_index])
-								}
-							}
-						}
-					}
-				}
+	Loop, 16 {
+		If (fadePicPath%a_index%)
+			{
+			fadePicList := GetFadeDirPicFile(preffix,fadePicPath%a_index%)
+			If (fadePicList[1]) ; if we filled anything in the array, stop here, randomize pics found	, and return
+				{ 	Random, RndmfadePic, 1, % fadePicList.MaxIndex()
+					file := fadePicList[RndmfadePic]
+					Log("GetFadePicFile - Randomized images and Fade " . name . " will use " . file)
+					break
 			}
 		}
-	}	
-	If fadePicList[1]	; if we filled anything in the array, stop here, randomize pics found	, and return
-	{	Random, RndmfadePic, 1, % fadePicList.MaxIndex()
-		file := fadePicList[RndmfadePic]
-		Log("GetFadePicFile - Randomized images and Fade " . name . " will use " . file)
-		Return file
 	}
+	Return file
 }
 
 GetFadeDirPicFile(name,path){
@@ -662,8 +679,10 @@ GetFadeGifFile(name){
 AnimateWindow(Hwnd,Direction,Type,Time=100){
 	Static Activate=0x20000, Center=0x10, Fade=0x80000, Hide=0x10000, Slide=0x40000, RL=0x2, LR=0x1, BT=0x8, TB=0x4
 	hFlags := 0
-	If !Hwnd
-		ScriptError("AnimateWindow: No Hwnd supplied. Do not know what window to animate.")
+	If !Hwnd {
+		Log("AnimateWindow: No Hwnd supplied. Do not know what window to animate.",2)
+		Return
+	}
 	If !Direction
 		ScriptError("AnimateWindow: No direction supplied. Options are In or Out")
 	If !Type
@@ -673,19 +692,26 @@ AnimateWindow(Hwnd,Direction,Type,Time=100){
 		Else hFlags |= %A_LoopField%
 	IfEqual, hFlags, ,Return "Error: Some of the types are invalid"
 	DllCall("AnimateWindow", "uint", Hwnd, "uint", Time, "uint", If Direction="out"?Hide|=hFlags:hFlags)	; adds the Hide type on "out" direction
+	Return
 }
 
 
-fadeOptionsScale(){
-	global
+FadeOptionsScale(){
+	Global
 	OptionScale(fadeLyr3StaticX, fadeXScale)
 	OptionScale(fadeLyr3StaticY, fadeYScale)
+	OptionScale(fadeLyr3StaticW, fadeXScale)
+	OptionScale(fadeLyr3StaticH, fadeYScale)
 	OptionScale(fadeLyr3StaticPicPad, fadeXScale) ;could be Y also
 	OptionScale(fadeLyr3X, fadeXScale)
 	OptionScale(fadeLyr3Y, fadeYScale)
+	OptionScale(fadeLyr3W, fadeXScale)
+	OptionScale(fadeLyr3H, fadeYScale)
 	OptionScale(fadeLyr3PicPad, fadeXScale) ;could be Y also
 	OptionScale(fadeLyr4X, fadeXScale)
 	OptionScale(fadeLyr4Y, fadeYScale)
+	OptionScale(fadeLyr4W, fadeXScale)
+	OptionScale(fadeLyr4H, fadeYScale)
 	OptionScale(fadeLyr4PicPad, fadeXScale)
 	OptionScale(fadeBarWindowX, fadeXScale) ;could be Y also
 	OptionScale(fadeBarWindowY, fadeYScale)
@@ -720,5 +746,5 @@ fadeOptionsScale(){
 	OptionScale(fadeExtractionTimeTextX, fadeXScale)
 	OptionScale(fadeExtractionTimeTextY, fadeYScale)
 	TextOptionScale(fadeExtractionTimeTextOptions,fadeXScale, fadeYScale)
-Return	
+	Return	
 }
