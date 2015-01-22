@@ -1,3 +1,5 @@
+MCRC=D0390B31
+MVersion=1.0.1
 
 ;Alternative Gdip function wrappers with support for graphics rotation
 
@@ -24,6 +26,13 @@ Gdip_Alt_TextToGraphics(pGraphics, Text, Options, Font="Arial", Width="", Height
 		Options := RegExReplace(Options, "i)Y([\-\d\.]+)(p*)", "y" . Y)
 	}
 Return Gdip_TextToGraphics(pGraphics, Text, Options, Font, Width, Height, Measure)
+}
+
+Gdip_Alt_DrawRectangle(pGraphics, pPen, x, y, w, h){
+	Global screenRotationAngle
+	if screenRotationAngle
+		GraphicsCoordUpdate(pGraphics,X,Y)
+Return Gdip_DrawRectangle(pGraphics, pPen, X, Y, W, H)
 }
 
 Gdip_Alt_FillRectangle(pGraphics, pBrush, X, Y, W, H){
