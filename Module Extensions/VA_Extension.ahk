@@ -1,4 +1,6 @@
-﻿
+﻿MCRC=24F6F44
+MVersion=1.0.1
+
 ;Functions to get and handle program specififc volume
 
 ;get volume     
@@ -48,12 +50,13 @@ setMute(ByRef Muted=1, this=0, GuidEventContext="") {
 
 ;program specific volume controls 
 GetVolumeObject(Param)
-{
-    static IID_IASM2 := "{77AA99A0-1BD6-484F-8BC7-2C654C9A9B6F}"
+{    static IID_IASM2 := "{77AA99A0-1BD6-484F-8BC7-2C654C9A9B6F}"
     , IID_IASC2 := "{bfb7ff88-7239-4fc9-8fa2-07c950be9c6d}"
     , IID_ISAV := "{87CE5498-68D6-44E5-9215-6DA47EF883D8}"
+   
+    if (GetOSVersion() < 6)  ; true if xp
+        Return 0
     
-
     ; Turn empty into integer
     if !Param
         Param := 0
