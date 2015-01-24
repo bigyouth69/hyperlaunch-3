@@ -47,6 +47,10 @@
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Emerson Arcadia 2001. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
 						</KEY>
+						<KEY name="LibRetro_AAE" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for AAE. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mame_libretro</DESCRIPTION>
+						</KEY>
 						<KEY name="LibRetro_ALICE" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Matra &amp; Hachette Alice. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
@@ -90,6 +94,10 @@
 						<KEY name="LibRetro_CPC" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Amstrad CPC. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_DRAG64" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Dragon 64. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_DS" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
@@ -159,6 +167,14 @@
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for MAME. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mame_libretro</DESCRIPTION>
 						</KEY>
+						<KEY name="LibRetro_MO5" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Thomson MO5. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>	
+						<KEY name="LibRetro_MSDOS" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Microsoft MS-DOS. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is dosbox_libretro</DESCRIPTION>
+						</KEY>
 						<KEY name="LibRetro_MSX" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Microsoft MSX. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is bluemsx_libretro</DESCRIPTION>
@@ -222,6 +238,10 @@
 						<KEY name="LibRetro_ODYS2" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Magnavox Odyssey 2. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_P64" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Pecom 64. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
 						</KEY>
 						<KEY name="LibRetro_PCE" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
@@ -331,6 +351,18 @@
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for RCA Studio II. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
 						</KEY>
+						<KEY name="LibRetro_STV" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Sega ST-V. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mame_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_SV328" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Spectravision SV-328. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+						<KEY name="LibRetro_SV8K" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Bandai Super Vision 8000. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
 						<KEY name="LibRetro_SVMU" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Sega VMU. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
@@ -367,6 +399,10 @@
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for VTech CreatiVision. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
 						</KEY>
+						<KEY name="LibRetro_WIN3X" required="false" nullable="true">
+							<KEYTYPE>FileNameNoExt</KEYTYPE>
+							<DESCRIPTION>The name of the dll for Microsoft Windows 3.x. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is dosbox_libretro</DESCRIPTION>
+						</KEY>
 						<KEY name="LibRetro_WSAN" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Bandai WonderSwan. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mednafen_wswan_libretro</DESCRIPTION>
@@ -378,6 +414,31 @@
 						<KEY name="LibRetro_ZXSPEC" required="false" nullable="true">
 							<KEYTYPE>FileNameNoExt</KEYTYPE>
 							<DESCRIPTION>The name of the dll for Sinclair ZX Spectrum. (Do NOT include the .dll extension.) This file should be in the same folder as your emulator or the folder you define in the 'LibRetroFolder' setting. Default is mess_libretro</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="Network" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Enable_Network_Play" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, when this game is launched, will give an option if you want to play Single or Multi-Player.</DESCRIPTION>
+						</KEY>
+						<KEY name="NetPlay_Nickname" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Sets the Nickname you will appear as in Multi-Player.</DESCRIPTION>
+						</KEY>
+						<KEY name="Default_Server_IP" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>If you always connect to the same server as a client, put the IP address here. If no IP is entered on the GUI, this is the IP used.</DESCRIPTION>
+						</KEY>
+						<KEY name="Default_Server_Port" required="false" nullable="true" minLength="0" maxLength="65535">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>If you always connect to the same server as a client, put the Port here. Servers must make sure this port is forwarded through all firewalls.</DESCRIPTION>
+						</KEY>
+						<KEY name="Get_WAN_IP" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Will retrieve your WAN IP automatically, which is different than your LAN IP when behind a router. If you get a windows firewall prompt to allow HyperLaunch or Autohotkey to talk out, please allow it. You only really need this enabled if you are acting as a server and need to tell your clients your IP. Default is true.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>
@@ -416,6 +477,7 @@
 								<VALUE>glide64</VALUE>
 								<VALUE>gln64</VALUE>
 								<VALUE>rice</VALUE>
+								<VALUE>angrylion</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Mupen_RSP_Plugin" required="false" nullable="false">
@@ -516,6 +578,109 @@
 								<VALUE>fullspeed</VALUE>
 							</VALUES>
 						</KEY>
+						<KEY name="Mupen_Resolution" required="false" nullable="false">
+                            <KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set this to the resolution you would like to use for the mupen core.</DESCRIPTION>
+							<VALUES>
+									<VALUE>640x480</VALUE>
+									<VALUE>320x200</VALUE>
+									<VALUE>320x240</VALUE>
+									<VALUE>400x256</VALUE>
+									<VALUE>512x384</VALUE>
+									<VALUE>640x200</VALUE>
+									<VALUE>640x350</VALUE>
+									<VALUE>640x400</VALUE>
+									<VALUE>800x600</VALUE>
+									<VALUE>960x720</VALUE>
+									<VALUE>856x480</VALUE>
+									<VALUE>512x256</VALUE>
+									<VALUE>1024x768</VALUE>
+									<VALUE>1280x1024</VALUE>
+									<VALUE>1600x1200</VALUE>
+									<VALUE>400x300</VALUE>
+									<VALUE>1152x864</VALUE>
+									<VALUE>1280x960</VALUE>
+									<VALUE>1600x1024</VALUE>
+									<VALUE>1920x1440</VALUE>
+									<VALUE>2048x1536</VALUE>
+									<VALUE>2048x2048</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_Polygon_Offset_Factor" required="false" nullable="false">
+								<KEYTYPE>String</KEYTYPE>
+								<DESCRIPTION>Set this to the polygon offset factor you would like to use for the mupen core.</DESCRIPTION>
+								<VALUES>
+										<VALUE>-3.0</VALUE>
+										<VALUE>-3.5</VALUE>
+										<VALUE>-4.0</VALUE>
+										<VALUE>-4.5</VALUE>
+										<VALUE>-5.0</VALUE>
+										<VALUE>5.0</VALUE>
+										<VALUE>4.5</VALUE>
+										<VALUE>4.0</VALUE>
+										<VALUE>3.5</VALUE>
+										<VALUE>3.0</VALUE>
+										<VALUE>2.5</VALUE>
+										<VALUE>2.0</VALUE>
+										<VALUE>1.5</VALUE>
+										<VALUE>1.0</VALUE>
+										<VALUE>0.5</VALUE>
+										<VALUE>0.0</VALUE>
+										<VALUE>-0.5</VALUE>
+										<VALUE>-1.0</VALUE>
+										<VALUE>-1.5</VALUE>
+										<VALUE>-2.0</VALUE>
+										<VALUE>-2.5</VALUE>
+								</VALUES>
+						</KEY>
+						<KEY name="Mupen_Polygon_Offset_Units" required="false" nullable="false">
+								<KEYTYPE>String</KEYTYPE>
+								<DESCRIPTION>Set this to the polygon offset units you would like to use for the mupen core.</DESCRIPTION>
+								<VALUES>
+										<VALUE>-3.0</VALUE>
+										<VALUE>-3.5</VALUE>
+										<VALUE>-4.0</VALUE>
+										<VALUE>-4.5</VALUE>
+										<VALUE>-5.0</VALUE>
+										<VALUE>5.0</VALUE>
+										<VALUE>4.5</VALUE>
+										<VALUE>4.0</VALUE>
+										<VALUE>3.5</VALUE>
+										<VALUE>3.0</VALUE>
+										<VALUE>2.5</VALUE>
+										<VALUE>2.0</VALUE>
+										<VALUE>1.5</VALUE>
+										<VALUE>1.0</VALUE>
+										<VALUE>0.5</VALUE>
+										<VALUE>0.0</VALUE>
+										<VALUE>-0.5</VALUE>
+										<VALUE>-1.0</VALUE>
+										<VALUE>-1.5</VALUE>
+										<VALUE>-2.0</VALUE>
+										<VALUE>-2.5</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_VI_Overlay" required="false" nullable="false">
+								<KEYTYPE>Boolean</KEYTYPE>
+								<DESCRIPTION>If true, enables VI overlay used by Angrylion.</DESCRIPTION>
+								<VALUES>
+										<VALUE description="true">enabled</VALUE>
+										<VALUE description="false">disabled</VALUE>
+								</VALUES>
+						</KEY>
+						<KEY name="Mupen_Analog_Deadzone" required="false" nullable="false">
+								<KEYTYPE>String</KEYTYPE>
+								<DESCRIPTION>Set this to the analog deadzone you would like to use for the mupen core.</DESCRIPTION>
+								<VALUES>
+										<VALUE>15</VALUE>
+										<VALUE>20</VALUE>
+										<VALUE>25</VALUE>
+										<VALUE>30</VALUE>
+										<VALUE>0</VALUE>
+										<VALUE>5</VALUE>
+										<VALUE>10</VALUE>
+								</VALUES>
+						</KEY>
 					</KEYS>
 				</SECTION>
 				<SECTION name="%RomName%" required="false">
@@ -529,6 +694,7 @@
 								<VALUE>glide64</VALUE>
 								<VALUE>gln64</VALUE>
 								<VALUE>rice</VALUE>
+								<VALUE>angrylion</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="Mupen_RSP_Plugin" required="false" nullable="false">
@@ -627,6 +793,336 @@
 							<VALUES>
 								<VALUE>original</VALUE>
 								<VALUE>fullspeed</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_Resolution" required="false" nullable="false">
+                            <KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Set this to the resolution you would like to use for the mupen core.</DESCRIPTION>
+							<VALUES>
+									<VALUE>640x480</VALUE>
+									<VALUE>320x200</VALUE>
+									<VALUE>320x240</VALUE>
+									<VALUE>400x256</VALUE>
+									<VALUE>512x384</VALUE>
+									<VALUE>640x200</VALUE>
+									<VALUE>640x350</VALUE>
+									<VALUE>640x400</VALUE>
+									<VALUE>800x600</VALUE>
+									<VALUE>960x720</VALUE>
+									<VALUE>856x480</VALUE>
+									<VALUE>512x256</VALUE>
+									<VALUE>1024x768</VALUE>
+									<VALUE>1280x1024</VALUE>
+									<VALUE>1600x1200</VALUE>
+									<VALUE>400x300</VALUE>
+									<VALUE>1152x864</VALUE>
+									<VALUE>1280x960</VALUE>
+									<VALUE>1600x1024</VALUE>
+									<VALUE>1920x1440</VALUE>
+									<VALUE>2048x1536</VALUE>
+									<VALUE>2048x2048</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_Polygon_Offset_Factor" required="false" nullable="false">
+								<KEYTYPE>String</KEYTYPE>
+								<DESCRIPTION>Set this to the polygon offset factor you would like to use for the mupen core.</DESCRIPTION>
+								<VALUES>
+										<VALUE>-3.0</VALUE>
+										<VALUE>-3.5</VALUE>
+										<VALUE>-4.0</VALUE>
+										<VALUE>-4.5</VALUE>
+										<VALUE>-5.0</VALUE>
+										<VALUE>5.0</VALUE>
+										<VALUE>4.5</VALUE>
+										<VALUE>4.0</VALUE>
+										<VALUE>3.5</VALUE>
+										<VALUE>3.0</VALUE>
+										<VALUE>2.5</VALUE>
+										<VALUE>2.0</VALUE>
+										<VALUE>1.5</VALUE>
+										<VALUE>1.0</VALUE>
+										<VALUE>0.5</VALUE>
+										<VALUE>0.0</VALUE>
+										<VALUE>-0.5</VALUE>
+										<VALUE>-1.0</VALUE>
+										<VALUE>-1.5</VALUE>
+										<VALUE>-2.0</VALUE>
+										<VALUE>-2.5</VALUE>
+								</VALUES>
+						</KEY>
+						<KEY name="Mupen_Polygon_Offset_Units" required="false" nullable="false">
+								<KEYTYPE>String</KEYTYPE>
+								<DESCRIPTION>Set this to the polygon offset units you would like to use for the mupen core.</DESCRIPTION>
+								<VALUES>
+										<VALUE>-3.0</VALUE>
+										<VALUE>-3.5</VALUE>
+										<VALUE>-4.0</VALUE>
+										<VALUE>-4.5</VALUE>
+										<VALUE>-5.0</VALUE>
+										<VALUE>5.0</VALUE>
+										<VALUE>4.5</VALUE>
+										<VALUE>4.0</VALUE>
+										<VALUE>3.5</VALUE>
+										<VALUE>3.0</VALUE>
+										<VALUE>2.5</VALUE>
+										<VALUE>2.0</VALUE>
+										<VALUE>1.5</VALUE>
+										<VALUE>1.0</VALUE>
+										<VALUE>0.5</VALUE>
+										<VALUE>0.0</VALUE>
+										<VALUE>-0.5</VALUE>
+										<VALUE>-1.0</VALUE>
+										<VALUE>-1.5</VALUE>
+										<VALUE>-2.0</VALUE>
+										<VALUE>-2.5</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Mupen_VI_Overlay" required="false" nullable="false">
+								<KEYTYPE>Boolean</KEYTYPE>
+								<DESCRIPTION>If true, enables VI overlay used by Angrylion.</DESCRIPTION>
+								<VALUES>
+										<VALUE description="true">enabled</VALUE>
+										<VALUE description="false">disabled</VALUE>
+								</VALUES>
+						</KEY>
+						<KEY name="Mupen_Analog_Deadzone" required="false" nullable="false">
+								<KEYTYPE>String</KEYTYPE>
+								<DESCRIPTION>Set this to the analog deadzone you would like to use for the mupen core.</DESCRIPTION>
+								<VALUES>
+										<VALUE>15</VALUE>
+										<VALUE>20</VALUE>
+										<VALUE>25</VALUE>
+										<VALUE>30</VALUE>
+										<VALUE>0</VALUE>
+										<VALUE>5</VALUE>
+										<VALUE>10</VALUE>
+								</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="Nintendo Entertainment System" required="false">
+			<INITYPE>System</INITYPE>
+			<STANDALONE>false</STANDALONE>
+			<SECTIONS>
+					<SECTION name="%SystemName%" required="false">
+							<SECTIONTYPE>System</SECTIONTYPE>
+							<KEYS>
+							</KEYS>
+					</SECTION>
+					<SECTION name="Nestopia" required="false">
+							<SECTIONTYPE>Global</SECTIONTYPE>
+							<KEYS>
+									<KEY name="Nestopia_Blargg_NTSC_Filter" required="false" nullable="false">
+											<KEYTYPE>String</KEYTYPE>
+											<DESCRIPTION>Set this to the blargg NTSC filter you would like to use for this system.</DESCRIPTION>
+											<VALUES>
+													<VALUE>disabled</VALUE>
+													<VALUE>composite</VALUE>
+													<VALUE>svideo</VALUE>
+													<VALUE>rgb</VALUE>
+											</VALUES>
+									</KEY>
+									<KEY name="Nestopia_Palette" required="false" nullable="false">
+											<KEYTYPE>String</KEYTYPE>
+											<DESCRIPTION>Set this to the palette you would like to use for this system.</DESCRIPTION>
+											<VALUES>
+													<VALUE>canonical</VALUE>
+													<VALUE>consumer</VALUE>
+													<VALUE>alternative</VALUE>
+													<VALUE>rgb</VALUE>
+											</VALUES>
+									</KEY>
+									<KEY name="Nestopia_Remove_Sprites_Limit" required="false" nullable="false">
+											<KEYTYPE>Boolean</KEYTYPE>
+											<DESCRIPTION>Set this to true to remove the sprites per-scanline limit for this system.</DESCRIPTION>
+											<VALUES>
+													<VALUE description="false">disabled</VALUE>
+													<VALUE description="true">enabled</VALUE>
+											</VALUES>
+									</KEY>
+							</KEYS>
+					</SECTION>
+					<SECTION name="%RomName%" required="false">
+							<SECTIONTYPE>Rom</SECTIONTYPE>
+							<GROUPS>
+									<GROUP name="Nestopia"/>
+							</GROUPS>
+							<KEYS>
+									<KEY name="Nestopia_Blargg_NTSC_Filter" required="false" nullable="false" group="Nestopia">
+											<KEYTYPE>String</KEYTYPE>
+											<DESCRIPTION>Set this to the blargg NTSC filter you would like to use for this rom.</DESCRIPTION>
+											<VALUES>
+													<VALUE>disabled</VALUE>
+													<VALUE>composite</VALUE>
+													<VALUE>svideo</VALUE>
+													<VALUE>rgb</VALUE>
+											</VALUES>
+									</KEY>
+									<KEY name="Nestopia_Palette" required="false" nullable="false" group="Nestopia">
+											<KEYTYPE>String</KEYTYPE>
+											<DESCRIPTION>Set this to the palette you would like to use for this rom.</DESCRIPTION>
+											<VALUES>
+													<VALUE>canonical</VALUE>
+													<VALUE>consumer</VALUE>
+													<VALUE>alternative</VALUE>
+													<VALUE>rgb</VALUE>
+											</VALUES>
+									</KEY>
+									<KEY name="Nestopia_Remove_Sprites_Limit" required="false" nullable="false" group="Nestopia">
+											<KEYTYPE>Boolean</KEYTYPE>
+											<DESCRIPTION>Set this to true to remove the sprites per-scanline limit for this rom.</DESCRIPTION>
+											<VALUES>
+													<VALUE description="false">disabled</VALUE>
+													<VALUE description="true">enabled</VALUE>
+											</VALUES>
+									</KEY>
+							</KEYS>
+					</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="Atari Lynx" required="false">
+		<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="%RomName%" required="false">
+					<GROUPS>
+							<GROUP name="Handy"/>
+					</GROUPS>
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Handy_Rotation" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Screen rotation for vertically oriented games. Does not rotate your desktop.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">None</VALUE>
+								<VALUE description="Rotate Left">90</VALUE>
+								<VALUE description="Rotate Right">240</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+		<INIFILE name="Sony PlayStation" required="false">
+		<INITYPE>System</INITYPE>
+			<SECTIONS>
+				<SECTION name="%RomName%" required="false">
+					<GROUPS>
+							<GROUP name="Mednafen"/>
+					</GROUPS>
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="PSX_CD_Image_Cache" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Preloads the entire CD image into memory at startup. It causes a small delay at start-up but alleviates small hiccups that can be caused by emulated CD access. This setting is recommended unless you have a system with very low memory.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Enabled">enabled</VALUE>
+								<VALUE description="Disabled">disabled</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="PSX_Memcard_Handling" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Sets how user data and memory cards are handled, either using libretro's built-in functions or Mednafen's. Unless you have a specific reason to change this, it is best to just allow libretro to handle data on its own.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="libretro">libretro</VALUE>
+								<VALUE description="Mednafen">mednafen</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="PSX_Dualshock_Analog_Toggle" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>This setting enables the Mode button in the DualShock controller, otherwise analogs are always enabled. Toggle the analog mode by pressing Select + Start + L1 + L2 + R1 + R2 at the same time.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Enabled">enabled</VALUE>
+								<VALUE description="Disabled">disabled</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="P1_Controller_Type" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Controller type for Player 1 to use for this game. Defaults to DualShock.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="PS1 Joypad">1</VALUE>
+								<VALUE description="DualAnalog">261</VALUE>
+								<VALUE description="DualShock">517</VALUE>
+								<VALUE description="FlightStick">773</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="P2_Controller_Type" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Controller type for Player 2 to use for this game. Defaults to DualShock.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="PS1 Joypad">1</VALUE>
+								<VALUE description="DualAnalog">261</VALUE>
+								<VALUE description="DualShock">517</VALUE>
+								<VALUE description="FlightStick">773</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="P3_Controller_Type" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Controller type for Player 3 to use for this game. Defaults to DualShock.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="PS1 Joypad">1</VALUE>
+								<VALUE description="DualAnalog">261</VALUE>
+								<VALUE description="DualShock">517</VALUE>
+								<VALUE description="FlightStick">773</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="P4_Controller_Type" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Controller type for Player 4 to use for this game. Defaults to DualShock.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="PS1 Joypad">1</VALUE>
+								<VALUE description="DualAnalog">261</VALUE>
+								<VALUE description="DualShock">517</VALUE>
+								<VALUE description="FlightStick">773</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="P5_Controller_Type" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Controller type for Player 5 to use for this game. Defaults to DualShock.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="PS1 Joypad">1</VALUE>
+								<VALUE description="DualAnalog">261</VALUE>
+								<VALUE description="DualShock">517</VALUE>
+								<VALUE description="FlightStick">773</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="P6_Controller_Type" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Controller type for Player 6 to use for this game. Defaults to DualShock.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="PS1 Joypad">1</VALUE>
+								<VALUE description="DualAnalog">261</VALUE>
+								<VALUE description="DualShock">517</VALUE>
+								<VALUE description="FlightStick">773</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="P7_Controller_Type" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Controller type for Player 7 to use for this game. Defaults to DualShock.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="PS1 Joypad">1</VALUE>
+								<VALUE description="DualAnalog">261</VALUE>
+								<VALUE description="DualShock">517</VALUE>
+								<VALUE description="FlightStick">773</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="P8_Controller_Type" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Controller type for Player 8 to use for this game. Defaults to DualShock.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="PS1 Joypad">1</VALUE>
+								<VALUE description="DualAnalog">261</VALUE>
+								<VALUE description="DualShock">517</VALUE>
+								<VALUE description="FlightStick">773</VALUE>
 							</VALUES>
 						</KEY>
 					</KEYS>

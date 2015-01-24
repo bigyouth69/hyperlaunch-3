@@ -2,11 +2,11 @@ MEmu = RetroArch
 MEmuV =  v12-25-2014 Nightly
 MURL = http://themaister.net/retroarch.html
 MAuthor = djvj,zerojay
-MVersion = 2.2.0
-MCRC = 9C0576F0
-iCRC = B33E9394
+MVersion = 2.2.1
+MCRC = CE967CAD
+iCRC = 51E752D3
 MID = 635038268922229162
-MSystem = "Amstrad CPC","Amstrad GX4000","APF Imagination Machine","Atari 2600","Atari 5200","Atari 7800","Atari Jaguar","Atari Lynx","Atari ST","Bally Astrocade","Bandai Wonderswan","Bandai Wonderswan Color","Casio PV-1000","Casio PV-2000","ColecoVision","Commodore Amiga","Creatronic Mega Duck","Emerson Arcadia 2001","Entex Adventure Vision","Epoch Game Pocket Computer","Epoch Super Cassette Vision","Exidy Sorcerer","Fairchild Channel F","Final Burn Alpha","Funtech Super Acan","GCE Vectrex","Hartung Game Master","JungleTac Sport Vii","MAME","Magnavox Odyssey 2","Microsoft MSX","Microsoft MSX2","Matra & Hachette Alice","Mattel Aquarius","NEC PC Engine","NEC PC Engine-CD","NEC PC-FX","NEC TurboGrafx-16","NEC SuperGrafx","NEC TurboGrafx-CD","Nintendo 64","Nintendo Arcade Systems","Nintendo DS","Nintendo Entertainment System","Nintendo Famicom","Nintendo Famicom Disk System","Nintendo Game Boy","Nintendo Game Boy Color","Nintendo Game Boy Japan","Nintendo Game Boy Advance","Nintendo Super Game Boy","Nintendo Pokemon Mini","Nintendo Virtual Boy","Nintendo Super Famicom","Nintendo Super Famicom Satellaview","Panasonic 3DO","Philips CD-i","Philips Videopac","Sega 32X","Sega SC-3000","Sega SG-1000","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","Sega Pico","Sega VMU","Sinclair ZX Spectrum","Sony PlayStation","Sony PocketStation","Sony PSP","Sord M5","Sega Saturn","Sega SG-1000","SNK Neo Geo","SNK Neo Geo MVS","SNK Neo Geo AES","SNK Neo Geo Pocket","SNK Neo Geo CD","SNK Neo Geo Pocket Color","Super Nintendo Entertainment System","Tandy TRS-80 Color Computer 3","Texas Instruments TI 99-4A","Tomy Tutor","VTech CreatiVision","Watara Supervision"
+MSystem = "AAE","Amstrad CPC","Amstrad GX4000","APF Imagination Machine","Atari 2600","Atari 5200","Atari 7800","Atari Jaguar","Atari Lynx","Atari ST","Bally Astrocade","Bandai Super Vision 8000","Bandai Wonderswan","Bandai Wonderswan Color","Casio PV-1000","Casio PV-2000","ColecoVision","Commodore Amiga","Creatronic Mega Duck","Dragon 64","Emerson Arcadia 2001","Entex Adventure Vision","Epoch Game Pocket Computer","Epoch Super Cassette Vision","Exidy Sorcerer","Fairchild Channel F","Final Burn Alpha","Funtech Super Acan","GamePark 32","GCE Vectrex","Hartung Game Master","JungleTac Sport Vii","MAME","Magnavox Odyssey 2","Microsoft MSX","Microsoft MSX2","Matra & Hachette Alice","Mattel Aquarius","Mattel Intellivision","NEC PC Engine","NEC PC Engine-CD","NEC PC-FX","NEC TurboGrafx-16","NEC SuperGrafx","NEC TurboGrafx-CD","Nintendo 64","Nintendo Arcade Systems","Nintendo DS","Nintendo Entertainment System","Nintendo Famicom","Nintendo Famicom Disk System","Nintendo Game Boy","Nintendo Game Boy Color","Nintendo Game Boy Japan","Nintendo Game Boy Advance","Nintendo Super Game Boy","Nintendo Pokemon Mini","Nintendo Virtual Boy","Nintendo Super Famicom","Nintendo Super Famicom Satellaview","Panasonic 3DO","Pecom 64","Philips CD-i","Philips Videopac","RCA Studio II","Sega 32X","Sega SC-3000","Sega SG-1000","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","Sega Pico","Sega Saturn","Sega Saturn Japan","Sega VMU","Sega ST-V","Sinclair ZX Spectrum","Sony PlayStation","Sony PocketStation","Sony PSP","Sord M5","SNK Neo Geo","SNK Neo Geo MVS","SNK Neo Geo AES","SNK Neo Geo Pocket","SNK Neo Geo CD","SNK Neo Geo Pocket Color","Spectravideo SV-328","Super Nintendo Entertainment System","Tandy TRS-80 Color Computer 3","Texas Instruments TI 99-4A","Thomson MO5","Tomy Tutor","VTech CreatiVision","Watara Supervision"
 ;----------------------------------------------------------------------------
 ; Notes:
 ; If the emu doesn't load and you get no error, usually this means the LibRetro DLL is not working!
@@ -48,7 +48,7 @@ BezelGUI()
 FadeInStart()
 
 ; This object controls how the module reacts to different systems. RetroArch can play a lot of systems, but needs to know what system you want to run, so this module has to adapt.
-mType := Object("Amstrad CPC","LibRetro_CPC","Amstrad GX4000","LibRetro_GX4K","APF Imagination Machine","LibRetro_APF","Atari 2600","LibRetro_2600","Atari 5200","LibRetro_5200","Atari 7800","LibRetro_7800","Atari Jaguar","LibRetro_JAG","Atari Lynx","LibRetro_LYNX","Atari ST","LibRetro_ST","Bally Astrocade","LibRetro_BAST","Bandai Wonderswan","LibRetro_WSAN","Bandai Wonderswan Color","LibRetro_WSANC","Casio PV-1000","LibRetro_CAS1K","Casio PV-2000","LibRetro_CAS2K","ColecoVision","LibRetro_COLEC","Commodore Amiga","LibRetro_PUAE","Creatronic Mega Duck","LibRetro_DUCK","Emerson Arcadia 2001","LibRetro_A2001","Entex Adventure Vision","LibRetro_AVISION","Epoch Game Pocket Computer","LibRetro_GPCKET","Epoch Super Cassette Vision","LibRetro_SCV","Exidy Sorcerer","LibRetro_SORCR","Fairchild Channel F","LibRetro_CHANF","Final Burn Alpha","LibRetro_FBA","Funtech Super Acan","LibRetro_SACAN","GamePark 32","LibRetro_GP32","GCE Vectrex","LibRetro_VECTX","Hartung Game Master","LibRetro_GMASTR","JungleTac Sport Vii","LibRetro_SPORTV","MAME","LibRetro_MAME","Magnavox Odyssey 2","LibRetro_ODYS2","Mattel Aquarius","LibRetro_AQUA","Mattel Intellivision","LibRetro_INTV","MGT Sam Coupe","LibRetro_SAMCP","Microsoft MSX","LibRetro_MSX","Microsoft MSX2","LibRetro_MSX2","Matra & Hachette Alice","LibRetro_ALICE","NEC PC Engine","LibRetro_PCE","NEC PC Engine-CD","LibRetro_PCECD","NEC PC-FX","LibRetro_PCFX","NEC SuperGrafx","LibRetro_SGFX","NEC TurboGrafx-16","LibRetro_TG16","NEC TurboGrafx-CD","LibRetro_TGCD","Nintendo 64","LibRetro_N64","Nintendo Arcade Systems","LibRetro_NINARC","Nintendo DS","LibRetro_DS","Nintendo Entertainment System","LibRetro_NES","Nintendo Famicom","LibRetro_NFAM","Nintendo Famicom Disk System","LibRetro_NFDS","Nintendo Game Boy","LibRetro_GB","Nintendo Game Boy Color","LibRetro_GBC","Nintendo Game Boy Japan","LibRetro_GBJ","Nintendo Game Boy Advance","LibRetro_GBA","Nintendo Pokemon Mini","LibRetro_POKE","Nintendo Super Famicom","LibRetro_NSF","Nintendo Super Famicom Satellaview","LibRetro_NSFS","Nintendo Super Game Boy","LibRetro_SGB","Nintendo Virtual Boy","LibRetro_NVB","Panasonic 3DO","LibRetro_3DO","Philips CD-i","LibRetro_CDI","Philips Videopac","LibRetro_PVID","RCA Studio II","LibRetro_STUD2","SCUMMVM","LibRetro_SCUMM","Sega 32X","LibRetro_32X","Sega CD","LibRetro_SCD","Sega Game Gear","LibRetro_GG","Sega Genesis","LibRetro_GEN","Sega Mega Drive","LibRetro_GEN","Sega Master System","LibRetro_SMS","Sega Pico","LibRetro_PICO","Sega VMU","LibRetro_SVMU","Sony PlayStation","LibRetro_PSX","Sony PocketStation","LibRetro_POCKS","Sony PSP","LibRetro_PSP","Sega Saturn","LibRetro_SAT","Sega SG-1000","LibRetro_SG1K","Sega SC-3000","LibRetro_SC3K","SNK Neo Geo","LibRetro_NEO","SNK Neo Geo AES","LibRetro_NEOAES","SNK Neo Geo Pocket","LibRetro_NGP","SNK Neo Geo Pocket Color","LibRetro_NGPC","SNK Neo Geo CD","LibRetro_NEOCD","Sord M5","LibRetro_SORD","Super Nintendo Entertainment System","LibRetro_SNES","Sinclair ZX Spectrum","LibRetro_SPECZX","Tandy TRS-80 Color Computer 3","LibRetro_TRS80","Texas Instruments TI 99-4A","LibRetro_TI99","Tomy Tutor","LibRetro_TOMY","VTech CreatiVision","LibRetro_VTECH","Watara Supervision","LibRetro_SUPRV")
+mType := Object("AAE","LibRetro_AAE","Amstrad CPC","LibRetro_CPC","Amstrad GX4000","LibRetro_GX4K","APF Imagination Machine","LibRetro_APF","Atari 2600","LibRetro_2600","Atari 5200","LibRetro_5200","Atari 7800","LibRetro_7800","Atari Jaguar","LibRetro_JAG","Atari Lynx","LibRetro_LYNX","Atari ST","LibRetro_ST","Bally Astrocade","LibRetro_BAST","Bandai Super Vision 8000","LibRetro_SV8K","Bandai Wonderswan","LibRetro_WSAN","Bandai Wonderswan Color","LibRetro_WSANC","Casio PV-1000","LibRetro_CAS1K","Casio PV-2000","LibRetro_CAS2K","ColecoVision","LibRetro_COLEC","Commodore Amiga","LibRetro_PUAE","Creatronic Mega Duck","LibRetro_DUCK","Dragon 64","LibRetro_DRAG64","Emerson Arcadia 2001","LibRetro_A2001","Entex Adventure Vision","LibRetro_AVISION","Epoch Game Pocket Computer","LibRetro_GPCKET","Epoch Super Cassette Vision","LibRetro_SCV","Exidy Sorcerer","LibRetro_SORCR","Fairchild Channel F","LibRetro_CHANF","Final Burn Alpha","LibRetro_FBA","Funtech Super Acan","LibRetro_SACAN","GamePark 32","LibRetro_GP32","GCE Vectrex","LibRetro_VECTX","Hartung Game Master","LibRetro_GMASTR","JungleTac Sport Vii","LibRddetro_SPORTV","MAME","LibRetro_MAME","Magnavox Odyssey 2","LibRetro_ODYS2","Mattel Aquarius","LibRetro_AQUA","Mattel Intellivision","LibRetro_INTV","MGT Sam Coupe","LibRetro_SAMCP","Microsoft MS-DOS","LibRetro_MSDOS","Microsoft MSX","LibRetro_MSX","Microsoft MSX2","LibRetro_MSX2","Microsoft Windows 3.x","LibRetro_WIN3X","Matra & Hachette Alice","LibRetro_ALICE","NEC PC Engine","LibRetro_PCE","NEC PC Engine-CD","LibRetro_PCECD","NEC PC-FX","LibRetro_PCFX","NEC SuperGrafx","LibRetro_SGFX","NEC TurboGrafx-16","LibRetro_TG16","NEC TurboGrafx-CD","LibRetro_TGCD","Nintendo 64","LibRetro_N64","Nintendo Arcade Systems","LibRetro_NINARC","Nintendo DS","LibRetro_DS","Nintendo Entertainment System","LibRetro_NES","Nintendo Famicom","LibRetro_NFAM","Nintendo Famicom Disk System","LibRetro_NFDS","Nintendo Game Boy","LibRetro_GB","Nintendo Game Boy Color","LibRetro_GBC","Nintendo Game Boy Japan","LibRetro_GBJ","Nintendo Game Boy Advance","LibRetro_GBA","Nintendo Pokemon Mini","LibRetro_POKE","Nintendo Super Famicom","LibRetro_NSF","Nintendo Super Famicom Satellaview","LibRetro_NSFS","Nintendo Super Game Boy","LibRetro_SGB","Nintendo Virtual Boy","LibRetro_NVB","Panasonic 3DO","LibRetro_3DO","Pecom 64","LibRetro_P64","Philips CD-i","LibRetro_CDI","Philips Videopac","LibRetro_PVID","RCA Studio II","LibRetro_STUD2","SCUMMVM","LibRetro_SCUMM","Sega 32X","LibRetro_32X","Sega CD","LibRetro_SCD","Sega Game Gear","LibRetro_GG","Sega Genesis","LibRetro_GEN","Sega Mega Drive","LibRetro_GEN","Sega Master System","LibRetro_SMS","Sega Pico","LibRetro_PICO","Sega VMU","LibRetro_SVMU","Sony PlayStation","LibRetro_PSX","Sony PocketStation","LibRetro_POCKS","Sony PSP","LibRetro_PSP","Sega Saturn","LibRetro_SAT","Sega Saturn Japan","LibRetro_SAT","Sega SG-1000","LibRetro_SG1K","Sega SC-3000","LibRetro_SC3K","Sega ST-V","LibRetro_STV","SNK Neo Geo","LibRetro_NEO","SNK Neo Geo AES","LibRetro_NEOAES","SNK Neo Geo Pocket","LibRetro_NGP","SNK Neo Geo Pocket Color","LibRetro_NGPC","SNK Neo Geo CD","LibRetro_NEOCD","Sord M5","LibRetro_SORD","Spectravideo SV-328","LibRetro_SV328","Super Nintendo Entertainment System","LibRetro_SNES","Sinclair ZX Spectrum","LibRetro_SPECZX","Tandy TRS-80 Color Computer 3","LibRetro_TRS80","Texas Instruments TI 99-4A","LibRetro_TI99","Thomson MO5","LibRetro_MO5","Tomy Tutor","LibRetro_TOMY","VTech CreatiVision","LibRetro_VTECH","Watara Supervision","LibRetro_SUPRV")
 ident := mType[systemName]	; search object for the systemName identifier Retroarch uses for its cores
 If !ident
 	ScriptError("Your systemName is: " . systemName . "`nIt is not one of the known supported systems for this " . MEmu . " module: " . moduleName)
@@ -65,6 +65,7 @@ LibRetro_7800 := IniReadCheck(settingsFile, "Settings", "LibRetro_7800","prosyst
 LibRetro_32X := IniReadCheck(settingsFile, "Settings", "LibRetro_32X","picodrive_libretro",,1)	; picodrive is the 32x core, not genesis plus
 LibRetro_3DO := IniReadCheck(settingsFile, "Settings", "LibRetro_3DO","4do_libretro",,1)
 LibRetro_A2001 := IniReadCheck(settingsFile, "Settings", "LibRetro_A2001","mess_libretro",,1)
+LibRetro_AAE := IniReadCheck(settingsFile, "Settings", "LibRetro_AAE","mame_libretro",,1)
 LibRetro_ALICE := IniReadCheck(settingsFile, "Settings", "LibRetro_ALICE","mess_libretro",,1)
 LibRetro_APF := IniReadCheck(settingsFile, "Settings", "LibRetro_APF","mess_libretro",,1)
 LibRetro_AQUA := IniReadCheck(settingsFile, "Settings", "LibRetro_AQUA","mess_libretro",,1)
@@ -76,6 +77,7 @@ LibRetro_CDI := IniReadCheck(settingsFile, "Settings", "LibRetro_CDI","mess_libr
 LibRetro_CHANF := IniReadCheck(settingsFile, "Settings", "LibRetro_CHANF","mess_libretro",,1)
 LibRetro_COLEC := IniReadCheck(settingsFile, "Settings", "LibRetro_COLEC","mess_libretro",,1)
 LibRetro_CPC := IniReadCheck(settingsFile, "Settings", "LibRetro_CPC","mess_libretro",,1)
+LibRetro_DRAG64 := IniReadCheck(settingsFile, "Settings", "LibRetro_DRAG64","mess_libretro",,1)
 LibRetro_DS := IniReadCheck(settingsFile, "Settings", "LibRetro_DS","desmume_libretro",,1)
 LibRetro_DUCK := IniReadCheck(settingsFile, "Settings", "LibRetro_DUCK","mess_libretro",,1)
 LibRetro_FBA := IniReadCheck(settingsFile, "Settings", "LibRetro_FBA","fb_alpha_libretro",,1)
@@ -93,6 +95,8 @@ LibRetro_INTV := IniReadCheck(settingsFile, "Settings", "LibRetro_INTV","mess_li
 LibRetro_JAG := IniReadCheck(settingsFile, "Settings", "LibRetro_JAG","virtualjaguar_libretro",,1)
 LibRetro_LYNX := IniReadCheck(settingsFile, "Settings", "LibRetro_LYNX","handy_libretro",,1)
 LibRetro_MAME := IniReadCheck(settingsFile, "Settings", "LibRetro_MAME","mame_libretro",,1)
+LibRetro_MO5 := IniReadCheck(settingsFile, "Settings", "LibRetro_MO5","mess_libretro",,1)
+LibRetro_MSDOS := IniReadCheck(settingsFile, "Settings", "LibRetro_MSDOS","dosbox_libretro",,1)
 LibRetro_MSX := IniReadCheck(settingsFile, "Settings", "LibRetro_MSX","bluemsx_libretro",,1)
 LibRetro_MSX2 := IniReadCheck(settingsFile, "Settings", "LibRetro_MSX2","bluemsx_libretro",,1)
 LibRetro_N64 := IniReadCheck(settingsFile, "Settings", "LibRetro_N64","mupen64plus_libretro",,1)
@@ -109,6 +113,7 @@ LibRetro_NGP := IniReadCheck(settingsFile, "Settings", "LibRetro_NGP","mednafen_
 LibRetro_NGPC := IniReadCheck(settingsFile, "Settings", "LibRetro_NGPC","mednafen_ngp_libretro",,1)
 LibRetro_NINARC := IniReadCheck(settingsFile, "Settings", "LibRetro_NINARC","mame_libretro",,1)
 LibRetro_ODYS2 := IniReadCheck(settingsFile, "Settings", "LibRetro_ODYS2","mess_libretro",,1)
+LibRetro_P64 := IniReadCheck(settingsFile, "Settings", "LibRetro_P64","mess_libretro",,1)
 LibRetro_PCE := IniReadCheck(settingsFile, "Settings", "LibRetro_PCE","mednafen_pce_fast_libretro",,1)
 LibRetro_PCECD := IniReadCheck(settingsFile, "Settings", "LibRetro_PCECD","mednafen_pce_fast_libretro",,1)
 LibRetro_PCFX := IniReadCheck(settingsFile, "Settings", "LibRetro_PCFX","mednafen_pcfx_libretro",,1)
@@ -137,6 +142,9 @@ LibRetro_SPECZX := IniReadCheck(settingsFile, "Settings", "LibRetro_SPECZX","mes
 LibRetro_SPORTV := IniReadCheck(settingsFile, "Settings", "LibRetro_SPORTV","mess_libretro",,1)
 LibRetro_ST := IniReadCheck(settingsFile, "Settings", "LibRetro_ST","hatari_libretro",,1)
 LibRetro_STUD2 := IniReadCheck(settingsFile, "Settings", "LibRetro_STUD2","mess_libretro",,1)
+LibRetro_STV := IniReadCheck(settingsFile, "Settings", "LibRetro_STV","mame_libretro",,1)
+LibRetro_SV328 := IniReadCheck(settingsFile, "Settings", "LibRetro_SV328","mess_libretro",,1)
+LibRetro_SV8K := IniReadCheck(settingsFile, "Settings", "LibRetro_SV8K","mess_libretro",,1)
 LibRetro_SVMU := IniReadCheck(settingsFile, "Settings", "LibRetro_SVMU","mess_libretro",,1)
 LibRetro_SUPRV := IniReadCheck(settingsFile, "Settings", "LibRetro_SUPRV","mess_libretro",,1)
 LibRetro_TG16 := IniReadCheck(settingsFile, "Settings", "LibRetro_TG16","mednafen_pce_fast_libretro",,1)
@@ -146,13 +154,20 @@ LibRetro_TOMY := IniReadCheck(settingsFile, "Settings", "LibRetro_TOMY","mess_li
 LibRetro_TRS80 := IniReadCheck(settingsFile, "Settings", "LibRetro_TRS80","mess_libretro",,1)
 LibRetro_VECTX := IniReadCheck(settingsFile, "Settings", "LibRetro_VECTX","mess_libretro",,1)
 LibRetro_VTECH := IniReadCheck(settingsFile, "Settings", "LibRetro_VTECH","mess_libretro",,1)
+LibRetro_WIN3X := IniReadCheck(settingsFile, "Settings", "LibRetro_WIN3X","dosbox_libretro",,1)
 LibRetro_WSAN := IniReadCheck(settingsFile, "Settings", "LibRetro_WSAN","mednafen_wswan_libretro",,1)
 LibRetro_WSANC := IniReadCheck(settingsFile, "Settings", "LibRetro_WSANC","mednafen_wswan_libretro",,1)
-superGB := IniReadCheck(settingsFile, systemName . "|" . romName, "SuperGameBoy", "false",,1)
+superGB := IniReadCheck(settingsFile, systemName . "|" . romName, "SuperGameBoy","false",,1)
+enableNetworkPlay := IniReadCheck(settingsFile, "Network|" . romName, "Enable_Network_Play","false",,1)
+
 messRomPath := GetFullName(messRomPath)
 libRetroFolder := GetFullName(libRetroFolder)
 
 retroArchSystem := systemName
+
+If ((ident = "LibRetro_LYNX") or (ident = "wsan")) {
+	rotateScreen := IniReadCheck(settingsFile, romName, "RotateScreen","None",,1)
+}
 
 If (ident = "LibRetro_SGB" || If superGB = "true")	; if system or rom is set to use Super Game Boy
 {	superGB = true	; setting this just in case it's false and the system is Nintendo Super Game Boy
@@ -181,8 +196,8 @@ Loop, %libRetroFolder%\*.dll,,1 ; loop through all folder in emuPath looking for
 If !libDll
 	ScriptError("Your " . ident . " dll is set to " . %ident% . " but could not locate this file in any folder inside:`n" . libRetroFolder)
 
-If ident In LibRetro_NFDS,LibRetro_SCD,LibRetro_TGCD,LibRetro_PCECD,LibRetro_PCFX
-{	retroCFG := LoadProperties(retroCFGFile)	; load the config into memory
+If RegExMatch(ident, "LibRetro_NFDS|LibRetro_SCD|LibRetro_TGCD|LibRetro_PCECD|LibRetro_PCFX") {		; these systems require the retroarch settings to be read
+	retroCFG := LoadProperties(retroCFGFile)	; load the config into memory
 	retroSysDir := ReadProperty(retroCFG,"system_directory")	; read value
 	retroSysDir := ConvertRetroCFGKey(retroSysDir)	; remove dbl quotes
 	StringLeft, retroSysDirLeft, retroSysDir, 2
@@ -198,8 +213,10 @@ If ident In LibRetro_NFDS,LibRetro_SCD,LibRetro_TGCD,LibRetro_PCECD,LibRetro_PCF
 		StringTrimRight, retroSysDir, retroSysDir, 1
 }
 
-If InStr(ident, "LibRetro_N64") {		; these systems will use an ini to store game specific settings
+If (RegExMatch(ident, "LibRetro_N64|LibRetro_NES|LibRetro_LYNX|LibRetro_PSX") || RegExMatch(ident, "LibRetro_NES") && (InStr(%ident%, "nestopia_libretro"))) {	; these systems will use an ini to store game specific settings
 	sysSettingsFile := CheckSysFile(modulePath . "\" . systemName . ".ini")	; create the ini if it does not exist
+	coreOptionsCFGFile := CheckFile(emuPath . "\retroarch-core-options.cfg", "Could not find retroarch-core-options.cfg in retroarch directory")
+	coreOptionsCFG := LoadProperties(coreOptionsCFGFile)
 	If InStr(ident, "LibRetro_N64") {	; Nintendo 64
 		mupenGfx := IniReadCheck(sysSettingsFile, systemName . "|" . romName, "Mupen_Gfx_Plugin", "auto",,1)
 		mupenRsp := IniReadCheck(sysSettingsFile, systemName . "|" . romName, "Mupen_RSP_Plugin", "auto",,1)
@@ -213,10 +230,12 @@ If InStr(ident, "LibRetro_N64") {		; these systems will use an ini to store game
 		mupenTexturFilt := IniReadCheck(sysSettingsFile, systemName . "|" . romName, "Mupen_Texture_Filtering", "nearest",,1)
 		mupenViRefresh := IniReadCheck(sysSettingsFile, systemName . "|" . romName, "Mupen_VI_Refresh", "2200",,1)
 		mupenFramerate := IniReadCheck(sysSettingsFile, systemName . "|" . romName, "Mupen_Framerate", "fullspeed",,1)
+		mupenResolution := IniReadCheck(sysSettingsFile, systemName . "|" . romName, "Mupen_Resolution", "640x480",,1)
+		mupenPolyOffstFctr := IniReadCheck(sysSettingsFile, systemName . "|" . romName, "Mupen_Polygon_Offset_Factor", "-3.0",,1)
+		mupenPolyOffstUnts := IniReadCheck(sysSettingsFile, systemName . "|" . romName, "Mupen_Polygon_Offset_Units", "-3.0",,1)
+		mupenViOverlay := IniReadCheck(sysSettingsFile, systemName . "|" . romName, "Mupen_VI_Overlay", "disabled",,1)
+		mupenAnalogDzone := IniReadCheck(sysSettingsFile, systemName . "|" . romName, "Mupen_Analog_Deadzone", "15",,1)
 
-		coreOptionsCFGFile := CheckFile(emuPath . "\retroarch-core-options.cfg", "Could not find retroarch-core-options.cfg in retroarch directory")
-		coreOptionsCFG := LoadProperties(coreOptionsCFGFile)
-		
 		WriteProperty(coreOptionsCFG, "mupen64-gfxplugin", mupenGfx, 1)
 		WriteProperty(coreOptionsCFG, "mupen64-rspplugin", mupenRsp, 1)
 		WriteProperty(coreOptionsCFG, "mupen64-cpucore", mupenCpu, 1)
@@ -229,9 +248,64 @@ If InStr(ident, "LibRetro_N64") {		; these systems will use an ini to store game
 		WriteProperty(coreOptionsCFG, "mupen64-filtering", mupenTexturFilt, 1)
 		WriteProperty(coreOptionsCFG, "mupen64-virefresh", mupenViRefresh, 1)
 		WriteProperty(coreOptionsCFG, "mupen64-framerate", mupenFramerate, 1)
+		WriteProperty(coreOptionsCFG, "mupen64-screensize", mupenResolution, 1)
+		WriteProperty(coreOptionsCFG, "mupen64-polyoffset-factor", mupenPolyOffstFctr, 1)
+		WriteProperty(coreOptionsCFG, "mupen64-polyoffset-units", mupenPolyOffstUnts, 1)
+		WriteProperty(coreOptionsCFG, "mupen64-angrylion-vioverlay", mupenViOverlay, 1)
+		WriteProperty(coreOptionsCFG, "mupen64-astick-deadzone", mupenAnalogDzone, 1)
+	} Else If InStr(ident, "LibRetro_NES") {		; these systems will use an ini to store game specific settings
+		If InStr(%ident%, "nestopia_libretro") {	; Nestopia
+			nestopiaBlargg := IniReadCheck(sysSettingsFile, "Nestopia" . "|" . romName, "Nestopia_Blargg_NTSC_Filter", "disabled",,1)
+			nestopiaPalette := IniReadCheck(sysSettingsFile, "Nestopia" . "|" . romName, "Nestopia_Palette", "canonical",,1)
+			nestopiaNoSprteLimit := IniReadCheck(sysSettingsFile, "Nestopia" . "|" . romName, "Nestopia_Remove_Sprites_Limit", "disabled",,1)
+
+			coreOptionsCFGFile := CheckFile(emuPath . "\retroarch-core-options.cfg", "Could not find retroarch-core-options.cfg in retroarch directory")
+			coreOptionsCFG := LoadProperties(coreOptionsCFGFile)
+			
+			WriteProperty(coreOptionsCFG, "nestopia_blargg_ntsc_filter", nestopiaBlargg, 1)
+			WriteProperty(coreOptionsCFG, "nestopia_palette", nestopiaPalette, 1)
+			WriteProperty(coreOptionsCFG, "nestopia_nospritelimit", nestopiaNoSprteLimit, 1)
+		}
+	} Else If InStr(ident, "LibRetro_LYNX") {	; Atari Lynx
+		handyRotate := IniReadCheck(sysSettingsFile, systemName . "|" . romName, "Handy_Rotation", "None",,1)
+
+		coreOptionsCFGFile := CheckFile(emuPath . "\retroarch-core-options.cfg", "Could not find retroarch-core-options.cfg in retroarch directory")
+		coreOptionsCFG := LoadProperties(coreOptionsCFGFile)
 		
-		SaveProperties(coreOptionsCFGFile, coreOptionsCFG)	
+		WriteProperty(coreOptionsCFG, "handy_rot", handyRotate, 1)
+	} Else If InStr(ident, "LibRetro_PSX") {	; Sony PlayStation
+		p1ControllerType := IniReadCheck(sysSettingsFile, systemName . "|" . romName, "P1_Controller_Type", """517""",,1)
+		p2ControllerType := IniReadCheck(sysSettingsFile, systemName . "|" . romName, "P2_Controller_Type", """517""",,1)
+		p3ControllerType := IniReadCheck(sysSettingsFile, systemName . "|" . romName, "P3_Controller_Type", """517""",,1)
+		p4ControllerType := IniReadCheck(sysSettingsFile, systemName . "|" . romName, "P4_Controller_Type", """517""",,1)
+		p5ControllerType := IniReadCheck(sysSettingsFile, systemName . "|" . romName, "P5_Controller_Type", """517""",,1)
+		p6ControllerType := IniReadCheck(sysSettingsFile, systemName . "|" . romName, "P6_Controller_Type", """517""",,1)
+		p7ControllerType := IniReadCheck(sysSettingsFile, systemName . "|" . romName, "P7_Controller_Type", """517""",,1)
+		p8ControllerType := IniReadCheck(sysSettingsFile, systemName . "|" . romName, "P8_Controller_Type", """517""",,1)
+		
+		psxCdImageCache := IniReadCheck(sysSettingsFile, systemName . "|" . romName, "PSX_CD_Image_Cache", """enabled""",,1)
+		psxMemcardHandling := IniReadCheck(sysSettingsFile, systemName . "|" . romName, "PSX_Memcard_Handling", """libretro""",,1)
+		psxDualshockAnalogToggle := IniReadCheck(sysSettingsFile, systemName . "|" . romName, "PSX_Dualshock_Analog_Toggle", """enabled""",,1)
+		
+		mednafenOptionsCFGFile := CheckFile(emuPath . "\config\" . LibRetro_PSX . ".dll.cfg", "Could not find core configuration file in config directory.")
+		mednafenOptionsCFG := LoadProperties(mednafenOptionsCFGFile)
+		
+		WriteProperty(mednafenOptionsCFG, "input_libretro_device_p1", p1ControllerType, 1)
+		WriteProperty(mednafenOptionsCFG, "input_libretro_device_p2", p2ControllerType, 1)
+		WriteProperty(mednafenOptionsCFG, "input_libretro_device_p3", p3ControllerType, 1)
+		WriteProperty(mednafenOptionsCFG, "input_libretro_device_p4", p4ControllerType, 1)
+		WriteProperty(mednafenOptionsCFG, "input_libretro_device_p5", p5ControllerType, 1)
+		WriteProperty(mednafenOptionsCFG, "input_libretro_device_p6", p6ControllerType, 1)
+		WriteProperty(mednafenOptionsCFG, "input_libretro_device_p7", p7ControllerType, 1)
+		WriteProperty(mednafenOptionsCFG, "input_libretro_device_p8", p8ControllerType, 1)
+		
+		SaveProperties(mednafenOptionsCFGFile, mednafenOptionsCFG)
+		
+		WriteProperty(coreOptionsCFG, "beetle_psx_cdimagecache", psxCdImageCache, 1)
+		WriteProperty(coreOptionsCFG, "beetle_psx_use_mednafen_memcard0_method", psxMemcardHandling, 1)
+		WriteProperty(coreOptionsCFG, "beetle_psx_analog_toggle", psxDualshockAnalogToggle, 1)
 	}
+	SaveProperties(coreOptionsCFGFile, coreOptionsCFG)	
 }
 
 hideEmuObj := Object("ahk_class ConsoleWindowClass",0,"RetroArch ahk_class RetroArch",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
@@ -245,7 +319,7 @@ messParam3 :=
 If InStr(%ident%, "mess") {	; if a mess core is used
 	Log("Module - Retroarch MESS mode enabled")
 	; the messType object links the system name to the name mess recognizes
-	messType := Object("Amstrad CPC","cpc464","Amstrad GX4000","gx4000","APF Imagination Machine","apfimag","Apple IIGS","apple2gs","Atari 8-bit","a800","Atari 2600","a2600","Atari 5200","a5200","Atari 7800","a7800","Atari Jaguar","jaguar","Atari Lynx","lynx","Bally Astrocade","astrocde","Bandai WonderSwan","wswan","Bandai WonderSwan Color","wscolor","Casio PV-1000","pv1000","Casio PV-2000","pv2000","Coleco ADAM","adam","ColecoVision","coleco","Creatronic Mega Duck","megaduck","Emerson Arcadia 2001","arcadia","Entex Adventure Vision","advision","Epoch Game Pocket Computer","gamepock","Epoch Super Cassette Vision","scv","Exidy Sorcerer","sorcerer","Fairchild Channel F","channelf","Funtech Super Acan","supracan","GCE Vectrex","vectrex","Hartung Game Master","gmaster","GamePark 32","gp32","Interton VC 4000","vc4000","JungleTac Sport Vii","vii","Magnavox Odyssey 2","odyssey2","Matra & Hachette Alice","alice32","Mattel Aquarius","aquarius","Mattel Intellivision","intv","NEC PC Engine","pce","NEC PC Engine-CD","pce","NEC SuperGrafx","sgx","NEC TurboGrafx-16","tg16","NEC TurboGrafx-CD","tg16","Nintendo 64","n64","Nintendo Entertainment System","nes","Nintendo Famicom Disk System","famicom","Nintendo Game Boy","gameboy","Nintendo Game Boy Advance","gba","Nintendo Game Boy Color","gbcolor","Nintendo Game Boy Japan","gameboy","Nintendo Pokemon Mini","pokemini","Nintendo Virtual Boy","vboy","Philips CD-i","cdimono1","Philips Videopac","videopac","RCA Studio II","studio2","Sega 32X","32x","Sega SC-3000","sc3000","Sega CD","segacd","Sega Game Gear","gamegear","Sega Genesis","genesis","Sega Master System","sms","Sega Mega Drive","megadriv","Sega VMU","svmu","Sinclair ZX Spectrum","spectrum","SNK Neo Geo AES","aes","SNK Neo Geo CD","neocd","SNK Neo Geo Pocket","ngp","SNK Neo Geo Pocket Color","ngpc","Sony PlayStation","psx","Sony PocketStation","pockstat","Sord M5","m5","Super Nintendo Entertainment System","snes","Tandy TRS-80 Color Computer 3","coco3","Texas Instruments TI 99-4A","ti99_4a","Tiger Game.com","gamecom","Tomy Tutor","tutor","VTech CreatiVision","crvision","Watara Supervision","svision")
+	messType := Object("Amstrad CPC","cpc464","Amstrad GX4000","gx4000","APF Imagination Machine","apfimag","Apple IIGS","apple2gs","Atari 8-bit","a800","Atari 2600","a2600","Atari 5200","a5200","Atari 7800","a7800","Atari Jaguar","jaguar","Atari Lynx","lynx","Bally Astrocade","astrocde","Bandai Super Vision 8000","sv8000","Bandai WonderSwan","wswan","Bandai WonderSwan Color","wscolor","Casio PV-1000","pv1000","Casio PV-2000","pv2000","Coleco ADAM","adam","ColecoVision","coleco","Creatronic Mega Duck","megaduck","Dragon 64","dragon64","Emerson Arcadia 2001","arcadia","Entex Adventure Vision","advision","Epoch Game Pocket Computer","gamepock","Epoch Super Cassette Vision","scv","Exidy Sorcerer","sorcerer","Fairchild Channel F","channelf","Funtech Super Acan","supracan","GCE Vectrex","vectrex","Hartung Game Master","gmaster","GamePark 32","gp32","Interton VC 4000","vc4000","JungleTac Sport Vii","vii","Magnavox Odyssey 2","odyssey2","Matra & Hachette Alice","alice32","Mattel Aquarius","aquarius","Mattel Intellivision","intv","NEC PC Engine","pce","NEC PC Engine-CD","pce","NEC SuperGrafx","sgx","NEC TurboGrafx-16","tg16","NEC TurboGrafx-CD","tg16","Nintendo 64","n64","Nintendo Entertainment System","nes","Nintendo Famicom Disk System","famicom","Nintendo Game Boy","gameboy","Nintendo Game Boy Advance","gba","Nintendo Game Boy Color","gbcolor","Nintendo Game Boy Japan","gameboy","Nintendo Pokemon Mini","pokemini","Nintendo Virtual Boy","vboy","Pecom 64","pecom64","Philips CD-i","cdimono1","Philips Videopac","videopac","RCA Studio II","studio2","Sega 32X","32x","Sega SC-3000","sc3000","Sega CD","segacd","Sega Game Gear","gamegear","Sega Genesis","genesis","Sega Master System","sms","Sega Mega Drive","megadriv","Sega VMU","svmu","Sinclair ZX Spectrum","spectrum","SNK Neo Geo AES","aes","SNK Neo Geo CD","neocdz","SNK Neo Geo Pocket","ngp","SNK Neo Geo Pocket Color","ngpc","Sony PlayStation","psx","Sony PocketStation","pockstat","Sord M5","m5","Spectravideo SV-328","svi328n","Super Nintendo Entertainment System","snes","Tandy TRS-80 Color Computer 3","coco3","Texas Instruments TI 99-4A","ti99_4a","Tiger Game.com","gamecom","Thomson MO5","mo5","Tomy Tutor","tutor","VTech CreatiVision","crvision","Watara Supervision","svision")
 	messIdent := messType[systemName]	; search object for the systemName identifier Retroarch uses for its cores
 	If !messIdent
 		ScriptError("Your systemName is: " . systemName . "`nIt is not one of the known supported systems for the MESS LibRetro core")
@@ -259,9 +333,13 @@ If InStr(%ident%, "mess") {	; if a mess core is used
 	messParam2 := " -rompath \" . """" . messRomPath . "\" . """"
 	If messIdent = alice32
 		messParam3 := " -cass1 \" . """" . romPath . "\" . romName . romExtension . "\" . """"
+	If messIdent = gp32
+		messParam3 := " -memc \" . """" . romPath . "\" . romName . romExtension . "\" . """"
 	Else If messIdent = cpc464
 		messParam3 := " -cass \" . """" . romPath . "\" . romName . romExtension . "\" . """"
 	Else If messIdent = spectrum
+		messParam3 := " -cass \" . """" . romPath . "\" . romName . romExtension . "\" . """"
+	Else If messIdent = dragon64
 		messParam3 := " -cass \" . """" . romPath . "\" . romName . romExtension . "\" . """"
 	Else If messIdent = cdimono1
 		messParam3 := " -cdrom \" . """" . romPath . "\" . romName . romExtension . "\" . """"
@@ -269,6 +347,10 @@ If InStr(%ident%, "mess") {	; if a mess core is used
 		messParam3 := " -cdrom \" . """" . romPath . "\" . romName . romExtension . "\" . """"
 	Else If messIdent = neocdz
 		messParam3 := " -cdrom \" . """" . romPath . "\" . romName . romExtension . "\" . """"
+	Else If messIdent = svi328n
+		messParam3 := " -cass \" . """" . romPath . "\" . romName . romExtension . "\" . """"
+	Else If messIdent = pecom64
+		messParam3 := " -cass \" . """" . romPath . "\" . romName . romExtension . "\" . """"
 	Else If messIdent = svmu
 		messParam3 := " -quik \" . """" . romPath . "\" . romName . romExtension . "\" . """"
 	Else 
@@ -307,6 +389,44 @@ If ident = LibRetro_NFDS	; Nintendo Famicom Disk System
 		ScriptError("RetroArch requires ""pcfxbios.bin"" for " . retroArchSystem . " but could not find it in your system_directory: """ . retroSysDir . """")
 }
 
+
+networkSession :=
+If (enableNetworkPlay = "true") {
+	Log("Module - Network Multi-Player is an available option for " . dbName,4)
+
+	netplayNickname := IniReadCheck(settingsFile, "Network", "NetPlay_Nickname","Player",,1)
+	getWANIP := IniReadCheck(settingsFile, "Network", "Get_WAN_IP","false",,1)
+
+	If (getWANIP = "true")
+		myPublicIP := GetPublicIP()
+
+	Log("Module - CAREFUL WHEN POSTING THIS LOG PUBLICALY AS IT CONTAINS YOUR IP ON THE NEXT LINE",2)
+	defaultServerIP := IniReadCheck(settingsFile, "Network", "Default_Server_IP", myPublicIP,,1)
+	defaultServerPort := IniReadCheck(settingsFile, "Network", "Default_Server_Port",,,1)
+	lastIP := IniReadCheck(settingsFile, "Network", "Last_IP", defaultServerIP,,1)	; does not need to be on the ISD
+	lastPort := IniReadCheck(settingsFile, "Network", "Last_Port", defaultServerPort,,1)	; does not need to be on the ISD
+
+	mpMenuStatus := MultiPlayerMenu(lastIP,lastPort,networkType,,0)
+	If (mpMenuStatus = -1) {	; if user exited menu early
+		Log("Module - Cancelled MultiPlayer Menu. Exiting module.",2)
+		ExitModule()
+	}
+	If networkSession {
+		Log("Module - Using a Network for " . dbName,4)
+		IniWrite, %networkPort%, %settingsFile%, Network, Last_Port
+		; msgbox lastIP: %lastIP%`nlastPort: %lastPort%`nnetworkIP: %networkIP%`nnetworkPort: %networkPort%
+		If (networkType = "client") {
+			IniWrite, %networkIP%, %settingsFile%, Network, Last_IP	; Save last used IP and Port for quicker launching next time
+			netCommand := " -C " . networkIP . " --port " . networkPort . " --nick """ . netplayNickname . """"	; -C = connect as client
+		} Else {	; server
+			netCommand := " -H --port " . networkPort . " --nick """ . netplayNickname . """"	; -H = host as server
+		}
+		Log("Module - CAREFUL WHEN POSTING THIS LOG PUBLICALY AS IT CONTAINS YOUR IP ON THE NEXT LINE",2)
+		Log("Module - Starting a network session using the IP """ . networkIP . """ and PORT """ . networkPort . """",4)
+	} Else
+		Log("Module - User chose Single Player mode for this session",4)
+}
+
 BezelStart()
 
 fullscreen := If fullscreen = "true" ? " -f" : ""
@@ -321,15 +441,44 @@ IfNotExist, %saveStatePath%
 HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
 
 If InStr(%ident%, "mess") {	; if a mess core is used
-	Run(executable . " """ . (messIdent ? messIdent : "") . fullRomPath . """" . A_Space . fullscreen . " -c """ . retroCFGFile . """ -L """ . libDll . """ -s """ . srmPath . "\" . romName . ".srm"" -S """ . saveStatePath . "\" . romName . ".state""", emuPath, "Hide")
+	Run(executable . " """ . (messIdent ? messIdent : "") . fullRomPath . """" . A_Space . fullscreen . " -c """ . retroCFGFile . """ -L """ . libDll . """ -s """ . srmPath . "\" . romName . ".srm"" -S """ . saveStatePath . "\" . romName . ".state""" . netCommand, emuPath, "Hide")
 } Else If (ident = "LibRetro_SGB" || If superGB = "true") { ; For some reason, the order of our command line matters in this particular case.
-	Run(executable . " " . fullscreen . " -c """ . retroCFGFile . """ -L """ . libDll . """ -s """ . srmPath . "\" . romName . ".srm"" -S """ . saveStatePath . "\" . romName . ".state""" . fullRomPath , emuPath, "Hide")
+	Run(executable . " " . fullscreen . " -c """ . retroCFGFile . """ -L """ . libDll . """ -s """ . srmPath . "\" . romName . ".srm"" -S """ . saveStatePath . "\" . romName . ".state""" . fullRomPath . netCommand, emuPath, "Hide")
+} Else If (ident = "LibRetro_LYNX" ) {
+	Run(executable . " " . fullRomPath . fullscreen . rotateScreen . " -c """ . retroCFGFile . """ -L """ . libDll . """ -s """ . srmPath . "\" . romName . ".srm"" -S """ . saveStatePath . "\" . romName . ".state""", emuPath, "Hide")
 } Else {
-	Run(executable . " " . fullRomPath . fullscreen . " -c """ . retroCFGFile . """ -L """ . libDll . """ -s """ . srmPath . "\" . romName . ".srm"" -S """ . saveStatePath . "\" . romName . ".state""", emuPath, "Hide")
+	Run(executable . " " . fullRomPath . fullscreen . " -c """ . retroCFGFile . """ -L """ . libDll . """ -s """ . srmPath . "\" . romName . ".srm"" -S """ . saveStatePath . "\" . romName . ".state""" . netCommand, emuPath, "Hide")
 }
 
-WinWait("RetroArch ahk_class RetroArch")
-WinWaitActive("RetroArch ahk_class RetroArch")
+mpMenuStatus :=
+If networkSession {
+	canceledServerWait := false
+	multiplayerMenuExit := false
+	SetTimer, NetworkConnectedCheck, 500
+
+	If (networkType = "server") {
+		Log("Module - Waiting for a client to connect to your server")
+		mpMenuStatus := MultiPlayerMenu(,,,,,,,,"You are the server. Please wait for your client to connect.")
+	} Else {	; client
+		Log("Module - Trying to contact the server to establish a connection.")
+		mpMenuStatus := MultiPlayerMenu(,,,,,,,,"Attempting to connect to the server...")
+	}
+
+	If (mpMenuStatus = -1) {	; if user exited menu early before a client connected
+		Log("Module - Cancelled waiting for the " . If (networkType = "server") ? "client to connect" : "server to respond" . ". Exiting module.",2)
+		If Process("Exist", executable)
+			Process("Close", executable)	; must close process as the exe is waiting for a client to connect and no window was drawn yet
+		ExitModule()
+	} Else {	; blank response from MultiPlayerMenu, exited properly
+		Log("Module - " . If (networkType = "server") ? "Client has connected" : "Connected to the server")
+		WinWait("RetroArch ahk_class RetroArch")
+		WinWaitActive("RetroArch ahk_class RetroArch")
+	}
+	SetTimer, NetworkConnectedCheck, Off
+} Else {	; single player
+	WinWait("RetroArch ahk_class RetroArch")
+	WinWaitActive("RetroArch ahk_class RetroArch")
+}
 
 If hideConsole = true
 	WinSet, Transparent, On, ahk_class ConsoleWindowClass	; makes the console window transparent so you don't see it on exit
@@ -374,8 +523,16 @@ CheckSysFile(file){
 	Return file
 }
 
+NetworkConnectedCheck:
+	If clientConnected
+		multiplayerMenuExit := true
+	Else If WinExist("RetroArch ahk_class RetroArch") {
+		Log("Module - RetroArch session started, closing the MultiPlayer menu",4)
+		multiplayerMenuExit := true
+	}
+Return
+
 CloseProcess:
 	FadeOutStart()
-	; Send !{F4}
 	WinClose("RetroArch ahk_class RetroArch")
 Return

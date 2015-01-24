@@ -1,5 +1,5 @@
-MCRC = A9E46982
-MVersion=1.0.2
+MCRC = CC2FD11D
+MVersion=1.0.3
 
 MultiPlayerMenu(lastIP=false, lastPort=false, ByRef networkType=false, ByRef networkPlayers=0, setupNetwork=false, keyboardControl=true, severUseNetworkIP=true, disableSeverInfoMenu=false, textMessage=false) {   ; severUseNetworkIP=true -> networkIP=publicIP / severUseNetworkIP=false -> networkIP=localIP
 	Log("MultiPlayerMenu - Started")
@@ -196,14 +196,15 @@ MultiPlayerMenu(lastIP=false, lastPort=false, ByRef networkType=false, ByRef net
 			Break
 		Sleep, 100
 	}
-	If !(textMessage) 
-	{
-		If (keymapperEnabled = "true") and (keymapperHyperLaunchProfileEnabled = "true")
-			RunKeymapper%zz%("load", keymapper)
-		If keymapperAHKMethod = External
-			RunAHKKeymapper%zz%("load")
+	If (textMessage){
+		Gosub, DisableMultiplayerTextMessageKeys
+		Gosub, CleanMultiplayerMenuMemory
+	} else 
 		networkType := MultiPlayerOption[SelectedMultiPlayerOption,"networkType"]
-	}
+	If (keymapperEnabled = "true") and (keymapperHyperLaunchProfileEnabled = "true")
+		RunKeymapper%zz%("load", keymapper)
+	If keymapperAHKMethod = External
+		RunAHKKeymapper%zz%("load")
 	multiplayerMenuExit := false
 	Log("MultiPlayerMenu - Ended")
 	XHotKeywrapper(exitEmulatorKey,"CloseProcess","ON")
@@ -229,8 +230,7 @@ MultiPlayerMenu(lastIP=false, lastPort=false, ByRef networkType=false, ByRef net
         forcedCloseMultiPlayerMenu := true
     MultiplayerTextMessageSelect:
         If !forcedCloseMultiPlayerMenu 
-               Log("MultiPlayer - User accepted the text message.",5)
-        Gosub, DisableMultiplayerTextMessageKeys
+			Log("MultiPlayer - User accepted the text message.",5)
         multiplayerMenuExit := true
     Return
 	EnableMultiplayerMenuKeys:
