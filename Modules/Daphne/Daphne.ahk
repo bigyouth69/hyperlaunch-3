@@ -1,8 +1,8 @@
 MEmu = Daphne
-MEmuV =  v1.0.13
+MEmuV =  v1.0.12
 MURL = http://www.daphne-emu.com/
 MAuthor = djvj
-MVersion = 2.0.6
+MVersion = 2.0.7
 MCRC = F8545233
 iCRC = 7FCE1920
 MID = 635038268879753802
