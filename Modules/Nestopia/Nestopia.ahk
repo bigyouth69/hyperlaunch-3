@@ -2,8 +2,8 @@ MEmu = Nestopia
 MEmuV =  v1.42
 MURL = http://www.emucr.com/2011/09/nestopia-unofficial-v1420.html
 MAuthor = djvj
-MVersion = 2.0.2
-MCRC = 89EE8369
+MVersion = 2.0.3
+MCRC = 6F80AA06
 iCRC = F9662CA1
 MID = 635038268908287546
 MSystem = "Nintendo Entertainment System","Nintendo Famicom","Nintendo Famicom Disk System"
@@ -57,15 +57,15 @@ StringReplace, nesXML, nesXML, % currentFS, % "<start-fullscreen>" . ((If Fullsc
 
 SaveFile()
 
-hideEmuObj := Object(romName . " - Nestopia",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
+hideEmuObj := Object("Nestopia ahk_class Nestopia",1)	; Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 7z(romPath, romName, romExtension, 7zExtractPath)
 
 HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
 
 Run(executable . " """ . romPath . "\" . romName . romExtension . """", emuPath)
 
-WinWait(romName . " - Nestopia")
-WinWaitActive(romName . " - Nestopia")
+WinWait("Nestopia ahk_class Nestopia")
+WinWaitActive("Nestopia ahk_class Nestopia")
 
 BezelDraw()
 HideEmuEnd()
@@ -95,5 +95,5 @@ Return
 
 CloseProcess:
 	FadeOutStart()
-	WinClose("ahk_class Nestopia")
+	WinClose("Nestopia ahk_class Nestopia")
 Return
