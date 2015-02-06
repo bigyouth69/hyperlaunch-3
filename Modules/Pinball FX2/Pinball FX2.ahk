@@ -2,9 +2,9 @@ MEmu = Pinball FX2
 MEmuV = N/A
 MURL = http://www.pinballfx.com/
 MAuthor = djvj & bleasby
-MVersion = 2.0.2
-MCRC = DF1AB8F1
-iCRC = E55FC3CA
+MVersion = 2.0.3
+MCRC = 48091017
+iCRC = 22518073
 mId = 635244873683327779
 MSystem = "Pinball FX2","Pinball"
 ;----------------------------------------------------------------------------
@@ -31,13 +31,22 @@ MSystem = "Pinball FX2","Pinball"
 ; Bezel:
 ; Bezel uses the fixResMode and requires the use of windowed mode, therefore you need to set the resolution on the module options to the same resolution that you set in Pinball FX2.
 ; By default, the module will use the resolution of your desktop. Your bezel is most likely smaller, so make sure to set the correct windowed resolution in HLHQ for this module.
+;
+; DMD (Dot Matrix Display)
+; The module will support and hide the window components of detached DMD
+; To see it, you must have a 2nd monitor connected as an extension of your desktop, and placement will be on that monitor
+; To Detach:
+; Run Pinball FX2 manually, and goto Help & Options -> Settings -> Video
+; Set Dot Matrix Size to Off, and close Pinball FX2
+; The module will automatically create the dotmatrix.cfg file in the same folder of the "Pinball FX2.exe" (your installation folder) for you
+; Edit the module's settings in RLUI to customize the DMD size and placement of this window
 ;----------------------------------------------------------------------------
 StartModule()
 BezelGUI()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
 multiplayerMenu := IniReadCheck(settingsFile, "Settings", "Multiplayer_Menu","true",,1)
-if (multiplayerMenu = "true")
+If (multiplayerMenu = "true")
 	SelectedNumberofPlayers := NumberOfPlayersSelectionMenu(4)
 
 FadeInStart()
@@ -50,6 +59,11 @@ initialTableY := IniReadCheck(settingsFile, "Settings", "Initial_Table_Y",1,,1)
 sleepLogo := IniReadCheck(settingsFile, "Settings", "Sleep_Until_Logo",12000,,1)
 sleepMenu := IniReadCheck(settingsFile, "Settings", "Sleep_Until_Main_Menu",1500,,1)
 sleepBaseTime := IniReadCheck(settingsFile, "Settings", "Sleep_Base_Time",1,,1)
+externalDMD := IniReadCheck(settingsFile, "Settings", "External_DMD","false",,1)
+dmdX := IniReadCheck(settingsFile, "Settings", "DMD_X",A_ScreenWidth,,1)
+dmdY := IniReadCheck(settingsFile, "Settings", "DMD_Y",0,,1)
+dmdW := IniReadCheck(settingsFile, "Settings", "DMD_Width",0,,1)
+dmdH := IniReadCheck(settingsFile, "Settings", "DMD_Height",0,,1)
 tableNavX := IniReadCheck(settingsFile, romName, "x",,,1)
 tableNavY := IniReadCheck(settingsFile, romName, "y",,,1)
 tableNavX2 := IniReadCheck(settingsFile, romName, "x2",,,1)
@@ -78,6 +92,23 @@ If (!Fullscreen || Fullscreen = "false"){
 	DXWndGame := 1
 }
 
+If (externalDMD = "true") {
+	Log("Module - Updating external DMD window placement values",4)
+	If !executable
+		If !steamPath
+			GetSteamPath()
+	dotmatrixCFGFile := If executable ? emuPath . "\dotmatrix.cfg" : steamPath . "\SteamApps\common\Pinball FX2\dotmatrix.cfg"
+	IfNotExist, %dotmatrixCFGFile%
+		FileAppend, %dotmatrixCFGFile%	; create a new blank file if one does not exist
+	Log("Module - Using this dotmatrix.cfg: " . dotmatrixCFGFile,4)
+	dotmatrixCFG := LoadProperties(dotmatrixCFGFile)
+	WriteProperty(dotmatrixCFG, "x", dmdX, 1)
+	WriteProperty(dotmatrixCFG, "y", dmdY, 1)
+	WriteProperty(dotmatrixCFG, "width", dmdW, 1)
+	WriteProperty(dotmatrixCFG, "height", dmdH, 1)
+	SaveProperties(dotmatrixCFGFile, dotmatrixCFG)	
+}
+
 If executable {
 	Log("Module - Running Pinball FX2 as a stand alone game and not through Steam as an executable was defined.")
 	Run(executable, emuPath)
@@ -86,13 +117,17 @@ If executable {
 	Steam(226980)
 }
 
-; attempt to hide window components of the DMD (unable to prove this works still)
-; DllCall( "RegisterShellHookWindow", UInt,hWnd )
-; MsgNum := DllCall( "RegisterWindowMessage", Str,"SHELLHOOK" )
-; OnMessage( MsgNum, "ShellMessage" )
-
 WinWait(pinballTitleClass)
 WinWaitActive(pinballTitleClass)
+
+; Attempt to hide window components of the detached DMD
+If (externalDMD = "true") {
+	Gui +LastFound
+	hWnd := WinExist()
+	DllCall("RegisterShellHookWindow", UInt,hWnd)
+	MsgNum := DllCall("RegisterWindowMessage", Str,"SHELLHOOK")
+	OnMessage(MsgNum, "ShellMessage")
+}
 
 Run("BlockInput.exe 30", moduleExtensionsPath)	; start the tool that blocks all input so user cannot interrupt the launch process for 30 seconds
 SetKeyDelay(50*sleepBaseTime)	; required otherwise pinball fx2 does not respond to the keys
@@ -128,8 +163,8 @@ If (tableNavY<0){
 }
 	
 If (tableNavX2) and (tableNavY2)
-{	iniRead,currentFootballTable, %settingsFile%, Settings, Current_Football_Table
-	if !(currentFootballTable=romName){
+{	IniRead,currentFootballTable, %settingsFile%, Settings, Current_Football_Table
+	If !(currentFootballTable=romName){
 		ControlSend,, {Enter Down}{Enter Up}, %pinballTitleClass%	; select game
 		Sleep, % 500*sleepBaseTime
 		ControlSend,, {Up Down}{Up Up}, %pinballTitleClass%	; Move up
@@ -162,7 +197,7 @@ If (tableNavX2) and (tableNavY2)
 				Sleep, % 50*sleepBaseTime
 			}
 		}
-		iniWrite, %romName%, %settingsFile%, Settings, Current_Football_Table
+		IniWrite, %romName%, %settingsFile%, Settings, Current_Football_Table
 	}
 }
 
@@ -198,10 +233,9 @@ ExitModule()
     
 
 ShellMessage(wParam, lParam) {
-	Log("DEBUG - " . wParam,3)
-	; msgbox % wParam
+	Log("Module - DMD external window - " . wParam,4)
 	If (wParam = 1)
-		IfWinExist Pinball FX2 DotMatrix
+		IfWinExist Pinball FX2 DotMatrix ahk_class PxWindowClass
 		{
 			WinSet, Style, -0xC00000 ; hide title bar
 			WinSet, Style, -0x800000 ; hide thin-line border

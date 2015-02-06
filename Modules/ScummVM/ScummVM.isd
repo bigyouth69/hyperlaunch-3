@@ -40,6 +40,10 @@
 							<KEYTYPE>xHotkey</KEYTYPE>
 							<DESCRIPTION>hotkey to access the ScummVM menu</DESCRIPTION>
 						</KEY>
+						<KEY name="bezelDelay" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Use this to add a longer delay to launch the emulator. Some games require a longer wait to be resized correctly.  Default is 0.  1000 = 1 second. This can be overwriten by the Rom Settings tab.</DESCRIPTION>
+						</KEY>
 					</KEYS>
 				</SECTION>
 				<SECTION name="%RomName%" required="false">
@@ -61,6 +65,10 @@
 						<KEY name="ForceExtractionToRomPath" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Set to true if you want to force the extraction of compressed roms to the rom path regardless what you have set for 7z_Extract_Path. It's not advisable to do this since if something goes wrong you can end up with your roms folder deleted, but if you are using the eXoDOS sets and intend to run the games with both HyperLaunch and Meagre then you will want this option active since this how those sets will work out of the box. This setting can only be enabled if LaunchMode=eXoDOS.</DESCRIPTION>
+						</KEY>
+						<KEY name="bezelDelay" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Use this to add a longer delay to launch the emulator. Some games require a longer wait to be resized correctly.  Default is 0.  1000 = 1 second.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>
@@ -105,6 +113,10 @@
 							<KEYTYPE>xHotkey</KEYTYPE>
 							<DESCRIPTION>hotkey to access the ScummVM menu</DESCRIPTION>
 						</KEY>
+						<KEY name="bezelDelay" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Use this to add a longer delay to launch the emulator. Some games require a longer wait to be resized correctly.  Default is 0.  1000 = 1 second. This can be overwriten by the Rom Settings tab.</DESCRIPTION>
+						</KEY>
 					</KEYS>
 				</SECTION>
 				<SECTION name="%RomName%" required="false">
@@ -126,6 +138,10 @@
 						<KEY name="ForceExtractionToRomPath" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Set to true if you want to force the extraction of compressed roms to the rom path regardless what you have set for 7z_Extract_Path. It's not advisable to do this since if something goes wrong you can end up with your roms folder deleted, but if you are using the eXoDOS sets and intend to run the games with both HyperLaunch and Meagre then you will want this option active since this how those sets will work out of the box. This setting can only be enabled if LaunchMode=eXoDOS.</DESCRIPTION>
+						</KEY>
+						<KEY name="bezelDelay" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Use this to add a longer delay to launch the emulator. Some games require a longer wait to be resized correctly.  Default is 0.  1000 = 1 second.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>

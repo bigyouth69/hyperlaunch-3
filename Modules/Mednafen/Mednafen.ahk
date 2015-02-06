@@ -2,7 +2,7 @@ MEmu = Mednafen
 MEmuV =  v0.9.31 WIP
 MURL = http://mednafen.sourceforge.net/
 MAuthor = djvj
-MVersion = 2.1.0
+MVersion = 2.1.1
 MCRC = C50D0FA7
 iCRC = 6BB3C8AD
 MID = 635038268903923913
@@ -32,6 +32,7 @@ MSystem = "Atari Lynx","Bandai Wonderswan","Bandai Wonderswan Color","NEC PC Eng
 
 ; Atari Lynx:
 ; Create a folder called "firmware" in your mednafen folder and place lynxboot.img in there
+; If games are not rotating and the CLI command is being sent to the emu, your roms have bad headers
 ;
 ; Nintendo Virtual Boy:
 ; For Virtual Boy you might not be able to get in game and get stuck

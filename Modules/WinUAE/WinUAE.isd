@@ -269,6 +269,26 @@
 								<VALUE>max</VALUE>
 							</VALUES>
 						</KEY>
+						<KEY name="CPU" group="CPU" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>CPU to use. You should only set this if you want to change whatever CPU you are using from the quick start mode you selected, like for example running an A4000 with a 68060 CPU.</DESCRIPTION>
+							<VALUES>
+								<VALUE>68000</VALUE>
+								<VALUE>68010</VALUE>
+								<VALUE>68020</VALUE>
+								<VALUE>68030</VALUE>
+								<VALUE>68040</VALUE>
+								<VALUE>68060</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="FPU" group="CPU" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>FPU to use, beware some CPU models won't accept a FPU so make sure you only select compatible settings. Only some rare demos or later 3D games might require a FPU so normally you won't need to change this setting.</DESCRIPTION>
+							<VALUES>
+								<VALUE>68881</VALUE>
+								<VALUE>68882</VALUE>
+							</VALUES>
+						</KEY>
 						<KEY name="CacheSize" group="CPU" required="false" nullable="false">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>Define the JIT cache size you want to use (in KB, so for 8MB type 8192). Setting cache size to anything different than 0 means JIT enabled.</DESCRIPTION>

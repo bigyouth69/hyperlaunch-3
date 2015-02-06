@@ -11,6 +11,10 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>If true emulator will run fullscreen.</DESCRIPTION>
 						</KEY>
+						<KEY name="globalParams" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Pass additional CLI paramteres to all Daphne Singe games.</DESCRIPTION>
+						</KEY>
 						<KEY name="daphneWidth" required="false" nullable="true" minLength="1">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>Set fullscreen width.</DESCRIPTION>
@@ -26,6 +30,15 @@
 						<KEY name="ForcePathUpdate" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>If true, the module will always update paths in your singe files regardless if they "look" correct or not. Use this if some games are not launching correctly and you feel its related to a path problem.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="params" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Pass additional CLI paramteres this Daphne Singe game.</DESCRIPTION>
 						</KEY>
 					</KEYS>
 				</SECTION>

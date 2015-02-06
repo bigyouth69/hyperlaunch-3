@@ -57,6 +57,26 @@
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>The multiplier applied to all the sleeps in the module. Default is 1. If you have a problem where the module is not accurately sending keys to Pinball FX2, try increasing this multplier by .1 at a time.</DESCRIPTION>
 						</KEY>
+						<KEY name="External_DMD" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Turning this on will allow the module to hide the window components of the external DMD. To customize placement on the screen, set the other DMD settings in this window. Default is false.</DESCRIPTION>
+						</KEY>
+						<KEY name="DMD_X" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The X location you want the DMD to appear at. Default is the right side of your primary monitor. So if your desktop width is 1920, this value will default to 1920.</DESCRIPTION>
+						</KEY>
+						<KEY name="DMD_Y" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The Y location you want the DMD to appear at.</DESCRIPTION>
+						</KEY>
+						<KEY name="DMD_Width" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The horizontal width of the DMD.</DESCRIPTION>
+						</KEY>
+						<KEY name="DMD_Height" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The vertical height of the DMD.</DESCRIPTION>
+						</KEY>
 					</KEYS>
 				</SECTION>
 				<SECTION name="%RomName%" required="true">

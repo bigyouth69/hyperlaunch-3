@@ -2,9 +2,9 @@ MEmu = Daphne Singe
 MEmuV =  v1.14
 MURL = http://www.singeengine.com/cms/
 MAuthor = djvj
-MVersion = 2.0.3
-MCRC = D73E9B2
-iCRC = 727919E9
+MVersion = 2.0.4
+MCRC = 2CBC6BD2
+iCRC = 777E5B50
 MID = 635038268880264228
 MSystem = "American Laser Games","WoW Action Max"
 ;----------------------------------------------------------------------------
@@ -57,17 +57,20 @@ FadeInStart()
 
 settingsFile := modulePath . "\" . moduleName . ".ini"
 fullscreen := IniReadCheck(settingsFile, "settings", "Fullscreen","true",,1)
+globalParams := IniReadCheck(settingsFile,"settings","globalParams","",,1)
 daphneWidth := IniReadCheck(settingsFile, "settings", "daphneWidth","1024",,1)
 daphneHeight := IniReadCheck(settingsFile, "settings", "daphneHeight","768",,1)
 singePathUpdate := IniReadCheck(settingsFile, "settings", "SingePathUpdate","true",,1)
 forcePathUpdate := IniReadCheck(settingsFile, "settings", "ForcePathUpdate","false",,1)
+params := IniReadCheck(settingsFile,romName,"params","",,1)
+params := " " . globalParams . " " .  params
 
 BezelStart()
 
 ; Emptying variables If they are not set
 fullscreen := If fullscreen = "true" ? " -fullscreen_window" : ""	; fullscreen_window mode allows guncon and aimtraks to work
 If bezelPath   ; this variable is only filled if bezel is enabled and a valid bezel image is found
-{	params:= params . " -ignore_aspect_ratio"
+{	params := params . " -ignore_aspect_ratio"
 	daphneWidth := " -x " . Round(bezelScreenWidth)  ;bezelScreenWidth variable is defined on the BezelStart function and it gives the desired width that your game screen should have while using this bezel 
 	daphneHeight := " -y " . Round(bezelScreenHeight) ;idem above
 } Else {
@@ -84,7 +87,7 @@ If singePathUpdate = true
 HideEmuStart()	; This fully ensures windows are completely hidden even faster than winwait
 
 ; This allows us to send variables, that when empty, are not sent to the Run command
-Run(executable . " singe vldp" . daphneWidth . daphneHeight . fullscreen . " -framefile """ . romPath . "\" . romName . ".txt"" -script """ . romPath . "\" . romName . ".singe""", emuPath)
+Run(executable . " singe vldp" . daphneWidth . daphneHeight . fullscreen . params . " -framefile """ . romPath . "\" . romName . ".txt"" -script """ . romPath . "\" . romName . ".singe""", emuPath)
 
 WinWait("DAPHNE ahk_class SDL_app")
 WinWaitActive("DAPHNE ahk_class SDL_app")

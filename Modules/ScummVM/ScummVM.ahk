@@ -2,9 +2,9 @@ MEmu = ScummVM
 MEmuV = v1.7.0
 MURL = http://scummvm.org/
 MAuthor = djvj, brolly
-MVersion = 2.0.7
-MCRC = 94CC13AF
-iCRC = 3ADCD646
+MVersion = 2.0.8
+MCRC = 8DE09DA4
+iCRC = C211523C
 MID = 635038268922749586
 MSystem = "ScummVM","Microsoft MS-DOS"
 ;----------------------------------------------------------------------------
@@ -41,8 +41,9 @@ customConfigFile := GetFullName(customConfigFile)	; convert relative path to abs
 configFile := CheckFile(If customConfigFile ? customConfigFile : scummDefaultConfigFile)	; checks If either the default config file or the custom one exists
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 LaunchMode := IniReadCheck(settingsFile, "Settings|" . romName, "LaunchMode", "Auto",,1)
-TargetName := IniReadCheck(settingsFile, romName, "Target", romName,,1)
+TargetName := IniReadCheck(settingsFile, romName, "TargetName", romName,,1)
 ForceExtractionToRomPath := IniReadCheck(settingsFile, "Settings" . "|" . romName, "ForceExtractionToRomPath", "false",,1)
+BezelDelay := IniReadCheck(settingsFile, "Settings|" . romName, "BezelDelay", "0",,1)
 
 SaveKey := IniReadCheck(settingsFile, "Settings", "SaveKey","1",,1)					; hotkey to save state
 LoadKey := IniReadCheck(settingsFile, "Settings", "LoadKey","2",,1)						; hotkey to load state
@@ -166,6 +167,9 @@ WinWait("ahk_class SDL_app")
 WinWaitActive("ahk_class SDL_app")
 
 Sleep, 700 ; Necessary otherwise the HyperSpin window flashes back into view
+
+If bezelPath
+	Sleep, % bezelDelay
 
 BezelDraw()
 HideEmuEnd()

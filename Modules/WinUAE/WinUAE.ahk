@@ -2,9 +2,9 @@ MEmu = WinUAE
 MEmuV =  v2.6.0
 MURL = http://www.winuae.net/
 MAuthor = brolly
-MVersion = 2.1.2
-MCRC = 36AB306
-iCRC = EEA3289D
+MVersion = 2.1.3
+MCRC = 64CDF688
+iCRC = 387DD74B
 mId = 635138307631183750
 MSystem = "Commodore Amiga","Commodore Amiga CD32","Commodore CDTV","Commodore Amiga CD","Commodore Amiga Demos"
 ;----------------------------------------------------------------------------
@@ -123,6 +123,8 @@ blittercycleexact := IniReadCheck(settingsFile, romName, "BlitterCycleExact","",
 cpucompatible := IniReadCheck(settingsFile, romName, "CpuCompatible",defaultCpuCompatible,,1)
 cpuspeed := IniReadCheck(settingsFile, romName, "CpuSpeed",defaultCpuSpeed,,1)
 cachesize := IniReadCheck(settingsFile, romName, "CacheSize",defaultCacheSize,,1)
+cpu := IniReadCheck(settingsFile, romName, "CPU","",,1)
+fpu := IniReadCheck(settingsFile, romName, "FPU","",,1)
 
 ;RAM settings
 chipmemory := IniReadCheck(settingsFile, romName, "ChipMemory","",,1)
@@ -244,6 +246,10 @@ If (ident = "cd32" or ident = "cdtv") {
 		options := options . " -s cpu_compatible=" . cpucompatible
 	If cpuspeed
 		options := options . " -s cpu_speed=" . cpuspeed
+	If cpu
+		options := options . " -s cpu_model=" . cpu
+	If fpu
+		options := options . " -s fpu_model=" . fpu
 	If cachesize
 		options := options . " -s cachesize=" . cachesize
 	If collisionlevel

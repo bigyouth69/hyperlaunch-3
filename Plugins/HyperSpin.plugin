@@ -36,7 +36,8 @@ PluginInit:
 	; Game Info (not required)
 	; format: gameInfo["Label"] := "Value"
 	gameInfo := Object()
-	
+	gameInfo := BuildDatabaseTable(dbName,systemName,"Description|Cloneof|Manufacturer|Year|Genre|Rating","Name|Cloneof|Manufacturer|Year|Genre|Rating")
+
 	;----------Loading FrontEnd asset labels
 	feLogoLabels:= RIniLoadVar(8,9, "HyperSpin", "Fe_Logo_Labels", "Game Logo|System Logo")   ; if label "keepFileName" the filename will be used as label
 	feArtworkLabels:= RIniLoadVar(8,9, "HyperSpin", "Fe_Artwork_Labels", "Artwork1|Box Art|Cartridge|Flyers|Letters|Other")
@@ -48,26 +49,46 @@ PluginInit:
 	feDiscArtworkLabel:= RIniLoadVar(8,9, "HyperSpin", "Fe_Disc_Artwork_Label", "Artwork1")
 	
 	;----------Acquiring HyperSpin Paths and defining respective labels------------
+
+	parentDbName := gameInfo["Cloneof"].Value
+	
 	;Acquiring Logos
-	feMedia.Logos := BuildAssetsTable(frontendPath . "\Media\" . systemName . "\Images\Wheel\" . dbName . ".png" . "|" . frontendPath . "\Media\Main Menu\Images\Wheel\" . systemName . ".png",feLogoLabels,"game|system","png")
+	logoPath := frontendPath . "\Media\" . systemName . "\Images\Wheel\" . dbName . ".png"
+	If (parentDbName && !FileExist(logoPath)) {
+		Log("PluginInit - Looking for a Parent ""Logo"" for """ . dbName . """ because none were found in: " . logoPath,4)
+		logoPath := frontendPath . "\Media\" . systemName . "\Images\Wheel\" . parentDbName . ".png"
+	}
+	feMedia.Logos := BuildAssetsTable(logoPath . "|" . frontendPath . "\Media\Main Menu\Images\Wheel\" . systemName . ".png",feLogoLabels,"game|system","png")
 
 	;Acquiring ArtWork
-	feMedia.Artwork := BuildAssetsTable(frontendPath . "\Media\" . systemName . "\Images\Artwork1\" . dbName . ".png" . "|" . frontendPath . "\Media\" . systemName . "\Images\Artwork2\" . dbName . ".png" . "|" . frontendPath . "\Media\" . systemName . "\Images\Artwork3\" . dbName . ".png" . "|" . frontendPath . "\Media\" . systemName . "\Images\Artwork4\" . dbName . ".png" . "|" . frontendPath . "\Media\" . systemName . "\Images\Letters"  . "|" . frontendPath . "\Media\" . systemName . "\Images\Other",feArtworkLabels,"game|game|game|game|system|system","png")
+	Loop, 4
+	{	artwork%A_Index%Path := frontendPath . "\Media\" . systemName . "\Images\Artwork" . A_Index . "\" . dbName . ".png"
+		If (parentDbName && !FileExist(artwork%A_Index%Path)) {
+			Log("PluginInit - Looking for a Parent ""Artwork" . A_Index . """ for """ . dbName . """ because none were found in: " . artwork%A_Index%Path,4)
+			artwork%A_Index%Path := frontendPath . "\Media\" . systemName . "\Images\Artwork" . A_Index . "\" . parentDbName . ".png"
+		}
+	}
+	feMedia.Artwork := BuildAssetsTable(artwork1Path . "|" . artwork2Path . "|" . artwork3Path . "|" . artwork4Path . "|" . frontendPath . "\Media\" . systemName . "\Images\Letters"  . "|" . frontendPath . "\Media\" . systemName . "\Images\Other",feArtworkLabels,"game|game|game|game|system|system","png")
 		
 	;Acquiring Videos
 	IniRead, hsGameVideoPath, frontendPath . "\Settings\" . systemName . ".ini", video defaults, path		; read video path for game videos, if not exist, set default
-	hsGameVideo := if FileExist(hsGameVideoPath) ? hsGameVideoPath . dbName : frontendPath . "\Media\" . systemName . "\Video\" . dbName 
+	hsGameVideo := If FileExist(hsGameVideoPath) ? hsGameVideoPath : frontendPath . "\Media\" . systemName . "\Video\"
+	hsGameVideoClone := hsGameVideo . dbName
+	If (parentDbName && !FileExist(hsGameVideoClone . ".mp4") && !FileExist(hsGameVideoClone . ".flv")) {
+		Log("PluginInit - Looking for a Parent ""Game Video"" for """ . dbName . """ because one was not found in: " . hsGameVideo . dbName . ".(mp4 or flv)",4)
+		hsGameVideo := hsGameVideo . parentDbName
+	} Else
+		hsGameVideo := hsGameVideo . dbName
+	
 	IniRead, hsSystemVideoPath, frontendPath . "\Settings\Main Menu.ini", video defaults, path		; read video path for system videos, if not exist, set default
-	hsSystemVideo := if FileExist(hsSystemVideoPath) ? hsSystemVideo . dbName : frontendPath . "\Media\Main Menu\Video\" . systemName 
-	feMedia.Videos := BuildAssetsTable(hsGameVideo . ".mp4" "|" . hsGameVideo . ".flv" . "|" . hsSystemVideo . ".mp4" . "|" . hsSystemVideo . ".flv",feVideosLabels,"game|game|system|system","mp4,flv")
+	hsSystemVideo := If FileExist(hsSystemVideoPath) ? hsSystemVideoPath . systemName : frontendPath . "\Media\Main Menu\Video\" . systemName 
+	feMedia.Videos := BuildAssetsTable(hsGameVideo . ".* |" . hsSystemVideo . ".*","game|system","mp4,flv")
 
 	;Acquiring Backgrounds (not available on HyperSpin)
 	;Acquiring Controller (not available on HyperSpin)
 	;Acquiring Guides (not available on HyperSpin)
 	;Acquiring Manuals (not available on HyperSpin)
 	
-	; Game Info
-	gameInfo := BuildDatabaseTable(dbName,systemName,"Description|Cloneof|Manufacturer|Year|Genre|Rating","Name|Cloneof|Manufacturer|Year|Genre|Rating")
 	Log("PluginInit - Ended")
 Return	
 
