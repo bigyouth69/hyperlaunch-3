@@ -1,5 +1,5 @@
-MCRC = CC2FD11D
-MVersion=1.0.3
+MCRC = 42E27C16
+MVersion=1.0.4
 
 MultiPlayerMenu(lastIP=false, lastPort=false, ByRef networkType=false, ByRef networkPlayers=0, setupNetwork=false, keyboardControl=true, severUseNetworkIP=true, disableSeverInfoMenu=false, textMessage=false) {   ; severUseNetworkIP=true -> networkIP=publicIP / severUseNetworkIP=false -> networkIP=localIP
 	Log("MultiPlayerMenu - Started")
@@ -570,7 +570,7 @@ MultiPlayerMenu(lastIP=false, lastPort=false, ByRef networkType=false, ByRef net
 			IPSelected := % IPSelectedDigit[1] . IPSelectedDigit[2] . IPSelectedDigit[3] . "." . IPSelectedDigit[4] . IPSelectedDigit[5] . IPSelectedDigit[6] . "." . IPSelectedDigit[7] . IPSelectedDigit[8] . IPSelectedDigit[9] . "." . IPSelectedDigit[10] . IPSelectedDigit[11] . IPSelectedDigit[12] 
 			PortSelected := % IPSelectedDigit[13] . IPSelectedDigit[14] . IPSelectedDigit[15] . IPSelectedDigit[16] . IPSelectedDigit[17]
 			If !(ValidIP(IPSelected)){
-				Log("MultiPlayer - CAREFUL WHEN POSTING THIS LOG PUBLICALY AS IT CONTAINS YOUR IP ON THE NEXT LINE",2)
+				Log("MultiPlayer - CAREFUL WHEN POSTING THIS LOG PUBLICLY AS IT CONTAINS YOUR IP ON THE NEXT LINE",2)
 				Log("MultiPlayer - Invalid IP Port Selected: " . IPSelected . ". Please try again.")
 				Gdip_GraphicsClear(multiplayerMenu_G4)
 				Gdip_Alt_TextToGraphics(multiplayerMenu_G4, "IP number must be lower or equal to 255.255.255.255. Please try again!", "x" . multiplayerMenuW-multiplayerMenuMargin . " y" . multiplayerMenuH-multiplayerMenuMargin . " Right c" . errorTextColor . " r4 s" . errorTextSize . " " . currentTextStyle, errorTextFont)	
@@ -585,7 +585,7 @@ MultiPlayerMenu(lastIP=false, lastPort=false, ByRef networkType=false, ByRef net
 				SetTimer, clearErrorMessage, %errorShowTime%
 				Return
 			} Else {
-				Log("MultiPlayer - CAREFUL WHEN POSTING THIS LOG PUBLICALY AS IT CONTAINS YOUR IP ON THE NEXT LINE",2)
+				Log("MultiPlayer - CAREFUL WHEN POSTING THIS LOG PUBLICLY AS IT CONTAINS YOUR IP ON THE NEXT LINE",2)
 				Log("MultiPlayer - IP Selected: " . IPSelected . ". Port Selected: " . PortSelected)
 				networkIP := IPSelected
 				networkPort := PortSelected
