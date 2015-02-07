@@ -6,7 +6,7 @@ MVersion = 2.1.4
 MCRC = 9678FB18
 iCRC = D88577B3
 MID = 635038268903403479
-MSystem = "AAE","Cave","Capcom","LaserDisc","MAME","Nintendo Arcade Systems","Sega Model 1","Sega ST-V","SNK Neo Geo","SNK Neo Geo AES"
+MSystem = "AAE","Cave","Capcom","LaserDisc","MAME","Nintendo Arcade Systems","Sega Model 1","Sega ST-V","SNK Neo Geo","SNK Neo Geo AES","SNK Neo Geo MVS"
 ;----------------------------------------------------------------------------
 ; Notes:
 ; No need to edit mame.ini and set your rom folder, module sends the rompath for you.
