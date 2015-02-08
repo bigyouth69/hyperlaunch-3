@@ -2,9 +2,9 @@ MEmu = Pinball FX2
 MEmuV = N/A
 MURL = http://www.pinballfx.com/
 MAuthor = djvj & bleasby
-MVersion = 2.0.3
+MVersion = 2.0.4
 MCRC = 48091017
-iCRC = 22518073
+iCRC = B2656270
 mId = 635244873683327779
 MSystem = "Pinball FX2","Pinball"
 ;----------------------------------------------------------------------------
