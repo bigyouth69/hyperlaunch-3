@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen. Requires dxwnd configured for windowed mode. Please read the module notes.</DESCRIPTION>
+						</KEY>
+						<KEY name="Module_Debugging" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables the module tooltips when debugging where the module is in regards to controlling actions to select your game. Default is false.</DESCRIPTION>
+						</KEY>
+						<KEY name="Rotate_Method" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>The tool you want to use to rotate your desktop. Choiced are display or irotate. The exe of the one you choose should be placed in your Module Extensions folder</DESCRIPTION>
+							<VALUES>
+								<VALUE>display</VALUE>
+								<VALUE>irotate</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="Rotate_Display" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Rotate the display 90 degrees either left or right for vertical games.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="None">0</VALUE>
+								<VALUE description="Left">90</VALUE>
+								<VALUE description="Right">270</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="My_Tables" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Pipe-delimited list of all the games you own in the My Tables folder. By default, this is all the games. If you do not own them all, you need to create this list so the module knows where each game lies. Open the module in notepad and copy/paste the default list into this setting and remove all games you don't have.</DESCRIPTION>
+						</KEY>
+						<KEY name="Sleep_Until_Logo" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>In Milliseconds, the amount of time to sleep until the Pinball Arcade logo finishes loading. If the module does not cancel this immediately upon the start screen, decrease this value. Default is 7000, which is 7 seconds.</DESCRIPTION>
+						</KEY>
+						<KEY name="Sleep_Base_Time" required="false" nullable="true">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>The multiplier applied to all the sleeps in the module. Default is 1. If you have a problem where the module is not accurately sending keys to Pinball Arcade, try increasing this multplier by .1 at a time.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>
