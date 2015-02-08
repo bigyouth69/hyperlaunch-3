@@ -2,8 +2,8 @@ MEmu = Daphne Singe
 MEmuV =  v1.14
 MURL = http://www.singeengine.com/cms/
 MAuthor = djvj
-MVersion = 2.0.4
-MCRC = 2CBC6BD2
+MVersion = 2.0.5
+MCRC = 6509AFA2
 iCRC = 777E5B50
 MID = 635038268880264228
 MSystem = "American Laser Games","WoW Action Max"
@@ -153,15 +153,16 @@ SingePathUpdate(){
 		currentData := FileFullPath[currentSingeIndex,2]
 		Loop, Parse, currentData, `n, `r
 		{
+			currentLine := A_Index
 			oldSingeLine := A_LoopField
 			lineUpdated :=
 			Loop % singeUpdateStrings.MaxIndex()	; for each string in the array
 				If InStr(oldSingeLine, singeUpdateStrings[A_Index]) {	; check each singe file for the strings
-					updatedText .= (If A_Index = 1 ? "" : "`r`n") . UpdateLine(oldSingeLine, singeUpdateStrings[A_Index])
+					updatedText .= (If currentLine = 1 ? "" : "`r`n") . UpdateLine(oldSingeLine, singeUpdateStrings[A_Index])
 					lineUpdated := 1
 				}
 			If !lineUpdated	; if line was not found above, just put the old line back
-				updatedText .= (If A_Index = 1 ? "" : "`r`n") . A_LoopField
+				updatedText .= (If currentLine = 1 ? "" : "`r`n") . A_LoopField
 		}
 		Log("SingePathUpdate - Deleting file: " . FileFullPath[currentSingeIndex,1],4)
 		FileDelete, % FileFullPath[currentSingeIndex,1]
@@ -170,6 +171,7 @@ SingePathUpdate(){
 	}
 	Log(updatedLines . " Singe paths updated by HyperLaunch.")
 	Log("SingePathUpdate - Ended")
+	exitapp
 	Return
 }
 
