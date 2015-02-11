@@ -1,9 +1,9 @@
 MEmu = Pinball Arcade
-MEmuV = N/A
+MEmuV = v1.31.8
 MURL = http://www.pinballarcade.com/
 MAuthor = djvj
-MVersion = 2.0
-MCRC = 37DA3801
+MVersion = 2.0.1
+MCRC = DE46ABEC
 iCRC = 7893F2F8
 mId = 635589857631115764
 MSystem = "Pinball Arcade","Pinball"
@@ -61,7 +61,7 @@ sleepLogo := IniReadCheck(settingsFile, "Settings", "Sleep_Until_Logo",7000,,1)
 sleepBaseTime := IniReadCheck(settingsFile, "Settings", "Sleep_Base_Time",1,,1)
 lastMyTable := "Attack from Mars (Bally)"	; Mytables always starts on Attack from Mars
 ; myTables := IniReadCheck(settingsFile, "Settings", "My_Tables","Attack From Mars|Big Shot|Black Hole|Black Knight|Bride of Pin-Bot|Cactus Canyon|Centaur|Central Park|Champion Pub|Cirqus Voltaire|Class of 1812|Creature from the Black Lagoon|Cue Ball Wizard|Dr. Dude|El Dorado - City of Gold|Elvira|Firepower|Fish Tales|Flight 2000|Funhouse|Genie|Goin' Nuts|Gorgar|Harley-Davidson|Haunted House|Medieval Madness|Monster Bash|No Good Gofers|Pin-Bot|Ripley's Believe It or Not|Scared Stiff|Space Shuttle|Star Trek|Tales of the Arabian Nights|Taxi|Tee'd Off|Terminator 2|Theatre of Magic|Twilight Zone|Victory|Whirlwind|White Water",,1) ; | separated list of the tables I own
-myTables := IniReadCheck(settingsFile, "Settings", "My_Tables","Attack from Mars (Bally)|Big Shot (Gottlieb)|Black Hole (Gottlieb)|Black Knight 2000 (Williams)|Black Knight (Williams)|Black Rose (Bally)|Machine - Bride of Pin Bot, The (Williams)|Cactus Canyon (Bally)|Centaur (Bally)|Central Park (Gottlieb)|Champion Pub, The (Bally)|Cirqus Voltaire (Bally)|Class of 1812 (Gottlieb)|Creature from the Black Lagoon (Bally)|Cue Ball Wizard (Gottlieb)|Dr. Dude & His Excellent Ray (Bally)|El Dorado - City Of Gold (Gottlieb)|Elvira and the Party Monsters (Bally)|Firepower (Williams)|Fish Tales (Williams)|Flight 2000 (Stern)|FunHouse (Williams)|Genie (Gottlieb)|Goin' Nuts (Gottlieb)|Gorgar (Williams)|Harley-Davidson, 3rd Edition (Stern)|Haunted House (Gottlieb)|High Speed (Williams)|Junk Yard (Williams)|Medieval Madness (Williams)|Monster Bash (Williams)|No Good Gofers (Williams)|Pin Bot (Williams)|Ripley's Believe It or Not! (Stern)|Scared Stiff (Bally)|Space Shuttle (Williams)|Star Trek - The Next Generation (Williams)|Tales of the Arabian Nights (Williams)|Taxi (Williams)|Tee'd Off (Gottlieb)|Terminator 2 - Judgment Day (Williams)|Theatre of Magic (Bally)|Twilight Zone (Bally)|Victory (Gottlieb)|Whirlwind (Williams)|White Water (Williams)|WHO Dunnit (Bally)",,1)	; | separated list of the tables user owns
+myTables := IniReadCheck(settingsFile, "Settings", "My_Tables","Attack from Mars (Bally)|Big Shot (Gottlieb)|Black Hole (Gottlieb)|Black Knight 2000 (Williams)|Black Knight (Williams)|Black Rose (Bally)|Bram Stoker's Dracula (Williams)|Machine - Bride of Pin Bot, The (Williams)|Cactus Canyon (Bally)|Centaur (Bally)|Central Park (Gottlieb)|Champion Pub, The (Bally)|Cirqus Voltaire (Bally)|Class of 1812 (Gottlieb)|Creature from the Black Lagoon (Bally)|Cue Ball Wizard (Gottlieb)|Diner (Williams)|Dr. Dude & His Excellent Ray (Bally)|El Dorado - City Of Gold (Gottlieb)|Elvira and the Party Monsters (Bally)|Firepower (Williams)|Fish Tales (Williams)|Flight 2000 (Stern)|FunHouse (Williams)|Genie (Gottlieb)|Goin' Nuts (Gottlieb)|Gorgar (Williams)|Harley-Davidson, 3rd Edition (Stern)|Haunted House (Gottlieb)|High Roller Casino (Stern)|High Speed (Williams)|Junk Yard (Williams)|Lights... Camera... Action! (Gottlieb)|Medieval Madness (Williams)|Monster Bash (Williams)|No Good Gofers (Williams)|Phantom of the Opera, The (Stern)|Pin Bot (Williams)|Ripley's Believe It or Not! (Stern)|Scared Stiff (Bally)|Space Shuttle (Williams)|Star Trek - The Next Generation (Williams)|Tales of the Arabian Nights (Williams)|Taxi (Williams)|Tee'd Off (Gottlieb)|Terminator 2 - Judgment Day (Williams)|Theatre of Magic (Bally)|Twilight Zone (Bally)|Victory (Gottlieb)|Whirlwind (Williams)|White Water (Williams)|WHO Dunnit (Bally)",,1)	; | separated list of the tables user owns
 
 BezelStart()
 
@@ -139,7 +139,7 @@ Sleep % sleepLogo      ; sleep till Pinball FX2 logo appears
 
 If moduleDebugging = true
 	Tooltip, sending enter to get to the main menu
-Send, {Enter Down}{Enter Up}100{Enter Down}{Enter Up} ;100{Enter Down}{Enter Up}        ; get to the Main menu
+Send, {Enter Down}{Enter Up}100{Enter Down}{Enter Up}100{Enter Down}{Enter Up}        ; get to the Main menu
 
 If moduleDebugging = true
 	Tooltip, entering MyTable folder
