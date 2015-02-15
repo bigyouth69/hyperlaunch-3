@@ -1,5 +1,5 @@
-MCRC=23DE82D6
-MVersion=1.0.8
+MCRC=C8A44421
+MVersion=1.0.9
 
 BezelGUI(){
 	Global
@@ -146,7 +146,7 @@ BezelStart(Mode="",parent="",angle="",rom=""){
 		; -------------- End of Read ini options and define default values
 		;Loading Bezel parameters and images
 		;Checking if game is vertical oriented
-		if ((angle=90) or (angle=270) or (angle)) {
+		if (angle != 180 && ((angle=90) or (angle=270) or (angle))) {
 			vertical := "true"
 			Log("Bezel - Assuming that game has vertical orientation. Bezel will search on the extra folder Vertical in order to find assets.",4)
 		} else

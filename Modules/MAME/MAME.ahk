@@ -2,8 +2,8 @@ MEmu = MAME
 MEmuV =  v0.150
 MURL = http://www.mame.net/
 MAuthor = djvj
-MVersion = 2.1.4
-MCRC = 9678FB18
+MVersion = 2.1.5
+MCRC = 968DA0CB
 iCRC = D88577B3
 MID = 635038268903403479
 MSystem = "AAE","Cave","Capcom","LaserDisc","MAME","Nintendo Arcade Systems","Sega Model 1","Sega ST-V","SNK Neo Geo","SNK Neo Geo AES","SNK Neo Geo MVS"
@@ -58,20 +58,20 @@ UseMarquees := If (Use_Marquees = "true") ? " -use_marquees" : " -nouse_marquees
 
 hideEmuObj := Object(dialogOpen . " ahk_class ConsoleWindowClass",0,"ahk_class MAME",1)	;Hide_Emu will hide these windows. 0 = will never unhide, 1 = will unhide later
 
-; Process mame's ListXMLtable for certain features
+; Process mame's ListXML for certain features
 If (bezelEnabled = "true" || servoStikEnabled != "false") {
-	ListXMLtable := []
-	ListXMLtable := ListXMLInfo(romName)
+	ListXMLObject := Object()
+	ListXMLObject := ListXMLInfo(romName)
 	If (bezelEnabled = "true") {
 		If (bezelMode = "layout"){
-			BezelStart("layout",ListXMLtable[1],ListXMLtable[2],romName)
+			BezelStart("layout",ListXMLObject["Parent"].Value,ListXMLObject["Angle"].Value,romName)
 		} Else { ;bezel mode = normal
 			useBezels := " -nouse_bezels"   ; force disabling MAME built-in bezels
-			BezelStart(,,ListXMLtable[2])
+			BezelStart(,,ListXMLObject["Angle"].Value)
 		}
 	}
 	If (servoStikEnabled != "false") {
-		ServoStik(If ListXMLtable[5] <= 4 ? 4 : 8)	; If "ways" in the xml is set to 4 or less, the servo will go into 4-way mode, else 8-way mode will be enabled
+		ServoStik(If ListXMLObject["Ways"].Value <= 4 ? 4 : 8)	; If "ways" in the xml is set to 4 or less, the servo will go into 4-way mode, else 8-way mode will be enabled
 	}
 }
 
@@ -160,7 +160,8 @@ ExitModule()
 
 ListXMLInfo(rom){ ; returns MAME/MESS info about parent rom, orientation angle, resolution
 	Global emuFullPath, emuPath
-	ListXMLtable := []
+	ListXMLObject := Object()
+	listXMLVarLog :=
 	RunWait, % comspec . " /c " . """" . emuFullPath . """" . " -listxml " . rom . " > tempBezel.txt", %emuPath%, Hide
 	Fileread, ListxmlContents, %emuPath%\tempBezel.txt
 	RegExMatch(ListxmlContents, "s)<game.*name=" . """" . rom . """" . ".*" . "cloneof=" . """" . "[^""""]*", parent)
@@ -175,15 +176,22 @@ ListXMLInfo(rom){ ; returns MAME/MESS info about parent rom, orientation angle, 
 	RegExMatch(Height,"[0-9]+", Height, "-6")
 	RegExMatch(ListxmlContents, "s)<control.*ways=" . """" . "[0-9]+" . """", Ways)
 	RegExMatch(Ways,"[0-9]+", Ways, "-6")
-	ListXMLtable[1] := parent
-	ListXMLtable[2] := angle
-	ListXMLtable[3] := height
-	ListXMLtable[4] := width
-	ListXMLtable[5] := ways
-	if (ListXMLtable[3] > ListXMLtable[4])
-		ListXMLtable[2] := true
+	logVars := "Parent|Angle|Height|Width|Ways"
+	Loop, Parse, logVars, |
+	{
+		currentobj:={}
+		currentobj.Label := A_Loopfield
+		currentobj.Value := %A_Loopfield%
+		ListXMLObject.Insert(currentobj["Label"], currentobj)
+		listXMLLog .= "`r`n`t`t`t`t`t" . currentobj["Label"] . " = " . currentobj["Value"]
+	}
+	Log("Module - MAME ListXML values: " . listXMLLog,5)
+	If (ListXMLObject["Height"].Value > ListXMLObject["Width"].Value) {
+		ListXMLObject["Angle"].Value := true
+		Log("Module - This game's height is greater than its width, forcing vertical mode",5)
+	}
 	FileDelete, %emuPath%\tempBezel.txt
-	Return ListXMLtable	
+	Return ListXMLObject	
 }
 
 HaltEmu:
