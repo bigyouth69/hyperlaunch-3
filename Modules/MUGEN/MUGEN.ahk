@@ -2,13 +2,15 @@ MEmu = MUGEN
 MEmuV = N/A
 MURL = http://www.elecbyte.com/
 MAuthor = brolly & djvj
-MVersion = 2.0.2
-MCRC = C7CEEEE
+MVersion = 2.0.4
+MCRC = FA465B5D
 iCRC = 965C2F5A
 MID = 635038268906726252
 MSystem = "MUGEN"
 ;----------------------------------------------------------------------------
 ; Notes:
+; To use this module, set SkipChecks to "Rom and Emu". This sytem does not use any roms and uses a different executable for each game.
+; Emulator Path needs to point to a dummy exe, like Dummy.exe, if you don't set Skip Checks to Rom and Emu
 ; Default location to launch the games will be in your romPath with a subfolder for each game (named after the rom in the xml).
 ; Each game's folder, should contain a MUGEN.exe
 
@@ -25,8 +27,6 @@ MSystem = "MUGEN"
 ; gamePath = Street Fighter Legends\mugen.exe
 ; exitHack = 0
 ;
-; emuPath and exe need to point to a dummy exe, like PCLauncher.exe
-; romPath needs to point to the dir with all the blank txt files and the settings.ini
 ; Escape will only close the game from the main menu, it is needed for in-game menu usage otherwise.
 ; Fullscreen and controls are done via in-game options for each game. To speed up configuring of games, configure one game then save its settings to a default.cfg and paste it into each game's Saves folder.
 ; Controls are done via in-game options for each game.
@@ -40,11 +40,11 @@ remapWinKeys := IniReadCheck(settingsFile, "Settings", "remapWinKeys","true",,1)
 gamePath := IniReadCheck(settingsFile, romName, "gamePath",A_Space,,1)
 exitHack := IniReadCheck(settingsFile, romName, "exitHack","1",,1)
 
+7z(romPath, romName, romExtension, 7zExtractPath)
+
 gamePath := romPath . "\" . (If (!gamePath or gamePath = "ERROR") ? (romName . "\MUGEN.exe") : (gamePath))
 CheckFile(gamePath,"Could not find " . gamePath . "`nPlease place your game in it's own folder in your Rom_Path or define a custom gamePath in " . SettingsFile)
 SplitPath, gamePath,gExe, gPath
-
-7z(romPath, romName, romExtension, 7zExtractPath)
 
 ; This remaps windows Start keys to Return to prevent accidental leaving of game
 If remapWinKeys = true
