@@ -2,8 +2,8 @@ MEmu = Fusion
 MEmuV =  v3.64
 MURL = http://www.eidolons-inn.net/tiki-index.php?page=Kega
 MAuthor = djvj
-MVersion = 2.0.9
-MCRC = 6E4CD2B
+MVersion = 2.1.0
+MCRC = F512EFED
 iCRC = C78F8D9A
 MID = 635038268893895568
 MSystem = "Samsung Gam Boy","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","Sega Mega-CD","Sega Pico","Sega SC-3000","Sega SG-1000"
@@ -233,8 +233,12 @@ Loop { ; looping until Fusion is done loading game
 	Sleep, 200
 	WinGetTitle, winTitle, Fusion ahk_class KegaClass
 	StringSplit, T, winTitle, %A_Space%
-	If ( T3 = "-" )
+	If (T3 = "-")
 		Break
+	If (A_Index > 75) {
+		Log("Module - Timed out detecting that a game was loaded in Fusion. There may be a problem with the emu loading your game." . (If ident = "scd" ? "You need to make sure you select the proper CD drive manually in Fusion first by going to Options -> CD Drive":""),3)
+		Break
+	}
 }
 
 If hideTitleBar = true
