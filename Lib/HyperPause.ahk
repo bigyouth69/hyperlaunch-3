@@ -1,5 +1,5 @@
-MCRC=219E7381
-mVersion=1.0.7
+MCRC=48FFD00B
+mVersion=1.0.8
 
 ;Author: bleasby
 ;Thanks to djvj and brolly for helping in the development of HyperPause (without them this would be impossible to achieve)
@@ -2083,7 +2083,7 @@ MovesList:
                 }
                 MovesListCurrentLine  := A_LoopField
                 StringCaseSense, On
-                replace := {"_a":"#a","_b":"#b","_c":"#c","_d":"#d","_e":"#e","_f":"#f","_g":"#g","_h":"#h","_i":"#i","_j":"#j","_k":"#k","_l":"#l","_m":"#m","_n":"#n","_o":"#o","_p":"#p","_q":"#q","_r":"#r","_s":"#s","_t":"#t","_u":"#u","_v":"#v","_w":"#w","_x":"#x","_y":"#y","_z":"#z","^s":"Òs","^?":"ÒQ","^*":"^X"} ; Dealing with altered filenames due to the impossibility of using a lower and upper case file names on the same directory (_letter lower cases are transformed in #letter)  
+                replace := {"_a":"#a","_b":"#b","_c":"#c","_d":"#d","_e":"#e","_f":"#f","_g":"#g","_h":"#h","_i":"#i","_j":"#j","_k":"#k","_l":"#l","_m":"#m","_n":"#n","_o":"#o","_p":"#p","_q":"#q","_r":"#r","_s":"#s","_t":"#t","_u":"#u","_v":"#v","_w":"#w","_x":"#x","_y":"#y","_z":"#z","^s":"@S","_?":"_;","^*":"^X"} ; Dealing with altered filenames due to the impossibility of using a lower and upper case file names on the same directory (_letter lower cases are transformed in #letter)  
                 For what, with in replace
                     StringReplace, MovesListCurrentLine, MovesListCurrentLine, %what%, %with%, All
                 
