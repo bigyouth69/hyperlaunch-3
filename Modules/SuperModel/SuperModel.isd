@@ -68,6 +68,12 @@
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>Specifies the volume of MPEG music produced by the Digital Sound Board and the audio produced by the sound board in percent. The default is 100, which is full volume, and the valid range of v is 0 (muted) to 200.</DESCRIPTION>
 						</KEY>
+						<KEY name="ClearNVRAM" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Globally clear out the NVRAM each time a game is started. This can be helpful for Star Wars (swtrilgy) as it will bug if you close it with coins still inserted. The default is False.</DESCRIPTION>
+						</KEY>
+
+						
 					</KEYS>
 				</SECTION>
 				<SECTION name="%RomName%" required="false">
@@ -130,6 +136,11 @@
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>Specifies the volume of MPEG music produced by the Digital Sound Board and the audio produced by the sound board in percent. The default is 100, which is full volume, and the valid range of v is 0 (muted) to 200.</DESCRIPTION>
 						</KEY>
+						<KEY name="ClearNVRAM" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Clear out the NVRAM each time this game is started. This can be helpful for Star Wars (swtrilgy) as it will bug if you close it with coins still inserted. The default is False.</DESCRIPTION>
+						</KEY>
+						
 					</KEYS>
 				</SECTION>
 			</SECTIONS>

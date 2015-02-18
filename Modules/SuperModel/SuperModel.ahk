@@ -2,9 +2,9 @@ MEmu = SuperModel
 MEmuV = r271
 MURL = http://www.supermodel3.com/
 MAuthor = djvj & chillin
-MVersion = 2.0.6
-MCRC = DC765B83
-iCRC = A8F43E35
+MVersion = 2.0.7
+MCRC = 86158329
+iCRC = A9DD70E9
 MID = 635038268926572770
 MSystem = "Sega Model 3"
 ;----------------------------------------------------------------------------
@@ -34,6 +34,7 @@ throttle := IniReadCheck(SettingsFile, "Settings|" . romName, "Throttle","false"
 multiThreading := IniReadCheck(SettingsFile, "Settings|" . romName, "MultiThreading","true",,1)
 musicVolume := IniReadCheck(SettingsFile, "Settings|" . romName, "MusicVolume",,,1)
 soundVolume := IniReadCheck(SettingsFile, "Settings|" . romName, "SoundVolume",,,1)
+clearNVRAM := IniReadCheck(SettingsFile, "Settings|" . romName, "ClearNVRAM","false",,1)
 
 BezelStart()
 
@@ -54,6 +55,16 @@ forceFeedback := If forceFeedback = "true" ? "-force-feedback" : ""
 multiThreading := If multiThreading = "true" ? "" : "-no-threads"
 musicVolume := If musicVolume != "" ? "-music-volume=" . musicVolume : ""
 soundVolume := If soundVolume != "" ? "-sound-volume=" . soundVolume : ""
+
+If clearNVRAM = true
+{	Log("Module - Clearing NVRAM")
+	nvramFile := emuPath . "\NVRAM\" . romName . ".nv"
+	If FileExist(nvramFile) {
+		Log("Module - This NVRAM file exists and will be deleted: """ . nvramFile . """",4)
+		FileDelete, %nvramFile%
+	} Else
+		Log("Module - This NVRAM file does not exist: """ . nvramFile . """",4)
+}
 
 If ConfigInputs = true
 	Run(executable . " -config-inputs", emuPath)
