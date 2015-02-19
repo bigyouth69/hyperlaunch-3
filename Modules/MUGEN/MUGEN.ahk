@@ -2,8 +2,8 @@ MEmu = MUGEN
 MEmuV = N/A
 MURL = http://www.elecbyte.com/
 MAuthor = brolly & djvj
-MVersion = 2.0.4
-MCRC = FA465B5D
+MVersion = 2.0.5
+MCRC = 4E8C22E9
 iCRC = 965C2F5A
 MID = 635038268906726252
 MSystem = "MUGEN"
@@ -79,7 +79,7 @@ If (exitHack = 1)	; Sometimes mugen crashes during exit and doesn't close, so we
 		IfWinExist, %gameTitle%
 		{	
 			FadeOutExit()	; this needs to be on its own line so it does not error
-			Process("Close", game_PID)
+			Process("WaitClose", game_PID)
 		}
 	Process("Close", executable) ;on some machines/games, MUGEN doesn't close itself properly, this is the work around to make sure it does
 } Else
