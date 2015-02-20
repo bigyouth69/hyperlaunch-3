@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen</DESCRIPTION>
+						</KEY>
+						<KEY name="WaitTime" required="false" nullable="false" minLength="0">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Waiting time in ms. for RiscOS to boot until the module can start sending commands to it. Make sure you set this value high enough in order to allow the RiscOS desktop to start.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="Keys" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="AsteriskKey" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Depending on your keyboard layout you might need to map the RiscOS * key to whatever key you need to press in your keyboard in order to type * under Arculator.</DESCRIPTION>
+						</KEY>
+						<KEY name="DoubleQuoteKey" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Depending on your keyboard layout you might need to map the RiscOS " key to whatever key you need to press in your keyboard in order to type " under Arculator.</DESCRIPTION>
+						</KEY>
+						<KEY name="UnderscoreKey" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Depending on your keyboard layout you might need to map the RiscOS _ key to whatever key you need to press in your keyboard in order to type _ under Arculator.</DESCRIPTION>
+						</KEY>
+						<KEY name="MinusKey" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Depending on your keyboard layout you might need to map the RiscOS - key to whatever key you need to press in your keyboard in order to type - under Arculator.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="CpuType" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>CPU Type to use for this game</DESCRIPTION>
+							<VALUES>
+								<VALUE>ARM610</VALUE>
+								<VALUE>ARM710</VALUE>
+								<VALUE description="StrongARM">SA110</VALUE>
+								<VALUE>ARM7500</VALUE>
+								<VALUE>ARM7500FE</VALUE>
+								<VALUE>ARM810</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="RAMSize" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>RAM Size in MB to use for this game</DESCRIPTION>
+							<VALUES>
+								<VALUE>4</VALUE>
+								<VALUE>8</VALUE>
+								<VALUE>16</VALUE>
+								<VALUE>32</VALUE>
+								<VALUE>64</VALUE>
+								<VALUE>128</VALUE>
+								<VALUE>256</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="VRAMSize" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>VRAM Size in MB to use for this game</DESCRIPTION>
+							<VALUES>
+								<VALUE>0</VALUE>
+								<VALUE>2</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="WaitTime" required="false" nullable="false" minLength="0">
+							<KEYTYPE>Integer</KEYTYPE>
+							<DESCRIPTION>Waiting time in ms. for RiscOS to boot until the module can start sending commands to it. Make sure you set this value high enough in order to allow the RiscOS desktop to start.</DESCRIPTION>
+						</KEY>
+						<KEY name="ExecuteCmd" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>StarComms commands that should be sent to Arculator to start the game, use AHK Send syntax</DESCRIPTION>
+						</KEY>
+						<KEY name="WorkingDir" required="false" nullable="true">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Working Directory for the file you will be running. Whatever you set in ExecuteCmd will set sent from this directory</DESCRIPTION>
+						</KEY>
+						<KEY name="HdfFileName" required="false" nullable="true">
+							<KEYTYPE>FileName</KEYTYPE>
+							<DESCRIPTION>The name of the HDF file for this game. This should be used only when you have HDF files that contain more than one game. If you have 1 hdf file per game simply name them after the rom name and you don't need to use this setting. If you make use of this option make sure you enable skipchecks otherwise HL will error out failing to find the rom.</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>

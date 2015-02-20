@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<INISCHEMA>
+	<INIFILES>
+		<INIFILE name="%ModuleName%" required="false">
+			<INITYPE>Module</INITYPE>
+			<SECTIONS>
+				<SECTION name="Settings" required="false">
+					<SECTIONTYPE>Global</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Fullscreen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Fullscreen.</DESCRIPTION>
+						</KEY>
+						<KEY name="Model" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Choose the default Acorn BBC machine model you want to use. Default is the BBC Model B</DESCRIPTION>
+							<VALUES>
+								<VALUE description="BBC Model B">0</VALUE>
+								<VALUE description="BBC Model B + Integra-B">1</VALUE>
+								<VALUE description="BBC Model B Plus">2</VALUE>
+								<VALUE description="BBC Master 128">3</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="SetTube" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Tube, can also be set on a per rom basis. Default is False.</DESCRIPTION>
+						</KEY>
+						<KEY name="TapeSpeed" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Choose the speed of the tapedrive, can also be set on a per rom basis. Default is Fast</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Normal">e015</VALUE>
+								<VALUE description="Fast">ee02</VALUE>
+							</VALUES>
+						</KEY>
+					</KEYS>
+				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="Model" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Choose the Acorn BBC machine model you want to use. Default is the BBC Model B</DESCRIPTION>
+							<VALUES>
+								<VALUE description="BBC Model B">0</VALUE>
+								<VALUE description="BBC Model B + Integra-B">1</VALUE>
+								<VALUE description="BBC Model B Plus">2</VALUE>
+								<VALUE description="BBC Master 128">3</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="SetTube" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>Enables/Disables Tube. Default is False.</DESCRIPTION>
+						</KEY>
+						<KEY name="TapeSpeed" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Choose the speed of the tapedrive. Default is Fast</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Normal">e015</VALUE>
+								<VALUE description="Fast">ee02</VALUE>
+							</VALUES>
+						</KEY>
+						<KEY name="ChainCommand" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Type the chain command needed to start the game if it doesn't autoboot</DESCRIPTION>
+						</KEY>
+						<KEY name="RunCommand" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Type the run command needed to start the game if it doesn't autoboot</DESCRIPTION>
+						</KEY>
+					</KEYS>
+				</SECTION>
+			</SECTIONS>
+		</INIFILE>
+	</INIFILES>
+</INISCHEMA>
