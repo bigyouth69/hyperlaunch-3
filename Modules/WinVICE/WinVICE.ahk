@@ -2,11 +2,11 @@ MEmu = WinVICE
 MEmuV = v2.4
 MURL = http://vice-emu.sourceforge.net/
 MAuthor = djvj,wahoobrian,brolly
-MVersion = 2.0.5
-MCRC = A915BD1
+MVersion = 2.0.6
+MCRC = E3DB4D02
 iCRC = 4A31A54A
 MID = 635038268966170754
-MSystem = "Commodore 64","Commodore 16 & Plus4","Commodore VIC-20","Commodore 128"
+MSystem = "Commodore 64","Commodore 16 & Plus4","Commodore VIC-20","Commodore 128","Commodore MAX Machine","Commodore 64 Games System"
 ;----------------------------------------------------------------------------
 ; Notes:
 ; Roms must be unzipped.
@@ -42,7 +42,7 @@ StartModule()
 BezelGUI()
 FadeInStart()
 
-mType := Object("Commodore 64","C64","Commodore 16 & Plus4","PLUS4","Commodore VIC-20","VIC20","Commodore 128", "C128") ;ident should be the section names used in VICE.ini
+mType := Object("Commodore 64","C64","Commodore 16 & Plus4","PLUS4","Commodore VIC-20","VIC20","Commodore 128","C128","Commodore MAX Machine","C64","Commodore 64 Games System","C64") ;ident should be the section names used in VICE.ini
 ident := mType[systemName]	; search object for the systemName identifier
 
 IfExist, % modulePath . "\" . systemName . ".ini"	; use a custom systemName ini If it exists

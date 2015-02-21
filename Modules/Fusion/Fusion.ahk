@@ -16,7 +16,7 @@ MSystem = "Samsung Gam Boy","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis"
 ; Esc can also cause Fusion to change its fullscreen mode on exit, causing it to lockup for 5-10 seconds. The only fix for this is to not use Esc as your exit key.
 ; For Sega CD, make sure your cues are correctly pointing to all the tracks or else you will not get sound. Also turn off auto-play for CDs
 ;
-; Sega CD
+; Sega CD:
 ; Configure your Sega CD bios first by going to Options -> Set Config -> Sega CD
 ; Set the scsi drive you want to use manually by going to Options -> CD Drive and seleting the one that corresponds to your scsi drive in DT. A dt drive is not supported by the emu, it must be scsi.
 ;
@@ -29,6 +29,17 @@ MSystem = "Samsung Gam Boy","Sega 32X","Sega CD","Sega Game Gear","Sega Genesis"
 ; For P2_Controller - 0=None, 1=Gamepad, 2=Multitap, 3=Mouse, 4=Super Scope, 5=Justifier, 6=Dual Justifiers, 7=Serial USART
 ;
 ; Some games will not work if you have Teamplayer or 4way play active all the time, so you can set the MultiTapType for those problematic games in the module settings for each of these games.
+;
+; Sega Pico:
+; Fusion has very limited support for Sega Pico since it doesn't support the storyware overlays. This module offers support to add the storyware overlays by displaying the images 
+; on top of the emulator and having some controls to switch pages.
+; This isn't perfect and it's very easy to get the page currently viewed in Fusion to get out of sync with the one visible on-screen.
+; Overlays should be placed in your emulator folder in a sub-folder named \Overlays\%RomName%
+; Suggested name for each page is: "Overlay x - %RomName%.png" where x is the number of the storyware book page
+; You should map the Previous and Next Page commands to the ones you are using in Fusion, but make sure you only press them when Fusion is in the Storyware and not in the trackpad
+; Otherwise everything will go out of sync since the module cannot detect if Storyware mode is active or not so it will always change page whereas Fusion won't
+;
+; Mouse is required Pico, along with the following controls (using a Genesis Gamepad): START switches between StoryWare and Trackpad, B is the pico red button, A and C turn pages, and U/D/L/R are, well, U/D/L/R. 
 ;
 ; Windows 8 and 8.1 users:
 ; You may experience an issue with Fusion never getting higher than 33.5fps. Use Ctrl+F to bring up the FPS counter in Fusion to check if you are affected. This is caused by some compatibility changes Microsoft made for DirectDraw applications. There are two ways of fixing this issue:
