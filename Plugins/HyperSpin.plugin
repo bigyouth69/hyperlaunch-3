@@ -28,11 +28,11 @@ PluginInit:
 	frontendPlugin := "HyperSpin" 
 	frontendWinTitle := "HyperSpin"
 	frontendWinClass := "ThunderRT6FormDC"
-	
+
 	;Content assets (not required)
 	; format: one index for each asset with path and label info: Array[1,"Path"], Array[1,"Label"]
 	feMedia := {}
-	
+
 	; Game Info (not required)
 	; format: gameInfo["Label"] := "Value"
 	gameInfo := Object()
@@ -47,11 +47,11 @@ PluginInit:
 	feManualsLabels:= RIniLoadVar(8,9, "HyperSpin", "Fe_Manuals_Labels", "")
 	feVideosLabels:= RIniLoadVar(8,9, "HyperSpin", "Fe_Videos_Labels", "MP4 Game Video|FLV Game Video|MP4 System Video|FLV System Video")
 	feDiscArtworkLabel:= RIniLoadVar(8,9, "HyperSpin", "Fe_Disc_Artwork_Label", "Artwork1")
-	
+
 	;----------Acquiring HyperSpin Paths and defining respective labels------------
 
 	parentDbName := gameInfo["Cloneof"].Value
-	
+
 	;Acquiring Logos
 	logoPath := frontendPath . "\Media\" . systemName . "\Images\Wheel\" . dbName . ".png"
 	If (parentDbName && !FileExist(logoPath)) {
@@ -69,9 +69,11 @@ PluginInit:
 		}
 	}
 	feMedia.Artwork := BuildAssetsTable(artwork1Path . "|" . artwork2Path . "|" . artwork3Path . "|" . artwork4Path . "|" . frontendPath . "\Media\" . systemName . "\Images\Letters"  . "|" . frontendPath . "\Media\" . systemName . "\Images\Other",feArtworkLabels,"game|game|game|game|system|system","png")
-		
+
 	;Acquiring Videos
 	IniRead, hsGameVideoPath, frontendPath . "\Settings\" . systemName . ".ini", video defaults, path		; read video path for game videos, if not exist, set default
+	If (hsGameVideoPath != "ERROR" && hsGameVideoPath != "")
+		Log("PluginInit - Your HyperSpin is set to load " . systemName . " system videos from: " . hsGameVideoPath)
 	hsGameVideo := If FileExist(hsGameVideoPath) ? hsGameVideoPath : frontendPath . "\Media\" . systemName . "\Video\"
 	hsGameVideoClone := hsGameVideo . dbName
 	If (parentDbName && !FileExist(hsGameVideoClone . ".mp4") && !FileExist(hsGameVideoClone . ".flv")) {
@@ -79,23 +81,23 @@ PluginInit:
 		hsGameVideo := hsGameVideo . parentDbName
 	} Else
 		hsGameVideo := hsGameVideo . dbName
-	
+
 	IniRead, hsSystemVideoPath, frontendPath . "\Settings\Main Menu.ini", video defaults, path		; read video path for system videos, if not exist, set default
-	hsSystemVideo := If FileExist(hsSystemVideoPath) ? hsSystemVideoPath . systemName : frontendPath . "\Media\Main Menu\Video\" . systemName 
-	feMedia.Videos := BuildAssetsTable(hsGameVideo . ".* |" . hsSystemVideo . ".*","game|system","mp4,flv")
+	hsSystemVideo := If FileExist(hsSystemVideoPath) ? hsSystemVideoPath . systemName : frontendPath . "\Media\Main Menu\Video\" . systemName
+	feMedia.Videos := BuildAssetsTable(hsGameVideo . ".* |" . hsSystemVideo . ".*",feVideosLabels,"game|system","mp4,flv")
 
 	;Acquiring Backgrounds (not available on HyperSpin)
 	;Acquiring Controller (not available on HyperSpin)
 	;Acquiring Guides (not available on HyperSpin)
 	;Acquiring Manuals (not available on HyperSpin)
-	
+
 	Log("PluginInit - Ended")
-Return	
+Return
 
 
-BuildDatabaseTable(game,system,ByRef frontendDatabaseFields, ByRef frontendDatabaseLabels){ ; required for rom mapping menu name 
+BuildDatabaseTable(game,system,ByRef frontendDatabaseFields, ByRef frontendDatabaseLabels){ ; required for rom mapping menu name
 	Log("BuildDatabaseTable - Started - Building Table for: " . frontendDatabaseLabels,4)
-	Global frontendPath, logLevel	
+	Global frontendPath, logLevel
 	infoObject := Object()
 	stringSplit, label, frontendDatabaseLabels, |
 	systemXML := CheckFile(frontendPath . "\Databases\" . system . "\" . system . ".xml")
@@ -141,7 +143,7 @@ BuildDatabaseTable(game,system,ByRef frontendDatabaseFields, ByRef frontendDatab
 			Log("BuildDatabaseTable - Found """ . currentLabel . """ with a value: """ . XMLDbInfo . """",4)
 		}
 	}
-	if (logLevel>=5){	
+	if (logLevel>=5){
 		For attribute,value in infoObject
 			gameInfoLog := % gameInfoLog . "`r`n`t`t`t`t`tGameInfo Label: " . attribute . " | GameInfo Value: " . value
 		Log("PluginInit - GameInfo:" gameInfoLog ,5)
