@@ -2,9 +2,9 @@ MEmu = WinUAE Loader
 MEmuV = v1.74
 MURL = http://headsoft.com.au/index.php?category=winuaeloader
 MAuthor = djvj
-MVersion = 2.0.1
-MCRC = 5CA46EB
-iCRC = 4E0EC826
+MVersion = 2.0.2
+MCRC = F1E4627B
+iCRC = 28D2A69F
 MID = 635038268935640326
 MSystem = "Commodore Amiga"
 ;----------------------------------------------------------------------------
@@ -30,6 +30,12 @@ settingsFile := modulePath . "\" . moduleName . ".ini"
 fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 resolution := IniReadCheck(settingsFile, "Settings", "Resolution","1024x768",,1)	; Set resolution of WinUAE's window. Depending on Fullscreen value, there are different resolutions supported by WinUAE.
 autoResume := IniReadCheck(settingsFile, "Settings", "autoResume","true",,1)		; if true, will automatically save your game's state on exit and reload it on the next launch of the same game.
+
+;Bezel settings
+bezelTopOffset := IniReadCheck(settingsFile, "Settings", "Bezel_Top_Offset","0",,1)
+bezelBottomOffset := IniReadCheck(settingsFile, "Settings", "Bezel_Bottom_Offset","0",,1)
+bezelRightOffset := IniReadCheck(settingsFile, "Settings", "Bezel_Right_Offset", "0",,1)
+bezelLeftOffset := IniReadCheck(settingsFile, "Settings", "Bezel_Left_Offset", "0",,1)
 
 loaderINI := CheckFile(emuPath . "\Data\WinUAELoader.ini")
 IniRead, currentFullScreen, %loaderINI%, Display, Windowed
