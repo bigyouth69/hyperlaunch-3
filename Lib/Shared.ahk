@@ -1,8 +1,8 @@
-MCRC=2D17DC31
-MVersion=1.2.1
+MCRC=424953B3
+MVersion=1.2.2
 
 StartModule(){
-	Global gameSectionStartTime,gameSectionStartHour,skipChecks,dbName,romPath,romName,romExtension,systemName,moduleName,MEmu,MEmuV,MURL,MAuthor,MVersion,MCRC,iCRC,MSystem,romMapTable,romMappingLaunchMenuEnabled,romMenuRomName,7zEnabled,hideCursor,toggleCursorKey,winVer,zz
+	Global gameSectionStartTime,gameSectionStartHour,skipChecks,dbName,romPath,romName,romExtension,systemName,MEmu,MEmuV,MURL,MAuthor,MVersion,MCRC,iCRC,MSystem,romMapTable,romMappingLaunchMenuEnabled,romMenuRomName,7zEnabled,hideCursor,toggleCursorKey,winVer,zz
 	Global mgEnabled,mgOnLaunch,mgCandidate,mgLaunchMenuActive,MultiGame_Running
 	Global rIniIndex,globalPluginsFile,sysPluginsFile
 	Log("StartModule - Started")
@@ -48,7 +48,7 @@ StartModule(){
 	}
 	If (romMappingLaunchMenuEnabled = "true" && romMapTable.MaxIndex()) ; && romMapMultiRomsFound)
 		CreateRomMappingLaunchMenu%zz%(romMapTable)
-; msgbox dbName: %dbName%`nromName: %romName%`nromMenuRomName: %romMenuRomName%`n7zEnabled: %7zEnabled%`nskipChecks: %skipChecks%
+	; msgbox dbName: %dbName%`nromName: %romName%`nromMenuRomName: %romMenuRomName%`n7zEnabled: %7zEnabled%`nskipChecks: %skipChecks%
 	If (skipChecks != "false" && romMenuRomName && 7zEnabled = "false")	; this is to support the scenario where Rom Map Launch Menu can send a rom that does not exist on disk or in the archive (mame clones)
 	{	Log("StartModule - Setting romName to the game picked from the Launch Menu: " . romMenuRomName,4)
 		romName := romMenuRomName
@@ -62,14 +62,12 @@ StartModule(){
 	{	Log("StartModule - Setting romName to the dbName sent to HyperLaunch: " . dbName,4)
 		romName := dbName	; Use dbName if previous checks are false
 	}
-	If (moduleName != "PCLauncher") {	; PCLauncher has its own cursor control so we do not control the cursor here
-		If (hideCursor = "true")	; PCLauncher controls its own cursor hiding so HL should never touch this
-			SystemCursor("Off")
-		Else If (hideCursor = "custom") {
-			cursor := GetHLMediaFiles("Cursors","cur|ani") ;load cursor file for the system if they exist
-			If cursor
-				SetSystemCursor(Cursor) ; replace system cursors
-		}
+	If (hideCursor = "true")
+		SystemCursor("Off")
+	Else If (hideCursor = "custom") {
+		cursor := GetHLMediaFiles("Cursors","cur|ani") ;load cursor file for the system if they exist
+		If cursor
+			SetSystemCursor(Cursor) ; replace system cursors
 	}
 	If toggleCursorKey
 		XHotKeywrapper(toggleCursorKey,"ToggleCursor")
@@ -171,11 +169,14 @@ WinClose(winTitle,winText="",secondsToWait="",excludeTitle="",excludeText=""){
 ; To disable inputBlocker on a specific Run call, set inputBlocker to 0, or to force it a specified amount of seconds (upto 30), set it to that amount.
 ; By default, options will enable all calls of Run() to return errorlevel within the function. However, it will only be returned if errorLevelReporting is true
 ; bypassCmdWindow - some apps will never work with the command window, like xpadder. enable this argument on these Run calls so it doesn't get caught here
-Run(target,workingDir="",options=1,ByRef outputVarPID="",inputBlocker=1,bypassCmdWindow=0){
+Run(target,workingDir="",options=1,ByRef outputVarPID="",inputBlocker=1,bypassCmdWindow=0,disableLogging=0){
 	Static cmdWindowCount
 	Global logShowCommandWindow,logCommandWindow,cmdWindowObj,blockInputTime,blockInputFile,errorLevelReporting
 	options := If useErrorLevel = 1 ? "useErrorLevel" : options	; enable or disable error level
-	Log("Run - Running: " . workingDir . "\" . target)
+	If disableLogging
+		Log("Run - Running hidden executable in " . workingDir)
+	Else
+		Log("Run - Running: " . workingDir . "\" . target)
 	If (blockInputTime && inputBlocker = 1)	; if user set a block time, use the user set length
 		blockTime := blockInputTime
 	Else If inputBlocker > 1	; if module called for a block, use that amount
@@ -224,7 +225,10 @@ Run(target,workingDir="",options=1,ByRef outputVarPID="",inputBlocker=1,bypassCm
 			errLvl := curErr	; allows the module to handle the error level
 		}
 	}
-	Log("Run - """ . target . """ Process ID: " . outputVarPID, 4)
+	If disableLogging
+		Log("Run - ""Hidden executable"" Process ID: " . outputVarPID, 4)
+	Else
+		Log("Run - """ . target . """ Process ID: " . outputVarPID, 4)
 	Return errLvl
 }
 
@@ -386,9 +390,9 @@ ScriptError(error,timeout=6,w=800,h=225,txt=20){
 		XBaseRes := 1920, YBaseRes := 1080
 	If (((A_screenWidth < A_screenHeight) and ((screenRotationAngle=0) or (screenRotationAngle=180))) or ((A_screenWidth > A_screenHeight) and ((screenRotationAngle=90) or (screenRotationAngle=270))))
 		XBaseRes := 1080, YBaseRes := 1920
-	if !errorXScale 
+	If !errorXScale 
 		errorXScale := baseScreenWidth/XBaseRes
-	if !errorYScale
+	If !errorYScale
 		errorYScale := baseScreenHeight/YBaseRes
 	Error_Warning_Width := w
     Error_Warning_Height := h
@@ -446,6 +450,7 @@ ScriptError(error,timeout=6,w=800,h=225,txt=20){
 	Log("ScriptError - Playing error sound: " . erSoundsAr[erRndmSound],4)
 	setMute(0,emulatorVolumeObject)
 	SoundPlay % If erSoundsAr.MaxIndex() ? (HLErrSoundPath . "\" . erSoundsAr[erRndmSound]):("*-64"), wait	; play the random sound if any exist, or default to the Asterisk windows sound
+	7zCleanUp()	; clean up 7z if necessary
 	Sleep, %timeout%
 
 	CloseError:
@@ -463,7 +468,7 @@ ScriptError(error,timeout=6,w=800,h=225,txt=20){
 		Gdip_DisposeImage(WarningBitmap), SelectObject(Error_hdc, Error_obm), DeleteObject(Error_hbm), DeleteDC(Error_hdc), Gdip_DeleteGraphics(Error_G)
 		Gui, ErrorGUI_10: Destroy
 		Gdip_Shutdown(pToken)	; gdi+ may now be shutdown on exiting the program
-		Log(error,3)
+		Log("ScriptError - " . error,3)
 		
 		ExitModule()	; attempting to use this method which has the small chance to cause an infinite ScriptError loop, but no need to duplicate code to clean up on errors
 		; Below cleanup exists because we can't call other functions that may cause additional scripterrors and put the thread in an infinite loop
@@ -1617,11 +1622,14 @@ DaemonTools(action,file="",type="",drive=0){
 			If !cueHasMp3s {
 				Log("DaemonTools - This " . ext . " does not contain any mp3s.",4)
 				If (ext = "cue") {
+				msgbox % file
 					validateCUE := COM_Invoke(HLObject, "validateCUE", file)	; 0 = cue is invalid, 1 = cue is valid, 2 = cant find cue
 					If validateCUE = 1
 						Log("DaemonTools - This " . ext . " was found valid.",4)
-					Else
+					Else {
+						Log("DaemonTools - validateCUE returned an error code of " . validateCUE,4)
 						ScriptError("You have an invalid " . ext . " file. Please check it for errors.")
+					}
 				} Else If (ext = "gdi") {
 					If !DTAllowGDIQuotes	; by default, gdi files can contain double quotes. If a module contains "DTAllowGDIQuotes = false" it will be sent to the dll to error if they exist anywhere in the gdi.
 						DTAllowGDIQuotes := "true"
@@ -1630,10 +1638,13 @@ DaemonTools(action,file="",type="",drive=0){
 					validateGDI := COM_Invoke(HLObject, "validateGDI", file, DTAllowGDIQuotes)	; 0 = gdi is invalid, 1 = gsi is valid, 2 = cant find gdi, 3 = invalid double quotes were found. DTAllowGDIQuotes when true tells the dll that the GDI can have double quotes. False it cannot have quotes.
 					If validateGDI = 1
 						Log("DaemonTools - This " . ext . " was found valid.",4)
-					Else If !validateGDI
+					Else If !(validateGDI) {
+						Log("DaemonTools - validateGDI returned an error code of " . validateGDI,4)
 						ScriptError("You have an invalid " . ext . " file. Please check it for errors.")
-					Else If validateGDI = 3
+					} Else If (validateGDI = 3) {
+						Log("DaemonTools - validateGDI returned an error code of " . validateGDI,4)
 						ScriptError("Invalid double quotes were found in " . ext . " file.")
+					}
 				}
 			} Else If cueHasMp3s = 1
 				ScriptError("Your " . ext . " file contains links to mp3 files which is not supported by Daemon Tools. Please download another version of this game without MP3s or turn off Daemon Tools support to use the emulator's built-in image handler if supported.")
@@ -1675,7 +1686,7 @@ DaemonTools(action,file="",type="",drive=0){
 ;-------------------------------------------------------------------------------------------------------------
 
 7z(ByRef 7zP, ByRef 7zN, ByRef 7zE, ByRef 7zExP,call="", AttachRomName=true, AllowLargerFolders=false){
-	Global 7zEnabled,7zFormats,7zFormatsNoP,7zPath,7zAttachSystemName,romExtensions,skipchecks,romMatchExt,systemName,dbName,MEmu,logLevel
+	Global 7zEnabled,7zFormats,7zFormatsNoP,7zPath,7zAttachSystemName,7zTimedOut,7zTimerRunning,romExtensions,skipchecks,romMatchExt,systemName,dbName,MEmu,logLevel
 	Global fadeIn,fadeLyr37zAnimation,fadeLyr3Animation ,fadeLyr3Type,HLObject,7zTempRomExists,use7zAnimation,romExSize,7z1stRomPath,7zRomPath,7zPID,7zStatus
 	Global romMapTable,romMappingFirstMatchingExt,romMenuRomName ;,romMappingEnabled
 	Global altArchiveNameOnly,altRomNameOnly,altArchiveAndRomName,altArchiveAndManyRomNames,altRomNamesOnly
@@ -1946,6 +1957,12 @@ DaemonTools(action,file="",type="",drive=0){
 	
 	DumpExtractionToLog:			
 	Process("Wait", "7z.exe", 2)
+		If !7zTimerRunning {	; if the fade animation did not start the timer, let's start it here
+			7zTimerRunning := 1
+			7zTimedOut :=	; reset counter
+			SetTimer, 7zTimeout, 100	; poll 7z.exe every 100ms to see if it's still running
+			Log("7z - Starting 7zTimeout Timer",4)
+		}
 		Loop {
 			; Updating 7z extraction info
 			SetFormat, Float, 3	; don't want to show decimal places in the percentage
@@ -1966,9 +1983,10 @@ DaemonTools(action,file="",type="",drive=0){
 			Log(outputDebugPercentage,4)
 
 			; Breaking Loop
-			Process, Exist, 7z.exe	; This breaks out of 7z.exe If it's no longer running. Sometimes an extraction was very quick or there was an error and we don't want to be stuck in an infinite Loop
-			If (!ErrorLevel || romExPercentage >= 100) {	; bar is at 100% or 7z is already closed, so break out
-				Log("7z - " . (If romExPercentage >= 100 ? "7z.exe returned a percentage >= 100, assuming extraction is done" : "7z.exe is no longer running, assuming extraction is complete"),4)
+			; Process, Exist, 7z.exe	; This breaks out of 7z.exe If it's no longer running. Sometimes an extraction was very quick or there was an error and we don't want to be stuck in an infinite Loop
+			; If !ErrorLevel {
+			If (7zTimedOut >= 200) {	; bar is at 100% or 7z is already closed, so break out
+				Log("7z - " . (If romExPercentage >= 100 ? "7z.exe returned a percentage >= 100":"7z.exe is no longer running") . ", assuming extraction is complete",4)
 				Break
 			}
 			Sleep, 100
@@ -1976,12 +1994,25 @@ DaemonTools(action,file="",type="",drive=0){
 	Return
 }
 
+7zTimeout:
+	Process, Exist, 7z.exe	; This breaks out of 7z.exe If it's no longer running. Sometimes an extraction was very quick or there was an error and we don't want to be stuck in an infinite Loop
+	7zerrlvl := ErrorLevel
+	If !ErrorLevel
+		7zTimedOut += 100
+	If 7zTimedOut >= 200
+	{	Log("7zTimeout - 7z.exe is no longer running",4)
+		7zTimerRunning :=
+		SetTimer, 7zTimeout, Off
+	}
+Return
+
 7zCleanUp(ExtractedFolder="") {
 	Global romTable,dbName,mgEnabled,hpEnabled
-	Global 7zEnabled,7zDelTemp,7zCanceled,7z1stRomPath
+	Global 7zEnabled,7zDelTemp,7zCanceled,7z1stRomPath,7zCleanUpTriggered
 	7zDeleteFolder := If ExtractedFolder = "" ? 7z1stRomPath : ExtractedFolder
-	If (7zEnabled = "true" && (7zDelTemp = "true" or 7zCanceled))	; if user wants to delete temp files or user canceled a 7z extraction
+	If (7zEnabled = "true" && !7zCleanUpTriggered && (7zDelTemp = "true" or 7zCanceled))	; if user wants to delete temp files or user canceled a 7z extraction
 	{	Log("7zCleanUp - Started")
+		7zCleanUpTriggered := 1
 		romTableExists := IsObject(romTable)	; if romTable was ever created, it would be an object, which is what this checks for
 		If ((mgEnabled = "true" || hpEnabled = "true") && romTableExists)
 		{	Log("7zCleanUp - romTable exists and MG or HP is enabled. Parsing the table to delete any roms that were extracted",4)
@@ -2258,12 +2289,17 @@ HideEmuEnd() {
 
 HideEmuTimer:
 	For key, value in hideEmuObj
-	{	If !hideEmuObj[A_Index,"status"]	; if one of the windows was not hidden yet
+	{	If !hideEmuObj[A_Index,"status"]
+		{	If A_DetectHiddenWindows != On
+				DetectHiddenWindows, On
 			IfWinExist, % hideEmuObj[A_Index,"window"]
 			{	WinSet, Transparent, 0, % hideEmuObj[A_Index,"window"]
-				hideEmuObj[A_Index,"status"] := 1	; update object that this window is now hidden
 				Log("HideEmu - Found a new window to hide: " . hideEmuObj[A_Index,"window"],4)
+				WinGet, currentTran, Transparent, % hideEmuObj[A_Index,"window"]
+				If currentTran = 0
+					hideEmuObj[A_Index,"status"] := 1	; update object that this window is now hidden
 			}
+		}
 	}
 Return
 
@@ -2665,29 +2701,29 @@ BuildAssetsTable(list,label,AssetType,extensions=""){
 	Global logLevel
 	StringReplace, extensions, extensions, |, `,,All
 	obj:={}
-	stringSplit, labelArray, label, |,
-	stringSplit, AssetTypeArray, AssetType, |,
-	loop, parse, list,|, 
-	{
-		if !(labelArray%A_index% = "#disabled#")
+	StringSplit, labelArray, label, |,
+	StringSplit, AssetTypeArray, AssetType, |,
+	Loop, Parse, list,|, 
+	{	labelIndex++
+		If !(labelArray%labelIndex% = "#disabled#")
 		{
-			Log("BuildAssetsTable - Searching for: " . A_LoopField,4)
-			currentLabel := labelArray%A_index%
+			Log("BuildAssetsTable - Searching for a " . labelArray%labelIndex% . ": " . A_LoopField,4)
+			currentLabel := labelArray%labelIndex%
 			currentAssetType := AssetTypeArray%A_index% 
 			RASHNDOCT := FileExist(A_LoopField)
-			if InStr(RASHNDOCT, "D") { ; it is a folder
+			If InStr(RASHNDOCT, "D") { ; it is a folder
 				folderName := A_LoopFileName
 				Loop, % A_LoopField . "\*.*"
 				{   If A_LoopFileExt in %extensions%
 					{	currentobj := {}
-						if (currentLabel="keepFileName")
+						If (currentLabel="keepFileName")
 							currentobj["Label"] := folderName
-						else
+						Else
 							currentobj["Label"] := currentLabel
-						if obj[currentLabel].Label
+						If obj[currentLabel].Label
 						{   currentobj := obj[currentLabel]
 							currentobj.TotalItems := currentobj.TotalItems+1
-						} else {
+						} Else {
 							currentobj.TotalItems := 1
 							obj.TotalLabels := if obj.TotalLabels ? obj.TotalLabels + 1 : 1
 							obj[obj.TotalLabels] := currentobj.Label
@@ -2699,20 +2735,24 @@ BuildAssetsTable(list,label,AssetType,extensions=""){
 						obj.Insert(currentobj["Label"], currentobj)
 					}
 				}
-			} else if InStr(RASHNDOCT, "A") { ; it is a file
+			} Else If InStr(RASHNDOCT, "A") { ; it is a file
 				SplitPath, A_LoopField, , currentDir,, FileNameWithoutExtension
-				loop, parse, extensions,`,, 
+				Loop, Parse, extensions,`,, 
 				{
+					If (InStr(extensions , ",") && A_Index >= 2) {
+						labelIndex++	; need to advance the label by one each time a new extension is used
+						currentLabel := labelArray%labelIndex%
+					}
 					If FileExist(currentDir . "\" . FileNameWithoutExtension . "." . A_LoopField)
 					{	currentobj := {}
-						if (currentLabel="keepFileName")
+						If (currentLabel="keepFileName")
 							currentobj["Label"] := FileNameWithoutExtension
-						else
+						Else
 							currentobj["Label"] := currentLabel
-						if obj[FileNameWithoutExtension].Label
+						If obj[FileNameWithoutExtension].Label
 						{   currentobj := obj[FileNameWithoutExtension]
 							currentobj.TotalItems := currentobj.TotalItems+1
-						} else {
+						} Else {
 							currentobj.TotalItems := 1
 							obj.TotalLabels := if obj.TotalLabels ? obj.TotalLabels + 1 : 1
 							obj[obj.TotalLabels] := currentobj.Label
@@ -2721,16 +2761,103 @@ BuildAssetsTable(list,label,AssetType,extensions=""){
 						currentobj["Ext" . currentobj.TotalItems] := A_LoopField
 						currentobj["AssetType"] := currentAssetType
 						obj.Insert(currentobj["Label"], currentobj)  
-					}	
+					}
 				}
-		}	}			
-	}		
-	if (logLevel>=5){
+			}
+		} Else
+			Log("BuildAssetsTable - This asset has been disabled: " . labelArray%labelIndex%,4)
+
+	}
+	If (logLevel>=5){
 		for index, element in obj
-		{	loop, % obj[element.Label].TotalItems
+		{	Loop, % obj[element.Label].TotalItems
 				mediaAssetsLog := % mediaAssetsLog . "`r`n`t`t`t`t`tAsset Label: " . element.Label . " | Asset Path" . a_index . ":  " . element["Path" . a_index] . " | Asset Extension" . a_index . ":  " . element["Ext" . a_index] . " | Asset Type" . a_index . ":  " . element["AssetType"]
 		}
-		if mediaAssetsLog
+		If mediaAssetsLog
+            Log("BuildAssetsTable - Media assets found: " . mediaAssetsLog,5)
+	}
+	Log("BuildAssetsTable - Ended",4)
+	Return obj
+}
+
+BuildAssetsTableOld(list,label,AssetType,extensions=""){
+	Log("BuildAssetsTable - Started - Building Table for: " . label,4)
+	Global logLevel
+	StringReplace, extensions, extensions, |, `,,All
+	obj:={}
+	StringSplit, labelArray, label, |,
+	StringSplit, AssetTypeArray, AssetType, |,
+	Loop, Parse, list,|, 
+	{	labelIndex++
+		If !(labelArray%labelIndex% = "#disabled#")
+		{
+			Log("BuildAssetsTable - Searching for a " . labelArray%labelIndex% . ": " . A_LoopField,4)
+			currentLabel := labelArray%labelIndex%
+			currentAssetType := AssetTypeArray%A_index% 
+			RASHNDOCT := FileExist(A_LoopField)
+			If InStr(RASHNDOCT, "D") { ; it is a folder
+				folderName := A_LoopFileName
+				Loop, % A_LoopField . "\*.*"
+				{   If A_LoopFileExt in %extensions%
+					{	currentobj := {}
+						If (currentLabel="keepFileName")
+							currentobj["Label"] := folderName
+						Else
+							currentobj["Label"] := currentLabel
+						If obj[currentLabel].Label
+						{   currentobj := obj[currentLabel]
+							currentobj.TotalItems := currentobj.TotalItems+1
+						} Else {
+							currentobj.TotalItems := 1
+							obj.TotalLabels := if obj.TotalLabels ? obj.TotalLabels + 1 : 1
+							obj[obj.TotalLabels] := currentobj.Label
+						}
+						currentobj["Path" . currentobj.TotalItems] := A_LoopFileLongPath
+						currentobj["Ext" . currentobj.TotalItems] := A_LoopFileExt
+						currentobj["AssetType"] := currentAssetType
+						currentobj["Type"] := "ImageGroup"
+						obj.Insert(currentobj["Label"], currentobj)
+					}
+				}
+			} Else If InStr(RASHNDOCT, "A") { ; it is a file
+				SplitPath, A_LoopField, , currentDir,, FileNameWithoutExtension
+				Loop, Parse, extensions,`,, 
+				{
+					If (InStr(extensions , ",") && A_Index >= 2) {
+						labelIndex++	; need to advance the label by one each time a new extension is used
+						currentLabel := labelArray%labelIndex%
+					}
+					If FileExist(currentDir . "\" . FileNameWithoutExtension . "." . A_LoopField)
+					{	currentobj := {}
+						If (currentLabel="keepFileName")
+							currentobj["Label"] := FileNameWithoutExtension
+						Else
+							currentobj["Label"] := currentLabel
+						If obj[FileNameWithoutExtension].Label
+						{   currentobj := obj[FileNameWithoutExtension]
+							currentobj.TotalItems := currentobj.TotalItems+1
+						} Else {
+							currentobj.TotalItems := 1
+							obj.TotalLabels := if obj.TotalLabels ? obj.TotalLabels + 1 : 1
+							obj[obj.TotalLabels] := currentobj.Label
+						}
+						currentobj["Path" . currentobj.TotalItems] := currentDir . "\" . FileNameWithoutExtension . "." . A_LoopField
+						currentobj["Ext" . currentobj.TotalItems] := A_LoopField
+						currentobj["AssetType"] := currentAssetType
+						obj.Insert(currentobj["Label"], currentobj)  
+					}
+				}
+			}
+		} Else
+			Log("BuildAssetsTable - This asset has been disabled: " . labelArray%labelIndex%,4)
+
+	}
+	If (logLevel>=5){
+		for index, element in obj
+		{	Loop, % obj[element.Label].TotalItems
+				mediaAssetsLog := % mediaAssetsLog . "`r`n`t`t`t`t`tAsset Label: " . element.Label . " | Asset Path" . a_index . ":  " . element["Path" . a_index] . " | Asset Extension" . a_index . ":  " . element["Ext" . a_index] . " | Asset Type" . a_index . ":  " . element["AssetType"]
+		}
+		If mediaAssetsLog
             Log("BuildAssetsTable - Media assets found: " . mediaAssetsLog,5)
 	}
 	Log("BuildAssetsTable - Ended",4)
