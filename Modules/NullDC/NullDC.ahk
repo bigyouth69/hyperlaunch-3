@@ -2,9 +2,9 @@ MEmu = NullDC
 MEmuV =  r141
 MURL = https://code.google.com/p/nulldc/
 MAuthor = djvj & bleasby
-MVersion = 2.0.4
-MCRC = E1BED80E
-iCRC = 2454AF41
+MVersion = 2.0.5
+MCRC = E9F6474E
+iCRC = C2786503
 MID = 635038268910409317
 MSystem = "Sega Dreamcast"
 ;----------------------------------------------------------------------------
@@ -62,9 +62,9 @@ hideEmuObj := Object("ahk_class ConsoleWindowClass",0,"nullDC ahk_class ndc_main
 
 specialCfg = %emuPath%\cfg\%romName%.cfg
 defaultCfg = %emuPath%\cfg\nullDC.cfg
-If ( FileExist(specialCfg) && FileExist(defaultCfg))
+If (FileExist(specialCfg) && FileExist(defaultCfg))
 	FileCopy, %specialCfg%, %emuPath%\nullDC.cfg, 1
-Else If (FileExist(defaultCfg))
+Else If FileExist(defaultCfg)
 	FileCopy, %defaultCfg%, %emuPath%\nullDC.cfg, 1
 
 ;Detect game region based on rom name
@@ -76,6 +76,9 @@ Else IfInString, romName, (World)
 	region = 2
 Else
 	region = 1
+
+If romExtension In %7zformats%
+	ScriptError(MEmu . " does not support compressed formats. Please extract your images first or enable 7z.")
 
 BezelStart()
 
@@ -90,6 +93,7 @@ IniWrite, %loadDefaultImage%, %nullDCcfg%, ImageReader, LoadDefaultImage
 IniWrite, %patchRegion%, %nullDCcfg%, ImageReader, PatchRegion
 IniWrite, %region%, %nullDCcfg%, nullDC, Dreamcast.Region
 IniWrite, %cable%, %nullDCcfg%, nullDC, Dreamcast.Cable
+Log("Module - Telling ImageReader plugin to load this game: """ . romPath . "\" . romname . RomExtension)
 IniWrite, %romPath%\%romname%%RomExtension%, %nullDCcfg%, ImageReader, DefaultImage
 
 ;Fixes hanging previous nullDC on bad exits or loads

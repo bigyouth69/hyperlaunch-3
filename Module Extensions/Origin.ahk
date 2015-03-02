@@ -1,5 +1,5 @@
-﻿MCRC=A4332C53
-MVersion=1.0.0
+﻿MCRC=E1A31217
+MVersion=1.0.1
 
 Origin(aName, aPath, params="") {
 	Global k,moduleExtensionsPath,AppPID
@@ -39,7 +39,7 @@ Origin(aName, aPath, params="") {
 		oP := Decrypt(oP,"k")
 		If (!oU || !oP)
 			ScriptError("OriginLaunch - Origin is not running and needs to be logged in to launch this Origin game. HyperLaunch can do this, but you need to run ""EncryptPasswords"" application in your PCLauncher module folder first and set your login credentials.")
-		Run(originExe . " " . params, originPath,,OriginPID)
+		Run(originExe . " " . params, originPath,,OriginPID,,,1)
 		erLvl := WinWait(originLoginWindow,,15)	; wait 15 seconds until the Origin Login window exists
 		If erLvl	; if we simply timed out, some other problem happened
 			ScriptError("OriginLaunch - Timed out waiting 15 seconds for Origin's Login window. Please try again.")

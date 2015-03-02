@@ -2,9 +2,9 @@ MEmu = PCLauncher
 MEmuV =  N/A
 MURL = https://sites.google.com/site/hyperlaunch2/additional-features/pclauncher
 MAuthor = djvj
-MVersion = 2.1.4
-MCRC = 969D048A
-iCRC = D78DBEE9
+MVersion = 2.1.5
+MCRC = 52BF1C4E
+iCRC = 4F0EFDE4
 mId = 635243126483565041
 MSystem = "Arcade PC","Doujin Soft","Examu eX-BOARD","Fan Remakes","Games for Windows","Konami e-Amusement","Konami Bemani","Microsoft Windows","PCLauncher","PC Games","Steam","Steam Big Picture","Taito Type X","Touhou","Touhou Project"
 ;----------------------------------------------------------------------------
@@ -24,7 +24,7 @@ IfExist, % modulePath . "\" . systemName . ".ini"	; use a custom systemName ini 
 Else
 	settingsFile := CheckFile(modulePath . "\" . moduleName . ".ini", "Could not find """ . modulePath . "\" . moduleName . ".ini"". HyperLaunchHQ will create this file when you configure your first game to be used with this " . MEmu . " module.")
 
-iniLookup = SteamID|Application|AppWaitExe|DiscImage|Parameters|OriginGame|DXWndGame|WorkingFolder|PreLaunch|PreLaunchParameters|PreLaunchSleep|PostLaunch|PostLaunchParameters|PostLaunchSleep|PostExit|PostExitParameters|PostExitSleep|ExitMethod|FadeTitle|FadeInExitSleep|HideCursor|BezelEnabled
+iniLookup = SteamID|Application|AppWaitExe|DiscImage|Parameters|OriginGame|DXWndGame|WorkingFolder|PreLaunch|PreLaunchParameters|PreLaunchSleep|PostLaunch|PostLaunchParameters|PostLaunchSleep|PostExit|PostExitParameters|PostExitSleep|ExitMethod|FadeTitle|FadeInExitSleep|BezelEnabled
 Loop, Parse, iniLookup, |
 {	%A_LoopField% := IniReadCheck(settingsFile, dbName, A_LoopField, A_Space,,1)
 	If A_LoopField in Application
@@ -35,11 +35,8 @@ Loop, Parse, iniLookup, |
 }
 
 ; These settings enable them to be customized per-game in this module
-hideCursor := IniReadCheck(settingsFile, "Settings|" . dbName, "HideCursor",,,1)
 bezelEnabled := IniReadCheck(settingsFile, "Settings|" . dbName, "BezelEnabled",,,1)
 
-If hideCursor = true
-	SystemCursor("Off")
 If bezelEnabled = true
 	BezelGUI()
 FadeInStart()
@@ -65,9 +62,6 @@ If DiscImage {
 
 ; Verify module's settings are set
 CheckSettings()
-
-If hideCursor = true
-	SystemCursor("Off")
 
 If PreLaunch {
 	Log("PCLauncher - PreLaunch set by user, running: " . PreLaunch)
@@ -166,8 +160,6 @@ If appIsImage
 ; If AppPID = 0
 	; Run, Steam.exe -shutdown, %SteamPath%	; close steam
 
-If hideCursor = true
-	SystemCursor("On")
 If DXWndGame = true
 	DxwndClose()
 If bezelEnabled = true

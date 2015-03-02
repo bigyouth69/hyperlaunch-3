@@ -4,15 +4,6 @@
 		<INIFILE name="%ModuleName%" required="true">
 			<INITYPE>Module</INITYPE>
 			<SECTIONS>
-				<SECTION name="Settings" required="false">
-					<SECTIONTYPE>Global</SECTIONTYPE>
-					<KEYS>
-						<KEY name="HideCursor" required="false" nullable="false">
-							<KEYTYPE>Boolean</KEYTYPE>
-							<DESCRIPTION>Enable/Disable hiding of the mouse cursor globally for all games ran through PCLauncher. Note: HyperLaunch's version of this setting does not affect the cursor for this module, so it must be set here if you want to use it. Default is disabled.</DESCRIPTION>
-						</KEY>
-					</KEYS>
-				</SECTION>
 				<SECTION name="%RomName%" required="true">
 					<SECTIONTYPE>Rom</SECTIONTYPE>
 					<KEYS>
@@ -118,10 +109,6 @@
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>This is needed for some applications that may start, but not appear, ending FadeInExit prematurely. It keeps the fade screen up for the defined length.</DESCRIPTION>
 						</KEY>
-						<KEY name="HideCursor" required="false" nullable="false">
-							<KEYTYPE>Boolean</KEYTYPE>
-							<DESCRIPTION>Enable/Disable hiding of the mouse cursor just this game ran through PCLauncher. Overides the global setting for this module. Note: HyperLaunch's version of this setting does not affect the cursor for this game, so it must be set here if you want to use it.</DESCRIPTION>
-						</KEY>
 						<KEY name="BezelEnabled" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enable/Disable bezel support for just this game. Overides the global setting for this module. Note: HyperLaunch's version of this setting does not affect the bezels for this game, so it must be set here if you want to use it.</DESCRIPTION>
@@ -136,10 +123,6 @@
 				<SECTION name="Settings" required="false">
 					<SECTIONTYPE>Global</SECTIONTYPE>
 					<KEYS>
-						<KEY name="HideCursor" required="false" nullable="false">
-							<KEYTYPE>Boolean</KEYTYPE>
-							<DESCRIPTION>Enable/Disable hiding of the mouse cursor globally for all games ran through PCLauncher. Note: HyperLaunch's version of this setting does not affect the cursor for this module, so it must be set here if you want to use it. Default is disabled.</DESCRIPTION>
-						</KEY>
 						<KEY name="BezelEnabled" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enable/Disable bezel support for this entire system. Overides the global setting for this module. Note: HyperLaunch's version of this setting does not affect the bezels for this game, so it must be set here if you want to use it.</DESCRIPTION>
@@ -249,10 +232,6 @@
 						<KEY name="FadeInExitSleep" required="false" nullable="true">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>This is needed for some applications that may start, but not appear, ending FadeInExit prematurely. It keeps the fade screen up for the defined length.</DESCRIPTION>
-						</KEY>
-						<KEY name="HideCursor" required="false" nullable="false">
-							<KEYTYPE>Boolean</KEYTYPE>
-							<DESCRIPTION>Enable/Disable hiding of the mouse cursor just this game ran through PCLauncher. Overides the global setting for this module. Note: HyperLaunch's version of this setting does not affect the cursor for this game, so it must be set here if you want to use it.</DESCRIPTION>
 						</KEY>
 						<KEY name="BezelEnabled" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>

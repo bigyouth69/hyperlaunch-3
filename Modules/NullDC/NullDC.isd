@@ -60,6 +60,10 @@
 								<VALUE description="On">1</VALUE>
 							</VALUES>
 						</KEY>
+						<KEY name="VMUHideKey" required="false" nullable="true">
+							<KEYTYPE>xHotkey</KEYTYPE>
+							<DESCRIPTION>Hotkey to hide the VMU. The default is F10.</DESCRIPTION>
+						</KEY>
 						<KEY name="VMU1Pos" required="false">
 							<KEYTYPE>String</KEYTYPE>
 							<DESCRIPTION>VMU1 Position. Default is topLeft.</DESCRIPTION>

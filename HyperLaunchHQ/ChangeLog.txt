@@ -10,9 +10,16 @@
                                        Release History                                       
 =============================================================================================
 
+v1.1.1.3 (February 25th, 2015):
+  * Changed path for logos in the HLHQ plugin, they should now be located at .\Media\Logos\
+  * Added new setting to check if WMI Service is running on startup since HyperLaunch requires it
+  * Added support for Hide_Cursor setting on a per game basis
+  * Changed format of systems.xml file, check the bundled 'Systems (Example).xml'
+  * Fixed bug that was preventing some module per rom settings to be saved in some particular conditions
+
 v1.1.1.2 (January 21th, 2015):
-  * Added new button in the General Settings panel that will fix all your HyperLaunch settings files 
-    by deleting any unneeded keys and adding default values for any missing settings
+  * Added new button the the General Settings panel that will fix all your HyperLaunch settings files 
+    by deleting any uneeded keys and adding default values for any missing settings
   * Loading Fade Animations from the newly created User Fade Animations.ahk file
   * Corrected CRC calculation method on the Fade Animations.ahk file
   * Removed old settings and added all the new ones needed for the HyperLaunch changes on screen 

@@ -11,6 +11,57 @@
 ===========================================================================
 
 
+v3.1.0.5 BETA
+
+
+HyperLaunch (updated to v3.1.0.5)
+HideCursor was changed to a globally allow per-game control over it. Set it by configuring settings on that game in the Games tab.
+Fixed Keymapper_FrontEnd_Profile_Name was always writing the first pluginname sent to HL, this is supposed to by default be empty to allow HL to work with multiple FEs.
+Added new CLI switch "-c" which changes the context of HL on exit an option of giving focus to your FE or load an FE keymapper profile on exit.
+Fixed ahk error when bezels are turned off using the NullDC module and ExtraFixedResBezelGUI() was called.
+Added WMI check and will not attempt to use the WMI service if it is not running.
+Added file check for your emulator/application executable. Previously you would get an ahk error if the path was wrong.
+Fixed decrypting Steam/Origin credentials
+
+HyperLaunch.dll
+Updated to support WMI check
+
+Keymapper.ahk (updated to v1.1.0)
+Updated to support the -c switch
+
+Shared.ahk (updated to v1.2.2)
+Added a few checks to HideEmu to make sure the windows that it is trying to hide, actually become hidden
+Updates to remove PCLauncher HideCursor control, which now can be controlled per-game globally
+Added ability to hide logs when running executables
+7zCleanUp will now be triggered when an error occurs
+
+Origin.ahk (updated to v1.0.1)
+Will no longer show credentials in log
+
+Steam.ahk (updated to v1.0.1)
+Will no longer show credentials in log
+
+Modules
+
+BeebEm (updated to v1.0.1)
+Moved 7z call to proper location (7z support was broken) (brolly)
+Changed CLI switches to send proper RUN command (brolly)
+
+PCLauncher (updated to v2.1.5)
+Removed the HideCursor settings, in favor of the global per-game settings on HLHQ's Games tab.
+
+NullDC (updated to v2.0.5)
+Added romExtension check and module will now error if you try to pass a compressed format to nulldc as it is not supported by the ImageReader plugin.
+Added VMUHideKey (rfancella)
+
+RetroArch (updated to v2.2.3)
+Fixed zero values from not being written to RA configs
+Tandy TRS-80 Color Computer 3 renamed to Tandy TRS-80 Color Computer
+Spectravideo SV-328 renamed to Spectravideo
+Pecom 64 renamed to Elektronska Industrija Pecom 64
+SNK Neo Geo MVS support added and defaults to the mame core
+
+
 v3.1.0.4 BETA
 
 

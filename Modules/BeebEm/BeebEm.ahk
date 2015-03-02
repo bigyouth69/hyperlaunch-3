@@ -2,8 +2,8 @@ MEmu = BeebEm
 MEmuV =  v4.14
 MURL = http://www.mkw.me.uk/beebem/index.html
 MAuthor = brolly
-MVersion = 1.0
-MCRC = A4929607
+MVersion = 1.0.1
+MCRC = AEFA614B
 iCRC = 4EC57BED
 mId = 635599773229077671
 MSystem = "Acorn BBC Micro"
@@ -18,7 +18,6 @@ MSystem = "Acorn BBC Micro"
 ; BBC Model B Plus
 ; BBC Master 128
 ;----------------------------------------------------------------------------
-
 StartModule()
 BezelGUI()
 FadeInStart()
@@ -33,6 +32,10 @@ SetTube := IniReadCheck(settingsFile, "Settings" . "|" . romName, "SetTube","fal
 ChainCommand := IniReadCheck(settingsFile, romName, "ChainCommand","",,1)
 RunCommand := IniReadCheck(settingsFile, romName, "RunCommand","",,1)
 
+StringUpper RunCommand, RunCommand
+
+7z(romPath, romName, romExtension, 7zExtractPath)
+
 If romExtension not in .ssd,.dsd,.ad,.img,.uef
 	ScriptError("The extension " . romExtension . " is not one of the known supported extensions for this emulator.")
 
@@ -45,8 +48,6 @@ If Model not in 0,1,2,3
 configIni := LoadProperties(configFile)	; load the config into memory
 SetTube := If SetTube = "true" ? "01" : "00"
 
-7z(romPath, romName, romExtension, 7zExtractPath)
-
 Params := Params . "-Data - -DisMenu "
 If ( romExtension = ".uef" ) { ;Tape
 	Params :=  Params . " -KbdCmd ""OSCLI\s2\STAPE\s2\S\nPAGE\s-\S\s6\SE00\nCH.\s22\S\n"" "
@@ -56,8 +57,8 @@ If ( romExtension = ".uef" ) { ;Tape
 	;Params :=  Params . " -KbdCmd ""\s'\STAPE\n\s'\SRUN\n"" "
 } Else If (ChainCommand) {
 	Params :=  Params . " -KbdCmd """ . (If Model = "3" ? "\d0600\S\d0040" : "") . "CH.\s2\S" . ChainCommand . "\s2\S\n"" " ;Loading the Master 128 OS takes longer so we need to simulate a delay before starting to send the commands otherwise not all of it will get through. Then revert it back to the default value of 40ms.
-} Else If (ChainCommand) {
-	Params :=  Params . " -KbdCmd """ . (If Model = "3" ? "\d0600\S\d0040" : "") . "RUN " . RunCommand . "\n"" "  ;Loading the Master 128 OS takes longer so we need to simulate a delay before starting to send the commands otherwise not all of it will get through. Then revert it back to the default value of 40ms.
+} Else If (RunCommand) {
+	Params :=  Params . " -KbdCmd """ . (If Model = "3" ? "\d0600\S\d0040" : "") . "OSCLI\s2\SRUN " . RunCommand . "\s2\S\n"" "  ;Loading the Master 128 OS takes longer so we need to simulate a delay before starting to send the commands otherwise not all of it will get through. Then revert it back to the default value of 40ms.
 }
 Params :=  Params . " """ . romPath . "\" . romName . romExtension . """"
 

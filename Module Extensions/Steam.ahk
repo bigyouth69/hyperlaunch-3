@@ -1,5 +1,5 @@
-﻿MCRC=4CCE4499
-MVersion=1.0.0
+﻿MCRC=9466907C
+MVersion=1.0.1
 
 ; Steam settings can be found in the registry in a few places
 ; HKEY_CURRENT_USER\Software\Valve\Steam
@@ -7,7 +7,7 @@ MVersion=1.0.0
 ; HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Valve\Steam (64-bit OS)
 
 Steam(stmID="", stmProtocol="", params="") {
-	Global k,k0,k1,k2,k3,steamPath,steamExe,steamStartMode,steamIsOffline
+	Global stk,stk0,stk1,stk2,stk3,steamPath,steamExe,steamStartMode,steamIsOffline
 	Log("Steam - Started")
 	Log("Steam - Received SteamID: """ . stmID . """ | SteamProtocol: """ . stmProtocol . """ | Parameters: """ . params . """")
 	If (!steamPath || !steamExe)
@@ -46,11 +46,11 @@ Steam(stmID="", stmProtocol="", params="") {
 		Log("SteamLaunch - Steam is not running, launching it with credentials if defined.")
 		RegRead, sU, HKEY_CURRENT_USER, Software\PCLauncher, sU
 		RegRead, sP, HKEY_CURRENT_USER, Software\PCLauncher, sP
-		sU := Decrypt(sU,"k")
-		sP := Decrypt(sP,"k")
+		sU := Decrypt(sU,"stk")
+		sP := Decrypt(sP,"stk")
 		If (!sU || !sP)
 			ScriptError("SteamLaunch - Steam is not running and needs to be logged in to launch this steam game. HyperLaunch can do this, but you need to run ""EncryptPasswords"" application in your PCLauncher module folder first and set your login credentials.")
-		Run(SteamExe . " " . (If sU && sP ? "-login " . sU . " " . sP:"") . " " . (If stmID ? "-applaunch " . stmID : stmProtocol) . " " . params, steamPath,,steamPID)	; if stmID is defined, launch that, otherwise use the stmProtocol in the CLI (Usually this is for BPM mode)
+		Run(SteamExe . " " . (If sU && sP ? "-login " . sU . " " . sP:"") . " " . (If stmID ? "-applaunch " . stmID : stmProtocol) . " " . params, steamPath,,steamPID,,,1)	; if stmID is defined, launch that, otherwise use the stmProtocol in the CLI (Usually this is for BPM mode)
 		erLvl := WinWait("Steam",,15, "Steam Login")	; wait 15 seconds until the main steam window exists (not the login one)
 		If erLvl	; if we simply timed out, some other problem happened
 			ScriptError("SteamLaunch - Timed out waiting 15 seconds for Steam's Login window. Please try again.")
