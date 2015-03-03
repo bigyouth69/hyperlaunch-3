@@ -1,0 +1,91 @@
+; General Plugin Building Instructions:
+; 1) If the frontend has info about the game:
+;		1.1) You should create a gameInfo object with this info following the structure defined bellow:
+;		1.2) The game info object must have this structure:
+; 			- gameInfo[%LabelName%].Label := %LabelName%
+; 			- gameInfo[%LabelName%].Value := %Value%
+;		1.3) The database formated game name should be obrigatorily defined on the gameInfo labeled "Name":
+;			- gameInfo["Name"].Value := %Game_name_obtained_from_the_frontend_database%
+;		1.4) For rom mapping menu support it is required to create a BuildDatabaseTable function capable of creating the gameinfo object:
+;			- This function should have as the inputs four parameters, on this order obrigatorily: BuildDatabaseTable(game,system,ByRef frontendDatabaseFields, ByRef frontendDatabaseLabels)
+;			- This function should return the gameInfo object
+; 2) If the frontend has art assets:
+;		2.1) You must provide the path and labels for each file assets on the following object:
+;			- feMedia["Logos"].feLogo1.Label := "feLogo1"
+;			- feMedia["Logos"].feLogo1.Path1 := "c:\aaa.png"	
+;			- feMedia["Logos"].feLogo1.Ext1 := "png"	
+;			- feMedia["Logos"].feLogo1.TotalItems := 1	
+
+
+; MaximusArcade Plugin
+
+PluginInit:
+	Log("PluginInit - Started")
+
+	; Load Plugin settings
+	frontendPlugin := pluginName
+	frontendWinTitle := "Maximus Arcade ahk_class ImlWinCls"
+	
+	;Content assets (not required)
+	; format: one index for each asset with path and label info: Array[1,"Path"], Array[1,"Label"]
+	feMedia := {}
+	
+	; Game Info (not required)
+	; format: gameInfo["Label"] := "Value"
+	gameInfo := Object()
+	
+	; ***********************
+	; *********************** MAPPING INFO WILL BE HERE
+	; ***********************
+
+	;----------Loading FrontEnd asset labels
+	feLogoLabels:= RIniLoadVar(8,9, "Maximus", "Fe_Logo_Labels", "Game Logo|System Logo")   ; if label "keepFileName" the filename will be used as label
+	feArtworkLabels:= RIniLoadVar(8,9, "Maximus", "Fe_Artwork_Labels", "Box Art|Cartridge|Flyers|Letters|Other")
+	feBackgroundsLabels:= RIniLoadVar(8,9, "Maximus", "Fe_Backgrounds_Labels", "")
+	feControllerLabels:= RIniLoadVar(8,9, "Maximus", "Fe_Controller_Labels", "")
+	feGuidesLabels:= RIniLoadVar(8,9, "Maximus", "Fe_Guides_Labels", "")
+	feManualsLabels:= RIniLoadVar(8,9, "Maximus", "Fe_Manuals_Labels", "")
+	feVideosLabels:= RIniLoadVar(8,9, "Maximus", "Fe_Videos_Labels", "VIDEOS")
+	feDiscArtworkLabel:= RIniLoadVar(8,9, "Maximus", "Fe_Disc_Artwork_Label", "Artwork1")
+	
+	;----------Acquiring Maximus Paths and defining respective labels------------
+	
+	maximusDefaultIni := frontendPath . "\preferences\default.ini"
+
+	;Acquiring Logos
+	IniRead, maxMarquee, %maximusDefaultIni%, SECTIONNAME, Marquees
+	feMedia.Logos := BuildAssetsTable(maxMarquee . dbName,feLogoLabels,"game","png,jpg")
+
+	;Acquiring ArtWork
+	IniRead, maxImage, %maximusDefaultIni%, SECTIONNAME, Images
+	feMedia.Artwork := BuildAssetsTable(maxImage . dbName,feLogoLabels,"game","png,jpg")
+	
+	;Acquiring Videos
+	IniRead, maxMovie, %maximusDefaultIni%, SECTIONNAME, Movies
+	feMedia.Videos := BuildAssetsTable(maxMovie . dbName,feLogoLabels,"game","mp4,flv")
+
+	;Acquiring Backgrounds (not available on Maximus Arcade)
+	;Acquiring Controller (not available on Maximus Arcade)
+	;Acquiring Guides (not available on Maximus Arcade)
+	;Acquiring Manuals (not available on Maximus Arcade)
+	
+	; Game Info
+	; Maximus uses a proprietary lst format in binary and cannot be read outside the FE itself
+	gameInfo := BuildDatabaseTable(dbName,systemName,"","Name")
+	Log("PluginInit - Ended")
+Return	
+
+
+BuildDatabaseTable(game,system,ByRef frontendDatabaseFields, ByRef frontendDatabaseLabels){ ; required for rom mapping menu name 
+	Log("BuildDatabaseTable - Started - Building Table for: " . frontendDatabaseLabels,4)
+	infoObject := Object()
+	StringSplit, label, frontendDatabaseLabels, |
+	Log("BuildDatabaseTable - Maximus uses a proprietary lst format in binary and cannot be read outside Maximus",4)
+	currentobj:={}
+	currentobj.Label := "Name"
+	currentobj.Value := game
+	infoObject.Insert(currentobj["Label"], currentobj)
+	Log("BuildDatabaseTable - Ended - no ""Game Name"" found. Assigning """ . game . """ to the label ""Name""",2)
+	Return infoObject
+}
+

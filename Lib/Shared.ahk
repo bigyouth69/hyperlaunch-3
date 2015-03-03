@@ -1,5 +1,5 @@
-MCRC=424953B3
-MVersion=1.2.2
+MCRC=106DE768
+MVersion=1.2.3
 
 StartModule(){
 	Global gameSectionStartTime,gameSectionStartHour,skipChecks,dbName,romPath,romName,romExtension,systemName,MEmu,MEmuV,MURL,MAuthor,MVersion,MCRC,iCRC,MSystem,romMapTable,romMappingLaunchMenuEnabled,romMenuRomName,7zEnabled,hideCursor,toggleCursorKey,winVer,zz
@@ -1622,7 +1622,6 @@ DaemonTools(action,file="",type="",drive=0){
 			If !cueHasMp3s {
 				Log("DaemonTools - This " . ext . " does not contain any mp3s.",4)
 				If (ext = "cue") {
-				msgbox % file
 					validateCUE := COM_Invoke(HLObject, "validateCUE", file)	; 0 = cue is invalid, 1 = cue is valid, 2 = cant find cue
 					If validateCUE = 1
 						Log("DaemonTools - This " . ext . " was found valid.",4)
