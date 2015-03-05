@@ -2,9 +2,9 @@ MEmu = Virtual APF
 MEmuV =  v0.4
 MURL = http://www.oocities.org/emucompboy/
 MAuthor = brolly
-MVersion = 2.0.2
-MCRC = C27BE7E4
-iCRC = 8046E4E1
+MVersion = 2.0.3
+MCRC = 96A9A7FF
+iCRC = 5B09C491
 MID = 635038268930235818
 MSystem = "APF Imagination Machine"
 ;----------------------------------------------------------------------------
@@ -16,7 +16,8 @@ MSystem = "APF Imagination Machine"
 ; Make sure you don't have any cart loaded and the system is booting into the built-in Basic ROM with Enable ROM hack fast I/O checked
 ; Press your FR button (delete by default) type CLOAD, hit enter, hit enter again to get the file browser dialog, select your tape 
 ; file, once you see OK on the screen type RUN and hit enter again to start the game.
-; Some games might require you to type RUN before CLOAD to clear the memory/pointers. This happens on at least some APF Professional tapes
+; Some games might require you to type 1 CLOAD instead of CLOAD (which is the same as calling RUN before CLOAD) to clear the memory/pointers.
+; This happens on at least some APF Professional tapes.
 ;----------------------------------------------------------------------------
 StartModule()
 BezelGUI()
@@ -97,13 +98,20 @@ If TapeGame = true
 {	Sleep, 250 ;Wait for Basic screen to boot
 	SetKeyDelay(100)
 	SendCommand("{delete}{Wait:200}") ;Fire button to get past the Basic boot screen
-	If (TapeLoadingMethod = "2")
+	If (TapeLoadingMethod = "3")
 		SendCommand("run{Enter}")
-	SendCommand("cload{Enter}{Wait:200}{Enter}")
+	If (TapeLoadingMethod = "2")
+	{
+		SendCommand("1{Space}cload{Enter}")
+		SendCommand("run{Enter}{Wait:200}{Enter}")
+	}
+	Else
+		SendCommand("cload{Enter}{Wait:200}{Enter}")
+
 	fullRomPath := romPath . "\" . romName . romExtension
 	OpenROM(dialogOpen . " ahk_class #32770", fullRomPath)
 	Sleep, 1500 ;wait for OK to show up, increase this if run is being sent too soon
-	If (TapeLoadingMethod = "2")
+	If (TapeLoadingMethod = "2" or TapeLoadingMethod = "3")
 		SendCommand("goto100{Enter}")
 	Else
 		SendCommand("run{Enter}")

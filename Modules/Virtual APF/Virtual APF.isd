@@ -29,8 +29,9 @@
 							<KEYTYPE>String</KEYTYPE>
 							<DESCRIPTION>Tape Loading method, should be CLOAD+RUN for most tapes, only some professional APF tapes seem to use different loading methods</DESCRIPTION>
 							<VALUES>
-								<VALUE description="CLOAD+RUN">1</VALUE>							
-								<VALUE description="RUN+CLOAD+GOTO100">2</VALUE>
+								<VALUE description="CLOAD+RUN">1</VALUE>
+								<VALUE description="1 CLOAD+RUN+GOTO100">2</VALUE>
+								<VALUE description="RUN+CLOAD+GOTO100">3</VALUE>
 							</VALUES>
 						</KEY>
 					</KEYS>
