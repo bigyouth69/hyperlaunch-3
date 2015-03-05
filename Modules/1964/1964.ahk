@@ -1,6 +1,6 @@
 MEmu = 1964
 MEmuV =  v1.1
-MURL = http://www.emucr.com/2009/06/1964-11.html
+MURL = http://www.emulator-zone.com/doc.php/n64/1964.html
 MAuthor = djvj
 MVersion = 2.0.1
 MCRC = FECFF63D

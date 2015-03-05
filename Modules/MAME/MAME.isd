@@ -30,6 +30,7 @@
 								<VALUE>d3d</VALUE>
 								<VALUE>ddraw</VALUE>
 								<VALUE>gdi</VALUE>
+								<VALUE>opengl</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="BezelMode" required="false" nullable="false">
