@@ -19,6 +19,14 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables HLSL filters globally for all systems using this module</DESCRIPTION>
 						</KEY>
+						<KEY name="BezelMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Choose what type of bezels you want to use globally. HyperLaunch bezels or MAME bezels. Default is MAME bezels.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Use MAME built-in Bezels">layout</VALUE>
+								<VALUE description="Use HyperLaunch Bezels">normal</VALUE>
+							</VALUES>
+						</KEY>
 						<KEY name="Volume" required="false" nullable="true" minLength="-32" maxLength="0">
 							<KEYTYPE>Integer</KEYTYPE>
 							<DESCRIPTION>Set the volume of MAME globally for all systems using this module. It can range between -32db and 0db, 0db being the loudest and the default.</DESCRIPTION>
@@ -31,14 +39,6 @@
 								<VALUE>ddraw</VALUE>
 								<VALUE>gdi</VALUE>
 								<VALUE>opengl</VALUE>
-							</VALUES>
-						</KEY>
-						<KEY name="BezelMode" required="false" nullable="false">
-							<KEYTYPE>String</KEYTYPE>
-							<DESCRIPTION>Choose what type of bezels you want to use. HyperLaunch bezels or MAME bezels. Default is MAME bezels.</DESCRIPTION>
-							<VALUES>
-								<VALUE description="Use MAME built-in Bezels">layout</VALUE>
-								<VALUE description="Use HyperLaunch Bezels">normal</VALUE>
 							</VALUES>
 						</KEY>
 						<KEY name="CheatMode" required="false" nullable="false">
@@ -81,6 +81,14 @@
 						<KEY name="HLSL" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables HLSL filters for just this system</DESCRIPTION>
+						</KEY>
+						<KEY name="BezelMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Choose what type of bezels you want this system to use. HyperLaunch bezels or MAME bezels. Default is MAME bezels. This setting takes precedence over the global setting.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Use MAME built-in Bezels">layout</VALUE>
+								<VALUE description="Use HyperLaunch Bezels">normal</VALUE>
+							</VALUES>
 						</KEY>
 						<KEY name="Artwork_Crop" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
@@ -126,6 +134,14 @@
 						<KEY name="HLSL" required="false" nullable="false">
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables HLSL filters for just this game</DESCRIPTION>
+						</KEY>
+						<KEY name="BezelMode" required="false" nullable="false">
+							<KEYTYPE>String</KEYTYPE>
+							<DESCRIPTION>Choose what type of bezels you want this rom to use. HyperLaunch bezels or MAME bezels. Default is MAME bezels. This setting takes precedence over the system setting.</DESCRIPTION>
+							<VALUES>
+								<VALUE description="Use MAME built-in Bezels">layout</VALUE>
+								<VALUE description="Use HyperLaunch Bezels">normal</VALUE>
+							</VALUES>
 						</KEY>
 						<KEY name="Volume" required="false" nullable="true" minLength="-32" maxLength="0">
 							<KEYTYPE>Integer</KEYTYPE>

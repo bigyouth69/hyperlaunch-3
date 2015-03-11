@@ -2,9 +2,9 @@ MEmu = MAME
 MEmuV =  v0.159
 MURL = http://www.mame.net/
 MAuthor = djvj
-MVersion = 2.1.6
-MCRC = 968DA0CB
-iCRC = E6AA2D73
+MVersion = 2.1.7
+MCRC = E8475B4E
+iCRC = FE693AAF
 MID = 635038268903403479
 MSystem = "AAE","Cave","Capcom","LaserDisc","MAME","Nintendo Arcade Systems","Sega Model 1","Sega ST-V","SNK Neo Geo","SNK Neo Geo AES","SNK Neo Geo MVS"
 ;----------------------------------------------------------------------------
@@ -32,9 +32,9 @@ settingsFile := modulePath . "\" . moduleName . ".ini"
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
 legacyMode := IniReadCheck(settingsFile, "Settings|" . systemName . "|" . romName, "LegacyMode","false",,1)
 hlsl := IniReadCheck(settingsFile, "Settings|" . systemName . "|" . romName, "HLSL","false",,1)
+bezelMode := IniReadCheck(settingsFile, "Settings|" . systemName . "|" . romName, "BezelMode","layout",,1)	; "layout" or "normal"
 Videomode := IniReadCheck(settingsFile, "Settings", "Videomode","d3d",,1)
 pauseMethod := IniReadCheck(settingsFile, "Settings", "PauseMethod",1,,1)	; set the pause method that works better on your machine (preferred methods 1 and 2) 1 = Win7 and Win8 OK - Problems with Win XP, 2 = preferred method for WinXP - Problems in Win7, 3 and 4 = same as 1 and 2, 5 = only use If you have a direct input version of mame, 6 = suspend mame process method, it could crash mame in some computers
-bezelMode := IniReadCheck(settingsFile, "Settings", "BezelMode","layout",,1)	; "layout" or "normal"
 cheatMode := IniReadCheck(settingsFile, "Settings", "CheatMode","false",,1)
 cheatModeKey := IniReadCheck(settingsFile, "Settings", "CheatModeKey",A_Space,,1)	; user defined key to be held down before launching a mame rom.
 sysParams := IniReadCheck(settingsFile, systemName, "Params", A_Space,,1)
@@ -46,8 +46,8 @@ Use_Overlays := IniReadCheck(settingsFile, systemName . "|" . romName, "Use_Over
 Use_Backdrops := IniReadCheck(settingsFile, systemName . "|" . romName, "Use_Backdrops", "true",,1)
 Use_Cpanels := IniReadCheck(settingsFile, systemName . "|" . romName, "Use_Cpanels", "false",,1)
 Use_Marquees := IniReadCheck(settingsFile, systemName . "|" . romName, "Use_Marquees", "false",,1)
-volume := IniReadCheck(settingsFile, "Settings|" . systemName . "|" . romName, "Volume",,,1)
 autosave := IniReadCheck(settingsFile, systemName . "|" . romName, "Autosave", "false",,1)
+volume := IniReadCheck(settingsFile, "Settings|" . systemName . "|" . romName, "Volume",,,1)
 
 artworkCrop := If (Artwork_Crop = "true") ? " -artwork_crop" : " -noartwork_crop"
 useBezels := If (Use_Bezels = "true") ? " -use_bezels" : " -nouse_bezels"
