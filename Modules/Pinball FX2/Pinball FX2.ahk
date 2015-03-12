@@ -2,9 +2,9 @@ MEmu = Pinball FX2
 MEmuV = N/A
 MURL = http://www.pinballfx.com/
 MAuthor = djvj & bleasby
-MVersion = 2.0.4
-MCRC = 48091017
-iCRC = B2656270
+MVersion = 2.0.5
+MCRC = 7E5404C2
+iCRC = 36A0BDB7
 mId = 635244873683327779
 MSystem = "Pinball FX2","Pinball"
 ;----------------------------------------------------------------------------
@@ -53,6 +53,7 @@ FadeInStart()
 
 pinballTitleClass := "Pinball FX2 ahk_class PxWindowClass"
 Fullscreen := IniReadCheck(settingsFile, "Settings", "Fullscreen","true",,1)
+nagScreen := IniReadCheck(settingsFile, "Settings", "Nag_Screen","false")
 WindowedResolution := IniReadCheck(settingsFile, "Settings", "Windowed_Resolution",A_ScreenWidth . "x" . A_ScreenHeight,,1)
 initialTableX := IniReadCheck(settingsFile, "Settings", "Initial_Table_X",1,,1)
 initialTableY := IniReadCheck(settingsFile, "Settings", "Initial_Table_Y",1,,1)
@@ -135,6 +136,10 @@ Sleep, %sleepLogo%	; sleep till Pinball FX2 logo appears
 ControlSend,, {Esc Down}{Esc Up}, %pinballTitleClass%	
 Sleep, % 200*sleepBaseTime
 ControlSend,, {Enter Down}{Enter Up}, %pinballTitleClass%	; cancel pinball fx2 logo
+If nagScreen = true
+{	Sleep, % 300*sleepBaseTime
+	ControlSend,, {Enter Down}{Enter Up}, %pinballTitleClass%	; clear away the nag screen
+}
 Sleep, %sleepMenu%	; sleep till table select window appears
 
 tableNavX := tableNavX - initialTableX

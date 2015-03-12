@@ -15,6 +15,10 @@
 							<KEYTYPE>Boolean</KEYTYPE>
 							<DESCRIPTION>Enables/Disables the local MultiPlayer selection menu. This menu gives you a choice to select between 1 to 4 players which will be playing the game locally.</DESCRIPTION>
 						</KEY>
+						<KEY name="Nag_Screen" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, sends an extra ENTER key to clear the nag screen that the developer forces upon you on each launch. Default is false.</DESCRIPTION>
+						</KEY>
 						<KEY name="Windowed_Resolution" required="false" nullable="false">
 							<KEYTYPE>String</KEYTYPE>
 							<DESCRIPTION>Determines resolution for windowed mode (ex. "1920x1080"). Must be set to the same resolution set on Pinball FX2 configurations.</DESCRIPTION>
