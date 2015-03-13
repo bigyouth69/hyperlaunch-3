@@ -13,6 +13,38 @@
 						</KEY>
 					</KEYS>
 				</SECTION>
+				<SECTION name="%RomName%" required="false">
+					<SECTIONTYPE>Rom</SECTIONTYPE>
+					<KEYS>
+						<KEY name="SlowGeometry" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, uses slower but more accurate geometry calculations. If you see graphical errors, try this as a fix.</DESCRIPTION>
+						</KEY>
+						<KEY name="SoundFilterEnabled" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, enables the sound filter. Provides a quality increase with a tiny amount more CPU.</DESCRIPTION>
+						</KEY>
+						<KEY name="StereoExciterEnabled" required="false" nullable="false">
+							<KEYTYPE>Boolean</KEYTYPE>
+							<DESCRIPTION>If true, enables the stereo exciter, which widens the stereo image.</DESCRIPTION>
+						</KEY>
+						<KEY name="ControllerPlugin" required="false" nullable="false" FULLROW="true">
+							<KEYTYPE>FileName</KEYTYPE>
+							<BASEPATH>%EmulatorPath%</BASEPATH>
+							<DESCRIPTION>Select the controller plugin you want to use (.znc file), this file must be located in your emulator folder.</DESCRIPTION>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>znc</FILEEXTENSION>
+							</FILEEXTENSIONS>
+						</KEY>
+						<KEY name="RendererPlugin" required="false" nullable="false" FULLROW="true">
+							<KEYTYPE>FileName</KEYTYPE>
+							<DESCRIPTION>Select the renderer plugin you want to use (.znc file), this file must be located in your emulator folder.</DESCRIPTION>
+							<FILEEXTENSIONS>
+								<FILEEXTENSION>znc</FILEEXTENSION>
+							</FILEEXTENSIONS>
+						</KEY>
+					</KEYS>
+				</SECTION>
 			</SECTIONS>
 		</INIFILE>
 	</INIFILES>
