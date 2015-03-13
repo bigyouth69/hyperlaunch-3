@@ -2,11 +2,11 @@ MEmu = RetroArch
 MEmuV =  v12-25-2014 Nightly
 MURL = http://themaister.net/retroarch.html
 MAuthor = djvj,zerojay
-MVersion = 2.2.5
-MCRC = BE6269FB
+MVersion = 2.2.6
+MCRC = 50A767A6
 iCRC = A130BB6E
 MID = 635038268922229162
-MSystem = "Acorn BBC Micro","AAE","Amstrad CPC","Amstrad GX4000","APF Imagination Machine","Apple IIGS","Atari 2600","Atari 5200","Atari 7800","Atari Jaguar","Atari Lynx","Atari ST","Atari XEGS","Bally Astrocade","Bandai Gundam RX-78","Bandai Super Vision 8000","Bandai Wonderswan","Bandai Wonderswan Color","Canon X07","Casio PV-1000","Casio PV-2000","Coleco ADAM","ColecoVision","Commodore Max Machine","Commodore Amiga","Creatronic Mega Duck","Dragon 64","Emerson Arcadia 2001","Entex Adventure Vision","Elektronika BK","Epoch Game Pocket Computer","Epoch Super Cassette Vision","Exidy Sorcerer","Fairchild Channel F","Final Burn Alpha","Funtech Super Acan","GamePark 32","GCE Vectrex","Hartung Game Master","JungleTac Sport Vii","MAME","Magnavox Odyssey 2","Microsoft MSX","Microsoft MSX2","Matra & Hachette Alice","Mattel Aquarius","Mattel Intellivision","NEC PC Engine","NEC PC Engine-CD","NEC PC-FX","NEC TurboGrafx-16","NEC SuperGrafx","NEC TurboGrafx-CD","Nintendo 64","Nintendo Arcade Systems","Nintendo DS","Nintendo Entertainment System","Nintendo Famicom","Nintendo Famicom Disk System","Nintendo Game Boy","Nintendo Game Boy Color","Nintendo Game Boy Japan","Nintendo Game Boy Advance","Nintendo Super Game Boy","Nintendo Pokemon Mini","Nintendo Virtual Boy","Nintendo Super Famicom","Nintendo Super Famicom Satellaview","Panasonic 3DO","Elektronska Industrija Pecom 64","Philips CD-i","Philips Videopac","RCA Studio II","Sega 32X","Sega SC-3000","Sega SG-1000","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","Sega Pico","Sega Saturn","Sega Saturn Japan","Sega VMU","Sega ST-V","Sharp X1","Sinclair ZX Spectrum","Sony PlayStation","Sony PocketStation","Sony PSP","Sord M5","SNK Neo Geo","SNK Neo Geo MVS","SNK Neo Geo AES","SNK Neo Geo Pocket","SNK Neo Geo CD","SNK Neo Geo Pocket Color","Spectravideo","Super Nintendo Entertainment System","Tandy TRS-80 Color Computer","Texas Instruments TI 99-4A","Thomson MO5","Thomson TO7","Tiki-100","Tomy Tutor","VTech CreatiVision","Watara Supervision"
+MSystem = "Acorn BBC Micro","AAE","Amstrad CPC","Amstrad GX4000","APF Imagination Machine","Apple IIGS","Atari 2600","Atari 5200","Atari 7800","Atari Jaguar","Atari Lynx","Atari ST","Atari XEGS","Bally Astrocade","Bandai Gundam RX-78","Bandai Super Vision 8000","Bandai Wonderswan","Bandai Wonderswan Color","Canon X07","Casio PV-1000","Casio PV-2000","Coleco ADAM","ColecoVision","Commodore Max Machine","Commodore Amiga","Creatronic Mega Duck","Dragon 64","Emerson Arcadia 2001","Entex Adventure Vision","Elektronika BK","Epoch Game Pocket Computer","Epoch Super Cassette Vision","Exidy Sorcerer","Fairchild Channel F","Final Burn Alpha","Funtech Super Acan","GamePark 32","GCE Vectrex","Hartung Game Master","JungleTac Sport Vii","MAME","Magnavox Odyssey 2","Microsoft MSX","Microsoft MSX2","Matra & Hachette Alice","Mattel Aquarius","Mattel Intellivision","NEC PC Engine","NEC PC Engine-CD","NEC PC-FX","NEC TurboGrafx-16","NEC SuperGrafx","NEC TurboGrafx-CD","Nintendo 64","Nintendo Arcade Systems","Nintendo DS","Nintendo Entertainment System","Nintendo Famicom","Nintendo Famicom Disk System","Nintendo Game Boy","Nintendo Game Boy Color","Nintendo Game Boy Japan","Nintendo Game Boy Advance","Nintendo Super Game Boy","Nintendo Pokemon Mini","Nintendo Virtual Boy","Nintendo Super Famicom","Nintendo Satellaview","Panasonic 3DO","Elektronska Industrija Pecom 64","Philips CD-i","Philips Videopac","RCA Studio II","Sega 32X","Sega SC-3000","Sega SG-1000","Sega CD","Sega Game Gear","Sega Genesis","Sega Master System","Sega Mega Drive","Sega Pico","Sega Saturn","Sega Saturn Japan","Sega VMU","Sega ST-V","Sharp X1","Sinclair ZX Spectrum","Sony PlayStation","Sony PocketStation","Sony PSP","Sord M5","SNK Neo Geo","SNK Neo Geo MVS","SNK Neo Geo AES","SNK Neo Geo Pocket","SNK Neo Geo CD","SNK Neo Geo Pocket Color","Spectravideo","Super Nintendo Entertainment System","Tandy TRS-80 Color Computer","Texas Instruments TI 99-4A","Thomson MO5","Thomson TO7","Tiki-100","Tomy Tutor","VTech CreatiVision","Watara Supervision"
 ;----------------------------------------------------------------------------
 ; Notes:
 ; If the emu doesn't load and you get no error, usually this means the LibRetro DLL is not working!
@@ -63,7 +63,7 @@ mType := Object("Acorn BBC Micro","LibRetro_BBCB","AAE","LibRetro_AAE","Amstrad 
 				,"NEC SuperGrafx","LibRetro_SGFX","NEC TurboGrafx-16","LibRetro_TG16","NEC TurboGrafx-CD","LibRetro_TGCD","Nintendo 64","LibRetro_N64","Nintendo Arcade Systems","LibRetro_NINARC"
 				,"Nintendo DS","LibRetro_DS","Nintendo Entertainment System","LibRetro_NES","Nintendo Famicom","LibRetro_NFAM","Nintendo Famicom Disk System","LibRetro_NFDS","Nintendo Game Boy","LibRetro_GB"
 				,"Nintendo Game Boy Color","LibRetro_GBC","Nintendo Game Boy Japan","LibRetro_GBJ","Nintendo Game Boy Advance","LibRetro_GBA","Nintendo Pokemon Mini","LibRetro_POKE"
-				,"Nintendo Super Famicom","LibRetro_NSF","Nintendo Super Famicom Satellaview","LibRetro_NSFS","Nintendo Super Game Boy","LibRetro_SGB","Nintendo Virtual Boy","LibRetro_NVB"
+				,"Nintendo Super Famicom","LibRetro_NSF","Nintendo Satellaview","LibRetro_NSFS","Nintendo Super Game Boy","LibRetro_SGB","Nintendo Virtual Boy","LibRetro_NVB"
 				,"Panasonic 3DO","LibRetro_3DO","Elektronska Industrija Pecom 64","LibRetro_P64","Philips CD-i","LibRetro_CDI","Philips Videopac","LibRetro_PVID","RCA Studio II","LibRetro_STUD2"
 				,"SCUMMVM","LibRetro_SCUMM","Sega 32X","LibRetro_32X","Sega CD","LibRetro_SCD","Sega Game Gear","LibRetro_GG","Sega Genesis","LibRetro_GEN","Sega Mega Drive","LibRetro_GEN"
 				,"Sega Master System","LibRetro_SMS","Sega Pico","LibRetro_PICO","Sega VMU","LibRetro_SVMU","Sony PlayStation","LibRetro_PSX","Sony PocketStation","LibRetro_POCKS","Sony PSP","LibRetro_PSP"
@@ -351,10 +351,9 @@ If ident = LibRetro_NFDS	; Nintendo Famicom Disk System
 } Else If ident = LibRetro_PCFX
 {	If romExtension Not In .ccd,.cue
 		ScriptError("RetroArch only supports " . retroArchSystem . " games in ccd or cue format. It does not support:`n" . romExtension)
-	IfNotExist, %retroSysDir%\pcfxbios.bin
-		ScriptError("RetroArch requires ""pcfxbios.bin"" for " . retroArchSystem . " but could not find it in your system_directory: """ . retroSysDir . """")
+	IfNotExist, %retroSysDir%\pcfx.bios
+		ScriptError("RetroArch requires ""pcfx.bios"" for " . retroArchSystem . " but could not find it in your system_directory: """ . retroSysDir . """")
 }
-
 
 networkSession :=
 If (enableNetworkPlay = "true") {
