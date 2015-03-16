@@ -10,7 +10,7 @@
                                        Release History                                       
 =============================================================================================
 
-v1.1.1.4 (March 14th, 2015):
+v1.1.1.4 (March 16th, 2015):
   * Fixed issue that was causing adding new systems using the HyperLaunchHQ plugin not working properly
   * Added support to enable/disable HyperPause on a per game basis through the Specific Game Options form
 
