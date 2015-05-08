@@ -1,0 +1,1 @@
+HyperLaunch is the middle man between any front end and any other application on windows. it has support for over 120 emulators and ability to launch any PC Application or Game through it's PCLauncher module.
